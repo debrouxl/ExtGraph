@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#preshifted"><h1>Semi-preshifted sprite routines and macros</h1></a>
+<hr>
+<p>
+<h3>void PreshiftSprite16x16(register unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));</h3>
+<h3>void PreshiftGrayISprite16x16(register unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));</h3>
+<h3>PSprite16x16_OR_R, PSprite16x16_XOR_R, GrayPSprite16x16_OR_R, GrayPSprite16x16_XOR_R macros.</h3>
+<br>
+<u>Preshift... functions</u>: preshift non-masked interlaced sprite pointed to by <em>src</em> to 
+buffer pointed to by <em>dest</em>. The buffer must be large enough to hold the preshifted 
+sprite: SIZE_OF_PSPRITE16x16 bytes for a B/W sprite, SIZE_OF_PGSPRITE16x16 bytes for a 
+grayscale sprite.<br>
+<u>Macros</u>: draw preshifted sprite pointed to by <em>sprt</em> at coordinates <em>x</em> and 
+<em>y</em> to plane <em>dest</em> (<em>dest0</em> and <em>dest1</em> for grayscale 
+sprites).<br>
+Due to the huge size of the macros (hundreds of bytes), we suggest using a function 
+containing the macro if you use these macros more than twice. Of course, this will 
+decrease brute force performance.<br>
+<em>See the comparison between the different approaches in another part of the documentation.</em>
+</p>
+<br>
+
+</BODY>
+</HTML>

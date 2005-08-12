@@ -1,0 +1,5 @@
+The ExtGraph library in this release may be distributed by any other website for non-commercial use only.
+
+The author makes no representations or warranties about the suitability of the software, either express or implied. The author shall not be liable for any damages suffered as a result of using or distributing this software.
+
+If you use or re-use any part of this library, please give credits to us including a link to our website (http://tict.ticalc.org). This is not mandatory though.

@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#sprite_grab"><h1>Fast Sprite Grabbing Routines</h1></a>
+<hr>
+<p>
+<br>
+<a name="#SpriteXGet"></a>
+<h3>void Sprite8Get(short x,short y,short h,void* src,unsigned char* dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src asm("%a0"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16Get(short x,short y,short h,void* src,unsigned short* dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src asm("%a0"),register unsigned short* dest asm("%a1")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32Get(short x,short y,short h,void* src,unsigned long* dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src asm("%a0"),register unsigned long* dest asm("%a1")) __attribute__((__regparm__));</h3>
+<h3>void SpriteX8Get(short x,short y,short h,void* src,unsigned char* dest,short bytewidth) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void *src asm("%a1"),register unsigned char *dest asm("%a0"),register short bytewidth asm("%d3")) __attribute__((__regparm__));</h3>
+<br>
+SpriteXGet copies a sprite from the screen at x and y to <em>dest</em>.
+This routine is many times faster than the TIOS routine BitmapGet.
+Additonally sprites retrieved using SpriteXGet can be used as arguments
+for all the Sprite routines found in this header, unlike the bitmaps obtained 
+with BitmapGet. </span><em>x</em> and <em>y</em> 
+are the coordinates of the upper left corner of the sprite. <em>h</em> is the
+height of the sprite. <em>src</em> is a pointer to a video plane of size 240x128 pixels
+from which one wants to retrieve the sprite. <em>dest</em> is the pointer to a
+buffer (array) which is large enough to store the fetched sprite data.<br><br>
+The SpriteX8Get function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data fetched by SpriteX8Get is organized like this (example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.<br>
+<br>
+<em>You can use SpriteX8Get_R twice to simulate "FastCopyRectangleX8_R" (see Fast...RectanglesX8_R in another section).</em>
+</p>
+<br>
+
+</BODY>
+</HTML>

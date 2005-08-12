@@ -1,0 +1,39 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="utilisation.html">Utilisation</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="structures.html">Structures de données</a></td></tr>
+</table>
+<hr>
+<p>
+<h3><center>Les fonctions de la librairie</center></h3>
+Les fonctions fournies par la librairie peuvent se classer en deux catégories : les fonctions de bas niveau (puissantes, mais compliquées à utiliser) et les fonctions de haut niveau (beaucoup plus simple à utiliser, mais très légèrement moins efficaces).<br>
+Dans le cas général, les fonctions de haut niveau devraient suffir, mais si vous voulez faire un jeu complexe, et qui nécessite de la puissance ou si vous programmez en assembleur, alors vous devriez utiliser les fonctions de bas niveau.<br>
+Toutefois, il faut être prudent en utilisant les fonctions de bas niveau, car elles n'accélèreront pas forcément votre programme. En effet, les fonctions de haut niveau ont également été programmées en assembleur et sont optimisées, elles sont donc en général plus efficaces qu'un code C utilisant les fonctions de bas niveau.<br>
+Il est possible de faire avec les fonctions de haut niveau tout ce que l'on peut faire avec celles de bas niveau à l'exception de l'utilisation des tables de décalages de lignes.<br>
+<br>
+Si vous programmez en assembleur, sachez que les paramètres des fonctions sont passés directement par les registres, reportez vous au header pour connaître les registres coresspondant aux paramètres d'une fonction.<br>
+</p>
+<p>
+Je vous recommande de lire les exemples fournis pour bien comprendre l'utilisation des fonctions.<br>
+L'exemple 1 utilise les fonctions de haut niveau, il montre comment afficher plusieurs plans pour donner une illusion de profondeur (pour un jeu de plate-forme, par exemple).<br>
+L'exemple 2 est obsolète, il utilise les fonctions de bas niveau, il montre comment faire une map avec des tiles animés (pour un RPG par exemple), mais sans utiliser les fonctions prévues pour les map animées (elles n'étaient pas encore écrites au moment où j'ai fait cet exemple).<br>
+L'exemple 3 est le même que l'exemple 2, mais en utilisant les fonctions prévues pour.<br>
+L'exemple 4 utilise les fonctions de bas niveau et les tables de décalage.<br>
+L'exemple 5 utilise les fonctions de haut niveau pour afficher 3 plans simultanément à l'écran, en utilisant le mode MASK.<br>
+L'exemple 6 utilise une fonction <code>DrawTiles</code> pour afficher un plan.<br />
+</p>
+<hr>
+<p>
+<ul>
+  <li><a href="structures.html">Structures de données</a></li>
+  <li><a href="hautniv.html">Fonctions de haut niveau</a></li>
+  <li><a href="basniv.html">Fonctions de bas niveau</a></li>
+</ul>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="utilisation.html">Utilisation</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="structures.html">Structures de données</a></td></tr>
+</table>
+</body>
+</html>

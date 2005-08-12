@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#sprite_mirror_rotate"><h1>SpriteX8 Mirror and Rotate Routines</h1></a>
+<hr>
+<p>
+<br>
+<h3>void SpriteX8_MIRROR_H(short h,unsigned char* src,short bytewidth,unsigned char* dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_MIRROR_H_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<h3>void SpriteX8_MIRROR_V(short h,unsigned char* src,short bytewidth,unsigned char* dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_MIRROR_V_R(register short h asm("%d0"),register unsigned char* src asm("%a1"),register short bytewidth asm("%d2"),register unsigned char* dest asm("%a0")) __attribute__((__regparm__(4)));</h3>
+<h3>void SpriteX8_MIRROR_HV_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<br>
+<h3>void SpriteX8X8_ROTATE_RIGHT_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<h3>void SpriteX8X8_ROTATE_LEFT_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<h3>void SpriteX8X8_RR_MH_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<h3>void SpriteX8X8_RL_MH_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
+<br>
+SpriteX8_MIRROR_H/SpriteX8_MIRROR_V are utility functions which can be used to generate a
+horizontally or vertically mirrored version of a variable-sized sprite (X8 sprite).
+The height of the sprite is specified by parameter <em>h</em> and the width in bytes is
+specified by parameter <em>bytewidth</em>.
+<br>
+SpriteX8_MIRROR_HV_R generates a both horizontally and vertically mirrored version of a X8 sprite.
+<br>
+SpriteX8X8_ROTATE_RIGHT_R/SpriteX8X8_ROTATE_LEFT_R are utility functions which can be used to 
+generate a pi/2 right or left rotated version of a variable-sized <u>square</u> sprite (X8X8 sprite).
+The height and width of the sprite is specified by parameter <em>bytewidth</em>.
+<br>
+SpriteX8X8_RR_MH_R/SpriteX8X8_RL_MH_R mirror and rotate a <u>square</u> sprite (see extgraph.h 
+to see why these functions exist).
+</p>
+<br>
+
+</BODY>
+</HTML>

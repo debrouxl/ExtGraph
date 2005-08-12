@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#macros"><h1>Fast Pixel Access Macros / utility macros</h1></a>
+<hr>
+<p>
+<br>
+<h3>EXT_PIXOFFSET(x,y)</h3>
+calculates the byte offset of a pixel within a 240x128 pixels large video plane (used internally by EXT_PIXADDR).
+<h3>EXT_PIXADDR(plane,x,y)</h3>
+calculates the byte address of a pixel within a 240x128 pixels large video plane.
+<h3>EXT_PIXMASK(x)</h3>
+calculates the byte mask corresponding to a x coordinate within a 240x128 pixels large video plane.
+<h3>EXT_PIXNBIT(x)</h3>
+calculates the bit number corresponding to a x coordinate within a 240x128 pixels large video plane.
+
+<h3>EXT_PIXUP(address)</h3>
+subtracts 30 bytes (the width of 1 line in bytes) from given pixel byte address.
+<h3>EXT_PIXDOWN(address)</h3>
+adds 30 bytes (the width of 1 line in bytes) to given pixel byte address.
+<h3>EXT_PIXLEFT_AM(address,mask)</h3>
+modifies given pixel byte address and pixel mask to target the left neighbour pixel
+of the active one.
+<h3>EXT_PIXRIGHT_AM(address,mask)</h3>
+modifies given pixel byte address and pixel mask to target the right neighbour pixel
+of the active one.
+<h3>EXT_PIXLEFT_AN(address,n), EXT_PIXRIGHT_AN(address,n)</h3>
+Bit number versions of EXT_PIXLEFT/RIGHT_AM.
+
+<h3>EXT_SETPIX_AM(address,mask)</h3>
+sets a pixel using the given byte address and the given mask value.
+<h3>EXT_CLRPIX_AM(address,mask)</h3>
+clears a pixel using the given byte address and the given mask value.
+<h3>EXT_XORPIX_AM(address,mask)</h3>
+inverts a pixel using the given byte address and the given mask value.
+<h3>EXT_GETPIX_AM(address,mask)</h3>
+gets a pixel using the given byte address and the given mask value
+(NOTE: if the return value is 0 the pixel is not set, otherwise it is set).
+
+<h3>EXT_SETPIX_AN(a,offset,n)</h3>
+sets a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+number (used internally by EXT_SETPIX).
+<h3>EXT_CLRPIX_AN(a,offset,n)</h3>
+clears a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+number (used internally by EXT_CLRPIX).
+<h3>EXT_XORPIX_AN(a,offset,n)</h3>
+inverts a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+number (used internally by EXT_XORPIX).
+<h3>EXT_GETPIX_AN(a,offset,n)</h3>
+gets a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+number (used internally by EXT_GETPIX)
+(NOTE: if the return value is 0 the pixel is not set, otherwise it is set).
+
+<h3>EXT_SETPIX(plane,x,y)</h3>
+sets a pixel at position (x,y) within a 240x128 pixels large video plane.
+<h3>EXT_CLRPIX(plane,x,y)</h3>
+clears a pixel at position (x,y) within a 240x128 pixels large video plane.
+<h3>EXT_XORPIX(plane,x,y)</h3>
+inverts a pixel at position (x,y) within a 240x128 pixels large video plane.
+<h3>EXT_GETPIX(plane,x,y)</h3>
+gets a pixel at position (x,y) within a 240x128 pixels large video plane
+(NOTE: if the return value is 0 the pixel is not set, otherwise it is set).
+
+<h3>EXT_SHORTABS(a)</h3>
+returns the absolute value of given short a.
+<h3>EXT_LONGABS(a)</h3>
+returns the absolute value of given long a.
+<h3>EXT_XCHG(a,b)</h3>
+exchanges the content of values a and b using the ASM <code>exg</code> instruction.
+<h3>EXT_LONGSWAP(val)</h3>
+returns the word swapped value (upper and lower word swapped) of the given long using the 
+ASM <code>swap</code> instruction.
+<h3>DEREFSMALL(p,i)</h3>
+dereferences i-th element of pointer p (optimized version of p[i]).
+</p>
+<br>
+
+</BODY>
+</HTML>

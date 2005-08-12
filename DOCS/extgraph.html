@@ -1,0 +1,439 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0; text-align: center; text-decoration: bold}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0; text-align: center; text-decoration: bold}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+.strongcentered {text-align: center; text-decoration: bold}
+.startofblock {font-size: 18pt; COLOR: #000000; text-decoration: bold}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#000000" VLINK="#0000FF">
+<h1 class="toptitle">Library ExtGraph&nbsp;-&nbsp;Documentation</h1>
+<h2 class="strongcentered">Version 2.00</h2>
+<h3 class="subtitle">Extended Graphic Routines for TIGCC Projects</h3>
+<h3 class="strongcentered">Release Date: xx/xx/2005 (Beta 5)</h3>
+<hr><br>
+<strong>PREFACE:</strong>
+<p>
+The ExtGraph Library is an add-on to the TIGCC Library (TIGCCLIB). It's a compile-time 
+library (used functions are fetched from the library during the linking stage) and it contains 
+various useful graphics related routines which are missing in the TIGCCLIB or modified routines 
+which are implemented with very high speed in mind (without stupid excessive speed 
+optimizations, though, except for preshifted sprites which are a brute force approach). 
+For example, we unrolled tight loops in the tilemap engine, which costed around 12 bytes (&lt; 
+1/1000 of overall size for most programs using a tilemap engine), but increases speed by ~20%.<br>
+<strong>Note:</strong> We do not / cannot guarantee that any compiler or cross-compiler for TI-68k 
+calculators other than TIGCC will support ExtGraph.<br><br>
+<strong>The ExtGraph demos were tested on PedroM 0.80.</strong> PedroM exits demo12 and demo17 because 
+ROM_CALL CharNumber is not reimplemented, but all other demos work (although PedroM 0.80 seems 
+to suffer more from the keyboard rebounds, but I tested only on VTI) and show that PedroM uses 
+more efficient algorithms than AMS (in graphical functions - <em>up to 0.80, vital memcpy and memset
+were very slow in PedroM versions</em>): ExtGraph outperforms PedroM on lines by &lt;~10% 
+and rectangles by &gt;~3x, while it usually outperforms AMS by &gt;~5x on lines and &gt;~7x on 
+rectangles.<br><br>
+<br>
+</p>
+The ExtGraph 2 series is supposed to be backwards compatible with the previous versions, except:
+<ul>
+<li>calculator model checking (now in a better way in TIGCC);</li>
+<li>enum GrayColors (the values were changed in order to optimize a bit the fonctions that use 
+those values; anyway, the elements from the enum should be used instead of their values).</li>
+</ul>
+<p>
+If you find something else that won't compile (especially the optimized pixel macros - we've 
+already been reported bugs many times, and I found one by myself), please report it to us !
+</p>
+<br><br><br>
+<strong>ABOUT THE GRAYSCALE MONSTER FUNCTIONS:</strong>
+<p>
+The GraySprite routines are real "monsters" due to their number of parameters.
+I've never planned to implement them this way, but there were too many requests.
+We will not combine the consecutive planes into one double-sized plane for any sprite 
+routines. Indeed, this approach doesn't have any significant advantage speed-wise or 
+size-wise compared to the normal method, and it forbids writing directly to the grayscale 
+outputscreen or using doublebuffering, because the buffers used by the TIGCCLIB grayscale 
+routine are not combined this way on HW1 (which is screwing up with the tilemap engine). 
+Therefore I've decided to implement these "monsters".<br>
+GrayClipISprite8/16_... are speed-optimized by using interlaced sprites and two different 
+loops to optimize shiftings.<br>
+A number of programs (vertical scroller Venus is one of them) contain routines whose prototype is 
+similar to that of GrayClipISprite routines (single pointer to a sprite), but the sprite format 
+is different: it contains the entire data for one plane, the entire data for the other plane, 
+the entire mask data if any (or any permutation of these three blocks). Using this format is 
+nearly as efficient speed-wise and speed-wise as using interlaced sprites. Starting from Beta 
+4, you can find information in the readme, so that all users (even those who don't know ASM, 
+what a shame) can modify them to use this format without too much trouble.
+</p>
+<br>
+<strong>WHY EXTGRAPH 2.xx VERSIONS ARE A GREAT IMPROVEMENT OVER 1.xx AND OLDER:</strong>
+<ul>
+<li>Nearly all functions and even several macros were rewritten in pure assembly, resulting 
+in both size and speed improvements.</li>
+<li>__attribute__((__regparm__)) routines (functions whose name ends with "_R") are now 
+available. They are faster and smaller than equivalent __attribute__((__stkparm__)) routines, 
+which were rewritten too, and are left for backwards compatibility. Few __stkparm__ routines 
+do not have a __regparm__ version, but many __regparm__ routines do not have a __stkparm__ 
+versions. As a consequence, TIGCC 0.93 is not supported any more, but this version is no 
+longer the official release and is really outdated now. __stkparm__ routines should not be 
+used for new designs if they have __regparm__ equivalents.</li>
+<li>clipped sprite routines, which can be used just like the normal (non-clipped) sprite 
+routines. The prototypes of the equivalent non-clipped and clipped routines are identical. 
+The clipped routines assume the planes they are given are 240x128 pixels, but you can easily 
+modify them to make them fit your needs (see the readme). Note that GrayClip(I)Sprite32 
+routines can be slow when clipping at the left or right sides, due to a high shift count 
+(the smaller the part onscreen is, the slower the clipping is).</li>
+<li>a complete tilemap engine was added.</li>
+<li>grayscale transparency routines (TRANB_R / TRANW_R - the modifications for TRAND and 
+TRANL are given in the readme) are now available.</li>
+<li>tile (aligned sprite) functions were added.</li>
+<li>rectangle-drawing routines are now available.</li>
+<li>other utility functions for X8(X8) sprites were added, the B/W SpriteX8 routines were
+rewritten</li>
+<li>support for preshifted sprites (brute-force-which-takes-up-a-high-amount-of-RAM) 
+is now available.</li>
+<li>interlaced sprite functions were added.</li>
+<li>special fast background save&amp;restore functions are now available.</li>
+<li>transition effects were added.</li>
+<li>documentation is clearer (although much bigger) and more usable by newbies than it used 
+to be (tips, comparisons between different approaches - look forward to TICT tutorial S1P9 
+about optimization).</li>
+</ul>
+<br>
+<em>This is a beta, this means it may contain bugs we might not have seen despite our tests (Beta 4
+needed the entire library to be more or less retested, see the changelog). We already saw 
+several more or less severe bugs in all betas.</em>
+
+<br><br>
+<br>
+<p>
+As of Beta 4, the tilemap engine is still incompatible with the TIGCCLIB grayscale 
+doublebuffering support.
+</p>
+
+<hr>
+<p>
+<a name="#contents" class=startofblock>Contents</a>
+<ul>
+<li><a href="ExtGraph/howto.html"><strong>How to use the ExtGraph Library ?</strong></a></li>
+<li><a href="ExtGraph/sprite_draw.html"><strong>Fast Sprite Drawing Routines</strong></a></li>
+<li><a href="ExtGraph/sprite_grab.html"><strong>Fast Sprite Grabbing Routines</strong></a></li>
+<li><a href="ExtGraph/sprite_mirror_rotate.html"><strong>SpriteX8 Mirror and Rotate Routines</strong></a></li>
+<li><a href="ExtGraph/sprite_scale.html"><strong>Sprite Scaling Routines</strong></a></li>
+<li><a href="ExtGraph/plane_scroll.html"><strong>Plane Scrolling Routines</strong></a></li>
+<li><a href="ExtGraph/copy_screen.html"><strong>Fast CopyScreen Routines</strong></a></li>
+<li><a href="ExtGraph/line_draw.html"><strong>Fast Line Drawing</strong></a></li>
+<li><a href="ExtGraph/rect_draw.html"><strong>Fast Rectangle Drawing</strong></a></li>
+<li><a href="ExtGraph/gray_util.html"><strong>Misc. Grayscale Support Routines</strong></a></li>
+<li><a href="ExtGraph/enumerations.html"><strong>Misc. Types (Enumerations) for Grayscale Routines</strong></a></li>
+<li><a href="ExtGraph/macros.html"><strong>Fast Pixel Access Macros / utility macros</strong></a></li>
+<li><a href="ExtGraph/floodfill.html"><strong>FloodFill Routines</strong></a></li>
+<li><a href="ExtGraph/trans_effects.html"><strong>Transition effects</strong></a></li>
+<li><a href="ExtGraph/other_gfx.html"><strong>Other graphical routines</strong></a></li>
+<li><a href="ExtGraph/tile_func.html"><strong>Tile (aligned sprites) routines</strong></a></li>
+<li><a href="ExtGraph/createshadow.html"><strong>Sprite shadow creating routines</strong></a></li>
+<li><a href="ExtGraph/preshifted.html"><strong>Semi-preshifted sprite routines and macros</strong></a></li>
+<li><a href="ExtGraph/utility.html"><strong>Utility Routines and Macros</strong></a></li>
+<li><a href="ExtGraph/exepack.html"><strong>ExePack-Decompression and TTArchive Support</strong></a></li>
+<li><a href="ExtGraph/collision.html"><strong>Collision Detection Functions and Macros</strong></a></li>
+<li><a href="#reportingbugsnote"><strong>A note on reporting bugs</strong></a></li>
+<li><a href="#extgraphindistros"><strong>A note on including ExtGraph in your projects' distributions</strong></a></li>
+<li><a href="#specialthanks"><strong>Special thanks to</strong></a></li>
+<li><a href="ExtGraph/comparison.html"><strong>Comparison between the different sprite types</strong></a></li>
+<li><a href="ExtGraph/tips.html"><strong>Programming / usage tips</strong></a></li>
+<li><a href="ExtGraph/history.html"><strong>History</strong></a></li>
+</ul>
+<br>
+
+<a name="#functions" class=startofblock>Functions, Types, Globals and Macros</a><br>
+Library ExtGraph contains the following functions:
+<PRE><strong>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite8_AND</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite16_AND</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite32_AND</a>                   <a href="ExtGraph/sprite_draw.html#SpriteX_AND">SpriteX8_AND</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite8_AND_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite16_AND_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite32_AND_R</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_AND">SpriteX8_AND_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite8_AND</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite16_AND</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite32_AND</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySpriteX8_AND</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite8_AND_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite16_AND_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GraySprite32_AND_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">ClipSprite8_AND_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_AND">ClipSprite16_AND_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_AND">ClipSprite32_AND_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_AND">GrayClipSprite8_AND_R</a>        <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GrayClipSprite16_AND_R</a>        <a href="ExtGraph/sprite_draw.html#SpriteX_AND">GrayClipSprite32_AND_R</a>
+
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite8_BLIT</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite16_BLIT</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite32_BLIT</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">SpriteX8_BLIT</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite8_BLIT_R</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite16_BLIT_R</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">Sprite32_BLIT_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">SpriteX8_BLIT_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite8_BLIT</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite16_BLIT</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite32_BLIT</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySpriteX8_BLIT</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite8_BLIT_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite16_BLIT_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GraySprite32_BLIT_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">ClipSprite8_BLIT_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">ClipSprite16_BLIT_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">ClipSprite32_BLIT_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GrayClipSprite8_BLIT_R</a>       <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GrayClipSprite16_BLIT</a>         <a href="ExtGraph/sprite_draw.html#SpriteX_BLIT">GrayClipSprite32_BLIT_R</a>
+
+<a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite8Get</a>                   <a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite16Get</a>                   <a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite32Get</a>                    <a href="ExtGraph/sprite_grab.html#SpriteXGet">SpriteX8Get</a>
+<a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite8Get_R</a>                 <a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite16Get_R</a>                 <a href="ExtGraph/sprite_grab.html#SpriteXGet">Sprite32Get_R</a>                  <a href="ExtGraph/sprite_grab.html#SpriteXGet">SpriteX8Get_R</a>
+
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite8_MASK</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite16_MASK</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite32_MASK</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">SpriteX8_MASK</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite8_MASK_R</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite16_MASK_R</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">Sprite32_MASK_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">SpriteX8_MASK_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite8_MASK</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite16_MASK</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite32_MASK</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySpriteX8_MASK</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite8_MASK_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite16_MASK_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GraySprite32_MASK_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">ClipSprite8_MASK_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">ClipSprite16_MASK_R</a>           <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">ClipSprite32_MASK_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GrayClipSprite8_MASK_R</a>       <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GrayClipSprite16_MASK_R</a>       <a href="ExtGraph/sprite_draw.html#SpriteX_MASK">GrayClipSprite32_MASK_R</a>
+
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite8_OR</a>                   <a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite16_OR</a>                   <a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite32_OR</a>                    <a href="ExtGraph/sprite_draw.html#SpriteX_OR">SpriteX8_OR</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite8_OR_R</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite16_OR_R</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_OR">Sprite32_OR_R</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_OR">SpriteX8_OR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite8_OR</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite16_OR</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite32_OR</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySpriteX8_OR</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite8_OR_R</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite16_OR_R</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GraySprite32_OR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">ClipSprite8_OR_R</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_OR">ClipSprite16_OR_R</a>             <a href="ExtGraph/sprite_draw.html#SpriteX_OR">ClipSprite32_OR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_OR">GrayClipSprite8_OR_R</a>         <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GrayClipSprite16_OR_R</a>         <a href="ExtGraph/sprite_draw.html#SpriteX_OR">GrayClipSprite32_OR_R</a>
+
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite8_XOR</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite16_XOR</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite32_XOR</a>                   <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">SpriteX8_XOR</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite8_XOR_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite16_XOR_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">Sprite32_XOR_R</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">SpriteX8_XOR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite8_XOR</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite16_XOR</a>              <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite32_XOR</a>               <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySpriteX8_XOR</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite8_XOR_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite16_XOR_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GraySprite32_XOR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">ClipSprite8_XOR_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">ClipSprite16_XOR_R</a>            <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">ClipSprite32_XOR_R</a>
+<a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GrayClipSprite8_XOR_R</a>        <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GrayClipSprite16_XOR_R</a>        <a href="ExtGraph/sprite_draw.html#SpriteX_XOR">GrayClipSprite32_XOR_R</a>
+
+<a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GraySprite8_TRANB_R</a>          <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GraySprite16_TRANB_R</a>          <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GraySprite32_TRANB_R</a>
+<a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GrayClipSprite8_TRANB_R</a>      <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GrayClipSprite16_TRANB_R</a>      <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANB">GrayClipSprite32_TRANB_R</a>
+
+<a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GraySprite8_TRANW_R</a>          <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GraySprite16_TRANW_R</a>          <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GraySprite32_TRANW_R</a>
+<a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GrayClipSprite8_TRANW_R</a>      <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GrayClipSprite16_TRANW_R</a>      <a href="ExtGraph/sprite_draw.html#GraySpriteX_TRANW">GrayClipSprite32_TRANW_R</a>
+
+
+<a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_MIRROR_H</a>            <a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_MIRROR_V</a>
+<a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_MIRROR_H_R</a>          <a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_MIRROR_V_R</a>
+<a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_MIRROR_HV_R</a>
+<a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_ROTATE_RIGHT_R</a>      <a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_ROTATE_LEFT_R</a>
+<a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_RR_MH_R</a>             <a href="ExtGraph/sprite_mirror_rotate.html">SpriteX8_RL_MH_R</a>
+
+
+<a href="ExtGraph/sprite_scale.html#ScaleSpriteX_AND">ScaleSprite8_AND</a>             <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_AND">ScaleSprite16_AND</a>             <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_AND">ScaleSprite32_AND</a>              <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_AND">ScaleSprite64_AND</a>
+<a href="ExtGraph/sprite_scale.html#ScaleSpriteX_OR">ScaleSprite8_OR</a>              <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_OR">ScaleSprite16_OR</a>              <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_OR">ScaleSprite32_OR</a>               <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_OR">ScaleSprite64_OR</a>
+<a href="ExtGraph/sprite_scale.html#ScaleSpriteX_XOR">ScaleSprite8_XOR</a>             <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_XOR">ScaleSprite16_XOR</a>             <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_XOR">ScaleSprite32_XOR</a>              <a href="ExtGraph/sprite_scale.html#ScaleSpriteX_XOR">ScaleSprite64_XOR</a>
+
+
+<a href="ExtGraph/plane_scroll.html#ScrollLeftX">ScrollLeft160</a>                <a href="ExtGraph/plane_scroll.html#ScrollLeftX">ScrollLeft160_R</a>               <a href="ExtGraph/plane_scroll.html#ScrollLeftX">ScrollLeft240</a>                  <a href="ExtGraph/plane_scroll.html#ScrollLeftX">ScrollLeft240_R</a>
+<a href="ExtGraph/plane_scroll.html#ScrollRightX">ScrollRight160</a>               <a href="ExtGraph/plane_scroll.html#ScrollRightX">ScrollRight160_R</a>              <a href="ExtGraph/plane_scroll.html#ScrollRightX">ScrollRight240</a>                 <a href="ExtGraph/plane_scroll.html#ScrollRightX">ScrollRight240_R</a>
+<a href="ExtGraph/plane_scroll.html#ScrollUpX">ScrollUp160</a>                  <a href="ExtGraph/plane_scroll.html#ScrollUpX">ScrollUp160_R</a>                 <a href="ExtGraph/plane_scroll.html#ScrollUpX">ScrollUp240</a>                    <a href="ExtGraph/plane_scroll.html#ScrollUpX">ScrollUp240_R</a>
+<a href="ExtGraph/plane_scroll.html#ScrollDownX">ScrollDown160</a>                <a href="ExtGraph/plane_scroll.html#ScrollDownX">ScrollDown160_R</a>               <a href="ExtGraph/plane_scroll.html#ScrollDownX">ScrollDown240</a>                  <a href="ExtGraph/plane_scroll.html#ScrollDownX">ScrollDown240_R</a>
+
+
+<a href="ExtGraph/copy_screen.html">FastCopyScreen</a>               <a href="ExtGraph/copy_screen.html">FastCopyScreen_R</a>
+
+
+<a href="ExtGraph/line_draw.html#FastDrawLine">FastDrawLine</a>                 <a href="ExtGraph/line_draw.html#FastDrawLine">FastDrawLine_R</a>
+<a href="ExtGraph/line_draw.html#FastDrawHLine">FastDrawHLine</a>                <a href="ExtGraph/line_draw.html#FastDrawHLine">FastDrawHLine_R</a>
+<a href="ExtGraph/line_draw.html#FastDrawVLine">FastDrawVLine</a>                <a href="ExtGraph/line_draw.html#FastDrawVLine">FastDrawVLine_R</a>
+<a href="ExtGraph/line_draw.html#FastLine">FastLine_Draw_R</a>              <a href="ExtGraph/line_draw.html#FastLine">FastLine_Erase_R</a>              <a href="ExtGraph/line_draw.html#FastLine">FastLine_Invert_R</a>
+
+
+<a href="ExtGraph/rect_draw.html">FastFillRect</a>                 <a href="ExtGraph/rect_draw.html">FastFillRect_R</a>
+<a href="ExtGraph/rect_draw.html">FastFilledRect_Draw_R</a>        <a href="ExtGraph/rect_draw.html">FastFilledRect_Erase_R</a>        <a href="#rect_draw">FastFilledRect_Invert_R</a>
+<a href="ExtGraph/rect_draw.html">FastOutlineRect</a>              <a href="ExtGraph/rect_draw.html">FastOutlineRect_R</a>             <a href="#rect_draw">GrayFastOutlineRect_R</a>
+<a href="ExtGraph/rect_draw.html">FastEraseRect160_R</a>           <a href="ExtGraph/rect_draw.html">FastEraseRect240_R</a>
+<a href="ExtGraph/rect_draw.html">GrayFastEraseRect2B160_R</a>     <a href="ExtGraph/rect_draw.html">GrayFastEraseRect2B240_R</a>
+<a href="ExtGraph/rect_draw.html">FastFillRect160_R</a>            <a href="ExtGraph/rect_draw.html">FastFillRect240_R</a>
+<a href="ExtGraph/rect_draw.html">GrayFastFillRect2B160_R</a>      <a href="ExtGraph/rect_draw.html">GrayFastFillRect2B240_R</a>
+<a href="ExtGraph/rect_draw.html">FastInvertRect160_R</a>          <a href="ExtGraph/rect_draw.html">FastInvertRect240_R</a>
+<a href="ExtGraph/rect_draw.html">GrayFastInvertRect2B160_R</a>    <a href="ExtGraph/rect_draw.html">GrayFastInvertRect2B240_R</a>
+<a href="ExtGraph/rect_draw.html">FastEraseRectX8_R</a>            <a href="ExtGraph/rect_draw.html">FastFillRectX8_R</a>              <a href="#rect_draw">FastEraseRectX8_R</a>
+
+
+<a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen</a>              <a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen2B</a>             <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen</a>                <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen2B</a>
+<a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen_R</a>            <a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen2B_R</a>           <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen_R</a>              <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen2B_R</a>
+<a href="ExtGraph/gray_util.html#GrayDrawRect">DrawGrayRect</a>                 <a href="ExtGraph/gray_util.html#GrayDrawRect">DrawGrayRect2B</a>                <a href="ExtGraph/gray_util.html#GrayDrawRect">GrayDrawRect</a>                   <a href="ExtGraph/gray_util.html#GrayDrawRect">GrayDrawRect2B</a>
+<a href="ExtGraph/gray_util.html#GrayInvertRect">InvertGrayRect</a>               <a href="ExtGraph/gray_util.html#GrayInvertRect">InvertGrayRect2B</a>              <a href="ExtGraph/gray_util.html#GrayInvertRect">GrayInvertRect</a>                 <a href="ExtGraph/gray_util.html#GrayInvertRect">GrayInvertRect2B</a>
+<a href="ExtGraph/gray_util.html#GrayDrawLine">DrawGrayLine</a>                 <a href="ExtGraph/gray_util.html#GrayDrawLine">DrawGrayLine2B</a>                <a href="ExtGraph/gray_util.html#GrayDrawLine">GrayDrawLine</a>                   <a href="ExtGraph/gray_util.html#GrayDrawLine">GrayDrawLine2B</a>
+<a href="ExtGraph/gray_util.html#GrayFastDrawLine">FastDrawGrayLine</a>             <a href="ExtGraph/gray_util.html#GrayFastDrawLine">FastDrawGrayLine2B</a>            <a href="ExtGraph/gray_util.html#GrayFastDrawLine">GrayFastDrawLine</a>               <a href="ExtGraph/gray_util.html#GrayFastDrawLine">GrayFastDrawLine2B</a>
+<a href="ExtGraph/gray_util.html#GrayFastDrawHLine">FastDrawGrayHLine</a>            <a href="ExtGraph/gray_util.html#GrayFastDrawHLine">FastDrawGrayHLine2B</a>           <a href="ExtGraph/gray_util.html#GrayFastDrawHLine">GrayFastDrawHLine</a>              <a href="ExtGraph/gray_util.html#GrayFastDrawHLine">GrayFastDrawHLine2B</a>
+<a href="ExtGraph/gray_util.html#GrayDrawChar">DrawGrayChar</a>                 <a href="ExtGraph/gray_util.html#GrayDrawChar">DrawGrayChar2B</a>                <a href="ExtGraph/gray_util.html#GrayDrawChar">GrayDrawChar</a>                   <a href="ExtGraph/gray_util.html#GrayDrawChar">GrayDrawChar2B</a>
+<a href="ExtGraph/gray_util.html#GrayDrawStr">DrawGrayStr</a>                  <a href="ExtGraph/gray_util.html#GrayDrawStr">DrawGrayStr2B</a>                 <a href="ExtGraph/gray_util.html#GrayDrawStr">GrayDrawStr</a>                    <a href="ExtGraph/gray_util.html#GrayDrawStr">GrayDrawStr2B</a>
+<a href="ExtGraph/gray_util.html#GrayDrawStrExt">DrawGrayStrExt</a>               <a href="ExtGraph/gray_util.html#GrayDrawStrExt">DrawGrayStrExt2B</a>              <a href="ExtGraph/gray_util.html#GrayDrawStrExt">GrayDrawStrExt</a>                 <a href="ExtGraph/gray_util.html#GrayDrawStrExt">GrayDrawStrExt2B</a>
+
+
+<a href="ExtGraph/preshifted.html">PreshiftSprite16x16</a>          <a href="ExtGraph/preshifted.html">PreshiftGrayISprite16x16</a>
+
+
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_CWS1_R</a>        <a href="ExtGraph/trans_effects.html">FadeOutToWhite_CWS1_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_CCWS1_R</a>       <a href="ExtGraph/trans_effects.html">FadeOutToWhite_CCWS1_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_LR_R</a>          <a href="ExtGraph/trans_effects.html">FadeOutToWhite_LR_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_LR18_R</a>        <a href="ExtGraph/trans_effects.html">FadeOutToWhite_LR18_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_LR28_R</a>        <a href="ExtGraph/trans_effects.html">FadeOutToWhite_LR28_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_RL_R</a>          <a href="ExtGraph/trans_effects.html">FadeOutToWhite_RL_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_RL18_R</a>        <a href="ExtGraph/trans_effects.html">FadeOutToWhite_RL18_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_RL28_R</a>        <a href="ExtGraph/trans_effects.html">FadeOutToWhite_RL28_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_TB_R</a>          <a href="ExtGraph/trans_effects.html">FadeOutToWhite_TB_R</a>
+<a href="ExtGraph/trans_effects.html">FadeOutToBlack_BT_R</a>          <a href="ExtGraph/trans_effects.html">FadeOutToWhite_BT_R</a>
+<a href="ExtGraph/trans_effects.html">GrayIShadowPlanesX16_R</a>       <a href="ExtGraph/trans_effects.html">GrayShadowPlanesX16_R</a>
+<a href="ExtGraph/trans_effects.html">GrayIShadowPlanes160_R</a>       <a href="ExtGraph/trans_effects.html">GrayShadowPlanes160_R</a>
+<a href="ExtGraph/trans_effects.html">GrayIShadowPlanes240_R</a>       <a href="ExtGraph/trans_effects.html">GrayShadowPlanes240_R</a>
+<a href="ExtGraph/trans_effects.html">GrayIShadowPlanesTo_R</a>        <a href="ExtGraph/trans_effects.html">GrayShadowPlanesTo_R</a>
+
+
+<a href="ExtGraph/floodfill.html">FloodFill</a>                    <a href="ExtGraph/floodfill.html">FloodFill_R</a>
+<a href="ExtGraph/floodfill.html">FloodFillMF</a>                  <a href="ExtGraph/floodfill.html">FloodFillMF_R</a>
+
+
+<a href="ExtGraph/exepack.html">decompression routines</a>
+
+
+<a href="ExtGraph/collision.html">TestCollide8</a>                 <a href="ExtGraph/collision.html">TestCollide8_R</a>
+<a href="ExtGraph/collision.html">TestCollide16</a>                <a href="ExtGraph/collision.html">TestCollide16_R</a>
+
+
+</strong></PRE>
+the following predefined types:
+<PRE><strong><a href="ExtGraph/enumerations.html#GrayColors">GrayColors</a>
+<a href="ExtGraph/enumerations.html#FillAttrs">FillAttrs</a>
+<a href="ExtGraph/enumerations.html#ExtAttrs">ExtAttrs</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_HEADER</a>
+<a href="ExtGraph/exepack.html">TTARCHIVE_HEADER</a>
+<a href="ExtGraph/exepack.html">TTARCHIVE_ENTRY</a>
+
+</strong></PRE>
+
+the following global variables:
+<PRE><strong><a href="ExtGraph/utility.html">EXTGRAPH_VERSION_STR</a>
+<a href="ExtGraph/utility.html">EXTGRAPH_VERSION_PWDSTR</a>
+<a href="ExtGraph/utility.html">EXTGRAPH_VERSION_MAIN</a>
+<a href="ExtGraph/utility.html">EXTGRAPH_VERSION_SUB</a>
+<a href="ExtGraph/utility.html">EXTGRAPH_VERSION_REV</a>
+</strong></PRE>
+
+and the following macros/definitions:
+<PRE><strong><a href="ExtGraph/macros.html">EXT_PIXOFFSET</a>
+<a href="ExtGraph/macros.html">EXT_PIXADDR</a>
+<a href="ExtGraph/macros.html">EXT_PIXMASK</a>
+<a href="ExtGraph/macros.html">EXT_PIXNBIT</a>
+<a href="ExtGraph/macros.html">EXT_PIXUP</a>
+<a href="ExtGraph/macros.html">EXT_PIXDOWN</a>
+<a href="ExtGraph/macros.html">EXT_PIXLEFT_AM</a>
+<a href="ExtGraph/macros.html">EXT_PIXRIGHT_AM</a>
+<a href="ExtGraph/macros.html">EXT_SETPIX_AM</a>
+<a href="ExtGraph/macros.html">EXT_CLRPIX_AM</a>
+<a href="ExtGraph/macros.html">EXT_XORPIX_AM</a>
+<a href="ExtGraph/macros.html">EXT_GETPIX_AM</a>
+<a href="ExtGraph/macros.html">EXT_SETPIX_AN</a>
+<a href="ExtGraph/macros.html">EXT_CLRPIX_AN</a>
+<a href="ExtGraph/macros.html">EXT_XORPIX_AN</a>
+<a href="ExtGraph/macros.html">EXT_GETPIX_AN</a>
+<a href="ExtGraph/macros.html">EXT_SETPIX</a>
+<a href="ExtGraph/macros.html">EXT_CLRPIX</a>
+<a href="ExtGraph/macros.html">EXT_XORPIX</a>
+<a href="ExtGraph/macros.html">EXT_GETPIX</a>
+
+<a href="ExtGraph/macros.html">EXT_SHORTABS</a>
+<a href="ExtGraph/macros.html">EXT_LONGABS</a>
+<a href="ExtGraph/macros.html">EXT_XCHG</a>
+<a href="ExtGraph/macros.html">EXT_LONGSWAP</a>
+<a href="ExtGraph/macros.html">DEREFSMALL</a>
+
+<a href="ExtGraph/exepack.html">ttarchive_valid</a>
+<a href="ExtGraph/exepack.html">ttarchive_entries</a>
+<a href="ExtGraph/exepack.html">ttarchive_desc</a>
+<a href="ExtGraph/exepack.html">ttarchive_data</a>
+<a href="ExtGraph/exepack.html">ttarchive_size</a>
+<a href="ExtGraph/exepack.html">ttarchive_info</a>
+
+<a href="ExtGraph/exepack.html">ttunpack_size</a>
+<a href="ExtGraph/exepack.html">ttunpack_valid</a>
+
+<a href="ExtGraph/exepack.html">TTUNPACK_OKAY</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_NOESCFOUND</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_ESCBITS</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_MAXGAMMA</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_EXTRALZP</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_NOMAGIC</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_OUTBUFOVERRUN</a>
+<a href="ExtGraph/exepack.html">TTUNPACK_LZPOSUNDERRUN</a>
+
+<a href="ExtGraph/collision.html">BOUNDS_COLLIDE</a>
+<a href="ExtGraph/collision.html">BOUNDS_COLLIDE8</a>
+<a href="ExtGraph/collision.html">BOUNDS_COLLIDE16</a>
+<a href="ExtGraph/collision.html">BOUNDS_COLLIDE32</a>
+
+<a href="ExtGraph/preshifted.html">PSprite16x16_OR_R</a>           <a href="ExtGraph/preshifted.html">GrayPSprite16x16_OR_R</a>
+<a href="ExtGraph/preshifted.html">PSprite16x16_XOR_R</a>          <a href="ExtGraph/preshifted.html">GrayPSprite16x16_XOR_R</a>
+</strong></PRE>
+<br><br><br>
+
+<hr>
+<a name="#reportingbugsnote" class=startofblock>A note on reporting bugs...</a>
+<hr>
+<p>
+We tried to do our best to provide something bug-free, but we may have failed (many bugs 
+were found in the previous ExtGraph 2.00 betas).<br>
+If you believe a sprite function is buggy, could you please test it with the project 
+sprtst.tpr in \src\lib ? If the function is buggy, the program could show its flaws 
+(several flaws could be missed by the program though) more valueable. Note that I have 
+a large test suite for sprite functions.<br>
+If this test doesn't show the function is buggy, well, then it's not unlikely that there's 
+a problem in your code. One of the most frequent causes of random bugs is writes past the 
+bounds of arrays (segfaults on other architectures), on the stack (often triggers 
+Illegal Instruction or Address Error) or in the heap (infinite loop in AMS after the 
+program returns, often in HS_popEStack). Be sure to check the result of dynamic memory 
+allocations, too.<br>
+Be sure to use the TIGCC 0.95 release, or newer (0.96 recommended).<br>
+Thanks in advance.
+</p>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<a name="#extgraphindistros" class=startofblock>Including ExtGraph in your projects' distributions...</a>
+<hr>
+<p>
+If you distribute ExtGraph within your projects' distributions, please include both extgraph.a and 
+extgraph.h (and tilemap.a / tilemap.h if you use the tilemap engine, preshift.h if you use preshifted 
+sprites). Don't get fooled by the huge size of those files: they are very redundant data, high 
+compression ratios can therefore be achieved on them. The biggest file, extgraph.a, is more than six 
+times smaller after compression with old ZIP format.
+</p>
+<br>
+<br>
+<br>
+<br>
+<hr>
+<a name="#specialthanks" class=startofblock>Special thanks to...</a>
+<hr>
+<p>
+I'd like to thank the contributors, especially Julien Richard-Foy (jackiechan / Sasume - 
+author of the tilemap engine and various programs, attending the TIGCC/TICT message board on 
+a regular basis) and Geoffrey Anneheim (geogeo - author of PolySnd, Arkanoid Revenge of 
+Doh, Nebulus, GFA Basic) once more for their work. ExtGraph would never have been what it is 
+if they had not helped me. My policy is of course to let the contributors work on other 
+projects if they want to, which they do for sure. For example, Julien is now working on 
+kernel-based dynamic graphical library GenLib, in which he took ideas for the tilemap engine 
+and optimizations on TRANB/W routines (also seen in Phoenix Platinum).
+</p>
+<br>
+<br>
+<br>
+<br>
+
+<hr>
+<strong>
+Library ExtGraph and the documentation since 0.51 were written by <a href="mailto:thomas.nussbaumer@gmx.net">Thomas
+Nussbaumer</a> and <a href="mailto:lionel_debroux@yahoo.fr">Lionel Debroux</a>.<br>
+Credits for the documentation up to version 0.51 go to 
+<a href="mailto:kronicdeth@paradoxpoint.com"><strong>Luke Imhoff (KronicDeth)</strong></a>.<br>
+Additional credits for Routines and Updates go to 
+<a href="mailto:jimhaskell@yahoo.com">Jim Haskell</a>,
+<a href="mailto:zjuric@utic.net.ba">Zeljko Juric</a>, 
+<a href="mailto:lionel_debroux@yahoo.fr">Lionel Debroux</a>,
+<a href="mailto:julien.rf@wanadoo.fr">Julien Richard-Foy (jackiechan / Sasume)</a>, 
+<a href="mailto:ximoon@voila.fr">Christophe Molon-Noblot (Ximoon)</a>,
+<a href="mailto:ola.e-ml@wanadoo.fr">Olivier Armand (ExtendeD)</a>, 
+<a href="mailto:geoffrey.anneheim@wanadoo.fr">Geoffrey Anneheim (geogeo)</a>, 
+<a href="mailto:oragesoft@hotmail.com">Vincent Corfdir (Orage)</a>,
+<a href="mailto:calc@gregd.org">Greg Dietsche (dietsche)</a>,
+<a href="mailto:samuel@nyall.net">Samuel Stearley</a>.<br></strong>
+<hr>
+<strong>If you need help, please use the <a href="http://p080.ezboard.com/ftichessteamhqfrm5">TIGCC Programming Message Board</a>.</strong>
+</BODY>
+</HTML>

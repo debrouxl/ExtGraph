@@ -1,0 +1,39 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="intro.html">Introduction</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="description.html">Description des fonctions</a></td></tr>
+</table>
+<hr>
+<p>
+<h3><center>Comment utiliser la librairie dans vos programmes ?</center></h3>
+<br>
+<ul>
+ <li>
+ Si vous programmez en C ou ASM avec <a href=http://tigcc.ticalc.org>TIGCC</a>
+ <ul>
+  <br>
+  <li>
+  En utilisant l'IDE<br>
+  Ajoutez les fichiers <code>TileMap.a</code> et <code>TileMap.h</code> à votre projet (Project -> Add Files...), puis ajoutez la ligne <br>
+  <code>#include "TileMap.h"</code><br>
+  dans chaque fichier source où vous désirez utiliser des fonctions du TileMap Engine.<br>
+  </li>
+  <br>
+  <li>
+  En utilisant une ligne de commandes<br>
+  Dans chaque fichier source qui utilise des fonctions du TileMap Engine, incluez le header <code>TileMap.h</code>, en précisant soit le chemin absolu, soit le chemin relatif ; par exemple :<br>
+  <code>#include "../../TileMap Engine/Lib/TileMap.h"</code><br>
+  Puis, pour compiler, indiquez comme d'habitude les fichiers source à compiler, suivis de TileMap.a, en précisant là encore soit le chemin absolu, soit le chemin relatif pour y accéder ; par exemple :<br>
+  <code>tigcc prog.c sprites.c "../../TileMap Engine/Lib/TileMap.a"</code><br>
+  </li>
+ </ul>
+ </li>
+</ul>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="intro.html">Introduction</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="description.html">Description des fonctions</a></td></tr>
+</table>
+</body>
+</html>

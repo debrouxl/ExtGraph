@@ -1,0 +1,300 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#history"><h1>History</h1></a>
+<hr>
+<blockquote>
+<table border=1>
+<tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
+<tr><td>2.00 Beta 5</td><td>xx/xx/200x</td><td>Fixed silly bugs on pixel macros (yes, once more !).
+                                        Credits go to Sebastian and Kevin for the fixes (escape one of 
+                                        the question marks that form trigraph ??!, etc.).</td></tr>
+<tr><td>           </td><td>          </td><td>Restructured the entire documentation, so that it 
+                                        can be maintained and most of all read more easily. I 
+                                        myself didn't even feel like browsing that 180K block 
+                                        anymore, I guess ExtGraph users don't either. The main 
+                                        documentation is following the way started by the tilemap 
+                                        engine documentation - which is much smaller.</td></tr>
+<tr><td>           </td><td>          </td><td>updated the documentation, made the HTML code cleaner 
+                                        using Firefox plugin HTML Validator. Thanks to my schoolmate
+                                        Yoann for making me aware a while ago that the HTML code I 
+                                        used and made was poor.</td></tr>
+<tr><td>           </td><td>          </td><td>fixed side clipping of GrayClipISprite8_MASK_R,
+                                        thanks to Jean-François Geyelin for the report.</td></tr>
+<tr><td>           </td><td>          </td><td>Added new TestCollide routines (request from TIGCC/TICT
+                                        board user "lachprog"), optimized existing ones.</td></tr>
+<tr><td>           </td><td>          </td><td>Added plane scaling routines. They're slow and their
+                                        effect is rather ugly (especially when there's text), but
+                                        some use them...</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed SpriteX8Get(_R), they used to crash the
+                                        calculator when bytewidth was lower (or equal ?) than 2.
+                                        Thanks to Geoffrey Anneheim (geogeo) for the report.</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized and added single sprite -> 2 plane routines.
+                                        Thanks to David Randall (Ranman) for the contribution and part
+                                        of the coding.</td></tr>
+<tr><td>           </td><td>          </td><td>Switched to GCC 4.x, which required small changes in
+                                        the build batchfile (which you should hardly ever use anyway).</td></tr>
+<tr><td>           </td><td>          </td><td>Switched to a more general and powerful cleanup which
+                                        uses GNU tools.</td></tr>
+<tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>removed (I)SHADOW(2) routines: they are nearly 
+                                        useless thanks to Create(I)Sprite(I)Shadow and OR routines 
+                                        (which require a small additional amount of space) and 
+                                        they increase maintenance (more than one quarter of all 
+                                        drawing modes).</td></tr>
+<tr><td>           </td><td>          </td><td>added Gray(Clip)S[ame]MASK routines.</td></tr>
+<tr><td>           </td><td>          </td><td>added a number of hints in the readme, to help 
+                                        users customizing routines by themselves.</td></tr>
+<tr><td>           </td><td>          </td><td>added fast background save&amp;restore routines, 
+                                        with the corresponding demo (demo22): faster replacement 
+                                        for Get + RPLC, i.e. another way to do without redrawing 
+                                        everything all the time. This one can outperform all other 
+                                        approaches under some conditions.<br>
+                                        Thanks to the input of Julien, they are better.</td></tr>
+<tr><td>           </td><td>          </td><td>fixed once more pixel macros, thanks to Kevin.</td></tr>
+<tr><td>           </td><td>          </td><td>added missing "const" keyword to most prototypes: 
+                                        at last, no more warnings about discarded qualifiers.</td></tr>
+<tr><td>           </td><td>          </td><td>nearly all occurences of ".data" were replaced by 
+                                        ".text". This suits better to the latest TIGCC Betas 
+                                        (better code with -ffunction-sections -fdata-sections 
+                                        --reorder-sections). No impact on compression ratio.</td></tr>
+<tr><td>           </td><td>          </td><td>Reduced length of all label names in most ASM 
+                                        routines (unless this made the routines both unreadable 
+                                        and impossible to maintain). This saved dozens of 
+                                        kilobytes on extgraph.a (up to 500 bytes per function !) 
+                                        and .s sources, and improved compression ratio !</td></tr>
+<tr><td>           </td><td>          </td><td>ExtGraph doesn't force global imports (from the 
+                                        external files added with GNU ar) anymore. This saves 
+                                        ~6 KB on the size of extgraph.a and won't interfere 
+                                        with clients anymore. Thanks to Sebastian for the report.</td></tr>
+<tr><td>           </td><td>          </td><td>Julien told me about speed optimizations on TRANW 
+                                        and TRANB sprite routines (found in programs by pad and 
+                                        PpHd): +15% for TRANW, +&gt;30 % for TRANB.</td></tr>
+<tr><td>           </td><td>          </td><td>small optimization (2 bytes, 4 clocks) on a number 
+                                        of sprite routines. [A and B] is equivalent to [B and A]...</td></tr>
+<tr><td>           </td><td>          </td><td>small optimization on several routines: d3 or d4 
+                                        can be saved to a1 instead of the stack.</td></tr>
+<tr><td>           </td><td>          </td><td>fixed long-hidden bugs. Most B/W Sprite32 routines 
+                                        were buggy, thanks to Jesse Frey for the report. I found 
+                                        other long-hidden bugs retesting the entire library.</td></tr>
+<tr><td>           </td><td>          </td><td>updated the tilemap engine. The API was reduced 
+                                        somewhat: Julien took out with the most useless modes 
+                                        to reduce maintenance. Two demos were added. However, 
+                                        the tilemap engine is still incompatible with the 
+                                        TIGCCLIB grayscale doublebuffering.</td></tr>
+<tr><td>           </td><td>          </td><td>brand-new pure ASM ttunpack routines by Samuel 
+                                        Stearley. The fast version gives a huge speed increase 
+                                        (now over 80 KB/sec !), interesting size decrease (while 
+                                        the routine is definitely optimized for speed, with 
+                                        code inlining, and we did not trade safety for speed 
+                                        and size !) compared to the C routine Greg, him and 
+                                        later I had optimized. The small version is 240 bytes 
+                                        (more than 300 bytes smaller than the other version), 
+                                        but it is slow (~&lt;20 KB/sec).</td></tr>
+<tr><td>           </td><td>          </td><td>updated SpriteX8 functions, splitting them into
+                                        normal and slower versions.</td></tr>
+<tr><td>           </td><td>          </td><td>several new routines related to planes (Fill, 
+                                        FillWithGarbage). To be fair, I want to mention that I 
+                                        received suggestions and code from Dave Randall, but I 
+                                        had already thought about implementing such routines, 
+                                        and I made a different implementation.</td></tr>
+<tr><td>           </td><td>          </td><td>added GrayFastDrawHLine_R, done by Julien.</td></tr>
+<tr><td>           </td><td>          </td><td>probably added bugs, forgot fixes, forgot to
+                                        mention fixes...</td></tr>
+<tr><td>           </td><td>          </td><td>not updated the documentation much: most new 
+                                        functions are not described, some prototypes in this 
+                                        documentation may be wrong, etc... There are several 
+                                        annoying bugs in ExtGraph, and I'm on holiday, so I'm 
+                                        spending some time making a bugfix release</td></tr>
+<tr><td>           </td><td>          </td><td>translated and released the todo list.</td></tr>
+<tr><td>2.00 Beta 3</td><td>11/06/2004</td><td>4 distributions are now available. .tar.bz2 is 
+                                        not the most powerful format, but it's OS-independent, 
+                                        and significantly reduces the size of the library.<br>
+                                        Other large TICT software distributions (mainly 
+                                        TICT-Explorer, TI-Chess, FAT-Engine) will be 
+                                        available in both formats too in next versions.</td></tr>
+<tr><td>           </td><td>          </td><td>New (I)SHADOW(2)/ISHADOW/ISHADOW2 sprite, clipped 
+                                        sprite routines; not all 32 pixel-wide sprite 
+                                        routines were written.</td></tr>
+<tr><td>           </td><td>          </td><td>demo12 and demo17 now also show the usage of SHADOW2 
+                                        and ISHADOW2 functions.</td></tr>
+<tr><td>           </td><td>          </td><td>New Create(I)Sprite(I)Shadow routines: these 
+                                        routines compute a shadowed sprite from another; 
+                                        this shadowed sprite can be used with OR routines, 
+                                        resulting in a huge speed improvement, since 
+                                        (I)SHADOW(2) routines are rather slow.</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized EXT_GETPIX_AN the same way as 
+                                        EXT_SET/CLR/XORPIX_AN, fixed all these macros: they
+                                        used to have too wide constraints for inline ASM, 
+                                        resulting into nonexistent instructions and therefore 
+                                        errors while building projects.</td></tr>
+<tr><td>           </td><td>          </td><td>Improved macro EXT_XCHG: since the asm 
+                                        <code>exg</code> instruction can exchange address 
+					registers, address registers are now allowed too.</td></tr>
+<tr><td>           </td><td>          </td><td>Semi-preshifted sprite functions / macros are now 
+                                        available (8x8 are lacking).</td></tr>
+<tr><td>           </td><td>          </td><td>Rewritten many BLIT_R routines to take blitmask in d3, 
+                                        suppressing the inconsistency.</td></tr>
+<tr><td>           </td><td>          </td><td>Rewritten TestCollide... routines in ASM, added 
+                                        __regparm__ versions.</td></tr>
+<tr><td>           </td><td>          </td><td>Bugfixed the exepack decompression function introduced 
+                                        in Beta 2, thanks to maeyhem for the report. I 
+                                        decreased the size of the decompression routines 
+                                        a bit by turning two 4-byte branches into 2-byte 
+                                        branches.</td></tr>
+<tr><td>           </td><td>          </td><td>Bugfixed SpriteX8 routines (bug reported by 
+                                        Travis Fischer, "Fisch2"), thanks to Julien Richard-Foy
+                                        and step back to older C routines. They used to trigger
+                                        Address Errors when both height and bytewidth were odd.
+                                        The rather quick fix (due to lack of time) turns into 
+                                        slightly slower routines (the larger the sprite is, 
+                                        the higher the difference is). This will be improved 
+                                        in next versions.</td></tr>
+<tr><td>           </td><td>          </td><td>Revamped the readme at the root of the distribution.</td></tr>
+<tr><td>           </td><td>          </td><td>Documentation update (nearly complete):
+                                        <ul>
+                                        <li>fixed several problems (missing [END OF BOLD] at the 
+                                        beginning messed up the entire documentation, added 
+                                        [PARAGRAPH] and [END OF PARAGRAPH] everywhere);</li>
+                                        <li>added prototypes and descriptions;</li>
+                                        <li>made more compatible with that profusion of 
+                                        browsers (suggestions by Kevin Kofler and Sebastian 
+                                        Reichelt).</li>
+                                        <li>now using free and native SciTE to edit this 
+                                        documentation (I had to fix the formatting of 
+                                        this changelog though).</li>
+                                        <li>added tips, comparison between the different 
+                                        approaches.</li>
+                                        </ul></td></tr>
+<tr><td>           </td><td>          </td><td>Changed several directory names to 8.3 format.</td></tr>
+<tr><td>2.00 Beta 2</td><td>28/03/2004</td><td>Tilemap engine widely updated,
+                                        more functions and power (although currently incompatible with the "real"
+                                        TIGCCLIB doublebuffering); documentation now in English, thanks 
+                                        to Malcolm Smith (TRGenius) for fixing our translation.</td></tr>
+<tr><td>           </td><td>          </td><td>Documentation update started, far from complete.</td></tr>
+<tr><td>           </td><td>          </td><td>Added a sprite function test program, see right above.</td></tr>
+<tr><td>           </td><td>          </td><td>Added another unpacking routine, the new one doesn't disable 
+                                        interrupts (slower but doesn't mess up grayscale).</td></tr>
+<tr><td>           </td><td>          </td><td>demo6 now uses the full 92+/V200 screen.</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed various bugs: thanks to Jordan Krage (jmank88), Nicolas Lalevée (hibou),
+                                        ? (Vertyos) for the report.</td></tr>
+<tr><td>           </td><td>          </td><td>Slightly optimized many (Gray)(Clip)SpriteX functions (jackiechan), other
+                                        optimizations are on the way.</td></tr>
+<tr><td>           </td><td>          </td><td>Missing SpriteX8_MIRROR_HV_R written.</td></tr>
+<tr><td>           </td><td>          </td><td>New routines (GraySpriteX_SHADOW, transition effects, tile (aligned sprite)
+                                        routines, (Gray)(Clip)SpriteX_RPLC, non-clipped outlined circle drawing, etc.).<br>
+                                        Various other routines are on the way (preshifted sprites, more rectangle-drawing
+                                        routines, more transition effects...). We're open to suggestions up to some
+                                        extent, too.</td></tr>
+<tr><td>2.00 Beta 1</td><td>19/12/2003</td><td>Tilemap engine added (documentation currently in 
+                                        French, it will be translated into English ASAP).</td></tr>
+<tr><td>             </td><td>          </td><td>Small changes in the documentation.</td></tr>
+<tr><td>2.00 "Beta 0"</td><td>18/12/2003</td><td>Massive update !<br>
+                                        Credits for this version go to:<br>
+                                        <ul><li>Julien Richard-Foy (jackiechan): the vast majority 
+                                        of sprite routines, the upcoming tilemap engine, new scaling 
+                                        routines, several line routines... He's the main 
+                                        contributor, of course. The majority of the work for 
+                                        this version was done by him.</li>
+                                        <li>Christophe Molon-Noblot (Ximoon): SpriteX8 routines.</li>
+                                        <li>Olivier Armand (ExtendeD): generic line routine 
+                                        supporting the three drawing modes (optimized a bit).</li>
+                                        <li>Lionel Debroux: general maintaining, reorganization 
+                                        of the library, tests.</li>
+                                        <li>Greg Dietsche, Samuel Stearley: updated unpacking routine (safe and faster).
+                                        Current hexarray taken from SuperStart.</li></ul></td></tr>
+<tr><td>1.02</td><td>22/05/2002</td><td>Stepped back to old version of decompression function, because the new one causes
+                                        random errors to be thrown.</td></tr>
+<tr><td>    </td><td>          </td><td>For TIGCC versions greater than 0.93 all functions are declared
+                                        with "__attribute__((__stkparm__))" in extgraph.h to work correctly with
+                                        commandline switch -mregparm</td></tr>
+<tr><td>1.01</td><td>08/05/2002</td><td>Bug in exepack decompression function fixed. Thanks to MastaZog from the TIGCC Programming
+                                        Forum for the report.</td></tr>
+<tr><td>1.00</td><td>05/04/2002</td><td>Address calculations in almost all routines changed for speedup (using 0x1e instead of 0xffffe).
+                                        Thanks to Francesco Orabona (bremen79@infinito.it) for this suggestion.</td></tr>
+<tr><td>    </td><td>          </td><td>Macros for bounding rectangle collision testing (BOUNDS_COLLIDE,BOUNDS_COLLIDE8,
+                                        BOUNDS_COLLIDE16 and BOUNDS_COLLIDE32) added</td></tr>
+<tr><td>    </td><td>          </td><td>Functions for Collision detection (TestCollide8() and TestCollide16()) added</td></tr>
+<tr><td>    </td><td>          </td><td>bug in macro EXT_PIXOFFSET (missing brackets) fixed.
+                                        Thanks to Greg Dietsche (greg@gregd.org) for the report.</td></tr>
+<tr><td>    </td><td>          </td><td>Demo11 added which shows how to use the collision detection functions TestCollide8() and TestCollide16()</td></tr>
+<tr><td>0.97</td><td>02/04/2002</td><td>Function FastDrawVLine() added (thanks Lionel, for the original code)</td></tr>
+<tr><td>    </td><td>          </td><td>All functions which takes a color argument optimized by using internally the fact
+                                        that the color values are bit-flags</td></tr>
+<tr><td>    </td><td>          </td><td>Demo1 is built now separately for each calctype to reduce codesize</td></tr>
+<tr><td>    </td><td>          </td><td>2 bugs in FastDrawHLine() fixed by Francesco Orabona (bremen79@infinito.it)</td></tr>
+<tr><td>0.95</td><td>25/02/2002</td><td>FastDrawHLine: missing static keyword for local array added to gain speed and size reduction</td></tr>
+<tr><td>    </td><td>          </td><td>Local arrays in scaling function declared static to gain speed and size</td></tr>
+<tr><td>    </td><td>          </td><td>ClearGrayScreen2B - converted to ASM file (.s)</td></tr>
+<tr><td>    </td><td>          </td><td>FastCopyScreen - converted to ASM file (.s)</td></tr>
+<tr><td>    </td><td>          </td><td>Exepack decompression routine added (taken from TIGCC Tools Suite)</td></tr>
+<tr><td>    </td><td>          </td><td>ttunpack.h and ttarchive.h integrated into extgraph.h for ease of use</td></tr>
+<tr><td>    </td><td>          </td><td>Section about Exepack Decompression and TTArchives added to docs</td></tr>
+<tr><td>0.90</td><td>22/02/2002</td><td>Demos modified by Lionel Debroux (<a href="mailto:lionel_debroux@yahoo.fr">lionel_debroux@yahoo.fr</a>)</td></tr>
+<tr><td>    </td><td>          </td><td>Utilities: EXTGRAPH_VERSION_STR, EXTGRAPH_VERSION_PWDSTR, EXTGRAPH_VERSION_MAIN, EXTGRAPH_VERSION_SUB added</td></tr>
+<tr><td>    </td><td>          </td><td>Utilities: CheckHWMatch() and DESIRED_CALCTYPE added</td></tr>
+<tr><td>    </td><td>          </td><td></td></tr>
+<tr><td>    </td><td>          </td><td></td></tr>
+<tr><td>0.87</td><td>05/02/2002</td><td>Adaptions to compile correctly with TIGCC 0.93 and beyond</td></tr>
+<tr><td>0.86</td><td>31/07/2001</td><td>ClearGrayScreen2B and FastCopyScreen converted to pure ASM routines</td></tr>
+<tr><td>    </td><td>          </td><td>Function FastDrawHLine added (horizontal line drawing)</td></tr>
+<tr><td>    </td><td>          </td><td>Functions FastDrawGrayHLine/FastDrawGrayHLine2B added</td></tr>
+<tr><td>    </td><td>          </td><td>Misstyped -w option changed to -W in batch files</td></tr>
+<tr><td>    </td><td>          </td><td>Misstyped -w option changed to -W in batch files</td></tr>
+<tr><td>    </td><td>          </td><td>All problems reported by -W fixed</td></tr>
+<tr><td>    </td><td>          </td><td>Routines DrawGrayChar and DrawGrayChar2B added</td></tr>
+<tr><td>    </td><td>          </td><td>Warning added to docs of FastCopyScreen</td></tr>
+<tr><td>    </td><td>          </td><td>Grayscale variants of sprite drawing routines added</td></tr>
+<tr><td>    </td><td>          </td><td>Documentation of SpriteX_BLIT functions fixed</td></tr>
+<tr><td>    </td><td>          </td><td>Typo in macro EXT_PIXADDR fixed (thanks <a href="mailto:FlashZ@netcourrier.com">FlashZ</a> for reporting)</td></tr>
+<tr><td>0.80</td><td>31/05/2001</td><td>Routines FloodFill and FloodFillMF added</td></tr>
+<tr><td>    </td><td>          </td><td>Demo8 (floodfill demo) added</td></tr>
+<tr><td>    </td><td>          </td><td>Routines SpriteX8_MIRROR_H and SpriteX8_MIRROR_V added</td></tr>
+<tr><td>    </td><td>          </td><td>Demo9 (sprite x8 mirror demo) added</td></tr>
+<tr><td>    </td><td>          </td><td>ClearGrayScreen re-implemented as very fast ASM loop</td></tr>
+<tr><td>    </td><td>          </td><td>Routine FastCopyScreen added</td></tr>
+<tr><td>    </td><td>          </td><td>Demo10 (fastcopyscreen demo) added</td></tr>
+<tr><td>0.76</td><td>22/05/2001</td><td>Format information of wide sprites added to X8 functions</td></tr>
+<tr><td>    </td><td>          </td><td>Mis-typed macro DrawGrayRect() fixed</td></tr>
+<tr><td>    </td><td>          </td><td>Second bug in treatment of x position in ALL scaling routines fixed</td></tr>
+<tr><td>    </td><td>          </td><td>ClearGrayScreen/ClearGrayScreen2B added</td></tr>
+<tr><td>    </td><td>          </td><td>SpriteX8_MASK and SpriteX8_BLIT fixed</td></tr>
+<tr><td>    </td><td>          </td><td>Usage info changed</td></tr>
+<tr><td>0.75</td><td>17/05/2001</td><td>All TABs removed from the sources</td></tr>
+<tr><td>    </td><td>          </td><td>Grayscale support routines for doublebuffering added (DrawStr2B etc.)</td></tr>
+<tr><td>    </td><td>          </td><td>Problems with grayscale support routines fixed</td></tr>
+<tr><td>    </td><td>          </td><td>Demo6 and demo7 programs added</td></tr>
+<tr><td>    </td><td>          </td><td>Wide sprite routines (SpriteX8_OR/_AND/_XOR/_BLIT/_MASK/Get) added</td></tr>
+<tr><td>    </td><td>          </td><td>x position treatment in scaling routines fixed</td></tr>
+<tr><td>0.70</td><td>15/05/2001</td><td>Fast Pixel Access Macros added</td></tr>
+<tr><td>    </td><td>          </td><td>FastDrawLine supports now A_NORMAL, too</td></tr>
+<tr><td>    </td><td>          </td><td>DrawGrayStrExt restores now previously active font</td></tr>
+<tr><td>    </td><td>          </td><td>Documentation of KronicDeth reformatted and incorporated</td></tr>
+<tr><td>0.51</td><td>07/05/2001</td><td>Sprite scale routines added</td></tr>
+<tr><td>0.50</td><td>06/05/2001</td><td>Sprite get routines added</td></tr>
+<tr><td>0.30</td><td>14/04/2001</td><td>Grayscale routines added (taken from TI-Chess and slightly modified)</td></tr>
+<tr><td>0.20</td><td>13/04/2001</td><td>Sprite routines added (formerly released as TSE) and library renamed to extgraph</td></tr>
+<tr><td>0.10</td><td>12/04/2001</td><td>Project started (scroll routines and linedrawing routine)</td></tr>
+</table>
+</blockquote>
+
+</BODY>
+</HTML>

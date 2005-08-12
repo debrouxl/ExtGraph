@@ -1,0 +1,78 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="structures.html">Structures de données</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="basniv.html">Fonctions de bas niveau</a></td></tr>
+</table>
+<hr>
+<p>
+<h4><center>Les fonctions de haut niveau</center></h4>
+<ul>
+<br>
+<b><li><code>void DrawPlane(short x,short y,Plane *plane,void *dest,TM_Mode mode,TM_Type type);</code></li></b><br><br>
+Cette fonction affiche le plan <b><code>plane</code></b> à partir des coordonnées <b><code>x</code></b> et <b><code>y</code></b>, dans l'écran (virtuel ou non) d'adresse <b><code>dest</code></b>.<br>
+Elle s'occupe toute seule de rafraichir le grand écran virtuel lorsque c'est nécessaire.<br>
+Les paramètres <b><code>plane</code></b>, <b><code>type</code></b> et <b><code>mode</code></b> ont des types particuliers, voici à quoi ils correspondent :<br>
+<b><code>plane</code></b> est l'adresse d'une structure de type <b><code>Plane</code></b>, dont voici la définition :
+<pre>typedef struct
+{
+    void *matrix;  // Matrice de tiles
+    unsigned short width;  // Largeur de la map
+    void *sprites; // Tableau de sprites
+    char *big_vscreen;  // Grand écran virtuel
+    long mask;  // Contient le mask, lorsqu'on veut afficher en mode BLIT
+    long reserved1;  // Utilisé en interne (ne pas modifier)
+    short force_update; // Pour forcer l'actualisation du grand écran virtuel.
+}Plane;</pre><br>
+<b><code>type</code></b> indique le type de plan : taille des sprites (8x8 ou 16x16), matrice codée sur des char ou sur des short, utilisation des niveaux de gris ou non. C'est un paramètre de type <b><code>TM_Type</code></b>, ce type étant complexe, regardez dans le header si vous voulez vraiment savoir à quoi il correspond, mais ce n'est pas indispensable pour pouvoir utiliser la fonction, car j'ai défini des macros qui peuvent s'utiliser directement en paramètre (reportez vous à l'<a href="annexe.html">annexe</a> pour les connaître).<br>
+<b><code>mode</code></b> permet de spécifier le mode d'affichage : <code>RPLC</code>, <code>OR</code>, <code>XOR</code>, <code>AND</code>, <code>MASK</code>, <code>TRANW</code>, <code>TRANB</code> ou <code>BLIT</code>. Ce paramètre est de type <b><code>TM_Mode</code></b>, ce type est également compliqué, si vous voulez savoir à quoi il correspond, regardez dans le header. J'ai également défini plusieurs macros qui peuvent être utilisées directement en paramètre, reportez vous à l'<a href="annexe.html">annexe</a>.<br><br>
+Cette fonction actualise le grand écran virtuel si nécessaire seulement. Pour forcer la réactualisation, mettez une valeur non nulle dans le champ <b><code>force_update</code></b> de votre <code>Plane</code>, la fonction <code>DrawBuffer</code> remettra ce champ à 0 après que l'actualisation ait eu lieu. Il est <u>indispensable</u> de faire ça à l'initialisation, avant que le plane n'ait été affiché.<br><br>
+Pour utiliser la fonction avec un mode d'affichage <code>BLIT</code>, précisez au préalable la valeur du masque que vous voulez dans le champ <b><code>mask</code></b> de votre <code>Plane</code>.<br><br>
+Pour voir un exemple d'utilisation de cette fonction, jetez un coup d'oeil à l'exemple1 fourni avec la librairie.<br><br>
+Note : Il est recommandé d'utiliser les macros prévues à cet effet pour les paramètres <b><code>type</code></b> et <b><code>mode</code>.</b><br>
+<br>
+<br>
+<li><b><code>void DrawAnimatedPlane(short x,short y,AnimatedPlane *plane,void *dest,TM_Mode mode,TM_AnimType type);</code></b></li><br><br>
+Affiche le plan animé <b><code>plane</code></b> à partir des coordonnées <b><code>x</code></b> et <b><code>y</code></b>, dans l'écran (virtuel ou non) d'adresse <b><code>dest</code></b>.<br>
+Met automatiquement le grand écran virtuel du plane à jour lorsque c'est nécessaire.<br>
+Le paramètre <b><code>plane</code></b> est l'adresse d'une structure <b><code>AnimatedPlane</code></b>, voici sa définition :<br>
+<pre>typedef struct
+{
+    Plane p;
+    void *tabanim; // Matrice d'animations
+    short nb_anim; // Nombre d'animations
+    short nb_step; // Nombre d'étapes d'animation
+    short step; // Numéro de l'étape d'animation courante
+    short step_length; // Durée d'une étape (en nombre d'images)
+    short frame; // Numéro de l'image de l'étape courante
+}AnimatedPlane;</pre>
+Cette structure contient donc un <b><code>Plane</code></b> suivi de toutes les informations nécessaires pour l'animer.<br>
+La matrice du <code>Plane</code> ne contiendra pas des numéros de sprites, mais des numéros d'animation, et la fonction ira chercher le numéro de sprite correspondant dans la tableau d'animations <b><code>tabanim</code></b>.<br>
+Le paramètre <b><code>mode</code></b> est exactement le même que pour la fonction précédente, reportez vous à l'<a href="annexe.html">annexe</a> pour connaître toutes ses valeurs possibles.<br>
+Le paramètre <b><code>type</code></b> fonctionne comme dans la fonction précédente, mais ses valeurs possibles ne sont pas les mêmes, elles sont également données dans l'<a href="annexe.html">annexe</a>.<br>
+<br>
+Cette fonction est utilisée dans l'exemple 3 fourni avec la librairie.<br>
+<br />
+<br />
+<li><b><code>void DrawTiles(short col,short ligne,short larg,void *tab,void *dest,void *sprts,TM_TilesType type);</code></b></li><br />
+<br />
+Affiche directement le plan <b><code>tab</code></b> dans le buffer de destination <b><code>dest</code></b> à partir de la ligne <b><code>ligne</code></b> et de la colonne <b><code>col</code></b>.<br />
+Cette fonction est un peu différente des autres, puisqu'elle affiche directement les tiles (sans les scroller) à partir de la matrice de tiles dans un buffer de destination de la taille de l'écran (240x128 pixels).<br />
+L'affichage se fait en mode <code>RPLC</code>, il est donc inutile d'effacer la destination avant d'afficher dessus.<br />
+J'ai pensé qu'il pourrait être utile de fournir cette fonction, même si elle s'éloigne du fonctionnement des autres qui permettent de scroller le plan au pixel près.<br />
+Description des paramètres attendus :<br />
+<b><code>col</code></b> : numéro de la colonne à partir de laquelle on souhaite afficher le plan.<br />
+<b><code>ligne</code></b> : numéro de la ligne à partir de laquelle on souhaite afficher le plan.<br />
+<b><code>larg</code></b> : largeur de la matrice (en nombre de tiles, pas en pixels).<br />
+<b><code>tab</code></b> : matrice de tiles.<br />
+<b><code>dest</code></b> : buffer de destination (ce n'est pas un big_vscreen).<br />
+<b><code>sprts</code></b> : liste des sprites à utiliser pour afficher le plan.<br />
+<b><code>type</code></b> : type du plan. Indique à la fonction si la matrice de tiles est une matrice de <code>char</code> ou de <code>short</code>, la taille des tiles (16x16 ou 8x8), s'ils sont en niveaux de gris ou en noir et blanc, et enfin, si l'affichage doit se faire seulement sur la partie de l'écran visible par une TI-89 ou non. Le type <b><code>TM_TilesType</code></b> étant assez particulier, le header <code>TileMap.h</code> fournit des macros pour tous les styles possibles de matrices de tiles. Se reporter à l'<a href="annexe.html">annexe</a> pour les trouver.<br />
+</ul>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="structures.html">Structures de données</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="basniv.html">Fonctions de bas niveau</a></td></tr>
+</table>
+</body>
+</html>

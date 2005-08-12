@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#plane_scroll"><h1>Plane Scrolling Routines</h1></a>
+<hr>
+<p>
+<br>
+<a name="#ScrollLeftX"></a>
+<h3>void ScrollLeft160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollLeft160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+<h3>void ScrollLeft240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollLeft240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+
+ScrollLeftX scroll X pixels of <EM>nr</EM> number of lines of a video plane
+(240x128 pixels in size) 1 pixel to the left.
+<br><br><br><br>
+
+<a name="#ScrollRightX"></a>
+<h3>void ScrollRight160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollRight160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+<h3>void ScrollRight240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollRight240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+
+ScrollRightX scroll X pixels of <EM>nr</EM> number of lines of a video plane
+(240x128 pixels in size) 1 pixel to the right.
+<br><br><br><br>
+
+
+<a name="#ScrollUpX"></a>
+<h3>void ScrollUp160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollUp160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+<h3>void ScrollUp240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollUp240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+
+ScrollUpX scroll X pixels of <EM>nr</EM> number of lines of a video plane
+(240x128 pixels in size) 1 line upwards.
+<br><br><br><br>
+
+
+<a name="#ScrollDownX"></a>
+<h3>void ScrollDown160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollDown160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+<h3>void ScrollDown240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
+<h3>void ScrollDown240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
+
+ScrollDownX scroll X pixels of <EM>nr</EM> number of lines of a video plane
+(240x128 pixels in size) 1 line downwards.
+</p>
+<br>
+
+</BODY>
+</HTML>

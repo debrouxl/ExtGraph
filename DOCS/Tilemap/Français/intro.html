@@ -1,0 +1,106 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="index.html">Index</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="utilisation.html">Utilisation</a></td></tr>
+</table>
+<hr>
+<p>
+<h3><center>Introduction</center></h3>
+Cette partie a pour but de présenter le fonctionnement général de la librairie.<br>
+<br>
+La librairie est adaptée aux jeux nécessitant un arrière-plan de grande taille (en tout cas, plus large que l'écran d'une TI92+), et que l'on doit déplacer avec une précision au pixel près.<br>
+<br>
+Pour cela voici le procédé utilisé : le plan (la map, le niveau), est représenté par un tableau à deux dimensions, une case représente un carré de 16x16 pixels (ou 8x8 selon les cas), elle correspond donc à un sprite de cette même taille. Chaque case devra donc contenir le numéro du sprite correspondant, et tous les sprites seront alors rangés dans une liste de sprites (afin de pouvoir y accéder à partir de leur numéro).<br>
+Cette méthode présente un premier avantage : on peut utiliser un même sprite plusieurs fois dans le niveau, et on obtient ainsi un gain important de place puisque le sprite n'est défini qu'une seule fois, et partout où il est utilisé, on ne le référence que par son numéro, qui prendra 1 ou 2 octets selon que l'on utilisera une matrice d'octets ou de word, au lieu de 8 ou 32 selon que l'on utilisera des sprites 8x8 ou 16x16.<br>
+Ensuite, pour afficher le plan à l'écran, il faut passer par deux étapes : d'abord, on recopie grossièrement la zone du plan que l'on veut afficher dans un écran virtuel plus large que l'écran réel (32 pixels de plus en hauteur et en largeur pour être précis, ce qui fait que cet écran virtuel aura une taille de (240+32)*(128+32)/8 = 5440 octets).<br>
+Et enfin, on affiche ce grand écran virtuel à l'écran, en décalant en même temps l'image pour obtenir la zone exacte que l'on veut afficher.<br>
+Cela peut paraître peu subtil d'utiliser un plan intermédiaire, mais c'est en réalité très avantageux car on n'est pas obligé de rafraichir le contenu du grand écran virtuel à chaque image, on le fait seulement lorsque c'est nécessaire, c'est-à-dire lorsque l'on veut animer des tiles (3 à 4 fois par secondes en général, c'est-à-dire une image sur 5-6 pour un jeu à 20 fps) ou lorsque l'on dépasse les limites du grand écran virtuel (il n'a que 32 pixels de plus que l'écran normal, donc il faut rafraichir le buffer 1 fois sur 32 pour un jeu avec un déplacement de 1 pixel par image).<br>
+Cela permet à la fonction qui recopie cet écran virtuel plus grand vers l'écran de taille normale d'être très optimisée pour faire précisément cette tâche plutôt que de devoir s'adapter à une taille quelconque. Cette fonction est donc appelée à chaque image et est très rapide.<br>
+<br>
+Voici un shéma pour vous aider à visualiser le principe de fonctionnement :<br>
+<pre>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|00|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|00|00|00|00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|00|<b><b>01</b></b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color='#CC0000'>|00|00|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color='#CC0000'>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00|00|00|00|00|00|00|00|00|00|00|<b>01</b>|00|00|00|00|00|00|00|
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</pre>
+Voici notre plan, en rouge est représentée la zone que l'on désire afficher. Dans cet exemple, seuls deux sprites différents sont utilisés, le sprite n°1 est mis en gras pour une meilleure visibilité. Ce plan pourrait être utilisé dans un RPG, pour représenter par exemple une île entourée d'eau, avec un lac au centre (le sprite 0 serait de l'eau et le sprite 1 serait de la terre).<br>
+Chaque case représente un sprite de 16x16 pixels.<br>
+On peut déjà noter que la zone rouge fait 272x160 pixels, c'est-à-dire (240+32)x(128+32), donc en réalité, on n'affichera pas la totalité de la zone rouge à l'écran, mais seulement une partie.<br><br>
+La zone rouge est entièrement copiée dans le grand écran virtuel (en remplaçant, bien sûr, les numéros par leur sprite correspondant).<br>
+Voici donc ce qu'on obtient sur le grand écran virtuel :<pre>
+              272
+     <----------------->
+   ^ +-----------------+
+   | |    ######       |
+   | |   ##########    |
+   | |   ####  #####   |
+   | |  ####   ####    |
+160| |  ###### ###     |
+   | |   ###########   |
+   | |      ########## |
+   | |      ###########|
+   | |       ########  |
+   | |         ####    |
+   v +-----------------+</pre>Les sprites n°1 seront représentés par '<code>#</code>', et les sprites n°0 par '<code> </code>'.<br>
+Il ne reste plus maintenant qu'à afficher la partie de cet écran virtuel que l'on souhaite voir, dans le vrai écran (de 240x128 pixels).<br>
+La précision de mes shémas ne me permet plus de dessiner cette dernière phase, je vais donc ne dessiner qu'une partie de l'écran de taille normale.<br>
+Supposons que l'on veuille par exemple, afficher la zone commençant aux coordonnées 35 en abscisse et 21 en ordonnée.<br>
+On a pour cela dessiné dans le grand écran virtuel la zone de la map commençant aux coordonnées (32 ; 0). Il faut donc afficher le contenu du grand écran virtuel à partir de son 4<sup>ème</sup> pixel en abscisse et de son 22<sup>ème</sup> en ordonnée.<br>
+Le résultat sur l'écran de taille normale ressemblera à ça :<br>
+<pre>
+            16
+    <---------------->
+  ^ +----------------+----------------+----------------+---------------
+  | |             <font color='#DDDDDD'>|</font>  |           ^ <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |         11| <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+16| |      13     <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |<-----------><font color='#DDDDDD'>|</font>  |           v <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  v +----------------+----------------+----------------+---------------
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    +----------------+----------------+----------------+---------------
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+</pre>Je n'ai représenté qu'une partie de l'écran (en noir). En gris clair, j'ai représenté le grand écran virtuel : en fait, ce sont les limites entre les cases 16x16.<br><br></p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="index.html">Index</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="utilisation.html">Utilisation</a></td></tr>
+</table>
+</body>
+</html>

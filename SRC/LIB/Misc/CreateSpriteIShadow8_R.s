@@ -1,0 +1,39 @@
+| C prototype: void CreateSpriteIShadow8_R(register short height asm("%d0"),register unsigned char* src0 asm("%a0"),register unsigned char* src1 asm("%a1"),unsigned char* mask, unsigned char* dest0, unsigned char* dest1) __attribute__((__stkparm__));
+
+.text
+.globl CreateSpriteIShadow8_R
+.even
+
+CreateSpriteIShadow8_R:
+    subq.w   #1,%d0
+    blt.s    1f
+
+    movem.l  %d3/%a2-%a4,-(%sp)
+
+    move.l   4+16(%sp),%a2
+    move.l   4+16+4(%sp),%a3
+    move.l   4+16+8(%sp),%a4
+
+0:
+    move.b   (%a0)+,%d1
+    move.b   (%a1)+,%d2
+
+    move.b   %d1,%d3
+    and.b    %d2,%d3
+    not.b    %d1
+    and.b    %d1,%d2
+    
+    move.b   (%a2)+,%d1
+    not.b    %d1
+    and.b    %d1,%d2
+    and.b    %d1,%d3
+    
+    move.b   %d2,(%a3)+
+    move.b   %d3,(%a4)+
+
+    dbf      %d0,0b
+
+    movem.l  (%sp)+,%d3/%a2-%a4
+
+1:
+    rts

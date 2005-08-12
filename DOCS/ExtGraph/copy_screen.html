@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+
+<hr>
+<a name="#copy_screen"><h1>Fast CopyScreen Routine</h1></a>
+<hr>
+<p>
+<br>
+<h3>void FastCopyScreen(void* src,void* dest) __attribute__((__stkparm__));</h3>
+<h3>void FastCopyScreen_R(register void* src asm("%a0"),register void* dest asm("%a1")) __attribute__((__regparm__(2)));</h3>
+
+
+FastCopyScreen copies a complete screen (3840 bytes == 240x128 pixels) from buffer <em>src</em>
+to buffer <em>dest</em>. The implementation is similar to the one used within the actual
+grayscale support. You can bet it's really fast.<br><br>
+<strong>WARNING:</strong> <a href="mailto:kevin.kofler@chello.at">Kevin Kofler (kevin.kofler@chello.at)</a> informed me
+that FastCopyScreen will crash your calculator if <em>src</em> points into the archive memory,
+for example if you try to copy a screen which is stored in an archived variable. Don't use FastCopyScreen
+in this case.<br>
+<strong>In general, I highly recommend using FastCopyScreen_R instead of memcpy: to date, the PedroM memcpy is extremely
+slow.</strong>
+</p>
+<br>
+
+</BODY>
+</HTML>

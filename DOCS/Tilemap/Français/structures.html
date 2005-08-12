@@ -1,0 +1,53 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="description.html">Description des fonctions</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="hautniv.html">Fonctions de haut niveau</a></td></tr>
+</table>
+<hr>
+<p>
+<h4><center>Spécifications des structures de données</center></h4>
+Depuis le début, nous parlons de matrice de tiles, de liste de sprites, de grand écran virtuel, ou d'écran virtuel simple, sans vraiment avoir précisé quelles étaient leurs spécificités.<br>
+<br>
+<dl>
+<dt><u>Matrice de tiles</u></dt>
+<dd>Tableau de <code>char</code> ou de <code>short</code>, à deux dimensions, ayant au minimum 8 lignes et 15 colonnes si on utilise des sprites 16x16, ou 16 lignes et 30 colonnes avec des sprites 8x8.</dd>
+<br>
+<br>
+<dt><u>Sprites</u></dt>
+<dd>Les sprites peuvent être en noir et blanc ou en niveaux de gris, et de taille 8x8 pixels ou 16x16. Il y a des fonctions spécifiques pour chaque type de sprite, il ne faut donc pas se tromper en les choisissant.<br>
+Les sprites en noir et blanc sont classiques : un tableau de 8 <code>char</code> pour les sprites 8x8, ou un tableau de 16 <code>short</code> pour les sprites 16x16, contenant successivement chaque ligne du sprite.<br>
+Les sprites en niveaux de gris utilisent un format un peu plus compliqué : c'est un tableau de 16 <code>char</code> pour les sprites 8x8 ou 32 <code>short</code> pour les sprites 16x16 qui est organisé comme ceci : ligne1/plan1, puis ligne1/plan2, puis ligne2/plan1, puis ligne2/plan2, etc... On appelle cela un format entrelacé. Le plan1 peut-être celui correspondant au gris clair au au gris foncé, cela n'a pas d'importance tant que vous respectez la même convention pour les écrans virtuels (voir plus bas).</dd>
+<br>
+<br>
+<dt><u>Liste de sprites</u></dt>
+<dd>La liste peut être vue comme un tableau à une dimension contenant des sprites, mais en réalité, c'est un tableau à deux dimensions, puisque les sprites eux aussi sont des tableaux à une dimension.</dd>
+<br>
+<br>
+<dt><u>Tableau d'animation</u></dt>
+<dd>Tableau de <u><code>short</code></u> à deux dimensions : le nombre d'étape d'animation et le nombre d'animations. Chaque ligne représente une étape, et chaque colonne représente une animation, ainsi l'élément du tableau situé sur la colonne <code>c</code> et la ligne <code>l</code> sera le numéro du sprite de la <code>l</code><sup>ième</sup> étape de la <code>c</code><sup>ième</sup> animation.<br>
+Le tableau ne peut être qu'un tableau de <code>short</code>, car j'ai pensé que si vous utilisez des tiles animés vous aurez probablement beaucoup de sprites.</dd>
+<br>
+<br>
+<dt><u>Table de décalage horizontal</u></dt>
+<dd>Tableau de <code>char</code> à une dimension, de 128 éléments. Chaque élément représente le décalage individuel horizontal à ajouter à celui de la ligne courante lors de la recopie du grand écran virtuel vers l'écran. Les valeurs autorisées sont comprises entre 0 et 16.</dd>
+<br>
+<br>
+<dt><u>Table de décalage vertical</u></dt>
+<dd>Tableau de <code>short</code> à une dimension, de 128 éléments. Chaque élément représente la valeur à ajouter à l'adresse source à la fin de chaque ligne lors de la recopie du grand écran virtuel vers l'écran. Toutes les valeurs sont permises, mais faites attention à ne pas sortir du grand écran virtuel.</dd>
+<br>
+<br>
+<dt><u>Grand écran virtuel (ou big_vscreen)</u></dt>
+<dd>Zone mémoire de 5440 octets si vous travaillez en noir et blanc, ou bien deux fois plus grande (10880 octets) si vous travaillez en niveaux de gris (dans ce cas, les 5440 premiers octets correspondront au Plan1, et les 5440 suivant correspondront au Plan2, vous choisissez comme il vous arrange de définir le Plan1 gris clair ou gris foncé, mais respectez cette convention dans vos sprites).</dd>
+<br>
+<br>
+<dt><u>Ecran virtuel</u></dt>
+<dd>Zone mémoire de 3840 octets en noir et blanc, ou le double (7680 octets) si vous travaillez en niveaux de gris (dans ce cas, comme pour le grand écran virtuel, les deux plans seront adjacents, à vous de choisir lequel sera le plan foncé et lequel sera le plan clair).</dd>
+</dl>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="description.html">Description des fonctions</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="hautniv.html">Fonctions de haut niveau</a></td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#rect_draw"><h1>Fast Rectangle Drawing</h1></a>
+<hr>
+<p>
+<br>
+<h3>void FastFillRect(unsigned char* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));</h3>
+<h3>void FastFillRect_R(register unsigned char* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short mode) __attribute__((__stkparm__));</h3>
+<h3>void FastFilledRect_Draw_R(register unsigned char* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<h3>void FastFilledRect_Erase_R(register unsigned char* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<h3>void FastFilledRect_Invert_R(register unsigned char* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<br>
+These routines draw a filled rectangle whose endpoints are (<em>x1</em>;<em>y1</em>) and
+(<em>x2</em>;<em>y2</em>) in 240x128 plane <em>plane</em>. FastFilledRect_X_R are the
+one-mode-only versions of FastFillRect (Draw corresponds to <em>mode</em> == A_NORMAL, Erase
+corresponds to <em>mode</em> == A_REVERSE, Invert corresponds to <em>mode</em> == A_XOR).
+<br><br>
+<h3>void FastOutlineRect(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));</h3>
+<h3>void FastOutlineRect_R(register void* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short mode) __attribute__((__stkparm__));</h3>
+<h3>void GrayFastOutlineRect_R(register void* dest1 asm("%a0"),register void* dest2 asm("%a1"), register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short color) __attribute__((__stkparm__));</h3>
+<br>
+These routines draw an outlined rectangle whose endpoints are (<em>x1</em>;<em>y1</em>) and
+(<em>x2</em>;<em>y2</em>) in 240x128 plane <em>plane</em>.
+<br><br>
+<h3>void FastEraseRect160_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void FastEraseRect240_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void GrayFastEraseRect2B160_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<h3>void GrayFastEraseRect2B240_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<h3>void FastFillRect160_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void FastFillRect240_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void GrayFastFillRect2B160_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<h3>void GrayFastFillRect2B240_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<h3>void FastInvertRect160_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void FastInvertRect240_R(register unsigned char* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));</h3>
+<h3>void GrayFastInvertRect2B160_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<h3>void GrayFastInvertRect2B240_R(register unsigned char* lightplane asm("%a0"),register unsigned char* darkplane asm("%a1"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));</h3>
+<br>
+These routines fill a rectangle with white, black, or invert a rectangle (respectively) whose
+width is 160 or 240 pixels, and whose height is arbitrary, in a 240x128 plane.
+<br><br>
+<h3>void FastEraseRectX8_R(register unsigned char* plane asm("%a0"),register short startcol asm("%d0"),register short startrow asm("%d1"),register unsigned short nrlines asm("%d2"),register unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<h3>void FastFillRectX8_R(register unsigned char* plane asm("%a0"),register short startcol asm("%d0"),register short startrow asm("%d1"),register unsigned short nrlines asm("%d2"),register unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<h3>void FastInvertRectX8_R(register unsigned char* plane asm("%a0"),register short startcol asm("%d0"),register short startrow asm("%d1"),register unsigned short nrlines asm("%d2"),register unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));</h3>
+<h3>FastCopyRectX8_R can be emulated with SpriteX8Get_R and SpriteX8_OR_R.</h3>
+<br>
+These routines fill a rectangle with white, black, or invert a rectangle (respectively) whose
+width and x coordinate is multiple of 8, whose y coordinate is arbitrary, in a 240x128 plane.
+<br><br>
+</p>
+FastCopyRectX8_R can be emulated with SpriteX8Get_R and SpriteX8_OR_R.
+
+</BODY>
+</HTML>

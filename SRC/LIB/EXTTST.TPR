@@ -1,0 +1,58 @@
+[Settings]
+Archive=0
+Pack=0
+Packed Variable=
+Project Name=exttest
+GCC Switches=-O3 -Wall -W -Wwrite-strings -fomit-frame-pointer -mno-bss -Wpointer-arith -ffunction-sections -fdata-sections -mpcrel -std=gnu99
+GNU Assembler Switches=-l --all-relocs
+Assembler Switches=-g -t
+GNU Linker Switches=
+Linker Switches=
+Debug Info=1
+Standard Library=1
+Command Line=
+Post-Build Process=
+Fargo=0
+Use Data Variable=0
+Data Variable=
+Copy Data Variable=1
+Copy Data Variable if Archived=1
+Optimize NOPs=1
+Optimize Returns=1
+Optimize Branches=1
+Optimize Moves=1
+Optimize Tests=1
+Optimize Calculations=1
+Remove Unused Sections=1
+Cut Unused Ranges=1
+Binary Output=0
+
+[Library Options]
+Use TI-89=1
+Use TI-92 Plus=1
+Use V200=1
+Optimize Calc Consts=0
+Use Kernel=0
+Use PreOS=0
+Minimum AMS Version Defined=1
+Minimum AMS Version=1.00
+Unofficial OS Support=0
+Reloc Format=AMS
+ROM Call Format=Precomputed
+BSS Ref Format=None
+Data Ref Format=Kernel
+Use F-Line Jumps=0
+Use 4-Byte F-Line Jumps=0
+Use Internal F-Line Emulator=0
+Use Return Value=0
+Enable Error Return=0
+Save Screen=1
+
+[File Editing]
+Open File=
+
+[Included Files]
+C File 1=exttst.c
+Archive File 1=extgraph.a
+Header File 1=..\..\lib\extgraph.h
+

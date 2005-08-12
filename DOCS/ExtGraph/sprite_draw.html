@@ -1,0 +1,367 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#sprite_draw"><h1>Fast Sprite Drawing Routines</h1></a>
+<hr>
+<p>
+<br>
+<a name="#SpriteX_AND"></a>
+<p>
+<h3>void Sprite8_AND(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16_AND(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32_AND(short x,short y,short h,unsigned long *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void SpriteX8_AND(short x,short y,short h,unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_AND_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<br>
+<h3>void ClipSprite8_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<br>
+<h3>void GraySprite8_AND(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_AND(short x,short y,short h,unsigned short* sprite1,unsigned short* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_AND(short x,short y,short h,unsigned long* sprite1,unsigned long* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySpriteX8_AND(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,short bytewidth,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GrayClipSprite8_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+SpriteX_AND draw a sprite with a width of X pixels or less on the screen using AND logic.
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_AND as 
+parameter <em>mode</em>, because these routines have been streamlined for the specific 
+type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
+corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
+is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
+type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
+unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
+is the pointer to a video plane of size 240 x 128 pixels. If you want to
+draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+video planes.<br><br>
+The SpriteX8_AND function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data for SpriteX8_AND has to be organized like this (example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+<a name="#SpriteX_OR"></a>
+<p>
+<h3>void Sprite8_OR(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16_OR(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32_OR(short x,short y,short h,unsigned long *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void SpriteX8_OR(short x,short y,short h,unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_OR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<br>
+<h3>void ClipSprite8_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite16_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite32_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<br>
+<h3>void GraySprite8_OR(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_OR(short x,short y,short h,unsigned short* sprite1,unsigned short* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_OR(short x,short y,short h,unsigned long* sprite1,unsigned long* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySpriteX8_OR(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,short bytewidth,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GrayClipSprite8_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+SpriteX_OR draw a sprite with a width of X pixels or less on the screen using OR logic.
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_OR as 
+parameter <em>mode</em>, because these routines have been streamlined for the specific 
+type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
+corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
+is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
+type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
+unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
+is the pointer to a video plane of size 240 x 128 pixels. If you want to
+draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+video planes.<br><br>
+The SpriteX8_OR function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data for SpriteX8_OR has to be organized like this (example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+<a name="#SpriteX_XOR"></a>
+<p>
+<h3>void Sprite8_XOR(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16_XOR(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32_XOR(short x,short y,short h,unsigned long *sprt,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void SpriteX8_XOR(short x,short y,short h,unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_XOR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<br>
+<h3>void ClipSprite8_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite16_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite32_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<br>
+<h3>void GraySprite8_XOR(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_XOR(short x,short y,short h,unsigned short* sprite1,unsigned short* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_XOR(short x,short y,short h,unsigned long* sprite1,unsigned long* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySpriteX8_XOR(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,short bytewidth,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GrayClipSprite8_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+SpriteX_XOR draw a sprite with a width of X pixels or less on the screen using XOR logic.
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_XOR as 
+parameter <em>mode</em>, because these routines have been streamlined for the specific 
+type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
+corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
+is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
+type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
+unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
+is the pointer to a video plane of size 240 x 128 pixels. If you want to
+draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+video planes.<br><br>
+The SpriteX8_XOR function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data for SpriteX8_XOR has to be organized like this (example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+<a name="#SpriteX_MASK"></a>
+<p>
+<h3>void Sprite8_MASK(short x,short y,short h,unsigned char *sprt,unsigned char *mask,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_MASK(short x,short y,short h,unsigned short *sprt,unsigned short *mask,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),unsigned short *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_MASK(short x,short y,short h,unsigned long *sprt,unsigned long *mask,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_MASK(short x,short y,short h,unsigned char *sprt,unsigned char *mask,short bytewidth,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char *mask,register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void ClipSprite8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void ClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),unsigned short *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void ClipSprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GraySprite8_MASK(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,unsigned char* mask1,unsigned char* mask2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,unsigned char *mask0,unsigned char *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_MASK(short x,short y,short h,unsigned short* sprite1,unsigned short* sprite2,unsigned short* mask1,unsigned short* mask2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask0,unsigned short *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_MASK(short x,short y,short h,unsigned long* sprite1,unsigned long* sprite2,unsigned long* mask1,unsigned long* mask2,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,unsigned long *mask0,unsigned long *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySpriteX8_MASK(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,unsigned char* mask1,unsigned char* mask2,short bytewidth,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GrayClipSprite8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,unsigned char *mask0,unsigned char *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask0,unsigned short *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,unsigned long *mask0,unsigned long *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+SpriteX_MASK mask out an area of the screen at x and y by ANDing the mask
+pointed to by <em>mask</em>. Then SpriteX_MASK draws a sprite with a
+width of X pixels or less on the screen (on top of the masked area) using OR
+logic. This routine is much faster than using separate SpriteX commands
+or functions found in this header. <em>x</em> and <em>y</em> are the
+coordinates of the upper left corner of the sprite. <em>h</em> is the height of
+the sprite. <em>sprite</em> is a pointer to the array of unsigned numbers of
+type equal to X (i.e. for X=8 type is unsigned char; for X=16 type is unsigned
+short; and for X=32 type is unsigned long) which define the shape of the sprite
+(line by line). <em>dest</em> is the pointer to a video plane of size 240 x 128 pixels. If you want to
+draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+video planes.<br><br>
+If masked sprites are to be employed it is probably necessary to employ double buffering
+in order to restore the background when the masked sprite is redrawn.<br><br>
+The SpriteX8_MASK function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data for SpriteX8_MASK has to be organized like this (example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).<br>
+NOTE3: GrayClipISprite8/16/32_MASK_R are noticeably faster than GrayClipSprite8/16/32_MASK_R. Indeed, 
+the latter apply the same mask to both planes, the former apply one mask per plane. One mask per 
+plane is more powerful, but often overkill and of course bigger and slower. See also TRAN[BDLW] routines below.
+</p>
+<br><br><br>
+
+
+<a name="#SpriteX_BLIT"></a>
+<p>
+<h3>void Sprite8_BLIT(short x,short y,short h,unsigned char *sprt,unsigned char maskval,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register unsigned char maskval asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16_BLIT(short x,short y,short h,unsigned short *sprt,unsigned short maskval,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite16_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register unsigned short maskval asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32_BLIT(short x,short y,short h,unsigned long *sprt,unsigned long maskval,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void Sprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register unsigned long maskval asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void SpriteX8_BLIT(short x,short y,short h,unsigned char *sprt,unsigned char *maskval,short bytewidth,void *dest) __attribute__((__stkparm__));</h3>
+<h3>void SpriteX8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char *maskval,register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void ClipSprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char maskval,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void ClipSprite16_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),unsigned short maskval,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void ClipSprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long maskval,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_BLIT(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,unsigned char maskval,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,unsigned char maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_BLIT(short x,short y,short h,unsigned short* sprite1,unsigned short* sprite2,unsigned short maskval,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_BLIT(short x,short y,short h,unsigned long* sprite1,unsigned long* sprite2,unsigned long maskval,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,unsigned long maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySpriteX8_BLIT(short x,short y,short h,unsigned char* sprite1,unsigned char* sprite2,unsigned char* maskval,short bytewidth,void* dest1,void* dest2) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,unsigned char maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,unsigned long maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+
+SpriteX_BLIT mask out an area of the screen at x and y by ANDing the mask
+pointed to by <em>maskval</em> to each destination line. Then SpriteX_BLIT draws a
+sprite with a width of X pixels or less on the screen (on top of the masked area) using OR 
+logic. This routine is much faster than using separate SpriteX commands or functions found in this header. <em>x</em>
+and <em>y</em> are the coordinates of the upper left corner of the sprite. <em>h</em>
+is the height of the sprite. <em>sprite</em> is a pointer to the array of
+unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for
+X=16 type is unsigned short; and for X=32 type is unsigned long) which define
+the shape of the sprite (line by line). <em>dest</em> is the pointer to a video plane
+of size 240 x 128 pixels. If you want to
+draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+video planes.<br><br>
+The BLIT functions are commonly used for background sprites where
+one wishes to mask out a rectangular array that can be acomplished with the
+same value for each line of the sprite instead of a full mask sprite.<br><br>
+The SpriteX8_BLIT function differs from the rest of the functions. It is not fixed to
+a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
+The sprite data for SpriteX8_BLIT has to be a byte array organized like this 
+(example for <em>bytewidth</em> == 3):
+line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.<br><br>
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+<a name="#SpriteX_RPLC"></a>
+<p>
+<h3>void Sprite8_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite16_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<h3>void Sprite32_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
+<br>
+<h3>void ClipSprite8_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite16_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<h3>void ClipSprite32_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0"));</h3>
+<br>
+<h3>void GraySprite8_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+<h3>void GrayClipSprite8_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+SpriteX_RPLC are SpriteX_BLIT functions with hard-coded white (0) mask and therefore a slightly different prototype.
+<br><br>
+NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+
+<a name="#GraySpriteX_TRANB"></a>
+<p>
+<h3>void GraySprite8_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite8_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+GraySpriteX_TRANB draw a grayscale sprite with transparency color black.
+<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite. 
+<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the 
+arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16 
+type is unsigned short; and for X=32 type is unsigned long) which define the shape of the 
+sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of 
+size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the video planes.<br>
+NOTE: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br><br>
+
+
+<a name="#GraySpriteX_TRANW"></a>
+<p>
+<h3>void GraySprite8_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite16_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GraySprite32_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite8_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite16_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<h3>void GrayClipSprite32_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
+<br>
+GraySpriteX_TRANW draw a grayscale sprite with transparency color white.
+<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite. 
+<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the 
+arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16 
+type is unsigned short; and for X=32 type is unsigned long) which define the shape of the 
+sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of 
+size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the video planes.<br>
+NOTE: the functions whose name contains "Clip" are the clipped variants of the normal 
+(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+extreme points are (0,0) and (239,127).
+</p>
+<br><br>
+<h3>Read the readme for information on how to make TRANL (transparency color light gray) and 
+TRAND (transparency color dark gray) routines.</h3>
+
+</BODY>
+</HTML>

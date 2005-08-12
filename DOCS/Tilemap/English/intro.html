@@ -1,0 +1,108 @@
+<html>
+<head><title>Documentation of TileMap Engine v0.4 (06/29/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="index.html">Index</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="use.html">Utilisation</a></td></tr>
+</table>
+<hr>
+<p>
+<h3><center>Introduction</center></h3>
+This part aims to describe how the library works.<br />
+<br />
+The library is useful for games needing a large background, larger than the 92+/V200 screen, in which the screen can be scrolled by down to one pixel at a time.<br><br>
+In this algorithm, the sprite plane (map / level) is a two-dimensional array of <code>char</code> or <code>short</code>; an element of that map is the index of a sprite in an array of 16x16 or 8x8 sprites.<br>
+This method has a clear advantage: a sprite can be used multiple times in the map, but the sprite data is defined only once (32 bytes for a 16x16 sprite, 8 bytes for a 8x8 sprite), and a sprite is referenced through its index (1 or 2 bytes depending on the type of the elements in the sprite plane). If the map was not used, then each tile in the map would be 8 or 32 bytes, and the map could become redundant. This way, a lot of space is saved.<br>
+Then, drawing the plane on the screen is performed in two steps:<br>
+<ul>
+<li>Copy the sprites in a virtual screen, larger than the real screen (32 additional pixels in each dimension). The size in bytes of this virtual screen is (240+32)*(128+32)/8 = 5440 bytes. The copy is quite fast, since the sprites are drawn aligned (no shifting necessary), and the loops are partly unrolled.</li>
+<li>Draw the big virtual screen on the real screen, shifting the sprites as necessary. Shifting allows drawing at any X coordinate, not just byte/word boundaries.</li>
+</ul>
+Using an intermediate plane can be seen as unnecessary sometimes, but this method has many advantages. The virtual screen is refreshed only when necessary, when using animated tiles (usually 3 or 4 times per second, i.e. one image out of 5 or 6 for a game running at 20 fps) or when the bounds of the virtual screen are exceeded (which does not happen much more than once or twice per second).<br>
+Also, the function drawing the big virtual screen to the real screen can be highly optimized, instead of having to support any size. It is called every cycle and is very fast.<br><br>
+Here is a diagram to help you understand the algorithm:<br>
+<pre>+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+|00|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|00|00|00|00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|00|<b><b>01</b></b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00<font color="#cc0000">|00|00|00|00|00|00|00|00|00|<b>01</b>|<b>01</b>|<b>01</b>|<b>01</b>|00|00|00|00|</font>00|
++--+--<font color="#cc0000">+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</font>--+
+|00|00|00|00|00|00|00|00|00|00|00|00|<b>01</b>|00|00|00|00|00|00|00|
++--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+</pre>
+The area we want to draw on the screen is drawn here with red color. In this example, only two different sprites are used, and sprite 1 is in <b>bold</b> so that the shape can be seen more easily. This map could be used in a RPG, to represent an island containing a lake (sprite 0 being water and sprite 1 being land).<br>
+Each square represents a 16x16 sprite.<br>
+The red area is 272x160 pixels, this means only a part of this area will be drawn on the real screen.<br><br>
+The red area is copied to the big virtual screen, with sprites being drawn from the map indices.<br>
+Here is the result on the big virtual screen (not drawn):<pre>
+              272
+     <----------------->
+   ^ +-----------------+
+   | |    ######       |
+   | |   ##########    |
+   | |   ####  #####   |
+   | |  ####   ####    |
+160| |  ###### ###     |
+   | |   ###########   |
+   | |      ########## |
+   | |      ###########|
+   | |       ########  |
+   | |         ####    |
+   v +-----------------+</pre>
+Sprite 0 is represented by ' ', sprite 1 is represented by '#'.<br>
+Now, the only task left is to draw the desired part of the virtual screen to the real screen.<br>
+My diagrams aren't precise enough to draw this last step, so I'll draw only a part of the real screen.<br>
+Let's say we want to draw the area starting at [35, 21], but the virtual screen contains the map area starting at [32, 0]. Therefore, we have to start fetching the data from the virtual screen at [3, 21].<br>
+The result on the real screen will look like:<br>
+<pre>
+            16
+    <---------------->
+  ^ +----------------+----------------+----------------+---------------
+  | |             <font color='#DDDDDD'>|</font>  |           ^ <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |         11| <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+16| |      13     <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |<-----------><font color='#DDDDDD'>|</font>  |           v <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  v +----------------+----------------+----------------+---------------
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    +----------------+----------------+----------------+---------------
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+</pre>The real screen and the big virtual screen are only shown as 16x16 tile boundaries. The real screen is drawn with black, and the big virtual screen is drawn with light gray.<br><br>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="index.html">Index</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="use.html">Utilisation</a></td></tr>
+</table>
+</body>
+</html>

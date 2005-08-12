@@ -1,0 +1,53 @@
+<html>
+<head><title>Documentation of TileMap Engine v0.4 (06/29/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="description.html">Description of the functions</a></td> <td align="center" width="33%">Up : <a href="description.html">Description of the functions</a></td> <td align="right" width="33%">Next : <a href="highlevel.html">High level functions</a></td></tr>
+</table>
+<hr>
+<p>
+<center><h4>Data structures used by the functions</h4></center>
+From begining, we mention matrix of tiles, sprite array, big virtual screen, or virtual screen. Here are their details:<br>
+<br>
+<dl>
+<dt><u>Matrix of tiles</u></dt>
+<dd>Matrix of <code>char</code> or <code>short</code>, with two dimensions. Its size must be at least 8 rows and 15 columns with 16x16 sprites, or 16 rows and 30 columns with 8x8 sprites.</dd>
+<br>
+<br>
+<dt><u>Sprites</u></dt>
+<dd>The sprites can be in grayscale or in B/W, and their size can be 16x16 or 8x8 pixels. There are specific functions for each type of sprite, so you must be careful when choosing.<br>
+Black and White sprites are classics : a simple array of 8 <code>char</code> for 8x8 sprites, or an array of 16 <code>short</code> for 16x16 sprites, containing each line of the sprite.<br>
+Grayscale sprites use a more complex format : an array of 16 <code>char</code> for 8x8 sprites, or 32 <code>short</code> for 16x16 sprites, it contains the first line of the sprite for the first plane, the first line for the second plane, the second line of the sprite for the first plane, the second line of the sprite for the second plane, etc... It's called an interlaced format.<br>
+The first plane can be the light or the dark plane, that doesn't matter, but respect the convention in your virtuals screens (see below).</dd>
+<br>
+<br>
+<dt><u>Sprite array</u></dt>
+<dd>The sprite array can be seen like an 1D array containing sprites, but it's actually a 2D array, because sprites are already an 1D array.</dd>
+<br>
+<br>
+<dt><u>Matrix of animations</u></dt>
+<dd>2D array of <u><code>short</code></u> : the number of rows is the number of animation steps, and the number of columns is the number of animations. Each cell contains the number of the sprite for a step for an animation.</dd>
+<br>
+<br>
+<dt><u>Array of horizontal shifts</u></dt>
+<dd>Array of <code>char</code>, with one dimension, of 128 elements. Each element is a horizontal shift to add to the current line when the big virtual screen is drawn on the screen. Correct values are between 0 and 16.</dd>
+<br>
+<br>
+<dt><u>Array of vertical shifts</u></dt>
+<dd>Array of <code>short</code>, with one dimension, of 128 elements. Each element is a value to add to the pointer on the source, at the end of each line drawed, when the big virtual screen is drawed on the screen. Any value is allowed, but be careful to not point outside of the big virtual screen.</dd>
+<br>
+<br>
+<dt><u>Big virtual screen</u></dt>
+<dd>Buffer of 5440 bytes in B/W, or 10880 bytes in grayscale (in this case, the 5440 first bytes are the first plane and the 5440 followed bytes are the second plane ; you can choose which plane is the light or the dark plane, but keep this convention in your sprites).</dd>
+<br>
+<br>
+<dt><u>Virtual screen</u></dt>
+<dd>Buffer of 3840 bytes in B/W, or 7680 bytes in grayscales (in this case, like the big virtual screen, the two planes will be followed).</dd>
+</dl>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="description.html">Description of the functions</a></td> <td align="center" width="33%">Up : <a href="description.html">Description of the functions</a></td> <td align="right" width="33%">Next : <a href="highlevel.html">High level functions</a></td></tr>
+</table>
+</body>
+</html>

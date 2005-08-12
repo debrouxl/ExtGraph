@@ -1,0 +1,141 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="hautniv.html">Fonctions de haut niveau</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="annexe.html">Annexe</a></td></tr>
+</table>
+<hr>
+<h4><center>Les fonctions de bas niveau</center></h4>
+Il y a plusieurs familles de fonctions qui effectuent les deux tâches primaires de plusieurs façons différentes, pour donner au total pas moins de 84 fonctions différentes, et plus de 400 combinaisons d'utilisation...<br><br><br>
+<ul>
+<b><li>La famille <code>RefreshBuffer</code></li></b><br><br>
+Les fonctions du type <code>RefreshBuffer</code> servent à mettre à jour le contenu du grand écran virtuel.<br><br>
+Leurs prototypes sont de la forme : <br><b><code>void Refresh[Gray]BufferXY(short larg,void *tile,void *dest,void *sprts);</code></b><br>
+Où : <b><code>Gray</code></b> est optionnel, il indique si la fonction est en niveaux de gris ou non.<br>
+<b><code>X</code></b> indique la taille des sprites et peut prendre les valeurs <b><code>16</code></b> (sprites de 16x16 pixels) ou <b><code>8</code></b> (sprites de 8x8 pixels) seulement.<br>
+<b><code>Y</code></b> indique la taille des tiles de la matrice, peut prendre les valeurs <b><code>W</code></b> (matrice de words [2 octets]) et <b><code>B</code></b> (matrice d'octets).<br>
+Par exemple, pour utiliser cette fonction sur une matrice d'octets, avec des sprites de 16x16 pixels et en niveaux de gris, il faudra utiliser la fonction <code>RefreshGrayBuffer16B</code>.<br><br>
+Et voici la description des paramètres que prennent ces fonctions :<br>
+<b><code>larg</code></b> : largeur de la matrice de tiles.<br>
+<b><code>tile</code></b> : adresse du premier tile (celui dans le coin en haut à gauche) que vous voulez afficher dans le grand écran virtuel.<br>
+<b><code>dest</code></b> : adresse du grand écran virtuel de destination (il doit faire 5440 octets en noir et blanc, et 10880 octets en niveaux de gris).<br>
+<b><code>sprts</code></b> : adresse de la liste des sprites du plan.<br><br>
+Je vous conseille de regarder l'exemple2 pour voir un exemple d'utilisation de cette fonction.<br><br><br>
+
+<b><li>La famille <code>RefreshAnimatedBuffer</code></li></b><br><br>
+Les fonctions du type <code>RefreshAnimatedBuffer</code> servent à mettre à jour le contenu du grand écran virtuel tout en animant ses tiles.<br><br>
+Leurs prototypes sont de la forme : <br><b><code>void Refresh[Gray]AnimatedBufferXY(short larg,void *tile,void *dest,void *sprts,void *tabanim);</code></b><br>
+Où : <b><code>Gray</code></b> est optionnel, il indique si la fonction est en niveaux de gris ou non.<br>
+<b><code>X</code></b> indique la taille des sprites et peut prendre les valeurs <b><code>16</code></b> (sprites de 16x16 pixels) ou <b><code>8</code></b> (sprites de 8x8 pixels) seulement.<br>
+<b><code>Y</code></b> indique la taille des tiles de la matrice, peut prendre les valeurs <b><code>W</code></b> (matrice de words [2 octets]) et <b><code>B</code></b> (matrice d'octets).<br>
+Par exemple, pour utiliser cette fonction sur une matrice d'octets, avec des sprites de 16x16 pixels et en niveaux de gris, il faudra utiliser la fonction <code>RefreshGrayBuffer16B</code>.<br><br>
+Et voici la description des paramètres que prennent ces fonctions :<br>
+<b><code>larg</code></b> : largeur de la matrice de tiles.<br>
+<b><code>tile</code></b> : adresse du premier tile (celui dans le coin en haut à gauche) que vous voulez afficher dans le grand écran virtuel. Ce tile ne contiendra pas le numéro du sprite correspondant, contrairement à la fonction précédente, mais il contiendra un numéro d'animation.<br>
+<b><code>dest</code></b> : adresse du grand écran virtuel de destination (il doit faire 5440 octets en noir et blanc, et 10880 octets en niveaux de gris).<br>
+<b><code>sprts</code></b> : adresse de la liste des sprites du plan.<br>
+<b><code>tabanim</code></b> : adresse de la liste des numéros de sprites. C'est un tableau de <u><code>short</code></u> à une dimension. L'élément <code>n</code> de ce tableau contient le numéro du sprite correspondant à l'étape courante de l'animation <code>n</code>.<br>
+<br>
+
+<br>
+Il n'y a pour l'instant pas d'exemple d'utilisation de cette fonction, donc voici un pseudo exemple :<br>
+<pre>
+char matrix[MAP_WIDTH][MAP_HEIGHT]={...};  // Contient des n° d'animation
+short anim[NB_ETAPES][NB_ANIM]={...}; // Contient des n° de sprites
+short sprts[NB_SPRITES][16]={...}; // Contient les sprites (en noir et blanc)
+
+void _main(void)
+{
+  char big_vscreen[BIG_VSCREEN_SIZE];
+  short old_sr,n_frame,n_etape;
+
+  old_sr=OSSetSR(0X0700);
+
+  n_frame=n_etape=0;
+
+  do
+  {
+    if(!n_frame) // Si on est à la première image d'une étape, on rafraichit
+      RefreshAnimatedBuffer(MAP_WIDTH,matrix,big_vscreen,sprts,anim[n_etape]);
+
+    DrawBuffer_RPLC(big_vscreen,0,0,LCD_MEM);
+
+    if(!(++n_frame % 16)) // Toutes les 16 images, on change d'étape d'animation
+      n_etape = (n_etape+1) % NB_ETAPES;
+  }while(!_keytest(RR_ESC));
+
+  OSSetSR(old_sr);
+}</pre>On note que la libraire est mal utilisée car les coordonnées passées à la fonction DrawBuffer sont nulles toutes les deux. C'est juste pour que l'exemple soit plus court.<br>
+À chaque image, on incrémente un compteur, qui arrivé à une certaine valeur (16 dans notre exemple) change le numéro de l'étape d'animation.<br>
+Pour chaque étape, le numéro de l'image correspondant à chaque animation est donnée dans le tableau <code>anim</code>.<br>
+La plupart du temps, on ne souhaite pas animer tous les tiles d'une map, mais seulement une partie d'entre eux, dans ce cas, il suffit d'affecter à l'animation le même numéro de sprite à toutes ses étapes.<br>
+Cela soulève un problème qui est que si seulement quelques tiles sont animés, le tableau <code>anim</code> devient trop redondant. Dans ce cas, procédez autrement, n'utilisez qu'une liste de numéros de sprites (plutôt que <code>NB_ETAPES</code> listes comme dans l'exemple), et mettez à jour directement la liste quand vous le voulez.<br>
+<br><br>
+<b><li>La famille <code>DrawBuffer</code></li></b><br><br>
+Les fonctions du type <code>DrawBuffer</code> recopient le contenu du grand ecran virtuel en le scrollant, vers un écran de taille normale (virtuel ou non).<br><br>
+Leurs prototypes sont de la forme : <br><b><code>void Draw[Gray]Buffer[89]_MODE(void *src,short x,short y,void *dest);</code></b><br>
+Où : <b><code>Gray</code></b> est optionnel, il indique si la fonction est en niveaux de gris.<br>
+<b><code>89</code></b> est également optionnel, il permet de ne recopier vers la destination que la partie visible par une TI-89 (c'est donc beaucoup plus rapide).<br>
+<b><code>MODE</code></b> spécifie le mode d'affichage, il peut prendre les valeurs <code>RPLC</code>, <code>OR</code>, <code>XOR</code>, <code>AND</code>, <code>MASK</code>, <code>TRANW</code>, <code>TRANB</code> ou <code>BLIT</code>. La description des différents modes d'affichage est disponible en <a href="annexe.html">annexe</a>.<br>
+Par exemple, pour afficher un plan en mode <code>RPLC</code>, et en niveaux de gris, on utilisera la fonction <code>DrawGrayBuffer_RPLC</code>.<br><br>
+Et voici la description des paramètres que prennent ces fonctions :<br>
+<b>src<code></code></b> : adresse du grand écran virtuel que l'on souhaite afficher.<br>
+<b><code>x</code></b> : décalage horizontal à effectuer, en pixels (Attention : doit être compris en 0 et 31).<br>
+<b><code>y</code></b> : décalage vertical à effectuer, en pixels (Attention : doit être compris entre 0 et 31).<br>
+<b><code>dest</code></b> : adresse du l'écran de destination (sa taille doit être de 3840 octets en noir et blanc, et de 7680 octets en niveaux de gris).<br><br>
+En réalité, les fonctions en mode <b><code>BLIT</code></b> sont légèrement différentes des autres, elles prennent un paramètre supplémentaire, le masque. Leurs prototypes sont de la forme :<br>
+<code>void Draw[Gray]Buffer[89]_BLIT(void *src, short x, short y, long mask, void *dest);</code><br>
+Où <b><code>mask</code></b> contient la valeur du masque. Attention : ce masque est sur 32 bits, afin de permettre une plus grande souplesse d'utilisation, mais cela peut être à l'origine de problèmes si vous n'y faites pas attention.<br>
+<br><br>
+<b><li>La famille <code>DrawTiles</code></li></b><br />
+<br />
+Les fonctions du type <code>Drawtiles</code> servent à afficher un plan, à partir de sa matrice de tiles, directement à l'écran (sans passer par un big_vscreen). Ces fonctions ne permettent pas de scroller le plan au pixel près.<br />
+En fait, ces fonctions fonctionnent exactement comme celles du type <code>RefreshBuffer</code>, sauf que la destination est un écran virtuel de taille normale.<br />
+L'affichage est en mode <code>RPLC</code>, il est donc inutile d'effacer la destination avant d'afficher dessus.<br />
+<br />
+Leurs prototypes sont de la forme :<br />
+<b><code>void Draw[Gray]TilesXY[89](short larg,void *tab,void *dest,void *sprts);</code></b><br />
+Où <b><code>Gray</code></b> est optionnel, il indique si la fonction est en niveaux de gris.<br />
+<b><code>89</code></b> est également optionnel, il permet de n'afficher que la partie de l'écran visible par une TI-89 (c'est donc plus rapide, surtout pour les tiles 8x8).<br />
+<b><code>X</code></b> indique la taille des sprites, il peut prendre les valeurs <b><code>16</code></b> (sprites 16x16) ou <b><code>8</code></b> (sprites 8x8).<br />
+<b><code>Y</code></b> indique si la matrice de tiles est codée sur des <code>char</code> ou des <code>short</code>, il peut prendre les valeurs <b><code>B</code></b> (<code>char</code>) ou <b><code>W</code></b> (<code>short</code>).<br />
+Par exemple, pour afficher un plan défini par une matrice de <code>char</code>, avec des sprites 8x8 en noir et blanc et n'afficher que la partie visible par une TI-89, on utilisera la fonction <code>DrawTiles8B89</code>.<br />
+<br />
+Description des paramètres attendus par ces fonctions :<br />
+<b><code>larg</code></b> : largeur de la matrice de tiles (en nombre de tiles, pas en pixels).<br />
+<b><code>tab</code></b> : adresse de la matrice de tiles, positionnée sur le premier tile à afficher en haut à gauche de l'écran.<br />
+<b><code>dest</code></b> : buffer de destination (de taille normale).<br />
+<b><code>sprts</code></b> : liste des sprites à utiliser.<br />
+<br />
+L'exemple 6 fourni avec la librairie illustre une utilisation d'une de ces fonctions.<br />
+<br />
+<br />
+<b><li>La famille <code>DrawBufferWithShifts</code></li></b><br><br>
+Les fonctions du type <code>DrawBufferWithShifts</code> recopient le contenu du grand écran virtuel en le scrollant, vers un écran de taille normale, mais contrairement à la fonction précédente, il est possible de spécifier la valeur du décalage horizontal pour chaque ligne, et il est aussi possible de rajouter des décalages verticaux entre les lignes.<br>
+Cela permet de faire énormément d'effets graphiques.<br><br>
+Leurs prototypes sont de la forme : <br>
+<b><code>void Draw[Gray]BufferWithShifts[89]_MODE(void *src,short x,short y,void *dest,char *dh,short *dv);</code></b><br>
+Où <b><code>Gray</code></b> est optionnel, il indique si la fonction est en niveaux de gris.<br>
+<b><code>89</code></b> est également optionnel, il permet de ne recopier vers la destination que la partie visible par une TI-89 (c'est donc plus rapide).<br>
+<b><code>MODE</code></b> spécifie le mode d'affichage, il peut prendre les même valeurs que pour <code>DrawBuffer</code>, c'est-à-dire : <code>RPLC</code>, <code>OR</code>, <code>XOR</code>, <code>AND</code>, <code>MASK</code>, <code>TRANW</code>, <code>TRANB</code> ou <code>BLIT</code>. La description des différents modes d'affichage est disponible en <a href="annexe.html">annexe</a>.<br><br>
+Description des paramètres que prennent ces fonctions :<br>
+<b><code>src</code></b> : adresse du grand écran virtuel que l'on souhaite afficher.<br>
+<b><code>x</code></b> : décalage horizontal, en pixels (Attention : doit être compris entre 0 et 15).<br>
+<b><code>y</code></b> : décalage vertical, en pixels (Attention : doit être compris entre 0 et 15).<br>
+<b><code>dest</code></b> : adresse de l'écran de destination.<br>
+<b><code>dh</code></b> : adresse de la table de décalage horizontal. Lors de la recopie du grand écran virtuel vers la destination, pour chaque ligne, on ajoutera la valeur correspondante de la table à <b><code>x</code></b> pour avoir le décalage horizontal de la ligne. Leur somme est comprise entre 0 et 31.<br>
+<b><code>dv</code></b> : adresse de la table de décalage vertical. Lors de la recopie du grand écran virtuel vers la destination, à la fin de la recopie de chaque ligne, on ajoutera la valeur correspondante de la table au pointeur qui contient l'adresse de la source (le grand écran virtuel à afficher). Ainsi pour afficher deux fois une même ligne, par exemple, il vous suffit de mettre la valeur <code>-34</code> quelque part dans le tableau (et pour sauter une ligne, mettez <code>34</code>).<br>
+<br>
+Les fonctions en mode <b><code>BLIT</code></b>, comme pour <code>DrawBuffer</code>, sont différentes en réalité, elles prennent un paramètre <code>masque</code> supplémentaire, donc leurs prototypes sont de la forme :<br>
+<code>void Draw[Gray]BufferWithShifts[89]_BLIT(void *src,short x,short y,long mask,void *dest,char *dh,short *dv);</code><br>
+Où <b><code>mask</code></b> contient la valeur du masque.<br>
+<br>
+Le fonctionnement de ces fonctions n'est pas très évident à comprendre au premier abord, c'est pourquoi je vous recommande de regarder l'exemple 4 pour vous aider à assimiler leur principe de fonctionnement. Une fois compris, vous verrez que les possibilités qu'offrent ces fonctions sont très étendues et puissantes.<br>
+</ul>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="hautniv.html">Fonctions de haut niveau</a></td> <td align="center" width="33%">Up : <a href="description.html">Description des fonctions</a></td> <td align="right" width="33%">Suivant : <a href="annexe.html">Annexe</a></td></tr>
+</table>
+</body>
+</html>

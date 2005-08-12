@@ -1,0 +1,1 @@
+rm `find -iname *.o | awk 'BEGIN {ORS = "\x20"} {print $1}'`

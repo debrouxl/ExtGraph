@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#gray_util"><h1>Misc. Grayscale Support Routines</h1></a>
+<h1>"Gray..." names reflect the new TIGCCLIB naming convention, "...Gray" names are left for compatibility</h1>
+<hr>
+<p>
+<br>
+<a name="#GrayClearScreen"></a>
+<h3>void GrayClearScreen();</h3>
+<h3>void GrayClearScreen2B(void* lightplane,void *darkplane);</h3>
+<h3>void ClearGrayScreen();</h3>
+<h3>void ClearGrayScreen2B(void* lightplane,void *darkplane);</h3>
+GrayClearScreen/ClearGrayScreen clears both standard grayplanes at once whereas
+GrayClearScreen2B/ClearGrayScreen2B clears the specified buffers.
+Internally it is implemented using a very fast ASM loop which outweights any other approach
+(memset() for example - <strong>especially on PedroM, since to date, the PedroM memset is extremely slow</strong>) in speed.<br>
+Note that <em>lightplane</em> and <em>darkplane</em> have to be of size 240 x 128 pixels
+and they have to start at an even address (buffers allocated with malloc always starts at
+an even address).<br>
+<br><br><br><br>
+
+<a name="#GrayDrawRect"></a>
+<a name="#GrayFastFillRect"></a>
+<h3>void GrayDrawRect(short x0,short y0,short x1,short y1,short color,short fill);</h3>
+<h3>void GrayDrawRect2B(short x0,short y0,short x1,short y1,short color,short fill,void* lightplane,void *darkplane);</h3>
+<h3>void DrawGrayRect(short x0,short y0,short x1,short y1,short color,short fill);</h3>
+<h3>void DrawGrayRect2B(short x0,short y0,short x1,short y1,short color,short fill,void* lightplane,void *darkplane);</h3>
+<h3>void GrayFastFillRect_R(register void* dest1 asm("%a0"),register void* dest2 asm("%a1"), register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short color) __attribute__((__stkparm__));</h3>
+DrawGrayRect/DrawGrayRect2B/GrayDrawRect/GrayDrawRect2B draws a rectangle with vertices at
+(<em>x0</em>,<em>y0</em>), (<em>x1</em>,<em>y0</em>),
+(<em>x0</em>,<em>y1</em>), and (<em>x1</em>,<em>y1</em>).
+Parameter <em>color</em> specifies the color of the rectangle.
+Valid color values are defined by enumeration <a href="#enumerations">GrayColors</a>.
+Parameter <em>fill</em> specifies whether the rect
+is filled (solid) or just the outline of a rectangle (hollow).
+Valid arguments for <em>fill</em> are define
+by enumeration <a href="#enumerations">FillAttrs</a>.
+<br>GrayDrawRect/DrawGrayRect uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawRect2B/DrawGrayRect2B uses
+the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br>GrayFastFillRect_R is the two-plane version of FastFillRect_R, with parameter <em>color</em>
+having the same meaning as in GrayDrawRect*.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+
+<a name="#GrayInvertRect"></a>
+<h3>void GrayInvertRect(short x0,short y0,short x1,short y1);</h3>
+<h3>void GrayInvertRect2B(short x0,short y0,short x1,short y1,void* lightplane,void *darkplane);</h3>
+<h3>void InvertGrayRect(short x0,short y0,short x1,short y1);</h3>
+<h3>void InvertGrayRect2B(short x0,short y0,short x1,short y1,void* lightplane,void *darkplane);</h3>
+InvertGrayRect/InvertGrayRect2B/GrayInvertRect/GrayInvertRect2B
+inverts (switches pixels, which are off, on and those, which are on, off) a rectangle
+with vertices at (<em>x0</em>,<em>y0</em>), (<em>x1</em>,<em>y0</em>), (<em>x0</em>,<em>y1</em>),
+and (<em>x1</em>,<em>y1</em>).<br>
+These functions may be useful in menus where the rect inverted by GrayInvertRect can
+act as the menu selection bar.<br>
+GrayInvertRect/InvertGrayRect uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayInvertRect2B/InvertGrayRect2B
+uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+<a name="#GrayDrawLine"></a>
+<h3>void GrayDrawLine(short x0,short y0,short x1,short y1,short color);</h3>
+<h3>void GrayDrawLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
+<h3>void DrawGrayLine(short x0,short y0,short x1,short y1,short color);</h3>
+<h3>void DrawGrayLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
+GrayDrawLine/GrayDrawLine2B/DrawGrayLine/DrawGrayLine2B draws a line with color <em>color</em>
+from (<em>x0</em>,&nbsp;<em>y0</em>) to (<em>x1</em>,&nbsp;<em>y1</em>) using the standard
+AMS routine DrawLine.
+Valid values of color are defined by enumeration <a href="#enumerations">GrayColors</a>.
+<br>GrayDrawLine/DrawGrayLine uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawLine2B/DrawGrayLine2B uses
+the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+<a name="#GrayFastDrawLine"></a>
+<h3>void GrayFastDrawLine(short x0,short y0,short x1, short y1, short color);</h3>
+<h3>void GrayFastDrawLine(short x0,short y0,short x1, short y1, short color);</h3>
+<h3>void FastDrawGrayLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
+<h3>void FastDrawGrayLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
+GrayFastDrawLine/GrayFastDrawLine2B/FastDrawGrayLine/FastDrawGrayLine2B is a grayscale
+version of the FastDrawLine function in this library, which is a replacement for the AMS
+DrawLine function.
+FastDrawLine is almost 500 percent faster than DrawLine which carries over to the grayscale
+version. GrayFastDrawLine/FastDrawGrayLine draws a line with color <em>color</em> from
+(<em>x0</em>,&nbsp;<em>y0</em>) to (<em>x1</em>,&nbsp;<em>y1</em>).Valid values of color
+are defined by enumeration <a href="#enumerations">GrayColors</a>.
+<br>GrayFastDrawLine/FastDrawGrayLine uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayFastDrawLine2B/FastDrawGrayLine2B
+uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+<a name="#GrayFastDrawHLine"></a>
+<h3>void GrayFastDrawHLine(short x0,short x1, short y, short color);</h3>
+<h3>void GrayFastDrawHLine2B(short x0,short x1,short y,short color,void* lightplane,void *darkplane);</h3>
+<h3>void FastDrawGrayHLine(short x0,short x1, short y, short color);</h3>
+<h3>void FastDrawGrayHLine2B(short x0,short x1,short y,short color,void* lightplane,void *darkplane);</h3>
+GrayFastDrawGrayHLine/GrayFastDrawHLine2B/FastDrawGrayHLine/FastDrawGrayHLine2B is a
+grayscale version of the FastDrawHLine function in this library.
+GrayFastDrawHLine/FastDrawGrayHLine draws a <strong>horizontal</strong> line with color <em>color</em>
+from (<em>x0</em>,&nbsp;<em>y</em>) to (<em>x1</em>,&nbsp;<em>y</em>).Valid values of color
+are defined by enumeration <a href="#enumerations">GrayColors</a>.
+<br>GrayFastDrawHLine/FastDrawGrayHLine uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas
+GrayFastDrawHLine2B/FastDrawGrayHLine2B uses the given parameters <em>lightplane</em> and
+<em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+<a name="#GrayDrawChar"></a>
+<h3>void GrayDrawChar(short x,short y,char c,short attr);</h3>
+<h3>void GrayDrawChar2B(short x,short y,char c,short attr,void* lightplane,void *darkplane);</h3>
+<h3>void DrawGrayChar(short x,short y,char c,short attr);</h3>
+<h3>void DrawGrayChar2B(short x,short y,char c,short attr,void* lightplane,void *darkplane);</h3>
+GrayDrawChar/GrayDrawChar2B/DrawGrayChar/DrawGrayChar2B draws character <em>c</em> at a
+specific (<em>x</em>,&nbsp;<em>y</em>) location to both grayscale planes producing a black
+character. See <A href="graph.html#DrawChar">DrawChar</a> for a description of attribute
+<em>attr</em>.
+<br>GrayDrawChar/DrawGrayChar uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawChar2B/DrawGrayChar2B uses
+the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+
+<a name="#GrayDrawStr"></a>
+<h3>void GrayDrawStr(short x,short y,char* s,short attr);</h3>
+<h3>void GrayDrawStr2B(short x,short y,char* s,short attr,void* lightplane,void *darkplane);</h3>
+<h3>void DrawGrayStr(short x,short y,char* s,short attr);</h3>
+<h3>void DrawGrayStr2B(short x,short y,char* s,short attr,void* lightplane,void *darkplane);</h3>
+GrayDrawStr/GrayDrawStr2B/DrawGrayStr/DrawGrayStr2B draws a string <em>s</em> at a specific
+(<em>x</em>,&nbsp;<em>y</em>) location to both grayscale planes producing a black string.
+See <A href="graph.html#DrawChar">DrawChar</a> for a description of attribute <em>attr</em>.
+<br>GrayDrawStr/DrawGrayStr uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawStr2B/DrawGrayStr2B uses the
+given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+<br><br><br><br>
+
+
+<a name="#GrayDrawStrExt"></a>
+<h3>void GrayDrawStrExt(short x,short y,char* s,short attr,short font);</h3>
+<h3>void GrayDrawStrExt2B(short x,short y,char* s,short attr,short font,void* lightplane,void *darkplane);</h3>
+<h3>void DrawGrayStrExt(short x,short y,char* s,short attr,short font);</h3>
+<h3>void DrawGrayStrExt2B(short x,short y,char* s,short attr,short font,void* lightplane,void *darkplane);</h3>
+GrayDrawStrExt/GrayDrawStrExt2B/DrawGrayStrExt/DrawGrayStrExt2B draws a string <em>s</em>
+at a specific (<em>x</em>,&nbsp;<em>y</em>) location to both grayscale planes producing a
+black string using the font <em>font</em>.
+See <A href="graph.html#DrawChar">DrawChar</a> for a description of attribute <em>attr</em>.
+GrayDrawStrExt/GrayDrawStrExt2B/DrawGrayStrExt/DrawGrayStrExt2B additonally supports the
+attributes A_CENTERED and A_SHADOWED, which can be OR’ed (|) to the normal Attributes.
+If A_CENTERED is used the string will be drawn then centered using the given font to
+evaluate its length. When A_SHADOWED is used a lightgray shadow will be drawn with +1 pixel
+offset in all two directions.<br><br>
+For example,
+<pre>
+GrayDrawStrExt(0,50,"Welcome!",A_REPLACE | A_CENTERED,F_4x6);
+</pre>
+will draw "Welcome!" horizontally centered at line 50 with font F_4x6.
+<br><br>GrayDrawStrExt/DrawGrayStrExt uses the results of GrayGetPlane(LIGHT_PLANE) and
+GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawStrExt2B/DrawGrayStrExt2B
+uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
+<br><br>NOTE: This function uses PortSet internally, the previously active plane is
+therefore no longer valid after calling it.
+</p>
+<br>
+<br>
+
+</BODY>
+</HTML>

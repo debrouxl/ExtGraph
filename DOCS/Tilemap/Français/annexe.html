@@ -1,0 +1,99 @@
+<html>
+<head><title>Documentation du TileMap Engine v0.4 (29/06/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="basniv.html">Fonctions de bas niveau</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="merci.html">Remerciements / Contact</a></td></tr>
+</table>
+<hr>
+<p>
+<center><h3>Annexe</h3></center>
+<br>
+<h4>Description des différents modes d'affichage :</h4>
+<dl>
+
+<dt><code>RPLC</code></dt>
+<dd>RemPLaCe complètement la destination (il est donc inutile de l'effacer auparavant). Vous devriez utiliser ce mode pour afficher un arrière-plan.</dd>
+
+<br><br>
+
+<dt><code>OR</code></dt>
+<dd>OU logique entre la source et la destination.</dd>
+
+<br><br>
+
+<dt><code>XOR</code></dt>
+<dd>OU eXclusif logique entre la source et la destination.</dd>
+
+<br><br>
+
+<dt><code>AND</code></dt>
+<dd>ET logique entre la source et la destination.</dd>
+
+<br><br>
+
+<dt><code>MASK</code></dt>
+<dd>Ce mode est assez particulier. En noir et blanc, il est complètement identique au mode AND. En niveaux de gris, ce mode réalise un ET logique entre le premier plan du big_vscreen source et les deux plans de la destination (vous pouvez donc passer en paramètre un big_vscreen noir et blanc, puisque seul le premier plan sera utilisé).<br />
+    Ce mode est particulièrement utile pour afficher plusieurs plans à l'écran sans perdre de couleur (en affichant ensuite un plan en mode OR). L'exemple5 illustre une utilisation possible de ce mode.</dd>
+
+<br><br>
+
+<dt><code>BLIT</code></dt>
+<dd>Ce mode utilise le champ <code>mask</code> du Plane (ou bien le mask peut être passé directement en paramètre avec les fonctions de bas niveau). Un ET logique est effectué entre le <code>mask</code> et la destination, puis le plan est affiché en mode OR. Ce mode peut être utile pour faire des effets de transitions.</dd>
+
+<br><br>
+
+<dt><code>TRANW</code></dt>
+<dd>La couleur blanche est TRANsparente, les autres couleurs sont opaques. Ce mode est très utile pour afficher des plans par-dessus un arrière-plan.</dd>
+
+<br><br>
+
+<dt><code>TRANB</code></dt>
+<dd>La couleur noire est TRANsparente, les autres couleurs sont opaques. Ce mode est également très utile pour afficher des plans par-dessus un arrière-plan.</dd>
+</dl>
+</p><br><br>
+<p>
+<table border=1>
+<caption><h4>Tableau récapitulatif des différents types de plans :</h4>("valeurs" de type TM_Type)</caption>
+<tr><th></th><th colspan=2>Matrice de char</th><th colspan=2>Matrice de short</th></tr>
+<tr><th></th><th>Sprites 8x8</th><th>Sprites 16x16</th><th>Sprites 8x8</th><th>Sprites 16x16</th></tr>
+<tr><th>Noir et blanc</th><td>TM_8B</td><td>TM_16B</td><td>TM_8W</td><td>TM_16W</td></tr>
+<tr><th>Niveaux de gris</th><td>TM_G8B</td><td>TM_G16B</td><td>TM_G8W</td><td>TM_G16W</td></tr>
+</table>
+</p><br><br>
+<p>
+<table border=1>
+<caption><h4>Tableau récapitulatif des différents types de plans animés :</h4>("valeurs" de type TM_AnimType)</caption>
+<tr><th></th><th colspan=2>Matrice de char</th><th colspan=2>Matrice de short</th></tr>
+<tr><th></th><th>Sprites 8x8</th><th>Sprites 16x16</th><th>Sprites 8x8</th><th>Sprites 16x16</th></tr>
+<tr><th>Noir et blanc</th><td>TM_A8B</td><td>TM_A16B</td><td>TM_A8W</td><td>TM_A16W</td></tr>
+<tr><th>Niveaux de gris</th><td>TM_GA8B</td><td>TM_GA16B</td><td>TM_GA8W</td><td>TM_GA16W</td></tr>
+</table>
+</p><br><br>
+<p>
+<table border="1">
+<caption><h4>Tableau récapitulatif des différents types de plans pour les fonctions <code>DrawTiles</code></h4>("valeurs" de type TM_TilesType)</caption>
+<tr> <th></th> <th></th> <th colspan="2">Matrice de char</th> <th colspan="2">Matrice de short</th></tr>
+<tr> <th></th> <th></th> <th>Sprites 8x8</th> <th>Sprites 16x16</th> <th>Sprites 8x8</th> <th>Sprites 16x16</th></tr>
+<tr> <th rowspan="2">Noir et blanc</th> <th>TI92+</th> <td>TM_T8B</td> <td>TM_T16B</td> <td>TM_T8W</td> <td>TM_T16W</td> </tr>
+<tr> <th>TI89</th> <td>TM_T8B89</td> <td>TM_T16B89</td> <td>TM_T8W89</td> <td>TM_T16W89</td> </tr>
+<tr> <th rowspan="2">Niveaux de gris</th> <th>TI92+</th> <td>TM_GT8B</td> <td>TM_GT16B</td> <td>TM_GT8W</td> <td>TM_GT16W</td> </tr>
+<tr> <th>TI89</th> <td>TM_GT8B89</td> <td>TM_GT16B89</td> <td>TM_GT8W89</td> <td>TM_GT16W89</td> </tr>
+</table>
+</p><br />
+<br />
+<p>
+<table border=1>
+<caption><h4>Tableau récapitulatif des différents modes d'affichage : </h4>("valeurs" de type TM_Mode)</caption>
+<tr> <th></th> <th></th> <th>RPLC</th> <th>OR</th> <th>XOR</th> <th>AND</th> <th>MASK</th> <th>BLIT</th> <th>TRANW</th> <th>TRANB</th> </tr>
+<tr> <th rowspan=2>Noir et blanc</th> <th>TI92+</th> <td>TM_RPLC</td> <td>TM_OR</td> <td>TM_XOR</td> <td>TM_AND</td> <td>TM_MASK</td> <td>TM_BLIT</td> </tr>
+<tr> <th>TI89</th> <td>TM_RPLC89</td> <td>TM_OR89</td> <td>TM_XOR89</td> <td>TM_AND89</td> <td>TM_MASK89</td> <td>TM_BLIT89</td> </tr>
+<tr> <th rowspan=2>Niveaux de gris</th> <th>TI92+</th> <td>TM_GRPLC</td> <td>TM_GOR</td> <td>TM_GXOR</td> <td>TM_GAND</td> <td>TM_GMASK</td> <td>TM_GBLIT</td> <td>TM_GTRANW</td> <td>TM_GTRANB</td> </tr>
+<tr> <th>TI89</th> <td>TM_GRPLC89</td> <td>TM_GOR89</td> <td>TM_GXOR89</td> <td>TM_GAND89</td> <td>TM_GMASK89</td> <td>TM_GBLIT89</td> <td>TM_GTRANW89</td> <td>TM_GTRANB89</td> </tr>
+</table>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Précédent : <a href="basniv.html">Fonctions de bas niveau</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Suivant : <a href="merci.html">Remerciements / Contact</a></td></tr>
+</table>
+</body>
+</html>

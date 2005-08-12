@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<TITLE>Library ExtGraph Documentation</TITLE>
+<STYLE TYPE="TEXT/CSS">
+<!--
+BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
+TD {FONT-SIZE: 8pt}
+H1 {FONT-SIZE: 18pt; COLOR: #000000}
+.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
+H2 {FONT-SIZE: 16pt; COLOR: #000000}
+H3 {FONT-SIZE: 10pt}
+.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
+PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+-->
+</STYLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
+
+<hr>
+<a name="#howto"><h1>How to use the ExtGraph Library?</h1></a>
+<hr>
+<p>
+<br>
+<strong>[Information valid for all distributions]</strong><br><br>
+Copy files extgraph.a and extgraph.h (tilemap.a and tilemap.h if you use the tilemap engine, 
+preshift.h if you use preshifted sprites) into the directory where the rest of your sources 
+are. To use extgraph functions now in your project add the following line:
+<pre>
+#include "extgraph.h"
+</pre>
+to your sourcecode.
+<br><br><br>
+If you are using the commandline compile your project (in this case myprog) this way:
+<pre>
+tigcc myprog.c extgraph.a
+</pre>
+If you are using the IDE add extgraph.a to the archive file folder of your project. That's 
+all.
+</p>
+
+</BODY>
+</HTML>

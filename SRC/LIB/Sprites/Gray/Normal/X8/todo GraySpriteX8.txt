@@ -1,0 +1,5 @@
+* Rewrite these routines in optimized assembly (both __regparm__ and __stkparm__). They're 
+currently faster than the previous versions, since the SpriteX8 are significantly faster than 
+the previous versions (see the speedup on demo6), but calling a SpriteX8 twice is slower than a 
+full-blown GraySpriteX8.
+* Keep the "slower" versions nevertheless (smaller).

@@ -1,0 +1,75 @@
+<html>
+<head><title>Documentation of TileMap Engine v0.4 (06/29/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="lowlevel.html">Low level functions</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="thanks.html">Credits / Contact information</a></td></tr>
+</table>
+<hr>
+<p>
+<center><h3>Appendix</h3></center>
+<br>
+<h4>Description of the various drawing modes :</h4>
+<dl>
+<dt><code>RPLC</code></dt>
+<dd>Completely RePLaCes the destination (clearing it before is useless). You should use this mode to display a background.</dd>
+<br><br>
+<dt><code>OR</code></dt>
+<dd>Logical OR between the source and the destination.</dd>
+<br><br>
+<dt><code>MASK</code></dt>
+<dd>This mode is particular. In black and white functions, it's totally the same as the AND mode. In grayscale, it realizes a logical AND between the first plane of the source big_vscreen, and the both planes of the destination (so you can pass a black and white big_vscreen, since only the first plane is used).<br />
+    This mode is very useful to draw several planes on the screen without losing a color (by drawing next a plane using the OR mode). The example 5 shows a way to use this mode.</dd>
+<br><br>
+<dt><code>TRANW</code></dt>
+<dd>The White color is TRANsparent, the other colors are opaque. This mode is very useful to draw planes over a background.</dd>
+<br><br>
+<dt><code>TRANB</code></dt>
+<dd>The Black color is TRANsparent, the other colors are opaque. This mode is very useful to draw planes over a background.</dd>
+</dl>
+</p><br><br>
+<p>
+<table border="1">
+<caption><h4>Table summarizing the different plane types:</h4>(elements have type TM_Type)</caption>
+<tr><th></th><th colspan="2">2D char arrays</th><th colspan="2">2D short arrays</th></tr>
+<tr><th></th><th>8x8 sprites</th><th>16x16 sprites</th><th>8x8 sprites</th><th>16x16 sprites</th></tr>
+<tr><th>B/W</th><td>TM_8B</td><td>TM_16B</td><td>TM_8W</td><td>TM_16W</td></tr>
+<tr><th>Grayscales</th><td>TM_G8B</td><td>TM_G16B</td><td>TM_G8W</td><td>TM_G16W</td></tr>
+</table>
+</p><br><br>
+<p>
+<table border="1">
+<caption><h4>Table summarizing the different animated plane types:</h4>(elements have type TM_AnimType)</caption>
+<tr><th></th><th colspan="2">2D char arrays</th><th colspan="2">2D short arrays</th></tr>
+<tr><th></th><th>8x8 sprites</th><th>16x16 sprites</th><th>8x8 sprites</th><th>16x16 sprites</th></tr>
+<tr><th>B/W</th><td>TM_A8B</td><td>TM_A16B</td><td>TM_A8W</td><td>TM_A16W</td></tr>
+<tr><th>Grayscales</th><td>TM_GA8B</td><td>TM_GA16B</td><td>TM_GA8W</td><td>TM_GA16W</td></tr>
+</table>
+</p><br><br>
+<p>
+<table border="1">
+<caption><h4>Table summarizing the different plane types for the <code>DrawTiles</code> functions</h4>(element have type TM_TilesType)</caption>
+<tr> <th></th> <th></th> <th colspan="2">2D char arrays</th> <th colspan="2">2D short arrays</th></tr>
+<tr> <th></th> <th></th> <th>8x8 Sprites</th> <th>16x16 Sprites</th> <th>8x8 Sprites</th> <th>16x16 Sprites</th></tr>
+<tr> <th rowspan="2">B/W</th> <th>TI92+</th> <td>TM_T8B</td> <td>TM_T16B</td> <td>TM_T8W</td> <td>TM_T16W</td> </tr>
+<tr> <th>TI89</th> <td>TM_T8B89</td> <td>TM_T16B89</td> <td>TM_T8W89</td> <td>TM_T16W89</td> </tr>
+<tr> <th rowspan="2">Grayscales</th> <th>TI92+</th> <td>TM_GT8B</td> <td>TM_GT16B</td> <td>TM_GT8W</td> <td>TM_GT16W</td> </tr>
+<tr> <th>TI89</th> <td>TM_GT8B89</td> <td>TM_GT16B89</td> <td>TM_GT8W89</td> <td>TM_GT16W89</td> </tr>
+</table>
+</p><br />
+<br />
+<p>
+<table border="1">
+<caption><h4>Table summarizing the different drawing modes</h4>(elements have type TM_Mode)</caption>
+<tr> <th></th> <th></th> <th>RPLC</th> <th>OR</th> <th>MASK</th> <th>TRANW</th> <th>TRANB</th> </tr>
+<tr> <th rowspan=2>B/W</th> <th>TI92+</th> <td>TM_RPLC</td> <td>TM_OR</td> <td>TM_MASK</td> </tr>
+<tr> <th>TI89</th> <td>TM_RPLC89</td> <td>TM_OR89</td> <td>TM_MASK89</td> </tr>
+<tr> <th rowspan=2>Grayscales</th> <th>TI92+</th> <td>TM_GRPLC</td> <td>TM_GOR</td> <td>TM_GMASK</td> <td>TM_GTRANW</td> <td>TM_GTRANB</td> </tr>
+<tr> <th>TI89</th> <td>TM_GRPLC89</td> <td>TM_GOR89</td> <td>TM_GMASK89</td> <td>TM_GTRANW89</td> <td>TM_GTRANB89</td> </tr>
+</table>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="lowlevel.html">Low level functions</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="thanks.html">Credits / Contact information</a></td></tr>
+</table>
+</body>
+</html>

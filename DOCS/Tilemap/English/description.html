@@ -1,0 +1,39 @@
+<html>
+<head><title>Documentation of TileMap Engine v0.4 (06/29/2004)</title></head>
+<body>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="use.html">Utilisation</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="structures.html">Data structures used by the functions</a></td></tr>
+</table>
+<hr>
+<p>
+<a name="#descr"><h3>Description of the functions</h3></a>
+The functions provided by the library can be splitted in two categories : low level functions (powerful, but not easy to use) and high level functions (easier to use, but slightly less powerful).<br>
+For usual use, high level functions should be enough, but in some cases, you'll need to use low level functions (if you want to make a complex game, or if you program in assembly).<br>
+Nevertheless, using low level functions may not speed up your program. High level functions are written in assembly, so they are usually faster than C code using low level functions.<br />
+High level functions allow you to do everything which is possible with low level functions, except use of shift arrays.<br>
+<br>
+If you program in assembly, you need to know how the parameters are passed to the functions. They are passed by registers, read the header file to know precisely which register corresponds to which parameter.<br>
+</p>
+<p>
+You should read the examples provided with the library to understand how to use the functions.<br />
+The example 1 uses high level functions, it shows how to draw more than one plane to give depth illusion.<br />
+The example 2 is obsolete, it uses low level functions to show how to make a map with animated tiles (for a RPG for example), but without using functions for animated maps (they weren't written when I wrote this example).<br />
+The example 3 is the same than the example 2, but it uses the functions for animated planes.<br />
+The example 4 uses low level functions and shifts arrays.<br />
+The example 5 uses high level functions to draw 3 planes, using the MASK mode.<br />
+The example 6 uses a <code>DrawTiles</code> function to draw a plane.<br />
+</p>
+<hr>
+<p>
+<ul>
+  <li><a href="structures.html">Data structures used by the functions</a></li>
+  <li><a href="highlevel.html">High level functions</a></li>
+  <li><a href="lowlevel.html">Low level functions</a></li>
+</ul>
+</p>
+<hr>
+<table width="100%" border="0">
+<tr><td align="left" width="33%">Previous : <a href="use.html">Utilisation</a></td> <td align="center" width="33%">Up : <a href="index.html">Index</a></td> <td align="right" width="33%">Next : <a href="structures.html">Data structures used by the functions</a></td></tr>
+</table>
+</body>
+</html>
