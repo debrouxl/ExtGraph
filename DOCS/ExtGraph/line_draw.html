@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -29,11 +29,11 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void FastDrawLine_R(register unsigned char* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short mode) __attribute__((__stkparm__));</h3>
 
 FastDrawLine() is a replacement for the AMS DrawLine function.
-It's almost 500 percent faster (see demo2), faster than that of graphlib too (ask me for 
-the kernel-based bench if you want it). Valid modes are A_REVERSE, A_NORMAL, A_XOR, 
-A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor 
-A_XOR).FastDrawLine draws a line from (<em>x1</em>,&nbsp;<em>y1</em>) to 
-(<em>x2</em>,&nbsp;<em>y2</em>) on a video plane of size 240x128 pixels using attribute 
+It's almost 500 percent faster (see demo2), faster than that of graphlib too (ask me for
+the kernel-based bench if you want it). Valid modes are A_REVERSE, A_NORMAL, A_XOR,
+A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor
+A_XOR).FastDrawLine draws a line from (<em>x1</em>,&nbsp;<em>y1</em>) to
+(<em>x2</em>,&nbsp;<em>y2</em>) on a video plane of size 240x128 pixels using attribute
 <em>mode</em>.
 <br><br><br><br>
 <a name="#FastDrawHLine"></a>
@@ -42,7 +42,7 @@ A_XOR).FastDrawLine draws a line from (<em>x1</em>,&nbsp;<em>y1</em>) to
 
 FastDrawHLine() draws a horizontal line from point (<em>x1</em>,&nbsp;<em>y</em>) to
 (<em>x2</em>,&nbsp;<em>y</em>) on a video plane of size 240x128 pixels using attribute <em>mode</em>.
-Valid modes are A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is 
+Valid modes are A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is
 assumed if mode is neither A_REVERSE nor A_XOR).
 If the specified mode is not one of these nothing will be drawn.<br><br>
 <strong>NOTE:</strong> This function is even more optimized than FastDrawLine and tries to write blocks of
@@ -54,7 +54,7 @@ If the specified mode is not one of these nothing will be drawn.<br><br>
 
 FastDrawVLine() draws a vertical line from point (<em>x</em>,&nbsp;<em>y1</em>) to
 (<em>x</em>,&nbsp;<em>y2</em>) on a video plane of size 240x128 pixels using attribute <em>mode</em>.
-Valid modes are A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is 
+Valid modes are A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR (A_NORMAL = A_REPLACE = A_OR is
 assumed if mode is neither A_REVERSE nor A_XOR).
 <br><br><br><br>
 <a name="#FastLine"></a>

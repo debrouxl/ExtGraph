@@ -32,6 +32,6 @@
 @tigcc demo26.asm ..\..\lib\extgraph.a ..\..\lib\tilemap.a
 @move demo26.89z ..\..\bin89
 @move demo26.9xz ..\..\bin92p
-@move demo26.v2z ..\..\binv200
+REM @move demo26.v2z ..\..\binv200
 @pause
 @echo on

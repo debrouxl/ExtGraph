@@ -1,4 +1,4 @@
-| C prototype: void FastOutlinedCircle_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));
+| C prototype: void FastOutlinedCircle_DRAW_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from
@@ -13,10 +13,10 @@
 | 20% slower and ~30 bytes bigger.
 
 .text
-.globl FastOutlinedCircle_R
+.globl FastOutlinedCircle_DRAW_R
 .even
 
-FastOutlinedCircle_R:
+FastOutlinedCircle_DRAW_R:
     movem.l  %d3-%d6/%a2-%a3,-(%sp)
 
     move.w   %d0,%d3 | xc

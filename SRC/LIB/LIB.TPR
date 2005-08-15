@@ -28,7 +28,7 @@ Cut Unused Ranges=1
 Binary Output=0
 Flash OS=0
 Reorder Sections=1
-Merge Constants=0
+Merge Constants=1
 Initialize BSS=0
 
 [Library Options]
@@ -54,7 +54,7 @@ Save Screen=1
 Optimize ROM Calls=1
 
 [File Editing]
-Open File=C:\Jeux\TI-89\ASM\ExtGraph 2.00 Beta 5\SRC\LIB\essais.c
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\..\..\lib\extgraph.h
 
 [Included Files]
 C File 1=essais.c

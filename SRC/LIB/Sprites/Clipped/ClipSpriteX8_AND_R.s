@@ -1,9 +1,8 @@
 | C prototype: void ClipSpriteX8_AND_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
 |
-| Based on a routine from GFA-Basic, made by Geoffrey Anneheim.
-| Modified by Lionel Debroux:
-| * changed calling convention and label names.
-| * changed OR mode to AND mode.
+| Based on a routine from GFA-Basic, made by Geoffrey Anneheim, strongly modified by Lionel Debroux
+| to become ClipSpriteX8_OR_R:
+| * changed drawing mode: OR -> AND.
 
 | Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
 | Julien started doing it for the new X8 routines.
@@ -16,49 +15,51 @@
 
 ClipSpriteX8_AND_R:
     movem.l  %d3-%d7,-(%sp)
-
+    
 |Zone de non affichage
     move.w   %d2,%d5				|%d5 = Bytewidth
-    neg.w    %d5					|%d5 = -Bytewidth
+    beq.s    0f 				|(d5 == 0)?exit:keep going.
+    neg.w    %d5				|%d5 = -Bytewidth
     lsl.w    #3,%d5				|-Bytewidth*8
     cmp.w    %d5,%d0				|x<=%d5
     jble     0f
     cmpi.w   #_EXT_MAX_LCD_WIDTH+1,%d0
     jbge     0f
     move.w   %d3,%d5				|%d5 = h
-    neg.w    %d5					|%d5 = -h
+    beq.s    0f 				|(d5 == 0)?exit:keep going.
+    neg.w    %d5				|%d5 = -h
     cmp.w    %d5,%d1
-    jblt     0f
+    jbls     0f
     cmpi.w   #_EXT_MAX_LCD_HEIGHT+1,%d1
-    jbge     0f
+    jblt     10f
+0:
+    movem.l  (%sp)+,%d3-%d7
+    rts
 
+10:
 |y<0
     tst.w    %d1
-    jbge     _ExecCmd_Put_Draw_continue
+    jbge     10f
     add.w    %d1,%d3				|h += y
     move.w   %d1,%d5				|%d5 = y
     muls.w   %d2,%d5				|y*Bytewidth
     suba.w   %d5,%a1				|sprite -= y*Bytewidth
     clr.w    %d1
-_ExecCmd_Put_Draw_continue:
+10:
 |y+1>=_EXT_MAX_LCD_HEIGHT
     move.w   %d1,%d5				|%d5 = y
     add.w    %d3,%d5				|%d5 = y+h
     cmpi.w   #_EXT_MAX_LCD_HEIGHT+1,%d5
-    jblt     _ExecCmd_Put_Draw_continue2
-    move.w   #_EXT_MAX_LCD_HEIGHT+1,%d3			|h = _EXT_MAX_LCD_HEIGHT
+    jblt     10f
+    move.w   #_EXT_MAX_LCD_HEIGHT+1,%d3		|h = _EXT_MAX_LCD_HEIGHT
     sub.w    %d1,%d3				|h = _EXT_MAX_LCD_HEIGHT-y
-_ExecCmd_Put_Draw_continue2:
+10:
     move.w   %d1,%d5
     lsl.w    #4,%d1
     sub.w    %d5,%d1
     add.w    %d1,%d1
-/*    move.w   %d1,%d5				|%d5 = y
-    add.w    %d5,%d5				|y*2
-    asl.w    #5,%d1				|%d1 = y<<5
-    sub.w    %d5,%d1				|(y<<5)-(y<<1)*/
     move.w   %d0,%d5				|%d5 = x
-    lsr.w    #3,%d5				|%d5 = x>>8
+    asr.w    #3,%d5				|%d5 = x>>8 - arithmetical shift (important !)
     add.w    %d5,%d1
     adda.w   %d1,%a0				|offset
 
@@ -68,50 +69,46 @@ _ExecCmd_Put_Draw_continue2:
     moveq.l  #8,%d4
     sub.w    %d1,%d4				|8-%d1
 
-    move.w   #30,%d5
-    sub.w    %d2,%d5
-
 |x<0
     tst.w    %d0
     jblt     7f
     move.w   %d2,%d6				|%d6 = Bytewidth
     lsl.w    #3,%d6				|%d6 = Bytewidth<<3
     add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
-    cmpi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
+    subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
     jbge     8f
-_ExecCmd_Put_Draw_normal:
-    moveq.l  #0,%d0
-    move.w   %d3,%d0
-    dbf      %d0,_ExecCmd_Put_Draw_normal_loop
-    jbra     0f
-_ExecCmd_Put_Draw_normal_loop:
-    moveq.l  #-1,%d3
-    move.b   (%a1),%d3
-    asr.w    %d1,%d3
-    and.b    %d3,(%a0)+
 
-    moveq.l  #0,%d7
+    moveq    #30,%d5
+    sub.w    %d2,%d5
+
+    subq.w   #2,%d2
+    subq.w   #1,%d3
+1:
+    moveq    #-1,%d0
+    move.b   (%a1),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+
     move.w   %d2,%d7
-    subq.l   #1,%d7
-    dbf      %d7,_ExecCmd_Put_Draw_normal_loop2
-    jbra     _ExecCmd_Put_Draw_normal_loop2_continue
-_ExecCmd_Put_Draw_normal_loop2:
-    moveq.l  #-1,%d3
-    move.b   (%a1)+,%d3
-    rol.w    %d4,%d3
-    and.b    %d3,(%a0)
-    moveq.l  #-1,%d3
-    move.b   (%a1),%d3
-    asr.w    %d1,%d3
-    and.b    %d3,(%a0)+
-    dbf      %d7,_ExecCmd_Put_Draw_normal_loop2
-_ExecCmd_Put_Draw_normal_loop2_continue:
-    moveq.l  #-1,%d3
-    move.b   (%a1)+,%d3
-    rol.w    %d4,%d3
-    and.b    %d3,(%a0)
-    lea.l    (%d5.w,%a0),%a0
-    dbf      %d0,_ExecCmd_Put_Draw_normal_loop
+    blt.s    9f
+2:
+    moveq    #-1,%d6
+    move.b   (%a1)+,%d6
+    rol.w    %d4,%d6
+    and.b    %d6,(%a0)
+    moveq    #-1,%d6
+    move.b   (%a1),%d6
+    ror.w    %d1,%d6
+    and.b    %d6,(%a0)+
+    dbf      %d7,2b
+
+9:
+    moveq    #-1,%d0
+    move.b   (%a1)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    adda.w   %d5,%a0
+    dbf      %d3,1b
 0:
     movem.l  (%sp)+,%d3-%d7
     rts
@@ -121,82 +118,84 @@ _ExecCmd_Put_Draw_normal_loop2_continue:
     move.w   %d0,%d6
     lsr.w    #3,%d6
 
+    subq.w   #1,%d3
+
     move.w   %d6,%d7
     lsl.w    #3,%d7
     cmp.w    %d7,%d0
-    jbeq     _ExecCmd_Put_Draw_left_continue
-    addi.w   #1,%d6
-_ExecCmd_Put_Draw_left_continue:
-    moveq.l  #0,%d0
-    move.w   %d3,%d0
-    dbf      %d0,_ExecCmd_Put_Draw_left_loop
-    jbra     0b
-_ExecCmd_Put_Draw_left_loop:
-|    subq.l   #1,%a1
-    lea.l    -1(%d6.w,%a1),%a1
-    lea.l    (%d6.w,%a0),%a0
-
-    moveq.l  #0,%d7
+    jbeq     10f
+    addq.w   #1,%d6
+10:
     move.w   %d2,%d7
     sub.w    %d6,%d7
-    dbf      %d7,_ExecCmd_Put_Draw_left_loop2
-    jbra     _ExecCmd_Put_Draw_left_loop2_continue
-_ExecCmd_Put_Draw_left_loop2:
-    moveq.l  #-1,%d3
-    move.b   (%a1)+,%d3
-    rol.w    %d4,%d3
-    and.b    %d3,(%a0)
-    moveq.l  #-1,%d3
-    move.b   (%a1),%d3
-    asr.w    %d1,%d3
-    and.b    %d3,(%a0)+
-    dbf      %d7,_ExecCmd_Put_Draw_left_loop2
-_ExecCmd_Put_Draw_left_loop2_continue:
-    moveq.l  #-1,%d3
-    move.b   (%a1)+,%d3
-    rol.w    %d4,%d3
-    and.b    %d3,(%a0)
-    lea.l    (%d5.w,%a0),%a0
-    dbf      %d0,_ExecCmd_Put_Draw_left_loop
+
+    subq.w   #1,%d7
+    move.w   %d7,%d2
+
+    adda.w   %d6,%a0
+4:
+    lea.l    -1(%d6.w,%a1),%a1
+
+    move.w   %d2,%d7
+    blt.s    9f
+6:
+    moveq    #-1,%d0
+    move.b   (%a1)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    moveq    #-1,%d0
+    move.b   (%a1),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+    dbf      %d7,6b
+9:
+    moveq    #-1,%d0
+    move.b   (%a1)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    adda.w   %d5,%a0
+    dbf      %d3,4b
 0:
     movem.l  (%sp)+,%d3-%d7
     rts
 
 8:
-    subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
-    asr.w    #3,%d6
-    moveq.l  #0,%d0
-    move.w   %d3,%d0
-    dbf      %d0,_ExecCmd_Put_Draw_right_loop
-    jbra     0b
-_ExecCmd_Put_Draw_right_loop:
-    moveq.l  #-1,%d3
-    move.b   (%a1),%d3
-    asr.w    %d1,%d3
-    and.b    %d3,(%a0)+
+    lsr.w    #3,%d6
 
-    moveq.l  #0,%d7
+    moveq    #30,%d5
+    sub.w    %d2,%d5
+    add.w    %d6,%d5
+
     move.w   %d2,%d7
     sub.w    %d6,%d7
-    subq.l   #1,%d7
-    dbf      %d7,_ExecCmd_Put_Draw_right_loop2
-    jbra     _ExecCmd_Put_Draw_right_loop2_continue
-_ExecCmd_Put_Draw_right_loop2:
-    moveq.l  #-1,%d3
-    move.b   (%a1)+,%d3
-    rol.w    %d4,%d3
-    and.b    %d3,(%a0)
-    moveq.l  #-1,%d3
-    move.b   (%a1),%d3
-    asr.w    %d1,%d3
-    and.b    %d3,(%a0)+
-    dbf      %d7,_ExecCmd_Put_Draw_right_loop2
-_ExecCmd_Put_Draw_right_loop2_continue:
-|    addq.l   #1,%a1
+    subq.w   #2,%d7
+
+    move.w   %d7,%d2
+
+    subq.w   #1,%d3
+
+5:
+    moveq    #-1,%d0
+    move.b   (%a1),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+
+    move.w   %d2,%d7
+    blt.s    9f
+7:
+    moveq    #-1,%d0
+    move.b   (%a1)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    moveq    #-1,%d0
+    move.b   (%a1),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+    dbf      %d7,7b
+9:
     lea.l    1(%d6.w,%a1),%a1
-    lea.l    0(%d6.w,%a0),%a0
-    lea.l    0(%d5.w,%a0),%a0
-    dbf      %d0,_ExecCmd_Put_Draw_right_loop
+    adda.w   %d5,%a0
+    dbf      %d3,5b
 
     movem.l  (%sp)+,%d3-%d7
     rts

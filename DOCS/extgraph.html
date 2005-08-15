@@ -27,98 +27,99 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <hr><br>
 <strong>PREFACE:</strong>
 <p>
-The ExtGraph Library is an add-on to the TIGCC Library (TIGCCLIB). It's a compile-time 
-library (used functions are fetched from the library during the linking stage) and it contains 
-various useful graphics related routines which are missing in the TIGCCLIB or modified routines 
-which are implemented with very high speed in mind (without stupid excessive speed 
-optimizations, though, except for preshifted sprites which are a brute force approach). 
-For example, we unrolled tight loops in the tilemap engine, which costed around 12 bytes (&lt; 
+The ExtGraph Library is an add-on to the TIGCC Library (TIGCCLIB). It's a compile-time
+library (used functions are fetched from the library during the linking stage) and it contains
+various useful graphics related routines which are missing in the TIGCCLIB or modified routines
+which are implemented with very high speed in mind (without stupid excessive speed
+optimizations, though, except for preshifted sprites which are a brute force approach).
+For example, we unrolled tight loops in the tilemap engine, which costed around 12 bytes (&lt;
 1/1000 of overall size for most programs using a tilemap engine), but increases speed by ~20%.<br>
-<strong>Note:</strong> We do not / cannot guarantee that any compiler or cross-compiler for TI-68k 
+<strong>Note:</strong> We do not / cannot guarantee that any compiler or cross-compiler for TI-68k
 calculators other than TIGCC will support ExtGraph.<br><br>
-<strong>The ExtGraph demos were tested on PedroM 0.80.</strong> PedroM exits demo12 and demo17 because 
-ROM_CALL CharNumber is not reimplemented, but all other demos work (although PedroM 0.80 seems 
-to suffer more from the keyboard rebounds, but I tested only on VTI) and show that PedroM uses 
+<strong>The ExtGraph demos were tested on PedroM 0.80.</strong> PedroM exits demo12 and demo17 because
+ROM_CALL CharNumber is not reimplemented, but all other demos work (although PedroM 0.80 seems
+to suffer more from the keyboard rebounds, but I tested only on VTI) and show that PedroM uses
 more efficient algorithms than AMS (in graphical functions - <em>up to 0.80, vital memcpy and memset
-were very slow in PedroM versions</em>): ExtGraph outperforms PedroM on lines by &lt;~10% 
-and rectangles by &gt;~3x, while it usually outperforms AMS by &gt;~5x on lines and &gt;~7x on 
+were very slow in PedroM versions</em>): ExtGraph outperforms PedroM on lines by &lt;~10%
+and rectangles by &gt;~3x, while it usually outperforms AMS by &gt;~5x on lines and &gt;~7x on
 rectangles.<br><br>
 <br>
 </p>
 The ExtGraph 2 series is supposed to be backwards compatible with the previous versions, except:
 <ul>
 <li>calculator model checking (now in a better way in TIGCC);</li>
-<li>enum GrayColors (the values were changed in order to optimize a bit the fonctions that use 
+<li>enum GrayColors (the values were changed in order to optimize a bit the fonctions that use
 those values; anyway, the elements from the enum should be used instead of their values).</li>
 </ul>
 <p>
-If you find something else that won't compile (especially the optimized pixel macros - we've 
-already been reported bugs many times, and I found one by myself), please report it to us !
+If you find something else that won't compile (especially the optimized pixel macros - bugs
+were found and fixed many times), please report it to us !
 </p>
 <br><br><br>
 <strong>ABOUT THE GRAYSCALE MONSTER FUNCTIONS:</strong>
 <p>
 The GraySprite routines are real "monsters" due to their number of parameters.
 I've never planned to implement them this way, but there were too many requests.
-We will not combine the consecutive planes into one double-sized plane for any sprite 
-routines. Indeed, this approach doesn't have any significant advantage speed-wise or 
-size-wise compared to the normal method, and it forbids writing directly to the grayscale 
-outputscreen or using doublebuffering, because the buffers used by the TIGCCLIB grayscale 
-routine are not combined this way on HW1 (which is screwing up with the tilemap engine). 
+We will not combine the consecutive planes into one double-sized plane for any sprite
+routines. Indeed, this approach doesn't have any significant advantage speed-wise or
+size-wise compared to the normal method, and it forbids writing directly to the grayscale
+outputscreen or using doublebuffering, because the buffers used by the TIGCCLIB grayscale
+routine are not combined this way on HW1 (which is screwing up with the tilemap engine),
+unless a fork of the TIGCCLIB routine available in src/gray.s is used.
 Therefore I've decided to implement these "monsters".<br>
-GrayClipISprite8/16_... are speed-optimized by using interlaced sprites and two different 
+GrayClipISprite8/16_... are speed-optimized by using interlaced sprites and two different
 loops to optimize shiftings.<br>
-A number of programs (vertical scroller Venus is one of them) contain routines whose prototype is 
-similar to that of GrayClipISprite routines (single pointer to a sprite), but the sprite format 
-is different: it contains the entire data for one plane, the entire data for the other plane, 
-the entire mask data if any (or any permutation of these three blocks). Using this format is 
-nearly as efficient speed-wise and speed-wise as using interlaced sprites. Starting from Beta 
-4, you can find information in the readme, so that all users (even those who don't know ASM, 
+A number of programs (vertical scroller Venus is one of them) contain routines whose prototype is
+similar to that of GrayClipISprite routines (single pointer to a sprite), but the sprite format
+is different: it contains the entire data for one plane, the entire data for the other plane,
+the entire mask data if any (or any permutation of these three blocks). Using this format is
+nearly as efficient speed-wise and speed-wise as using interlaced sprites. Starting from Beta
+4, you can find information in the readme, so that all users (even those who don't know ASM,
 what a shame) can modify them to use this format without too much trouble.
 </p>
 <br>
 <strong>WHY EXTGRAPH 2.xx VERSIONS ARE A GREAT IMPROVEMENT OVER 1.xx AND OLDER:</strong>
 <ul>
-<li>Nearly all functions and even several macros were rewritten in pure assembly, resulting 
+<li>Nearly all functions and even several macros were rewritten in pure assembly, resulting
 in both size and speed improvements.</li>
-<li>__attribute__((__regparm__)) routines (functions whose name ends with "_R") are now 
-available. They are faster and smaller than equivalent __attribute__((__stkparm__)) routines, 
-which were rewritten too, and are left for backwards compatibility. Few __stkparm__ routines 
-do not have a __regparm__ version, but many __regparm__ routines do not have a __stkparm__ 
-versions. As a consequence, TIGCC 0.93 is not supported any more, but this version is no 
-longer the official release and is really outdated now. __stkparm__ routines should not be 
+<li>__attribute__((__regparm__)) routines (functions whose name ends with "_R") are now
+available. They are faster and smaller than equivalent __attribute__((__stkparm__)) routines,
+which were rewritten too, and are left for backwards compatibility. Few __stkparm__ routines
+do not have a __regparm__ version, but many __regparm__ routines do not have a __stkparm__
+versions. As a consequence, TIGCC 0.93 is not supported any more, but this version is no
+longer the official release and is really outdated now. __stkparm__ routines should not be
 used for new designs if they have __regparm__ equivalents.</li>
-<li>clipped sprite routines, which can be used just like the normal (non-clipped) sprite 
-routines. The prototypes of the equivalent non-clipped and clipped routines are identical. 
-The clipped routines assume the planes they are given are 240x128 pixels, but you can easily 
-modify them to make them fit your needs (see the readme). Note that GrayClip(I)Sprite32 
-routines can be slow when clipping at the left or right sides, due to a high shift count 
+<li>clipped sprite routines, which can be used just like the normal (non-clipped) sprite
+routines. The prototypes of the equivalent non-clipped and clipped routines are identical.
+The clipped routines assume the planes they are given are 240x128 pixels, but you can easily
+modify them to make them fit your needs (see the readme). Note that GrayClip(I)Sprite32
+routines can be slow when clipping at the left or right sides, due to a high shift count
 (the smaller the part onscreen is, the slower the clipping is).</li>
 <li>a complete tilemap engine was added.</li>
-<li>grayscale transparency routines (TRANB_R / TRANW_R - the modifications for TRAND and 
-TRANL are given in the readme) are now available.</li>
+<li>grayscale transparency routines (TRANB_R / TRANW_R - there are two samples of TRAND and
+TRANL, GrayClipISprite16_TRAND/TRANL_R) are now available.</li>
 <li>tile (aligned sprite) functions were added.</li>
 <li>rectangle-drawing routines are now available.</li>
 <li>other utility functions for X8(X8) sprites were added, the B/W SpriteX8 routines were
 rewritten</li>
-<li>support for preshifted sprites (brute-force-which-takes-up-a-high-amount-of-RAM) 
+<li>support for preshifted sprites (brute-force-which-takes-up-a-high-amount-of-RAM)
 is now available.</li>
 <li>interlaced sprite functions were added.</li>
 <li>special fast background save&amp;restore functions are now available.</li>
 <li>transition effects were added.</li>
-<li>documentation is clearer (although much bigger) and more usable by newbies than it used 
-to be (tips, comparisons between different approaches - look forward to TICT tutorial S1P9 
+<li>documentation is clearer (although much bigger) and more usable by newbies than it used
+to be (tips, comparisons between different approaches - look forward to TICT tutorial S1P9
 about optimization).</li>
 </ul>
 <br>
-<em>This is a beta, this means it may contain bugs we might not have seen despite our tests (Beta 4
-needed the entire library to be more or less retested, see the changelog). We already saw 
-several more or less severe bugs in all betas.</em>
+<em>This is a beta, this means it may contain bugs we might not have seen despite our tests
+(Beta 4 needed the entire library to be more or less retested, see the changelog). We
+already saw a number of more or less severe bugs in all betas.</em>
 
 <br><br>
 <br>
 <p>
-As of Beta 4, the tilemap engine is still incompatible with the TIGCCLIB grayscale 
+As of Beta 4, the tilemap engine is still incompatible with the TIGCCLIB grayscale
 doublebuffering support.
 </p>
 
@@ -365,17 +366,17 @@ and the following macros/definitions:
 <a name="#reportingbugsnote" class=startofblock>A note on reporting bugs...</a>
 <hr>
 <p>
-We tried to do our best to provide something bug-free, but we may have failed (many bugs 
+We tried to do our best to provide something bug-free, but we may have failed (many bugs
 were found in the previous ExtGraph 2.00 betas).<br>
-If you believe a sprite function is buggy, could you please test it with the project 
-sprtst.tpr in \src\lib ? If the function is buggy, the program could show its flaws 
-(several flaws could be missed by the program though) more valueable. Note that I have 
+If you believe a sprite function is buggy, could you please test it with the project
+sprtst.tpr in \src\lib ? If the function is buggy, the program could show its flaws
+(several flaws could be missed by the program though) more valueable. Note that I have
 a large test suite for sprite functions.<br>
-If this test doesn't show the function is buggy, well, then it's not unlikely that there's 
-a problem in your code. One of the most frequent causes of random bugs is writes past the 
-bounds of arrays (segfaults on other architectures), on the stack (often triggers 
-Illegal Instruction or Address Error) or in the heap (infinite loop in AMS after the 
-program returns, often in HS_popEStack). Be sure to check the result of dynamic memory 
+If this test doesn't show the function is buggy, well, then it's not unlikely that there's
+a problem in your code. One of the most frequent causes of random bugs is writes past the
+bounds of arrays (segfaults on other architectures), on the stack (often triggers
+Illegal Instruction or Address Error) or in the heap (infinite loop in AMS after the
+program returns, often in HS_popEStack). Be sure to check the result of dynamic memory
 allocations, too.<br>
 Be sure to use the TIGCC 0.95 release, or newer (0.96 recommended).<br>
 Thanks in advance.
@@ -388,10 +389,10 @@ Thanks in advance.
 <a name="#extgraphindistros" class=startofblock>Including ExtGraph in your projects' distributions...</a>
 <hr>
 <p>
-If you distribute ExtGraph within your projects' distributions, please include both extgraph.a and 
-extgraph.h (and tilemap.a / tilemap.h if you use the tilemap engine, preshift.h if you use preshifted 
-sprites). Don't get fooled by the huge size of those files: they are very redundant data, high 
-compression ratios can therefore be achieved on them. The biggest file, extgraph.a, is more than six 
+If you distribute ExtGraph within your projects' distributions, please include both extgraph.a and
+extgraph.h (and tilemap.a / tilemap.h if you use the tilemap engine, preshift.h if you use preshifted
+sprites). Don't get fooled by the huge size of those files: they are very redundant data, high
+compression ratios can therefore be achieved on them. The biggest file, extgraph.a, is more than six
 times smaller after compression with old ZIP format.
 </p>
 <br>
@@ -402,13 +403,13 @@ times smaller after compression with old ZIP format.
 <a name="#specialthanks" class=startofblock>Special thanks to...</a>
 <hr>
 <p>
-I'd like to thank the contributors, especially Julien Richard-Foy (jackiechan / Sasume - 
-author of the tilemap engine and various programs, attending the TIGCC/TICT message board on 
-a regular basis) and Geoffrey Anneheim (geogeo - author of PolySnd, Arkanoid Revenge of 
-Doh, Nebulus, GFA Basic) once more for their work. ExtGraph would never have been what it is 
-if they had not helped me. My policy is of course to let the contributors work on other 
-projects if they want to, which they do for sure. For example, Julien is now working on 
-kernel-based dynamic graphical library GenLib, in which he took ideas for the tilemap engine 
+I'd like to thank the contributors, especially Julien Richard-Foy (jackiechan / Sasume -
+author of the tilemap engine and various programs, attending the TIGCC/TICT message board on
+a regular basis) and Geoffrey Anneheim (geogeo - author of PolySnd, Arkanoid Revenge of
+Doh, Nebulus, GFA Basic) once more for their work. ExtGraph would never have been what it is
+if they had not helped me. My policy is of course to let the contributors work on other
+projects if they want to, which they do for sure. For example, Julien is now working on
+kernel-based dynamic graphical library GenLib, in which he took ideas for the tilemap engine
 and optimizations on TRANB/W routines (also seen in Phoenix Platinum).
 </p>
 <br>
@@ -420,16 +421,16 @@ and optimizations on TRANB/W routines (also seen in Phoenix Platinum).
 <strong>
 Library ExtGraph and the documentation since 0.51 were written by <a href="mailto:thomas.nussbaumer@gmx.net">Thomas
 Nussbaumer</a> and <a href="mailto:lionel_debroux@yahoo.fr">Lionel Debroux</a>.<br>
-Credits for the documentation up to version 0.51 go to 
+Credits for the documentation up to version 0.51 go to
 <a href="mailto:kronicdeth@paradoxpoint.com"><strong>Luke Imhoff (KronicDeth)</strong></a>.<br>
-Additional credits for Routines and Updates go to 
+Additional credits for Routines and Updates go to
 <a href="mailto:jimhaskell@yahoo.com">Jim Haskell</a>,
-<a href="mailto:zjuric@utic.net.ba">Zeljko Juric</a>, 
+<a href="mailto:zjuric@utic.net.ba">Zeljko Juric</a>,
 <a href="mailto:lionel_debroux@yahoo.fr">Lionel Debroux</a>,
-<a href="mailto:julien.rf@wanadoo.fr">Julien Richard-Foy (jackiechan / Sasume)</a>, 
+<a href="mailto:julien.rf@wanadoo.fr">Julien Richard-Foy (jackiechan / Sasume)</a>,
 <a href="mailto:ximoon@voila.fr">Christophe Molon-Noblot (Ximoon)</a>,
-<a href="mailto:ola.e-ml@wanadoo.fr">Olivier Armand (ExtendeD)</a>, 
-<a href="mailto:geoffrey.anneheim@wanadoo.fr">Geoffrey Anneheim (geogeo)</a>, 
+<a href="mailto:ola.e-ml@wanadoo.fr">Olivier Armand (ExtendeD)</a>,
+<a href="mailto:geoffrey.anneheim@wanadoo.fr">Geoffrey Anneheim (geogeo)</a>,
 <a href="mailto:oragesoft@hotmail.com">Vincent Corfdir (Orage)</a>,
 <a href="mailto:calc@gregd.org">Greg Dietsche (dietsche)</a>,
 <a href="mailto:samuel@nyall.net">Samuel Stearley</a>.<br></strong>

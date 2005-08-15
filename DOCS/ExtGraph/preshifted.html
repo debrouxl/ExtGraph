@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -27,15 +27,15 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void PreshiftGrayISprite16x16(register unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));</h3>
 <h3>PSprite16x16_OR_R, PSprite16x16_XOR_R, GrayPSprite16x16_OR_R, GrayPSprite16x16_XOR_R macros.</h3>
 <br>
-<u>Preshift... functions</u>: preshift non-masked interlaced sprite pointed to by <em>src</em> to 
-buffer pointed to by <em>dest</em>. The buffer must be large enough to hold the preshifted 
-sprite: SIZE_OF_PSPRITE16x16 bytes for a B/W sprite, SIZE_OF_PGSPRITE16x16 bytes for a 
+<u>Preshift... functions</u>: preshift non-masked interlaced sprite pointed to by <em>src</em> to
+buffer pointed to by <em>dest</em>. The buffer must be large enough to hold the preshifted
+sprite: SIZE_OF_PSPRITE16x16 bytes for a B/W sprite, SIZE_OF_PGSPRITE16x16 bytes for a
 grayscale sprite.<br>
-<u>Macros</u>: draw preshifted sprite pointed to by <em>sprt</em> at coordinates <em>x</em> and 
-<em>y</em> to plane <em>dest</em> (<em>dest0</em> and <em>dest1</em> for grayscale 
+<u>Macros</u>: draw preshifted sprite pointed to by <em>sprt</em> at coordinates <em>x</em> and
+<em>y</em> to plane <em>dest</em> (<em>dest0</em> and <em>dest1</em> for grayscale
 sprites).<br>
-Due to the huge size of the macros (hundreds of bytes), we suggest using a function 
-containing the macro if you use these macros more than twice. Of course, this will 
+Due to the huge size of the macros (hundreds of bytes), we suggest using a function
+containing the macro if you use these macros more than twice. Of course, this will
 decrease brute force performance.<br>
 <em>See the comparison between the different approaches in another part of the documentation.</em>
 </p>

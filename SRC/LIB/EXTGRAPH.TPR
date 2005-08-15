@@ -54,7 +54,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=C:\Jeux\TI-89\ASM\ExtGraph 2.00 Beta 5\SRC\LIB\Sprites\Gray\Clipped\GrayClipISprite16_TRANL_R.s
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Misc\ClipFastOutlinedCircle_DRAW_R.s
 
 [Included Files]
 C File 1=Misc\unpack.c
@@ -92,6 +92,9 @@ C File 32=Sprites\Gray\Normal\X8\spritex8blitgray.c
 C File 33=Sprites\Gray\Normal\X8\spritex8maskgray.c
 C File 34=Sprites\Gray\Normal\X8\spritex8orgray.c
 C File 35=Sprites\Gray\Normal\X8\spritex8xorgray.c
+C File 36=Misc\ClipFilledTriangle_INVERT_R.c
+C File 37=Misc\ClipFilledTriangle_DRAW_R.c
+C File 38=Misc\ClipFilledTriangle_ERASE_R.c
 GNU Assembler File 1=Grayutil\grayclearscreen2b.s
 GNU Assembler File 2=Grayutil\grayclearscreen2b_R.s
 GNU Assembler File 3=Grayutil\grayfillscreen2b_R.s
@@ -432,8 +435,8 @@ GNU Assembler File 337=Sprites\Gray\Clipped\GrayClipISprite32_RPLC_R.s
 GNU Assembler File 338=Sprites\Gray\Clipped\GrayClipISprite32_TRANB_R.s
 GNU Assembler File 339=Sprites\Gray\Clipped\GrayClipISprite32_TRANW_R.s
 GNU Assembler File 340=Sprites\Gray\Clipped\GrayClipISprite32_XOR_R.s
-GNU Assembler File 341=Misc\FastOutlinedCircle_R.s
-GNU Assembler File 342=Misc\ClipFastOutlinedCircle_R.s
+GNU Assembler File 341=Misc\FastOutlinedCircle_DRAW_R.s
+GNU Assembler File 342=Misc\ClipFastOutlinedCircle_DRAW_R.s
 GNU Assembler File 343=Misc\FastSprite32_MIRROR_H_R.s
 GNU Assembler File 344=Misc\FastSprite16_MIRROR_H_R.s
 GNU Assembler File 345=Misc\FastSprite8_MIRROR_H_R.s

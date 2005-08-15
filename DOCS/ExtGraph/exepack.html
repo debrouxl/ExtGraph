@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -30,9 +30,9 @@ Everything (tools, sources, headerfiles etc.) which is necessary to use this com
 in your own projects can be found in the TIGCC Tools Suite which can be download from the
 <a href="http://tict.ticalc.org">TICT-HQ at http://tict.ticalc.org</a>.<br>
 <br>
-To make things easier for you I have decided to integrate support for exepack decompression 
-and ttarchives into library ExtGraph. It's no longer necessary nor recommended to include 
-files ttunpack.h and ttarchive.h into your sources. Just include extgraph.h and link 
+To make things easier for you I have decided to integrate support for exepack decompression
+and ttarchives into library ExtGraph. It's no longer necessary nor recommended to include
+files ttunpack.h and ttarchive.h into your sources. Just include extgraph.h and link
 against extgraph.a. That's all. To generate the compressed data files and ttarchive files
 you still need the TIGCC Tools Suite, of course (especially the tools ttpack and ttarchive).
 </p>
@@ -53,7 +53,7 @@ To use the exepack decompression routine and/or the ttarchive access macros you'
 a pointer to the memory where the external variable is stored first. This can be simply
 done function like the following:
 <pre>
- 
+
 //------------------------------------------------------------------
 // returns pointer to start of external variable which name is given
 // by fname.
@@ -188,7 +188,7 @@ else {
 
 <strong>IMPORTANT NOTE:</strong> If your program already uses library ExtGraph in combination with ttunpack.h and/or
 ttarchive.h from the TIGCC Tools Suite, please <strong>REMOVE</strong> all #include "ttunpack.h" and #include "ttarchive.h"
-lines in your sourcecode. Including one of these files is not longer necessary NOR recommended, all the more ExtGraph 
+lines in your sourcecode. Including one of these files is not longer necessary NOR recommended, all the more ExtGraph
 contains newer, faster and smaller versions. Just include extgraph.h, that's enough.<br>
 <br>
 <font color=red>

@@ -15,9 +15,9 @@ SpriteX8_BLIT_R:
 	sub.w	%d4,%d1
  
 	move.w	%d0,%d4
-	andi.w	#15,%d4	
+	andi.w	#15,%d4
 
-	lsr.w	#4,%d0	
+	lsr.w	#4,%d0
 	add.w	%d1,%d0	
 	add.w	%d0,%d0	
 	

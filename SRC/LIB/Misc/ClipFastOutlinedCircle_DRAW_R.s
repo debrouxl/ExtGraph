@@ -1,4 +1,4 @@
-| C prototype: void ClipFastOutlinedCircle_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));
+| C prototype: void ClipFastOutlinedCircle_DRAW_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from
@@ -7,10 +7,10 @@
 | PRG_getStart() = 0xCE: 45 ticks to draw 2000 circles, ~1100 circles / sec.
 
 .text
-.globl ClipFastOutlinedCircle_R
+.globl ClipFastOutlinedCircle_DRAW_R
 .even
 
-ClipFastOutlinedCircle_R:
+ClipFastOutlinedCircle_DRAW_R:
     movem.l  %d3-%d7/%a2-%a5,-(%sp)
 
 | Simple check for "completely out of plane".

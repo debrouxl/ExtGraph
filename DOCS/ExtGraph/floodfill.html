@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -45,8 +45,8 @@ malloc and free to allocate and release the necessary buffer. If speed is crucia
 routine FloodFill instead of FloodFillMF. <em>x</em> and <em>y</em> specifies a point in the destination
 plane (<em>dest</em>) from where the filling process should be started. If the pixel at (x,y) is
 already set the routine returns immediately.<br>
-NOTE: Due to the fact that FloodFill utilizes heavily the common program stack for its 
-operation the given <em>tmpplane</em> buffer shouldn't be a local LCD_BUFFER variable, but 
+NOTE: Due to the fact that FloodFill utilizes heavily the common program stack for its
+operation the given <em>tmpplane</em> buffer shouldn't be a local LCD_BUFFER variable, but
 it should be allocated dynamically by using malloc() like FloodFillMF does internally.
 </p>
 <br>

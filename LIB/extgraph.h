@@ -411,10 +411,24 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1
 
 
 //-----------------------------------------------------------------------------
-// Functions for circle drawing. Much faster than the AMS routines.
+// Functions for circle drawing. Much faster than the AMS routines, which
+// support multiple drawing modes and can draw ellipses, but are rarely used
+// to draw ellipses in games. Any bench between the two types is a bit unfair,
+// though.
+// Missing: filled circle drawing.
 //-----------------------------------------------------------------------------
-void FastOutlinedCircle_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
-void ClipFastOutlinedCircle_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void FastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+
+
+
+//-----------------------------------------------------------------------------
+// Functions for filled triangle drawing. No equivalent in AMS.
+// Can you figure the code of the outlined triangle drawing functions ? ;-)
+//-----------------------------------------------------------------------------
+void ClipFilledTriangle_DRAW_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
+void ClipFilledTriangle_ERASE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
+void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
 
 
 

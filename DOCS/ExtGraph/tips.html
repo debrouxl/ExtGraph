@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -24,53 +24,53 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <hr>
 <p>
 <ul>
-<li>In a program, using B/W AND grayscale or non-clipped AND clipped versions of the same 
-routine is usually pointless, size-wise and speed-wise. Instead, calling twice the B/W 
-function is smaller, while usually only slightly slower; clipped sprite functions can be 
-considered as fast as non-clipped functions for the sprites that do not need to be clipped 
-(have a look at the code). Of course, testing whether you have to call a clipped sprite 
-function or not wastes even more time, since the clipped function performs the necessary 
+<li>In a program, using B/W AND grayscale or non-clipped AND clipped versions of the same
+routine is usually pointless, size-wise and speed-wise. Instead, calling twice the B/W
+function is smaller, while usually only slightly slower; clipped sprite functions can be
+considered as fast as non-clipped functions for the sprites that do not need to be clipped
+(have a look at the code). Of course, testing whether you have to call a clipped sprite
+function or not wastes even more time, since the clipped function performs the necessary
 tests itself.</li>
 <li>Always optimize your code, think about better algorithms, etc. I'll give those examples:
 <ul>
-<li>Jim Babcock (JimRandomH) once suggested a rather wierd but efficient algorithm to check 
-whether a sprite is on the visible part of the screen or not, replying to Malcolm Smith 
+<li>Jim Babcock (JimRandomH) once suggested a rather wierd but efficient algorithm to check
+whether a sprite is on the visible part of the screen or not, replying to Malcolm Smith
 (TRgenius) asking for a better method. Transcript of the relevant part of the
 <a href="http://pub26.ezboard.com/ftichessteamhqfrm5.showMessage?topicID=2401.topic">thread</a>:<br>
-<code><strong>Q:</strong> What is the most efficient way to handle a large number of sprites in a 
-2D game, as in not having to check if all of them are within the 'active' window each frame ? 
-Most Duke I levels have around 275 active sprites, but one level has *614*. I considered sorting 
-them by X or Y coordinate, but that would still result in a lot of extra sprites being scanned 
+<code><strong>Q:</strong> What is the most efficient way to handle a large number of sprites in a
+2D game, as in not having to check if all of them are within the 'active' window each frame ?
+Most Duke I levels have around 275 active sprites, but one level has *614*. I considered sorting
+them by X or Y coordinate, but that would still result in a lot of extra sprites being scanned
 that wouldn't be onscreen.<br>
-<strong>A:</strong> Divide the entire playing field into roughly screen-sized segments, each of 
-which is the base of a linked list, and hash the sprites into that space. Then when drawing, 
-there will be at most four segments visible on screen, so iterate through the four corresponding 
-lists doing a more precise bounds check. This algorithm is optimal (O(N) to the number of 
+<strong>A:</strong> Divide the entire playing field into roughly screen-sized segments, each of
+which is the base of a linked list, and hash the sprites into that space. Then when drawing,
+there will be at most four segments visible on screen, so iterate through the four corresponding
+lists doing a more precise bounds check. This algorithm is optimal (O(N) to the number of
 sprites on the screen), but hard to implement.</code></li>
-<li>Geoffrey Anneheim (geogeo) was experiencing a too low speed when they were the maximum 
-number of items onscreen in Arkanoid (~8 FPS). Precomputing the sprite shadows takes a bit 
-more memory (there's still plenty of free memory though), but enables using OR routines 
+<li>Geoffrey Anneheim (geogeo) was experiencing a too low speed when they were the maximum
+number of items onscreen in Arkanoid (~8 FPS). Precomputing the sprite shadows takes a bit
+more memory (there's still plenty of free memory though), but enables using OR routines
 instead of SHADOW routines, saving thousands of clocks each frame !</li>
 </ul>
-<li>Redrawing everything every frame (an implementation choice where preshifted sprites 
-can be used) is hardly ever necessary and often detrimental to speed. Patrick Davidson 
-uses XOR and TRANW/MASK drawing modes in his games, nobody can say he's a bad programmer. 
-The framerate of Travis Fischer's Sumo wrestling game skyrocketed (way above 20 FPS) when 
-he switched to smarter methods (SpriteX8_Get_R - which is far from optimized for 
+<li>Redrawing everything every frame (an implementation choice where preshifted sprites
+can be used) is hardly ever necessary and often detrimental to speed. Patrick Davidson
+uses XOR and TRANW/MASK drawing modes in his games, nobody can say he's a bad programmer.
+The framerate of Travis Fischer's Sumo wrestling game skyrocketed (way above 20 FPS) when
+he switched to smarter methods (SpriteX8_Get_R - which is far from optimized for
 speed !)... This is also why I wrote fast background save&amp;restore functions.</li>
 <li>The screen of our TI-68k calculators is not designed for fast action. Framerates above
-20 FPS are not relevant. This leaves CPU time for more effects, better AI, better GFX 
-(doublebuffering, see S1P6 tutorial by TICT, Ice Hockey 68k, etc.). Using brute-force 
-to get higher framerates than what's enough takes more memory, which may be <em>in fine</em> 
-detrimental to the game itself (less features due to lack of memory...). We're pretty happy 
+20 FPS are not relevant. This leaves CPU time for more effects, better AI, better GFX
+(doublebuffering, see S1P6 tutorial by TICT, Ice Hockey 68k, etc.). Using brute-force
+to get higher framerates than what's enough takes more memory, which may be <em>in fine</em>
+detrimental to the game itself (less features due to lack of memory...). We're pretty happy
 with the ~15 FPS in Duke68k, a bit more in Ice Hockey 68k, aren't we ?</li>
 </ul>
-Three general optimization tips (which you can find with many others in the upcoming TICT 
+Three general optimization tips (which you can find with many others in the upcoming TICT
 tutorial S1P9) are:
 <ul>
 <li>loop optimization: use auxiliary pointers or postincremented/predecremented mode.</li>
 <li>if/else if or switch optimization: try to make the items as symmetric as possible.</li>
-Two of those three optimizations (second one is N/A) were performed in the latest version 
+Two of those three optimizations (second one is N/A) were performed in the latest version
 (2.10) of star (Starfield Effect by TICT), the latest version of TI-Miner, etc.
 </ul>
 </p>

@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -72,14 +72,14 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void GrayTile32x32_TRANW_R(register short col asm("%d0"),register short y asm("%d1"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GrayTile32x32_XOR_R(register short col asm("%d0"),register short y asm("%d1"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
-These routines draw <u>square</u> sprites at coordinates multiple of 8 (Tile8x8) or 16 
-(Tile16x16, Tile32x32) in 240x128 video planes. 
+These routines draw <u>square</u> sprites at coordinates multiple of 8 (Tile8x8) or 16
+(Tile16x16, Tile32x32) in 240x128 video planes.
 The x coordinate <em>col</em> is interpreted as a multiple of 8 or 16 (0 means 0, 1 means 8 for
-Tile8x8 and 16 for Tile16x16 and Tile32x32), the y coordinate <em>y</em> is arbitrary (within 
+Tile8x8 and 16 for Tile16x16 and Tile32x32), the y coordinate <em>y</em> is arbitrary (within
 the bounds of the plane, <u>these routines are NOT clipped</u>).<br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: if you want variable height tiles, it's easy: add the "h" parameter in d2, modify the functions (everything 
-outside the loops related to d2). <em>Warning</em>, most loops are unrolled: if you don't modify the routine more 
+NOTE2: if you want variable height tiles, it's easy: add the "h" parameter in d2, modify the functions (everything
+outside the loops related to d2). <em>Warning</em>, most loops are unrolled: if you don't modify the routine more
 thoroughly, the height will often have to be multiple of 2 or 4.<br>
 </p>
 <br><br>
@@ -114,11 +114,11 @@ thoroughly, the height will often have to be multiple of 2 or 4.<br>
 These routines have the same effect as GrayTileX, but they take interlaced sprites.<br>
 The interlaced sprite format is as follows:
 <ul>
-<li>all routines except MASK: L/D or D/L (depending on the convention you use for <em>dest0</em> 
-and <em>dest1</em>, usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), 
+<li>all routines except MASK: L/D or D/L (depending on the convention you use for <em>dest0</em>
+and <em>dest1</em>, usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise),
 without mask.</li>
-<li>MASK: M/L/D or M/D/L (depending on the convention you use for <em>dest0</em> and <em>dest1</em>, 
-usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), mask is applied to 
+<li>MASK: M/L/D or M/D/L (depending on the convention you use for <em>dest0</em> and <em>dest1</em>,
+usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), mask is applied to
 both planes.</li>
 </ul>
 </p>

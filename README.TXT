@@ -90,6 +90,10 @@ If you think you've found a bug, send me information about the faulty functions:
 I have a small test suite, which suits well for sprite routines. I'll try to
 reply within several days, the delay depends on how busy I am. If I forget to
 reply after a while, remind me about you !
+But first, please check out the ExtGraph library (at least the /LIB directory)
+from its SVN repository, created 2005/08/12, located at
+http://opensvn.csie.org/ExtGraph, and see if the bug is still there in the
+repository version.
 
 ===============================================================================
 thomas.nussbaumer@gmx.net                                          Graz/Austria

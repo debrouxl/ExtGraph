@@ -17,9 +17,9 @@ SpriteX8_OR_R:
 	lsr.w	#4,%d0			| d0/16
 	add.w	%d1,%d0			| d0=15y+x/16
 	add.w	%d0,%d0			| d0=30y+x/8 (even)
-	
+
 	adda.w	%d0,%a0			| align to the screen
- 
+
  	moveq.l	#16,%d5	
  	sub.w	%d4,%d5			| d5=16-d4
 

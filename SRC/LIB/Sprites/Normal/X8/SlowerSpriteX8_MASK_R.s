@@ -22,7 +22,7 @@ SlowerSpriteX8_MASK_R:
 	add.w	%d0,%d0	
 	
 	adda.w	%d0,%a0	
- 
+
  	moveq.l	#16,%d5
  	sub.w	%d4,%d5
  	

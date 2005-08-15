@@ -1,10 +1,10 @@
 | C prototype: void FastSpriteX8_MIRROR_H_R (register short h asm("%d2"), register short bytewidth asm("%d1"), register void *sprt asm("%a0"), register void *dest asm("%a1"));
 
 .text
-.globl FastSprite8_MIRROR_H_R
+.globl FastSpriteX8_MIRROR_H_R
 .even
 
-FastSprite8_MIRROR_H_R:
+FastSpriteX8_MIRROR_H_R:
     dbf      %d2,0f
     rts
 

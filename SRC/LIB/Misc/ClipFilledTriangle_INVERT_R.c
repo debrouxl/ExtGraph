@@ -1,34 +1,13 @@
-/******************************************************************************
-*
-* project name:   ExtGraph
-* file name:      tri.c
-* initial date:   23/04/2002
-* author:         thomas.nussbaumer@gmx.net
-* description:    triangle filling function
-*
-* build it with: tigcc -O3 -fomit-frame-pointer tri.c
-*
-*
-* Original version taken from David Coz (coz.hubert@infonie.fr)
-* The now optimized version runs about 4 times faster.
-*
-*
-*
-* actual results (TIGCC 0.93 on VTI):
-* ------------------------------------
-*
-* INT-1 ticks:  8025
-* seconds:      ~20s  (~500 triangles/second)
-*
-*
-* $Id$
-*
-******************************************************************************/
+// Modified a source done by Thomas:
+// * fixed the ASM FillSpan and changed #if 0 to #if 1 to use it.
+// * now using regparm calling convention and direct call to the
+//   ASM FillSpan.
+// * modified the main function to accept normal x coordinates
+//   instead of x coordinates << 7.
+// Original version taken from David Coz (coz.hubert@infonie.fr),
+// the previous version was said to be more than 4 times faster.
+// See demo19 for a bench.
 
-//#define OPTIMIZE_ROM_CALLS  //we gain speed if NOT used this!
-#define NO_EXIT_SUPPORT
-#define USE_TI89
-#define USE_TI92P
 
 #include <tigcclib.h>
 
@@ -40,18 +19,15 @@
 #define ASM_EXCHANGE(val1,val2) asm volatile ("exg %0,%1" : "=da" (val1),"=da" (val2) : "0" (val1),"1" (val2) : /*"memory",*/"cc")
 
 
-#if 0
-//
-// DONT USE - CONTAINS BUG!
-//
+#if 1
 //-----------------------------------------------------------------------
 // supposes %d0 = x1, %d1 = x2, %a0 = addr (trashes %d2)
 //-----------------------------------------------------------------------
 asm(".data
 .even
-.globl FillSpan
-_fillspn: clr.l   %d2
-          cmp.w   %d0,%d1        | if (x1>x2) exchange(x1,x2)
+.globl FillSpanXOR
+FillSpanXOR:
+_fillspn: cmp.w   %d0,%d1        | if (x1>x2) exchange(x1,x2)
           bge.s   _skip1
           exg     %d0,%d1
 _skip1:	  tst.w   %d0            | if (x1<0) x1=0
@@ -60,10 +36,11 @@ _skip1:	  tst.w   %d0            | if (x1<0) x1=0
           tst.w   %d1            | if (x2<0) x2=0
           bge.s   _skip2
           rts                    | return immediately: x1 & x2 are both lower than 0!
-_skip2:   cmp.w   #239,%d1       | if (x2>239) x2=239
+_skip2:   move.w  #239,%d2
+          cmp.w   %d2,%d1        | if (x2>239) x2=239
 	  ble.s   _skip3
-	  move.w  #239,%d1       | if (x1>239) x1=239
-	  cmp.w   #239,%d0
+	  move.w  %d2,%d1        | if (x1>239) x1=239
+	  cmp.w   %d2,%d0
 	  ble.s  _skip3
 	  rts                    | return immediately: x1 & x2 are both larger than 239!
 
@@ -73,11 +50,11 @@ _skip3:   |bra.s _skip3
           | both clipped to [0-239]
           |-----------------------------------------------------------------
           move.w %d0,%d2
-	  lsr.w  #3,%d2
-	  and.w  #30,%d2
+	  lsr.w  #4,%d2
+	  add.w  %d2,%d2
 	  add.w  %d2,%a0       | p = addr+((x1>>3)&0x1e)) [%a0]
 	  move.w %d0,%d2
-	  and.w  #15,%d2       | sx = x1 & 0xf [%d2]
+	  andi.w #15,%d2       | sx = x1 & 0xf [%d2]
 	  sub.w  %d0,%d1
 	  addq.w #1,%d1        | dx = x2-x1+1 [%d1]
 
@@ -86,13 +63,12 @@ _skip3:   |bra.s _skip3
           |--------------------------------------------------------------------
 	  cmp.w  #15,%d1       | if (dx<16) {*p^=(ASM_SWAP(table2[dx])) >> sx;return;}
 	  bgt.s  _dxgt16
-          clr.l  %d0
-          lsl.w  #1,%d1 | !!!!! FIX !!!!
-          move.w (__table2,%pc,%d1),%d0
-          lsr.w  #1,%d1 | !!!!! FIX !!!!
+          moveq  #0,%d0
+          move.w %d1,%d0
+          add.w  %d0,%d0
+          move.w (__table2,%pc,%d0.w),%d0
           swap   %d0
-          lsr.l  %d1,%d0
-          move.l (%a0),%d1
+          lsr.l  %d2,%d0
           eor.l  %d0,(%a0)    | replace this for OR instead of XOR!
 	  rts
 .even
@@ -101,25 +77,24 @@ __table2: .word     0,32768,49152,57344,61440,63488,64512,65024
 
 _dxgt16:  tst.w  %d2           | if (sx) ...
 	  beq.s  _loopwds
-          lsl.w  #1,%d2 | !!!!! FIX !!!!
-          move.w (__table1,%pc,%d2),%d0 | *p++ ^= table1[sx]
-          lsr.w  #1,%d2 | !!!!! FIX !!!!
+          move.w %d2,%d0
+          add.w  %d0,%d0
+          move.w (__table1,%pc,%d0.w),%d0 | *p++ ^= table1[sx]
   	  eor.w  %d0,(%a0)+
  	  add.w  #-16,%d2
-          sub.w  %d2,%d1       | dx -= 16 - sx;
+          add.w  %d2,%d1       | dx -= 16 - sx <=> dx += sx - 16;
 _loopwds:
 	  cmp.w  #15,%d1       | while (dx >= 16) {*p++ ^= 0xffff;dx-=16;}
-	  bgt.s  _loop
-	  bra.s  _last
+          ble.s  _last
 _loop:
-	  eor.w #-1,(%a0)+
+	  not.w  (%a0)+
 	  add.w #-16,%d1
 	  jbra  _loopwds
 _last:
 	  tst.w %d1        | if (dx) *p ^= table2[dx];
 	  jbeq  _end
-          lsl.w  #1,%d1 | !!!!! FIX !!!!
-          move.w (__table2,%pc,%d1),%d0
+          add.w  %d1,%d1
+          move.w (__table2,%pc,%d1.w),%d0
           eor.w  %d0,(%a0)
 _end:
 	  rts
@@ -130,11 +105,7 @@ __table1: .word 65535,32767,16383, 8191, 4095, 2047, 1023,  511
 
 
 
-#define FillSpan(x1,x2,a) \
-({unsigned long t1=(x1),t2=(x2);void* p = (a);\
- asm volatile("move.l %0,%%d0;move.l %1,%%d1;move.l %2,%%a0;jbsr _fillspn" : \
-    "=d" (t1),"=d" (t2), "=a" (p) : "0" (t1),"1" (t2), "2" (p) : "d0","d1","a0","d2","memory","cc");})
-
+extern void FillSpanXOR(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
 
 
 #else
@@ -144,7 +115,7 @@ __table1: .word 65535,32767,16383, 8191, 4095, 2047, 1023,  511
 //=============================================================================
 // fills a horizontal line from x1 to x2 starting at address addr
 //=============================================================================
-static inline void FillSpan(short x1,short x2,unsigned char* addr) {
+static inline void FillSpanXOR(short x1,short x2,unsigned char* addr) {
     static const unsigned short table1[16] = {0xffff,0x7fff,0x3fff,0x1fff,
                                               0x0fff,0x07ff,0x03ff,0x01ff,
                                               0x00ff,0x007f,0x003f,0x001f,
@@ -249,10 +220,11 @@ typedef union {
 } POINT;
 
 //=============================================================================
-// draws a filled triangle (x values are x<<=7 !!)
+// draws a filled triangle
 //=============================================================================
-void DrawTriangle(short x1,short y1,short x2,short y2,short x3,short y3) {
-    short m1,m2,m3,y,xa,xb,d1,d2;
+void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0")) {
+    short m1,m2,m3,y,xa,xb;
+//    short d1,d2;
     unsigned char* addr;
 
 /*
@@ -287,6 +259,10 @@ void DrawTriangle(short x1,short y1,short x2,short y2,short x3,short y3) {
         ASM_EXCHANGE(y2,y3);
     }
 
+    x1 <<= 7;
+    x2 <<= 7;
+    x3 <<= 7;
+
     //calculate dx/dy for highest-to-middle point
     if ((y=y1-y2)) m3 = (x1-x2)/y;
     else           m3 = 999;
@@ -306,6 +282,32 @@ void DrawTriangle(short x1,short y1,short x2,short y2,short x3,short y3) {
     if (m2==999) xb=x2;
     else         xb=xa;
 
+    addr = (unsigned char *)plane+((((y3)+(y3))<<4)-((y3)+(y3)));
+
+    if (x2<(x3+(y2-y3)*m1)) {
+//        d1=1,d2=0;
+
+        // now draw the spans
+        for (y=y3;y<y2;y++,xa+=m1,xb+=m2,(unsigned char *)addr+=30) {
+            FillSpanXOR(1+(xa>>7),0+(xb>>7),addr);
+        }
+        for (;y<y1;y++,xa+=m1,xb+=m3,(unsigned char *)addr+=30) {
+            FillSpanXOR(1+(xa>>7),0+(xb>>7),addr);
+        }
+    }
+    else {
+//        d1=0,d2=1;
+
+        // now draw the spans
+        for (y=y3;y<y2;y++,xa+=m1,xb+=m2,(unsigned char *)addr+=30) {
+            FillSpanXOR(0+(xa>>7),1+(xb>>7),addr);
+        }
+        for (;y<y1;y++,xa+=m1,xb+=m3,(unsigned char *)addr+=30) {
+            FillSpanXOR(0+(xa>>7),1+(xb>>7),addr);
+        }
+    }
+
+/*
     if (x2<(x3+(y2-y3)*m1)) d1=1,d2=0;
     else                    d1=0,d2=1;
 
@@ -313,110 +315,5 @@ void DrawTriangle(short x1,short y1,short x2,short y2,short x3,short y3) {
     addr = LCD_MEM+(y3<<5)-(y3<<1);
     for (y=y3;y<y2;y++,xa+=m1,xb+=m2,addr+=30) FillSpan(d1+(xa>>7),d2+(xb>>7),addr);
     for (;y<y1;y++,xa+=m1,xb+=m3,addr+=30)     FillSpan(d1+(xa>>7),d2+(xb>>7),addr);
+*/
 }
-
-//-----------------------------------------------------------------------------
-//
-// END OF TRIANGLE FUNCTION - START OF BENCHMARK CODE
-//
-//-----------------------------------------------------------------------------
-volatile unsigned short counter = 0;
-
-
-//=============================================================================
-// simple counter hooked on int1
-//=============================================================================
-DEFINE_INT_HANDLER (myint1handler) {
-    counter++;
-}
-
-#define RANDOM_TRIANGLES 2500
-#define NR_LOOPS         4
-
-short* x = NULL;
-short* y = NULL;
-
-
-//=============================================================================
-// allocate and initialize global points arrays with "random" values
-//=============================================================================
-static inline short InitArrays(void) {
-    unsigned short i;
-    x = y = NULL;
-    if (!(x = (short*)malloc(RANDOM_TRIANGLES*3*sizeof(short)))) return 0;
-    if (!(y = (short*)malloc(RANDOM_TRIANGLES*3*sizeof(short)))) return 0;
-
-    srand(0x00000000UL); // always start on same seed
-    for (i=0;i<RANDOM_TRIANGLES*3;i++) {
-       x[i]=(random(150)+5)<<7;
-       y[i]=random(90)+5;
-    }
-    return 1;
-}
-
-
-//=============================================================================
-// free the allocate global points arrays
-//=============================================================================
-static inline void CleanupArrays(void) {
-    if (x) free(x);
-    if (y) free(y);
-}
-
-
-//=============================================================================
-// run the triangle drawing benchmark
-//
-// RANDOM_TRIANGLES*NR_LOOPS triangles will be drawn
-//=============================================================================
-void Bench(void) {
-    short i,j;
-
-    for (j=0;j<NR_LOOPS;j++) {
-        for (i=0;i<RANDOM_TRIANGLES*3;i+=3) DrawTriangle(x[0+i],y[0+i],x[1+i],y[1+i],x[2+i],y[2+i]);
-        //for (i=RANDOM_TRIANGLES*3-3;i>=0;i-=3) DrawTriangle(x[0+i],y[0+i],x[1+i],y[1+i],x[2+i],y[2+i]);
-    }
-//DrawTriangle(0,0,159,0,80,99);
-//__HALT;
-}
-
-
-
-//=============================================================================
-// where all the fun starts ...
-//=============================================================================
-void _main(void) {
-    INT_HANDLER oldint1 = GetIntVec(AUTO_INT_1);
-    INT_HANDLER oldint5 = GetIntVec(AUTO_INT_5);
-    char        buffer[100];
-    LCD_BUFFER  screen;
-
-    if (!InitArrays()) {
-        CleanupArrays();
-        ST_helpMsg("error: out of mem");
-        return;
-    }
-    LCD_save(screen);
-    memset(LCD_MEM,0,LCD_SIZE);
-
-    counter = 0;
-    SetIntVec(AUTO_INT_1,myint1handler);
-    SetIntVec(AUTO_INT_5,DUMMY_HANDLER);
-
-    Bench();
-
-    sprintf(buffer,"int-1 ticks=%u",counter);
-    SetIntVec(AUTO_INT_1,oldint1);
-    SetIntVec(AUTO_INT_5,oldint5);
-    CleanupArrays();
-    LCD_restore(screen);
-    ST_helpMsg(buffer);
-}
-
-//#############################################################################
-// Revision History
-//#############################################################################
-//
-// $Log$
-//
-//

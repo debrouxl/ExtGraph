@@ -20,7 +20,7 @@ SpriteX8_OR:
 	lsl.w	#4,%d1
 	sub.w	%d4,%d1	
 		 
-	move.w	%d0,%d4	
+	move.w	%d0,%d4
 	andi.w	#15,%d4	
 
 	lsr.w	#4,%d0	

@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -94,8 +94,8 @@ If you are using grayscales use function GrayGetPlane to retrieve the pointer to
 <a name="#DoubleSpriteDimensions"></a>
 <h3>void DoubleSpriteDimensionsX8_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
 <h3>void DoubleSpriteDimensions16x16_R(register unsigned short* src asm("%a0"),register unsigned long* dest asm("%a1")) __attribute__((__regparm__(2)));</h3>
-DoubleSpriteDimensionsX8_R is a fast alternative to ScaleSprite routines if the scale factor 
-is 2. DoubleSpriteDimensions16x16_R was designed specifically for the "AMS native comment 
+DoubleSpriteDimensionsX8_R is a fast alternative to ScaleSprite routines if the scale factor
+is 2. DoubleSpriteDimensions16x16_R was designed specifically for the "AMS native comment
 format" icon type available since TIGCC 0.95.
 </p>
 </BODY>

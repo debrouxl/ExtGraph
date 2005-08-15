@@ -1,20 +1,32 @@
 Roadmap after Beta 4 (more or less sorted):
 
-X* Optimization of TestCollide.
+/* Fix bugs (pixel macros if any, etc.), update documentation (update links, check prototypes, document new functions,
+etc.) and header...
+
+0* Fix FastDrawLine(_R) in A_XOR mode.
+0* Make three FastTestLine_R functions: test both ends at the same time, left -> right; right -> left.
 
 0* add pixel collide.
+
 /* More routines related to planes: OrageGL's, Jesse's, etc.
 
-0* tilemap engine: make it usable with doublebuffering, in some way. -> Grib !
-
-/* Fix bugs (pixel macros - Kevin ?, SpriteX8Get, etc.), update documentation (update
-links, check prototypes, document new functions, etc.) and header...
+X* tilemap engine: make it usable with doublebuffering, in some way. -> fork of the TIGCCLIB routine, Grib. Update the
+documentation.
 
 /* "Fast" scaling 240x128 -> 160x85, 160x85 -> 240x128, 1 plane. Is there actually a point in making 2-plane versions ?
 It may or may not help the plane switching. There's no significant difference speed-wise with 1-plane versions,
 the 2-plane versions can increase memory consumption since reusing the same buffer is impossible.
 These routines are very expensive speed-wise and size-wise, their effect is visually rather poor (especially
 reduction - strings get ugly). It's IMO a major mistake designing a program only for one type and scaling the graphics.
+
+0* DrawPattern (Slimeball).
+
+
+
+-- Beta 5
+
+/* Fix bugs (pixel macros if any, etc.), update documentation (update links, check prototypes, document new functions,
+etc.) and header...
 
 /* Generic font routines, OS or custom. Two sets of pointers, one should always contain the OS fonts (i.e., mandatory
 SetupCharSet).
@@ -27,20 +39,19 @@ drawn with clipped routines, in TRANW mode, over a background that scrolls very 
 Redraw each frame if not using fastsrb functions, redraw only when needed otherwise. No waiting loop. Count the number of
 frames during 300 AI5 ticks.
 
-/* X16 routines.
+/* X16 routines: only GrayClipISpriteX16_MASK_R.
 
 0* __regparm__ grayscale utilities, while rewriting them all into GNU as ASM.
 
 0* optimize sprite routines:
     0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
-    /* Fast non-clipped GrayISpriteX_Y_R.
+    /* Make fast non-clipped GrayISpriteX_Y_R.
 
 /* Lines, triangles, circles, etc:
-    0* FastTestLine.
     0* ClipAndDrawLine, with callback. Which simple and efficient algorithm ?
-    0* reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes; make DrawMultiHLines.
+    0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
     /* clipped and non-clipped draw / fill circles.
-    0* clipped and non-clipped draw / fill triangles -> "tri.c".
+    X* clipped fill triangles - users should be smart enough to figure out how to do the corresponding outlined function ;-).
     Note: an algorithm for circles, triangles and lines could be: use the stack (max 2*128 bytes) to store endpoints, call
 DrawMultiHLines.
     0* "Extremely Fast Line Algorithm" (EFLA) by Po-Han Lin: what does "Freely useable in non-commercial applications as
@@ -50,11 +61,9 @@ faster than the C version of Bresenham, it's not sure that the ASM version of EF
 Bresenham.
     ?* Specialized versions of GrayFastDrawHLine_X (note: more or less done in modified Extreme Racing).
 
-0* DrawPattern (Slimeball)
-
 0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
-possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5 becomes
-ugly).
+possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5
+becomes ugly).
 
 0* Preshifted 8x8.
 
@@ -64,9 +73,8 @@ ugly).
 /* Transition effects: waiting loops in most of them, one routine makes one effect + demo18. Unless otherwise noted,
 modes are invert (B/W - gray), FOTB (B/W - gray), FOTW (B/W - gray), FI (B/W - gray). B/W routines: add "BW" in front of
 name.
-    /* l'effect qu'on a dans TI-Chess avant l'affichage du logo, extérieur vers intérieur (1) et inversement (2), vers
-blanc ou vers noir, 160x100 et 240x128: "ZapMinimize"/"ZapMaximize". Reprendre le code de TI-Hex, en ajoutant un clin
-d'oeil.
+    /* the transition effect at the very beginning of TI-Chess: outer border -> center and vice-versa, FOTB/FOTW,
+160x100 and 240x128. Name: "ZapMinimize"/"ZapMaximize". Take code from TI-Hex.
     0* rectangles outlined concentriques, B/W et couleurs COLOR_WHITE/LIGHTGRAY/DARKGRAY/BLACK, extérieur vers intérieur
 et inversement, 160x100 et 240x128: "RectMinimize"/"RectMaximize".
     /* dissolve effect: modes habituels + effet de Ice Hockey 68k (doublebuffering, accès direct aux variables internes),
@@ -83,6 +91,7 @@ voir si c'est moins moche.
     0* fire similaire à celui de Krypton I (probablement sprite-based et peut-être même tile-based) 240x128, B -> T,
 T -> B, R -> L, L -> R. Celui de TICT est trop gros... squale92 ?
     /* AND, OR, XOR mask de 32 bits vers planes 160x100, 240x128: "AND/OR/XORPlane(s)WithMask160x100/240x128_R".
+    0* L'effet de transition de Hawk (en ASM) et sa version horizontale.
     0* Modification de l'effet "Arcs de cercle" ("Search").
 
 
@@ -92,3 +101,4 @@ Always check:
 * all parameters sprite, mask, maskval should be unsigned.
 * all parameters plane should be void *.
 * all constant parameters should be const...
+* using "extern" and "register" in prototypes is not usually necessary.

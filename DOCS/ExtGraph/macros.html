@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -57,16 +57,16 @@ gets a pixel using the given byte address and the given mask value
 (NOTE: if the return value is 0 the pixel is not set, otherwise it is set).
 
 <h3>EXT_SETPIX_AN(a,offset,n)</h3>
-sets a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+sets a pixel using the given plane address, pixel offset from the beginning of plane, pixel
 number (used internally by EXT_SETPIX).
 <h3>EXT_CLRPIX_AN(a,offset,n)</h3>
-clears a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+clears a pixel using the given plane address, pixel offset from the beginning of plane, pixel
 number (used internally by EXT_CLRPIX).
 <h3>EXT_XORPIX_AN(a,offset,n)</h3>
-inverts a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+inverts a pixel using the given plane address, pixel offset from the beginning of plane, pixel
 number (used internally by EXT_XORPIX).
 <h3>EXT_GETPIX_AN(a,offset,n)</h3>
-gets a pixel using the given plane address, pixel offset from the beginning of plane, pixel 
+gets a pixel using the given plane address, pixel offset from the beginning of plane, pixel
 number (used internally by EXT_GETPIX)
 (NOTE: if the return value is 0 the pixel is not set, otherwise it is set).
 
@@ -87,7 +87,7 @@ returns the absolute value of given long a.
 <h3>EXT_XCHG(a,b)</h3>
 exchanges the content of values a and b using the ASM <code>exg</code> instruction.
 <h3>EXT_LONGSWAP(val)</h3>
-returns the word swapped value (upper and lower word swapped) of the given long using the 
+returns the word swapped value (upper and lower word swapped) of the given long using the
 ASM <code>swap</code> instruction.
 <h3>DEREFSMALL(p,i)</h3>
 dereferences i-th element of pointer p (optimized version of p[i]).

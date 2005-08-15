@@ -16,11 +16,11 @@ SpriteX8_XOR:
 	move.w  (%a0)+,%d3
 	move.l  (%a0)+,%a0
 
-	move.w	%d1,%d4		
+	move.w	%d1,%d4	
 	lsl.w	#4,%d1
 	sub.w	%d4,%d1	
 		 
-	move.w	%d0,%d4	
+	move.w	%d0,%d4
 	andi.w	#15,%d4	
 
 	lsr.w	#4,%d0	

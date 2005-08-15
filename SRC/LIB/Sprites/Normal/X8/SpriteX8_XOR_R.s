@@ -8,19 +8,19 @@
 SpriteX8_XOR_R:
 	movem.l	%d3-%d5/%a2,-(%sp)
 
-	move.w	%d1,%d4		
+	move.w	%d1,%d4
 	lsl.w	#4,%d1
 	sub.w	%d4,%d1	
 		 
-	move.w	%d0,%d4	
+	move.w	%d0,%d4
 	andi.w	#15,%d4	
 
 	lsr.w	#4,%d0	
 	add.w	%d1,%d0	
 	add.w	%d0,%d0	
-	
+
 	adda.w	%d0,%a0	
- 
+
  	moveq.l	#16,%d5
  	sub.w	%d4,%d5	
 

@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -52,8 +52,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void GrayClipSprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
 SpriteX_AND draw a sprite with a width of X pixels or less on the screen using AND logic.
-These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_AND as 
-parameter <em>mode</em>, because these routines have been streamlined for the specific 
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_AND as
+parameter <em>mode</em>, because these routines have been streamlined for the specific
 type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
 corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
@@ -61,7 +61,7 @@ type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
 unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
 is the pointer to a video plane of size 240 x 128 pixels. If you want to
 draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
-If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the
 video planes.<br><br>
 The SpriteX8_AND function differs from the rest of the functions. It is not fixed to
 a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
@@ -69,8 +69,8 @@ The sprite data for SpriteX8_AND has to be organized like this (example for <em>
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -103,8 +103,8 @@ extreme points are (0,0) and (239,127).
 <h3>void GrayClipSprite32_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
 SpriteX_OR draw a sprite with a width of X pixels or less on the screen using OR logic.
-These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_OR as 
-parameter <em>mode</em>, because these routines have been streamlined for the specific 
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_OR as
+parameter <em>mode</em>, because these routines have been streamlined for the specific
 type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
 corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
@@ -112,7 +112,7 @@ type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
 unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
 is the pointer to a video plane of size 240 x 128 pixels. If you want to
 draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
-If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the
 video planes.<br><br>
 The SpriteX8_OR function differs from the rest of the functions. It is not fixed to
 a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
@@ -120,8 +120,8 @@ The sprite data for SpriteX8_OR has to be organized like this (example for <em>b
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -154,8 +154,8 @@ extreme points are (0,0) and (239,127).
 <h3>void GrayClipSprite32_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
 SpriteX_XOR draw a sprite with a width of X pixels or less on the screen using XOR logic.
-These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_XOR as 
-parameter <em>mode</em>, because these routines have been streamlined for the specific 
+These routines are significantly faster than using the TIGCCLIB SpriteX with SPRT_XOR as
+parameter <em>mode</em>, because these routines have been streamlined for the specific
 type of logic they employ. <em>x</em> and <em>y</em> are the coordinates of the upper left
 corner of the sprite. <em>h</em> is the height of the sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
@@ -163,7 +163,7 @@ type is unsigned char; for X=16 type is unsigned short; and for X=32 type is
 unsigned long) which define the shape of the sprite (line by line). <em>dest</em>
 is the pointer to a video plane of size 240 x 128 pixels. If you want to
 draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
-If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the
 video planes.<br><br>
 The SpriteX8_XOR function differs from the rest of the functions. It is not fixed to
 a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
@@ -171,8 +171,8 @@ The sprite data for SpriteX8_XOR has to be organized like this (example for <em>
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -215,7 +215,7 @@ type equal to X (i.e. for X=8 type is unsigned char; for X=16 type is unsigned
 short; and for X=32 type is unsigned long) which define the shape of the sprite
 (line by line). <em>dest</em> is the pointer to a video plane of size 240 x 128 pixels. If you want to
 draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
-If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the
 video planes.<br><br>
 If masked sprites are to be employed it is probably necessary to employ double buffering
 in order to restore the background when the masked sprite is redrawn.<br><br>
@@ -225,11 +225,11 @@ The sprite data for SpriteX8_MASK has to be organized like this (example for <em
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).<br>
-NOTE3: GrayClipISprite8/16/32_MASK_R are noticeably faster than GrayClipSprite8/16/32_MASK_R. Indeed, 
-the latter apply the same mask to both planes, the former apply one mask per plane. One mask per 
+NOTE3: GrayClipISprite8/16/32_MASK_R are noticeably faster than GrayClipSprite8/16/32_MASK_R. Indeed,
+the latter apply the same mask to both planes, the former apply one mask per plane. One mask per
 plane is more powerful, but often overkill and of course bigger and slower. See also TRAN[BDLW] routines below.
 </p>
 <br><br><br>
@@ -261,7 +261,7 @@ plane is more powerful, but often overkill and of course bigger and slower. See 
 
 SpriteX_BLIT mask out an area of the screen at x and y by ANDing the mask
 pointed to by <em>maskval</em> to each destination line. Then SpriteX_BLIT draws a
-sprite with a width of X pixels or less on the screen (on top of the masked area) using OR 
+sprite with a width of X pixels or less on the screen (on top of the masked area) using OR
 logic. This routine is much faster than using separate SpriteX commands or functions found in this header. <em>x</em>
 and <em>y</em> are the coordinates of the upper left corner of the sprite. <em>h</em>
 is the height of the sprite. <em>sprite</em> is a pointer to the array of
@@ -270,20 +270,20 @@ X=16 type is unsigned short; and for X=32 type is unsigned long) which define
 the shape of the sprite (line by line). <em>dest</em> is the pointer to a video plane
 of size 240 x 128 pixels. If you want to
 draw the sprite to the normal video plane you can use constant LCD_MEM for dest.
-If you are using grayscales use function GrayGetPlane to retrieve the pointer to the 
+If you are using grayscales use function GrayGetPlane to retrieve the pointer to the
 video planes.<br><br>
 The BLIT functions are commonly used for background sprites where
 one wishes to mask out a rectangular array that can be acomplished with the
 same value for each line of the sprite instead of a full mask sprite.<br><br>
 The SpriteX8_BLIT function differs from the rest of the functions. It is not fixed to
 a specific width, but you can specify the width in bytes as parameter (<em>bytewidth</em>).
-The sprite data for SpriteX8_BLIT has to be a byte array organized like this 
+The sprite data for SpriteX8_BLIT has to be a byte array organized like this
 (example for <em>bytewidth</em> == 3):
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.<br><br>
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -309,8 +309,8 @@ extreme points are (0,0) and (239,127).
 SpriteX_RPLC are SpriteX_BLIT functions with hard-coded white (0) mask and therefore a slightly different prototype.
 <br><br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
-NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -326,14 +326,14 @@ extreme points are (0,0) and (239,127).
 <h3>void GrayClipSprite32_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
 GraySpriteX_TRANB draw a grayscale sprite with transparency color black.
-<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite. 
-<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the 
-arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16 
-type is unsigned short; and for X=32 type is unsigned long) which define the shape of the 
-sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of 
+<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite.
+<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the
+arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16
+type is unsigned short; and for X=32 type is unsigned long) which define the shape of the
+sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of
 size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the video planes.<br>
-NOTE: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br><br>
@@ -349,18 +349,18 @@ extreme points are (0,0) and (239,127).
 <h3>void GrayClipSprite32_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
 GraySpriteX_TRANW draw a grayscale sprite with transparency color white.
-<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite. 
-<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the 
-arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16 
-type is unsigned short; and for X=32 type is unsigned long) which define the shape of the 
-sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of 
+<em>x</em> and <em>y</em> are the coordinates of the upper left corner of the sprite.
+<em>h</em> is the height of the sprite. <em>sprt0</em> and <em>sprt1</em> are pointers to the
+arrays of unsigned numbers of type equal to X (i.e. for X=8 type is unsigned char; for X=16
+type is unsigned short; and for X=32 type is unsigned long) which define the shape of the
+sprite (line by line). <em>dest0</em> and <em>dest1</em> is the pointer to a video plane of
 size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the video planes.<br>
-NOTE: the functions whose name contains "Clip" are the clipped variants of the normal 
-(single or double plane) functions, the sprites are clipped outside the rectangle whose 
+NOTE: the functions whose name contains "Clip" are the clipped variants of the normal
+(single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
 </p>
 <br><br>
-<h3>Read the readme for information on how to make TRANL (transparency color light gray) and 
+<h3>Read the readme for information on how to make TRANL (transparency color light gray) and
 TRAND (transparency color dark gray) routines.</h3>
 
 </BODY>

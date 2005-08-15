@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -43,17 +43,17 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <td>64 bytes</td>
 <td>0 bytes</td>
 <td>most games, including not so simple platformers and sidescrollers (Phoenix Platinum, Monster, Venus are sprite-based)</td>
-<td><em>normal 16x16 <strong>gray clipped</strong> interlaced sprite routine with 2x2 loops</em> (special 
-version of GrayClipISprite16, not inclued: this was done in order to make a fairer comparison, 
-given that the loops in the preshifted sprite functions are completely unrolled): <strong>more than 4500 
+<td><em>normal 16x16 <strong>gray clipped</strong> interlaced sprite routine with 2x2 loops</em> (special
+version of GrayClipISprite16, not inclued: this was done in order to make a fairer comparison,
+given that the loops in the preshifted sprite functions are completely unrolled): <strong>more than 4500
 sprites/sec</strong></td>
 </tr>
 <tr>
 <td><strong>Tiles (interlaced or non-interlaced)</strong></td>
 <td>2*32 or 64 bytes</td>
 <td>0 bytes</td>
-<td>in conjunction with Scroll...  and FastCopyScreen, background of sidescrollers like 
-Phoenix (&amp; Phoenix Platinum), Krypton, Venus; simple strategy games (although sprite functions are often much 
+<td>in conjunction with Scroll...  and FastCopyScreen, background of sidescrollers like
+Phoenix (&amp; Phoenix Platinum), Krypton, Venus; simple strategy games (although sprite functions are often much
 better since they are much more flexible)</td>
 <td><strong>as fast as or faster than completely preshifted sprites</strong></td>
 </tr>
@@ -76,16 +76,16 @@ sprite takes 2 KB !):</em> <strong>at least 8500 sprites/sec</strong></td>
 <td><strong>Tilemap engine</strong></td>
 <td>64 bytes</td>
 <td>large backbuffers (5440 bytes per plane)</td>
-<td>complex RPGs, platformers for current version; Beta 4 adds support for still tiles 
-(simplified SimCity, Command And Conquer...). Future versions should add support for animated 
+<td>complex RPGs, platformers for current version; Beta 4 adds support for still tiles
+(simplified SimCity, Command And Conquer...). Future versions should add support for animated
 tiles</td>
 <td><strong>N/A</strong></td>
 </tr>
 </table>
 <h2>Comment:</h2>
-<h3>As you can see above, normal sprite functions are enough most of the time. ExtGraph 
-provides many alternatives: tilemap engine, tile functions, brute-force (preshifted 
-sprite macros)... If there are sprites moving on a background which is not refreshed too often, 
+<h3>As you can see above, normal sprite functions are enough most of the time. ExtGraph
+provides many alternatives: tilemap engine, tile functions, brute-force (preshifted
+sprite macros)... If there are sprites moving on a background which is not refreshed too often,
 think of fast background save&amp;restore functions (see demo22).</h3>
 </p>
 

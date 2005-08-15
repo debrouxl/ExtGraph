@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<HTML>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
@@ -38,36 +38,36 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void CreateISpriteShadow16_R(register short height asm("%d0"),register unsigned short* src asm("%a0"),register unsigned short* dest asm("%a1"));</h3>
 <h3>void CreateISpriteShadow32_R(register short height asm("%d0"),register unsigned long* src asm("%a0"),register unsigned long* dest asm("%a1"));</h3>
 <br>
-CreateSpriteShadowX_R: use sprite pointed to by <em>src0</em> and <em>src1</em> and 
-mask pointed to by <em>mask</em> to create a shadowed sprite <em>(colors are "increased": 
-white -> lightgray, lightgray -> darkgray, darkgray -> black, black -> black)</em>, stored in 
+CreateSpriteShadowX_R: use sprite pointed to by <em>src0</em> and <em>src1</em> and
+mask pointed to by <em>mask</em> to create a shadowed sprite <em>(colors are "increased":
+white -> lightgray, lightgray -> darkgray, darkgray -> black, black -> black)</em>, stored in
 <em>dest0</em> and <em>dest1</em>.<br>
 CreateISpriteShadowX_R: use sprite pointed to by masked interlaced sprite <em>src</em>
-to create a shadowed sprite <em>(colors are "increased": white -> lightgray, lightgray -> 
+to create a shadowed sprite <em>(colors are "increased": white -> lightgray, lightgray ->
 darkgray, darkgray -> black, black -> black)</em>, stored in masked interlaced sprite <em>dest</em>.<br>
-CreateSpriteIShadowX_R: use sprite pointed to by <em>src0</em> and <em>src1</em> and 
-mask pointed to by <em>mask</em> to create a shadowed sprite <em>(colors are "decreased": 
+CreateSpriteIShadowX_R: use sprite pointed to by <em>src0</em> and <em>src1</em> and
+mask pointed to by <em>mask</em> to create a shadowed sprite <em>(colors are "decreased":
 white -> white, lightgray -> white, darkgray -> lightgray, black -> darkgray)</em>,
 stored in <em>dest0</em> and <em>dest1</em>.<br>
-CreateISpriteIShadowX_R: use sprite pointed to by masked interlaced sprite <em>src</em> 
-to create a shadowed sprite <em>(colors are "decreased": white -> white, lightgray -> white, 
+CreateISpriteIShadowX_R: use sprite pointed to by masked interlaced sprite <em>src</em>
+to create a shadowed sprite <em>(colors are "decreased": white -> white, lightgray -> white,
 darkgray -> lightgray, black -> darkgray)</em>, stored in masked interlaced sprite <em>dest</em>.<br>
 The interlaced sprite format is as follows:
 <ul>
-<li>all routines except MASK: L/D or D/L (depending on the convention you use for <em>dest0</em> 
-and <em>dest1</em>, usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), 
+<li>all routines except MASK: L/D or D/L (depending on the convention you use for <em>dest0</em>
+and <em>dest1</em>, usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise),
 without mask.</li>
-<li>MASK: M/L/D or M/D/L (depending on the convention you use for <em>dest0</em> and <em>dest1</em>, 
-usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), mask is applied to 
+<li>MASK: M/L/D or M/D/L (depending on the convention you use for <em>dest0</em> and <em>dest1</em>,
+usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), mask is applied to
 both planes.</li>
 </ul>
 <br>
-These routines provide a convenient way to use shadowed sprites with best run-time 
-performance and lowest size: use Create(I)Sprite(I)ShadowX_R to create shadowed sprites once 
-at startup time (instead of embedding shadowed sprites in your program) and then use OR or 
+These routines provide a convenient way to use shadowed sprites with best run-time
+performance and lowest size: use Create(I)Sprite(I)ShadowX_R to create shadowed sprites once
+at startup time (instead of embedding shadowed sprites in your program) and then use OR or
 MASK routines to display these shadowed sprites.<br>
-<em>Starting from 2.00 Beta 4, Create(I)Sprite(I)ShadowX_R remain the only routines dealing with 
-SHADOW and ISHADOW mode: Gray(Clip)SpriteX_(I)SHADOW(2)_R were slow, made maintaining ExtGraph 
+<em>Starting from 2.00 Beta 4, Create(I)Sprite(I)ShadowX_R remain the only routines dealing with
+SHADOW and ISHADOW mode: Gray(Clip)SpriteX_(I)SHADOW(2)_R were slow, made maintaining ExtGraph
 even more complicated and mostly useless thanks to Create(I)Sprite(I)ShadowX_R routines.</em>
 </p>
 

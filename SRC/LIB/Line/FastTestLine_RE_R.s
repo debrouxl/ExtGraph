@@ -1,13 +1,13 @@
 | FastTestLine_R by Lionel Debroux.
 | Based on FastLine_*_R by Julien Richard-Foy / Lionel Debroux.
 |
-| C prototype: void FastTestLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
+| C prototype: void FastTestLine_RE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
 
 .text
-.globl FastTestLine_R
+.globl FastTestLine_RE_R
 .even
 
-FastTestLine_R:
+FastTestLine_RE_R:
 	movem.l	%d3-%d5/%a2,-(%sp)
 
 	cmp.w	%d0,%d2
@@ -79,10 +79,10 @@ DYPos_FTL_R:
 
 XLoop_FTL_R:
 	btst.b	%d0,(%a0)
-	eor.b	%d1,(%a1)
+	bne.s   End_FTL_R
 
 	subq.w	#1,%d0
-	bpl.s	Msk1OkX_FTL_R
+	bpl.s	MskOkX_FTL_R
 	addq.l	#1,%a0
 	moveq.l	#7,%d0
 
@@ -105,7 +105,7 @@ NoIncLineX_FTL_R:
 	dbf	%d5,XLoop_FTL_R
 | Prevent the center from being drawn twice.
 | This is a problem only in A_XOR mode.
-OnePix_FTL_R:
+End_FTL_R:
 	btst     #0,%d2
 	bne.s    __Draw_center_only_once_FTL_R__
 	or.b     %d6,(%a0)                      | Draw the center only once.

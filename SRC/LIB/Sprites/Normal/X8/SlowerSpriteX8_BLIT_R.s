@@ -20,7 +20,7 @@ SlowerSpriteX8_BLIT_R:
 	lsr.w	#4,%d0	
 	add.w	%d1,%d0	
 	add.w	%d0,%d0	
-	
+
 	adda.w	%d0,%a0	
  
  	moveq.l	#16,%d5
