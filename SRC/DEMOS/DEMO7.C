@@ -73,10 +73,10 @@ void _main(void) {
         OSTimerRestart(USER_TIMER);
         for (j=0;j<4 && !kbhit();j++) {
             short used_color = modes[j];
-            for (i=0;  i<160;i++) GrayFastDrawLine(80,50,i,8,   used_color);
-            for (i=8;  i<100;i++) GrayFastDrawLine(80,50,159,i, used_color);
-            for (i=159;i>=0; i--) GrayFastDrawLine(80,50,i,99,  used_color);
-            for (i=99; i>=8; i--) GrayFastDrawLine(80,50,0,i,   used_color);
+            for (i=0;  i<160;i++) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,i,8,   used_color);
+            for (i=8;  i<100;i++) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,159,i, used_color);
+            for (i=159;i>=0; i--) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,i,99,  used_color);
+            for (i=99; i>=8; i--) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,0,i,   used_color);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
         sprintf(tmpstr,"Own routine took %lu time units",(1000-measure_val)*50);

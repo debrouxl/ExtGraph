@@ -3,30 +3,25 @@ Roadmap after Beta 4 (more or less sorted):
 /* Fix bugs (pixel macros if any, etc.), update documentation (update links, check prototypes, document new functions,
 etc.) and header...
 
-0* Fix FastDrawLine(_R) in A_XOR mode.
-0* Make three FastTestLine_R functions: test both ends at the same time, left -> right; right -> left.
+0* Make double-buffered versions of the tilemap engine demos. Check Kevin's patch.
 
-0* add pixel collide.
+0* Modify demo26 to behave the following way:
+    * not crash the calculator;
+    * bench generic lines, horiz lines, rectangles, triangles (remove vert lines);
+    * bench ExtGraph if passed nothing or integer 0;
+    * bench Graphlib if passed integer 1 (no triangles);
+    * bench Genlib if passed integer 2;
+    * bail out otherwise.
 
-/* More routines related to planes: OrageGL's, Jesse's, etc.
+/* Make (Gray)ClipISpriteX16_OR/RPLC/TRANB/TRANW_R. ClipSpriteX16_MASK_R: which calling convention ?
 
-X* tilemap engine: make it usable with doublebuffering, in some way. -> fork of the TIGCCLIB routine, Grib. Update the
-documentation.
-
-/* "Fast" scaling 240x128 -> 160x85, 160x85 -> 240x128, 1 plane. Is there actually a point in making 2-plane versions ?
-It may or may not help the plane switching. There's no significant difference speed-wise with 1-plane versions,
-the 2-plane versions can increase memory consumption since reusing the same buffer is impossible.
-These routines are very expensive speed-wise and size-wise, their effect is visually rather poor (especially
-reduction - strings get ugly). It's IMO a major mistake designing a program only for one type and scaling the graphics.
-
-0* DrawPattern (Slimeball).
+0* DrawPattern_R (Slimeball).
 
 
 
--- Beta 5
+-- Beta 5 --
 
-/* Fix bugs (pixel macros if any, etc.), update documentation (update links, check prototypes, document new functions,
-etc.) and header...
+/* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
 
 /* Generic font routines, OS or custom. Two sets of pointers, one should always contain the OS fonts (i.e., mandatory
 SetupCharSet).
@@ -39,16 +34,18 @@ drawn with clipped routines, in TRANW mode, over a background that scrolls very 
 Redraw each frame if not using fastsrb functions, redraw only when needed otherwise. No waiting loop. Count the number of
 frames during 300 AI5 ticks.
 
-/* X16 routines: only GrayClipISpriteX16_MASK_R.
-
 0* __regparm__ grayscale utilities, while rewriting them all into GNU as ASM.
 
 0* optimize sprite routines:
     0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
     /* Make fast non-clipped GrayISpriteX_Y_R.
 
+0* Make more X8 routines, especially grayscale ones, including transparencies.
+0* Make more X16 routines (B/W and grayscale clipped and non-clipped, all modes) + demo27 = demo6 with X16 routines.
+
+
 /* Lines, triangles, circles, etc:
-    0* ClipAndDrawLine, with callback. Which simple and efficient algorithm ?
+    0* ClipLine, ClipAndDrawLine (with callback). Which simple and efficient algorithm ?
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
     /* clipped and non-clipped draw / fill circles.
     X* clipped fill triangles - users should be smart enough to figure out how to do the corresponding outlined function ;-).
@@ -59,7 +56,7 @@ long as credits to Po-Han Lin and link to http://www.edepot.com is provided in s
 EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel is
 faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM version of
 Bresenham.
-    ?* Specialized versions of GrayFastDrawHLine_X (note: more or less done in modified Extreme Racing).
+    ?* Specialized versions of GrayFastDrawHLine_X (NTS: more or less done in modified Extreme Racing), like in Genlib ?
 
 0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
 possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5

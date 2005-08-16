@@ -14,6 +14,7 @@
 .even
 
 ClipSpriteX8_XOR_R:
+    movem.l  %d3-%d7,-(%sp)
     
 |Zone de non affichage
     move.w   %d2,%d5				|%d5 = Bytewidth

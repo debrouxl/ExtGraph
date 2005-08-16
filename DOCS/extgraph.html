@@ -36,11 +36,10 @@ For example, we unrolled tight loops in the tilemap engine, which costed around 
 1/1000 of overall size for most programs using a tilemap engine), but increases speed by ~20%.<br>
 <strong>Note:</strong> We do not / cannot guarantee that any compiler or cross-compiler for TI-68k
 calculators other than TIGCC will support ExtGraph.<br><br>
-<strong>The ExtGraph demos were tested on PedroM 0.80.</strong> PedroM exits demo12 and demo17 because
-ROM_CALL CharNumber is not reimplemented, but all other demos work (although PedroM 0.80 seems
-to suffer more from the keyboard rebounds, but I tested only on VTI) and show that PedroM uses
-more efficient algorithms than AMS (in graphical functions - <em>up to 0.80, vital memcpy and memset
-were very slow in PedroM versions</em>): ExtGraph outperforms PedroM on lines by &lt;~10%
+<strong>The ExtGraph demos were tested on PedroM 0.81.</strong> All demos seem to work (although
+PedroM 0.81 seems to suffer more from the keyboard rebounds than AMS, but I tested only on VTI) and
+show that PedroM uses more efficient algorithms than AMS (in graphical functions - up to 0.80,
+PedroM's vital memcpy and memset were very slow): ExtGraph outperforms PedroM on lines by &lt;~10%
 and rectangles by &gt;~3x, while it usually outperforms AMS by &gt;~5x on lines and &gt;~7x on
 rectangles.<br><br>
 <br>
@@ -65,7 +64,8 @@ routines. Indeed, this approach doesn't have any significant advantage speed-wis
 size-wise compared to the normal method, and it forbids writing directly to the grayscale
 outputscreen or using doublebuffering, because the buffers used by the TIGCCLIB grayscale
 routine are not combined this way on HW1 (which is screwing up with the tilemap engine),
-unless a fork of the TIGCCLIB routine available in src/gray.s is used.
+unless a fork of the TIGCCLIB routine available starting from 2.00 Beta 5 in src/gray.s -
+or Grib - is used.
 Therefore I've decided to implement these "monsters".<br>
 GrayClipISprite8/16_... are speed-optimized by using interlaced sprites and two different
 loops to optimize shiftings.<br>
@@ -78,7 +78,7 @@ nearly as efficient speed-wise and speed-wise as using interlaced sprites. Start
 what a shame) can modify them to use this format without too much trouble.
 </p>
 <br>
-<strong>WHY EXTGRAPH 2.xx VERSIONS ARE A GREAT IMPROVEMENT OVER 1.xx AND OLDER:</strong>
+<strong>WHY EXTGRAPH 2.xx VERSIONS ARE A GREAT IMPROVEMENT OVER 1.xx AND OLDER (incomplete list):</strong>
 <ul>
 <li>Nearly all functions and even several macros were rewritten in pure assembly, resulting
 in both size and speed improvements.</li>
@@ -107,9 +107,10 @@ is now available.</li>
 <li>interlaced sprite functions were added.</li>
 <li>special fast background save&amp;restore functions are now available.</li>
 <li>transition effects were added.</li>
+<li>triangle filling and circle drawing functions are now available.</li>
 <li>documentation is clearer (although much bigger) and more usable by newbies than it used
 to be (tips, comparisons between different approaches - look forward to TICT tutorial S1P9
-about optimization).</li>
+about optimization). From Beta 5 on, it was split into separate files for better readability.</li>
 </ul>
 <br>
 <em>This is a beta, this means it may contain bugs we might not have seen despite our tests
@@ -118,9 +119,26 @@ already saw a number of more or less severe bugs in all betas.</em>
 
 <br><br>
 <br>
+<strong>ABOUT THE GRAYSCALE ROUTINES AND THE TILEMAP ENGINE:</strong>
 <p>
-As of Beta 4, the tilemap engine is still incompatible with the TIGCCLIB grayscale
-doublebuffering support.
+The tilemap engine is incompatible with the TIGCCLIB grayscale doublebuffering support,
+and will most probably remain. If you want to use the ExtGraph tilemap engine with the TIGCCLIB
+doublebuffering support, please use the forked support in /src/gray.s (just add the file to the
+TIGCC project, or link with it), which is API- and ABI-compatible with the TIGCCLIB one. Kevin's
+tilemap engine patch breaks the entire tilemap engine API and ABI, and gives a crappy calling
+convention to the functions, as a4 is used (like in a number of rarely-used TIGCCLIB functions),
+which prevents using -freg-relative-a4 or global register variables in a4 - that is, the most
+efficient ways to access global variables...<br>
+The forked support always allocates planes consecutively, even on HW1 (as a side effect, the
+routine uses less SMC and is slightly smaller). Right, this consumes more memory on HW1, but in
+practice, you couldn't use this memory anyway. Indeed, HW2/3 - most common models - usually run
+AMS 2.xx/3.xx, whose maximum amount of available memory is lesser or equal than that of AMS
+1.xx/2.xx used on HW1. Not to mention there are more TSRs on AMS 2.xx/3.xx, starting with Kevin's
+AutoAlphaLock-Off.<br>
+Note that Julien Richard-Foy is making a new grayscale library. It is significantly smaller than
+the TIGCCLIB one, its API looks more like that of Genlib in some aspects (framerate synchronization
+functions). It can use user-allocated planes, which also enables using the ExtGraph tilemap engine
+(his work !) with doublebuffering, provided the planes are allocated consecutively.
 </p>
 
 <hr>
@@ -158,7 +176,8 @@ doublebuffering support.
 <br>
 
 <a name="#functions" class=startofblock>Functions, Types, Globals and Macros</a><br>
-Library ExtGraph contains the following functions:
+Library ExtGraph contains the following functions (<strong>note that this list may be outdated, the correct list is always
+available in the header</strong>):
 <PRE><strong>
 <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite8_AND</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite16_AND</a>                  <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite32_AND</a>                   <a href="ExtGraph/sprite_draw.html#SpriteX_AND">SpriteX8_AND</a>
 <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite8_AND_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite16_AND_R</a>                <a href="ExtGraph/sprite_draw.html#SpriteX_AND">Sprite32_AND_R</a>                 <a href="ExtGraph/sprite_draw.html#SpriteX_AND">SpriteX8_AND_R</a>
@@ -369,15 +388,15 @@ and the following macros/definitions:
 We tried to do our best to provide something bug-free, but we may have failed (many bugs
 were found in the previous ExtGraph 2.00 betas).<br>
 If you believe a sprite function is buggy, could you please test it with the project
-sprtst.tpr in \src\lib ? If the function is buggy, the program could show its flaws
+sprtst.tpr in /src/lib ? If the function is buggy, the program could show its flaws
 (several flaws could be missed by the program though) more valueable. Note that I have
 a large test suite for sprite functions.<br>
 If this test doesn't show the function is buggy, well, then it's not unlikely that there's
 a problem in your code. One of the most frequent causes of random bugs is writes past the
-bounds of arrays (segfaults on other architectures), on the stack (often triggers
-Illegal Instruction or Address Error) or in the heap (infinite loop in AMS after the
-program returns, often in HS_popEStack). Be sure to check the result of dynamic memory
-allocations, too.<br>
+bounds of data section arrays (segfaults on other architectures), of stack arrays (often
+triggers Illegal Instruction or Address Error) or in the heap (often an infinite loop in
+AMS at the next allocation or after the program returns). Be sure to check the result of
+dynamic memory allocations, too.<br>
 Be sure to use the TIGCC 0.95 release, or newer (0.96 recommended).<br>
 Thanks in advance.
 </p>
@@ -393,7 +412,9 @@ If you distribute ExtGraph within your projects' distributions, please include b
 extgraph.h (and tilemap.a / tilemap.h if you use the tilemap engine, preshift.h if you use preshifted
 sprites). Don't get fooled by the huge size of those files: they are very redundant data, high
 compression ratios can therefore be achieved on them. The biggest file, extgraph.a, is more than six
-times smaller after compression with old ZIP format.
+times smaller after compression with old ZIP format.<br>
+If you modify ExtGraph functions, please mark your versions as modified in a clear way: this lowers
+risks of spreading modified versions which don't behave like the original ones.<br>
 </p>
 <br>
 <br>
@@ -404,13 +425,13 @@ times smaller after compression with old ZIP format.
 <hr>
 <p>
 I'd like to thank the contributors, especially Julien Richard-Foy (jackiechan / Sasume -
-author of the tilemap engine and various programs, attending the TIGCC/TICT message board on
-a regular basis) and Geoffrey Anneheim (geogeo - author of PolySnd, Arkanoid Revenge of
-Doh, Nebulus, GFA Basic) once more for their work. ExtGraph would never have been what it is
-if they had not helped me. My policy is of course to let the contributors work on other
-projects if they want to, which they do for sure. For example, Julien is now working on
-kernel-based dynamic graphical library GenLib, in which he took ideas for the tilemap engine
-and optimizations on TRANB/W routines (also seen in Phoenix Platinum).
+author of the tilemap engine and various programs) and Geoffrey Anneheim (geogeo - author of
+PolySnd, Arkanoid Revenge of Doh, Nebulus, GFA Basic, TI-Gen) once more for their work.
+ExtGraph would never have been what it is if they had not helped me. My policy is of course
+to let the contributors work on other projects if they want to, which they do for sure.
+For example, Julien is now working on kernel-based dynamic graphical library GenLib, in
+which he took ideas for the tilemap engine and optimizations on TRANB/W routines (also seen
+in Phoenix Platinum).
 </p>
 <br>
 <br>

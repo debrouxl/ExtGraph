@@ -3,8 +3,8 @@
 
 |------------------------------------------------------------------------------
 | This routine uses a very dirty trick to combine 3 loops into one.
-| This trick is called in-memory-patching. Normally each loop has
-| to execute one of the following ASM instructions:
+| This trick is called in-memory-patching / self-modifying code.
+| Normally each loop has to execute one of the following ASM instructions:
 |
 | bset %d2,(%a0) ... 0x05d0 (0x600 - 0x30)
 | bclr %d2,(%a0) ... 0x0590 (0x600 - 0x70)
@@ -15,8 +15,8 @@
 | the routine will set this byte BEFORE entering the loop.
 |------------------------------------------------------------------------------
 |
-| NOTE: The given mode will not be checked. The routine will assume that mode
-|       is A_NORMAL = A_REPLACE = A_OR if it is neither A_REVERSE nor A_XOR.
+| NOTE: The given mode will not be fully checked. The routine will assume that
+|       mode is A_NORMAL = A_REPLACE = A_OR if it is neither A_REVERSE nor A_XOR.
 
 
 .text

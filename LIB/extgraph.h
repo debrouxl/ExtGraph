@@ -162,11 +162,18 @@ short TestCollide16(short x0,short y0,short x1,short y1,short height,const unsig
 short TestCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height,const unsigned short* data0 asm("%a0"),const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 short TestCollide162h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height0,short height1,unsigned short* data0 asm("%a0"),unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 
+// checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
+// Added in 2.00 Beta 5.
+char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
+
 //-----------------------------------------------------------------------------
 // enums used by some extgraph functions
 // 2.00 changes the values in enum GrayColors for more optimized routines.
+// 2.00 Beta 5 adds the COLOR_LGRAY and COLOR_DGRAY aliases.
 //-----------------------------------------------------------------------------
-enum GrayColors {COLOR_WHITE=0,COLOR_LIGHTGRAY=1,COLOR_DARKGRAY=2,COLOR_BLACK=3};
+enum GrayColors {COLOR_WHITE=0,COLOR_LIGHTGRAY=1,COLOR_LGRAY=1,COLOR_DARKGRAY=2,COLOR_DGRAY=2,COLOR_BLACK=3};
 enum FillAttrs  {RECT_EMPTY=0,RECT_FILLED=1};
 enum ExtAttrs   {A_CENTERED=0x40,A_SHADOWED=0x80};
 
@@ -270,8 +277,8 @@ enum ExtAttrs   {A_CENTERED=0x40,A_SHADOWED=0x80};
 
 
 //-----------------------------------------------------------------------------
-// given buffer variants of grayscale support routines
-// NOTE: graph functions modify active plane with PortSet() !!
+// Given buffer variants of grayscale support routines
+// NOTE: these functions modify the active plane using PortSet() !
 // 2.00 introduces new names, more compliant with the new names in TIGCCLIB.
 //-----------------------------------------------------------------------------
 void GrayClearScreen2B(void* lightplane,void* darkplane) __attribute__((__stkparm__));
@@ -355,15 +362,23 @@ void ScrollDown240_R(unsigned short* buffer,unsigned short lines) __attribute__(
 
 
 //-----------------------------------------------------------------------------
-// fast alternative functions for line drawing
-// FastDrawLine(_R) rewritten by ExtendeD and optimized a bit by Lionel.
+// fast alternative functions for line drawing (NOT CLIPPED)
+// FastDrawLine(_R) rewritten by ExtendeD and optimized a bit by Lionel. Added
+// GrayFastDrawLine(_R) in 2.00 Beta 5.
 // FastLine_... written by jackiechan.
+// FastTestLine_... modified from FastLine_Invert_R: BE checks both ends at
+// the same time, LE starts from the left end, RE from the right end. Added in
+// 2.00 Beta 5.
+// Missing: "ClipLine" and "(Gray)ClipAndDrawLine" (ClipLine + callback to a
+// (Gray)Fast*_R-compatible line function).
 //-----------------------------------------------------------------------------
 void FastDrawLine(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
 void FastDrawLine_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
+void GrayFastDrawLine2B_R(void* plane0 asm("%a0"),void *plane1 asm("%a1"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color) __attribute__((__stkparm__));
 
 void FastDrawHLine(void* plane,short x1,short x2,short y,short mode) __attribute__((__stkparm__));
 void FastDrawHLine_R(void* plane asm("a0"), short x1 asm("d0"), short x2 asm("d1"), short y asm("d2"),short mode) __attribute__((__stkparm__));
+void GrayFastDrawHLine2B_R(void *plane0 asm("%a0"),void *plane1 asm("%a1"),short x0 asm("%d0"),short x1 asm("%d1"),short y asm("%d2"),short color asm("%d3"));
 
 void FastDrawVLine(void* plane,short x,short y1,short y2,short mode) __attribute__((__stkparm__));
 void FastDrawVLine_R(void* plane asm("%a0"),short x asm("%d0"),short y1 asm("%d1"),short y2 asm("%d2"),short mode) __attribute__((__stkparm__));
@@ -372,7 +387,9 @@ void FastLine_Draw_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d
 void FastLine_Erase_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
 void FastLine_Invert_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
 
-void FastTestLine_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_BE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_LE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_RE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
 
 
 
@@ -423,12 +440,42 @@ void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter
 
 
 //-----------------------------------------------------------------------------
-// Functions for filled triangle drawing. No equivalent in AMS.
+// Functions for filled triangle drawing and special line drawing functions
+// fit for them. No equivalent in AMS. Added in 2.00 Beta 5.
 // Can you figure the code of the outlined triangle drawing functions ? ;-)
+//--------------------------------** WARNING **--------------------------------
+// Gray(Clip)FilledTriangle_R and all GrayDrawSpan require consecutive grayscale
+// planes (see the root of the ExtGraph documentation, paragraph about the
+// tilemap engine, for more information) so as not to use too many registers,
+// which makes the algorithm used less efficient.
+// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
+//--------------------------------** WARNING **--------------------------------
+// All DrawSpan are clipped.
+// The difference between FilledTriangle_R and ClipFilledTriangle_R, and their
+// grayscale versions, is currently only a shift count. Higher shift counts
+// give better-looking triangles (smaller accumulated errors due to round-down
+// when dividing), but they are more prone to numerical overflows, which mess
+// up the entire triangle. Compare
+// FilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);
+// and
+// ClipFilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);
+// to see both problems.
+// Does anyone have an algorithm which would be more or even slightly less
+// efficient, and better-looking ?
 //-----------------------------------------------------------------------------
-void ClipFilledTriangle_DRAW_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
-void ClipFilledTriangle_ERASE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
-void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
+void FilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0")) asm("%a2"));
+void ClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0")) asm("%a2"));
+void DrawSpan_OR_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
+void DrawSpan_XOR_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
+void DrawSpan_REVERSE_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
+
+void GrayFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0")) asm("%a2"));
+void GrayClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0")) asm("%a2"));
+void GrayDrawSpan_WHITE_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+void GrayDrawSpan_LGRAY_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+void GrayDrawSpan_DGRAY_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+void GrayDrawSpan_BLACK_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+void GrayDrawSpan_INVERT_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
 
 
 
@@ -441,7 +488,7 @@ void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x
 //
 // Two scaling routines optimized for fixed size and scale factor,
 // DoubleSpriteDimensions16x16_R is obviously designed for use in file explorers
-// to read the AMS native comments available starting from TIGCC 0.95.
+// to read the AMS native comments available in TIGCC 0.95+.
 //-----------------------------------------------------------------------------
 void ScaleSprite8_OR(const unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
 void ScaleSprite16_OR(const unsigned short *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
@@ -466,7 +513,14 @@ void DoubleSpriteDimensions16x16_R(const unsigned short* src asm("%a0"),unsigned
 //-----------------------------------------------------------------------------
 // plane scaling routines by Geoffrey Anneheim (240 -> 160), "GoldenCrystal"
 // (160 -> 240).
-// [routines slightly modified to fit the needs, very slightly optimized]
+// Two-plane versions do not make sense to me:
+// * they wouldn't be faster;
+// * they wouldn't help the plane switching process, they could probably make
+//   things worse.
+// * they would require more memory, since the B/W ones can reuse an intermediate
+//   buffer, but the two-plane ones cannot.
+// [routines slightly modified to fit the needs, optimized for speed and/or size]
+// Added in 2.00 beta 5.
 //-----------------------------------------------------------------------------
 void Scale1Plane240to160_R(void *src asm("%a0"),void *dest asm("%a1"));
 void Scale1Plane160to240_R(void *src asm("%a0"),void *dest asm("%a1"));
@@ -475,9 +529,19 @@ void Scale1Plane160to240_R(void *src asm("%a0"),void *dest asm("%a1"));
 
 //-----------------------------------------------------------------------------
 // fast copy routine for a complete screen (240x128 pixels == 3840 bytes)
+// Two-plane versions would have two of the same drawbacks as the two-plane
+// versions of plane scaling routines (the last one does not apply to plane
+// copy routines).
+// 160to240(NC) added in 2.00 Beta 5. NC stands for "Nearly Centered": the
+// upper corner of the 160x100 screen is drawn at (32,14+(100-height)/2)
+// instead of (40,14+(100-height)/2). This makes the copy process much
+// more efficient.
 //-----------------------------------------------------------------------------
 void FastCopyScreen(void* src,void* dest) __attribute__((__stkparm__));
 void FastCopyScreen_R(void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastCopyScreen160to240_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastCopyScreen160to240NC_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
+
 
 
 
@@ -645,7 +709,7 @@ void ClipSpriteX8_XOR_R(register short x asm("%d0"), register short y asm("%d1")
 //-----------------------------------------------------------------------------
 // fast alternative functions for SpriteX() functions: AND, OR, XOR.
 // fast additional sprite functions: BLIT, RPLC (BLIT with hard-coded white
-// blitmask), MASK/SMASK, TRANB/TRAND/TRANL/TRANW (transparencies).
+// blitmask), MASK/SMASK, TRANB/TRANW (transparencies).
 //-----------------------------------------------------------------------------
 void GraySprite8_AND(short x,short y,short h,const unsigned char* sprite1,const unsigned char* sprite2,void* dest1,void* dest2) __attribute__((__stkparm__));
 void GraySprite8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -733,7 +797,7 @@ void GraySpriteX8_XOR(short x,short y,short h,const unsigned char* sprite1,const
 //-----------------------------------------------------------------------------
 // fast alternative functions for SpriteX() functions: AND, OR, XOR.
 // fast additional sprite functions: BLIT, RPLC (BLIT with hard-coded white
-// blitmask), MASK, TRANB/TRAND/TRANL/TRANW (transparencies).
+// blitmask), MASK, TRANB/TRANW (transparencies).
 //-----------------------------------------------------------------------------
 void GrayClipSprite8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,unsigned char maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -781,6 +845,9 @@ void GrayClipSprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%
 // * MASK: M/L/D or M/D/L (depending on the convention you use for dest0 and
 //   dest1, usually LIGHT_PLANE and DARK_PLANE respectively, but you can do
 //   otherwise), mask is applied to both planes.
+//
+// With some amount of work, depending on your knowledge of assembly, you
+// can make other TRAND/L routines from GrayClipISprite16_TRAND/L_R.
 //
 // As you can guess, GrayClipISpriteX16_MASK_R draws an interlaced masked
 // sprite whose width is multiple of 16 pixels, with the "interlacement size"
@@ -980,7 +1047,11 @@ void GrayShadowPlanesTo_R(void *src0 asm("%a0"),void *src1 asm("%a1"),void *dest
 
 void FastFillScreen_R(void *plane asm("%a0"));
 void FastClearScreen_R(void *plane asm("%a0"));
+// Fills (len-len%4) bytes of plane with LFSR-generated garbage, initialized with seed. Less
+// random but two orders of magnitude faster than using other pseudo-random generators like
+// twice the number of writes of random(RAND_MAX)+random(RAND_MAX).
 void FillScreenWithGarbage_R(unsigned long seed asm("%d0"),unsigned short len asm("%d1"), void *plane asm("%a0"));
+
 
 
 //-----------------------------------------------------------------------------
@@ -1019,7 +1090,7 @@ void CreateISpriteShadow32_R(short height asm("%d0"),const unsigned long* src as
 // Gray(Glip)FastGetBkgrnd32_R requires dest being at least 12*h+6 bytes long.
 //
 // Special thanks go to Julien Richard-Foy: he needed such routines for one
-// of his own projects. Mine were not exactly what he was looking for, and
+// of his own projects. Mine were not exactly what he was looking for, but
 // his idea of storing the offset instead of recomputing everything from the
 // parameters is great. I went further, storing as well the x coordinate (not
 // necessarily anded with 15) and the offset from start of plane and the
@@ -1045,13 +1116,15 @@ void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"),void *dest1 asm
 // Tilemap Engine.
 //-----------------------------------------------------------------------------
 // See tilemap.h.
-// NOTE1: the API was somewhat reduced by Julien compared to that of previous
-// versions. The most useless functions were removed, which I did later for
-// (I)SHADOW(2) functions in extgraph.h and extgraph.a. Beta 4 and later
-// reflect that change.
-// NOTE2: ExtGraph 2.00 Beta 4 is still incompatible with the TIGCCLIB
+// NOTE1: the API was somewhat changed by Julien between the versions. New
+// functions were added, but the most useless ones were removed, because they
+// were a maintenance burden. I did the same later for (I)SHADOW(2) functions
+// in extgraph.h and extgraph.a. Beta 4 and later reflect the changes in the
+// tilemap engine.
+// NOTE2: ExtGraph 2.00 Beta 5 is still incompatible with the official TIGCCLIB
 // grayscale doublebuffering support, because the TIGCCLIB grayscale support
-// does not allocate both planes in the same block of memory on HW1.
+// does not allocate both planes consecutively on HW1), _BUT_ there is a fork.
+// Read the root of the ExtGraph documentation for more information.
 
 
 
@@ -1230,15 +1303,17 @@ typedef struct {
 #endif
 
 //#############################################################################
-// Revision History
+// Revision History 
 //#############################################################################
 //
-// $Log: extgraph.h,v $
-// Revision 2.00
 // Huge changes for v2.00 (rewrites, internal organization of library...).
+// No more using CVS, but using online SVN starting from 2.00 Beta 5.
 // The complete changelog is in the documentation and will stay there.
 //
+// -- ExtGraph 2.xx --
 //
+//
+// $Log: extgraph.h,v $
 //
 // Revision 1.13  2002/05/22 09:19:20  tnussb
 // for TIGCC versions greater than 0.93 all functions are declared with

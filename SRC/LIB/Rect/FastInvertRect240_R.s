@@ -8,6 +8,7 @@ FastInvertRect240_R:
     lsl.w    #4,%d2
     sub.w    %d0,%d2
     adda.w   %d2,%a0
+    bra.s    1f
 0:
     not.l    (%a0)+
     not.l    (%a0)+
@@ -17,5 +18,6 @@ FastInvertRect240_R:
     not.l    (%a0)+
     not.l    (%a0)+
     not.w    (%a0)+
+1:
     dbf      %d1,0b
     rts

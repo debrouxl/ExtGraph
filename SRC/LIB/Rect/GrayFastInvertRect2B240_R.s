@@ -9,13 +9,15 @@ GrayFastInvertRect2B240_R:
     sub.w    %d0,%d2
     adda.w   %d2,%a0
     adda.w   %d2,%a1
+    bra.s    1f
 0:
     moveq    #7-1,%d2
-1:
+2:
     not.l    (%a0)+
     not.l    (%a1)+
-    dbf      %d2,1b
+    dbf      %d2,2b
     not.l    (%a1)+
     not.w    (%a1)+
+1:
     dbf      %d1,0b
     rts

@@ -9,6 +9,7 @@ GrayFastInvertRect2B160_R:
     sub.w    %d0,%d2
     adda.w   %d2,%a0
     adda.w   %d2,%a1
+    bra.s    1f
 0:
     not.l    (%a0)+
     not.l    (%a1)+
@@ -22,5 +23,6 @@ GrayFastInvertRect2B160_R:
     not.l    (%a1)
     lea      14(%a0),%a0
     lea      14(%a1),%a1
+1:
     dbf      %d1,0b
     rts

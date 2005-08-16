@@ -25,7 +25,7 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <blockquote>
 <table border=1>
 <tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
-<tr><td>2.00 Beta 5</td><td>xx/xx/200x</td><td>Fixed silly bugs on pixel macros (yes, once more !).
+<tr><td>2.00 Beta 5</td><td>xx/08/2005</td><td>Fixed silly bugs on pixel macros (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>
 <tr><td>           </td><td>          </td><td>Restructured the entire documentation, so that it
@@ -35,43 +35,74 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         documentation is following the way started by the tilemap
                                         engine documentation - which is much smaller.</td></tr>
 <tr><td>           </td><td>          </td><td>updated the documentation, made the HTML code cleaner
-                                        using Firefox plugin HTML Validator. Thanks to my schoolmate
-                                        Yoann for making me aware a while ago that the HTML code I
-                                        used and made was poor.</td></tr>
-<tr><td>           </td><td>          </td><td>fixed side clipping of GrayClipISprite8_MASK_R,
+                                        using Firefox plugin HTML Validator. My schoolmate Yoann made
+                                        me aware a while ago that the HTML code I used and made was
+                                        poor (but at least, it uses CSS !).</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed side clipping of GrayClipISprite8_MASK_R,
                                         thanks to Jean-François Geyelin for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Added new TestCollide routines (request from TIGCC/TICT
                                         board user "lachprog"), optimized existing ones.</td></tr>
-<tr><td>           </td><td>          </td><td>Added plane scaling routines. They're slow and their
-                                        effect is rather ugly (especially when there's text), but
-                                        some use them...</td></tr>
+<tr><td>           </td><td>          </td><td>Added plane scaling routines. As all such routines,
+                                        they eat up a lot of CPU time, they are rather large due to
+                                        unrolled loops and/or lookup tables, they require doubling
+                                        the space allocated to planes, their effect is more or less
+                                        ugly (especially when there's text). Some games are more
+                                        playable on 89 using that technique, but others should be
+                                        adapted to the other screen size in order not to rely on
+                                        those rather slow routines.</td></tr>
 <tr><td>           </td><td>          </td><td>Optimized and added single sprite -> 2 plane routines.
                                         Thanks to David Randall (Ranman) for the contribution and part
                                         of the coding.</td></tr>
-<tr><td>           </td><td>          </td><td>Switched to GCC 4.x, which required small changes in
-                                        the build batchfile (which you should hardly ever use anyway).</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized extgraph.h for size: removed many useless
+                                        "extern" and "register" keywords, saving ~12 KB.</td></tr>
+<tr><td>           </td><td>          </td><td>Switched to TIGCC 0.96 and its GCC 4.x, which required
+                                        small changes in the build batchfile (which you should hardly
+                                        ever use anyway).</td></tr>
 <tr><td>           </td><td>          </td><td>Switched to a more general and powerful cleanup script
                                         which uses GNU tools under an Unix shell. Requires Cygwin
                                         or MSYS (untested) on Win32.</td></tr>
+<tr><td>           </td><td>          </td><td>Added a fork of the TIGCCLIB grayscale routine, which
+                                        can run the tilemap engine, and a mention of Grib. See
+                                        <a href="../extgraph.html">the root of this documentation</a>
+                                        for more information.</td></tr>
 <tr><td>           </td><td>          </td><td>Added GrayClipISpriteX16_MASK_R, based on Genlib's
-                                        put_masked_big_sprite, made by Julien RF.</td></tr>
-<tr><td>           </td><td>          </td><td>Added three ClipSpriteX8 routines. The original code was
-                                        made by Geoffrey Anneheim (geogeo), I significantly optimized it.</td></tr>
+                                        put_masked_big_sprite, made by Julien RF; made several other
+                                        X16 routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Added three ClipSpriteX8 routines, based on code by
+                                        Geoffrey Anneheim (geogeo), which I significantly optimized;
+                                        it.</td></tr>
 <tr><td>           </td><td>          </td><td>Created GrayClipISprite16_TRAND/L_R as an example of
                                         TRAND/L routines. The readme used to be wrong about making
-                                        TRAND/L from TRANB/W, and making TRAND/M was not so easy.</td></tr>
+                                        TRAND/L from TRANB/W, and making TRAND/L was not so easy.</td></tr>
 <tr><td>           </td><td>          </td><td>On 12/08/2005, created a SVN repository for ExtGraph at
-                                        http://opensvn.csie.org/ExtGraph. Anonymous checkout allowed.</td></tr>
+                                        <a href="http://opensvn.csie.org/ExtGraph">http://opensvn.csie.org/ExtGraph</a>.
+                                        Anonymous checkout allowed, but recommended only to check if
+                                        particular bugs were fixed since the latest beta/release.
+                                        Indeed, the trunk may contain broken things or break the API
+                                        without notice (and it did multiple times in the few days
+                                        before this beta !).</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed GrayClip(I)Sprite32_MASK_R. Thanks to Olivier
                                         Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed *SpriteX8Get(_R), they used to crash the
                                         calculator when bytewidth was &lt; 2. Thanks to Geoffrey
                                         Anneheim (geogeo) for the report.</td></tr>
-<tr><td>           </td><td>          </td><td>Fixed a long-hidden bug on FastFillRect in A_REVERSE
+<tr><td>           </td><td>          </td><td>Fixed a long-hidden bug on FastFillRect(_R) in A_REVERSE
                                         mode. Thanks to Olivier Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Tested in unusual conditions (low bytewidths,
-                                        both dimensions odd) and eventually fixed some
+                                        both dimensions odd) and eventually fixed
                                         (Clip)SpriteX8(_R) routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Changed several function names, only rarely-used ones.</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed a number of simple rectangle functions.</td></tr>
+<tr><td>           </td><td>          </td><td>Added FastTestLine_*_R.</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized FastLine_*_R for both size and speed.</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed FastDrawLine(_R) in A_XOR mode and FastLine_Invert_R:
+                                        there was often a problem at the middle of the line.</td></tr>
+<tr><td>           </td><td>          </td><td>Added PixCollide*_R routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Added (Gray)(Clip)FillTriangle_R and callbacks for them.
+                                        The architecture (routine + callback) is close to that of
+                                        Genlib, with good reason. The grayscale versions require
+                                        modified grayscale routines (see an item above).</td></tr>
+<tr><td>           </td><td>          </td><td>Added GrayFastDrawLine_R.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>removed (I)SHADOW(2) routines: they are nearly
                                         useless thanks to Create(I)Sprite(I)Shadow and OR routines
                                         (which require a small additional amount of space) and

@@ -17,6 +17,8 @@
 short* x = NULL;
 short* y = NULL;
 
+void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
+
 //=============================================================================
 // allocate and initialize global points arrays with "random" values
 //=============================================================================
@@ -32,7 +34,7 @@ static inline short InitArrays(void) {
     px = &x[0];
     py = &y[0];
     for (i=0;i<RANDOM_TRIANGLES*3;i++) {
-       *px++ = (random(150)+5);
+       *px++ = random(150)+5;
        *py++ = random(90)+5;
     }
     return 1;
@@ -107,7 +109,7 @@ void _main(void) {
     ngetchx();
 */
 
-
+/*
     // Grayscale filled rectangles.
     if(!GrayOn()) goto end;
 
@@ -176,7 +178,7 @@ void _main(void) {
 
     GrayOff();
 
-
+*/
     // B/W triangles.
     ClrScr();
     if (!InitArrays()) {
@@ -188,7 +190,7 @@ void _main(void) {
     OSRegisterTimer(USER_TIMER,100000*20UL);
     for (j=0;j<NR_LOOPS;j++) {
         for (i=0;i<RANDOM_TRIANGLES*3;i+=3) {
-            ClipFilledTriangle_INVERT_R(x[0+i],y[0+i],x[1+i],y[1+i],x[2+i],y[2+i],LCD_MEM);
+            FilledTriangle_R(x[0+i],y[0+i],x[1+i],y[1+i],x[2+i],y[2+i],LCD_MEM,DrawSpan_XOR_R);
         }
     }
     sprintf(tmpstr,"opt: %lu AI5 ticks for 10000 triangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));

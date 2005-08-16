@@ -10,25 +10,6 @@
 #define debug_printf _rom_call(short,(const char*,...),479)
 #define debug_printf_enabled (*((unsigned char *)(_rom_call_addr(47A))))
 
-// 205modif-mod pour tester TICT-Explorer: dernière instruction avant le programme kernel-based:
-// jsr 0(a5,d0.l) à 3BBD8.
-// 0x34.l (launch) = 3C228.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #include <tigcclib.h>         // Include All Header Files
 #include "extgraph.h"
@@ -637,37 +618,6 @@ unsigned long reverselongword(register unsigned long val asm("%d0"))
 }
 */
 
-
-
-extern void Scale1Plane240to160_R(register void *src asm("%a0"),register void *dest asm("%a1"));
-extern void Scale1Plane160to240_R(register void *src asm("%a0"),register void *dest asm("%a1"));
-extern unsigned short sc1p160x240_t[256];
-
-extern void screen_stretch(void *dst asm("%a0"), const void *src asm("%a1"));
-
-// Le résultat de 160->240->160 est meilleur, mais le résultat de 240->160->240 est moins bon.
-// Fait grosses strings.
-//unsigned char t[4] = {0b000,0b011,0b110,0b111};
-// Le résultat de 160->240->160 est moins bon, mais le résultat de 240->160->240 est meilleur.
-// Fait strings coupées...
-////unsigned char t[4] = {0b000,0b001,0b100,0b111};
-/*
-void gen_table(void) {
-    unsigned short i = 0, res = 0;
-    unsigned short *ptr = sc1p160x240_t;
-    for (i = 0; i < 256; i++) {
-        res = t[(i>>6)&3];
-        res <<= 3;
-        res |= t[(i>>4)&3];
-        res <<= 3;
-        res |= t[(i>>2)&3];
-        res <<= 3;
-        res |= t[(i>>0)&3];
-        *ptr++ = res << 4;
-    }
-}
-*/
-
 /*
 typedef struct scoord {
     short x_new;
@@ -699,49 +649,6 @@ struct scoord *p = &a;
    (((EXT_SHORTABS((x1)-(x0)))<(w)) && ((EXT_SHORTABS((y1)-(y0)))<(min((h0),(h1)))))
 
 //extern void UpsideDownGrayClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask0,unsigned short *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));
-
-/*
-PixCollide8:
-        sub.w %d0,%d1
-        blt pc8_rts
-        moveq #7,%d0
-        sub.w %d1,%d0
-        blt pc8_rts
-        sub.w %d3,%d2
-        blt pc8_rts
-        cmp.w %d4,%d2
-        bge pc8_rts
-        btst.b %d0,(%a0, %d1.w)
-        seq.b %d0
-        rts
-pc8_rts:
-        clr.b  d0
-*/
-/*
-     short PixCollide8(register short x0 asm("%d1")   ,
-register short y0 asm("%d0")   , register short x1
-asm("%d2")   , register short y1 asm("%d3")   ,
-register short height asm("%d4")   , register unsigned
-char* data1 asm("%a0")
-)__attribute__((__regparm__(6)));
-PixCollide8:
-sub.w %d2,%d1
-blt pc8_rts
-moveq #7,%d2
-sub.w %d1,%d2
-blt pc8_rts
-sub.w %d3,%d0
-blt pc8_rts
-cmp.w %d4,%d0
-bge pc8_rts
-btst.b %d2,(%a0, %d0.w)
-sne.b %d0
-ext.w %d0
-rts
-pc8_rts:
-clr.w %d0
-rts
-*/
 
 /*
 // fait bien un zoom, mais utilise un scaling d'un facteur
@@ -840,7 +747,6 @@ unsigned long animations_mask[1][5][32] =
 }
 };
 */
-
 
 
 // Main Function
@@ -1059,19 +965,114 @@ GrayOn();
 ngetchx();
 GrayOff();
 */
+/*
+GrayOn();
+FillScreenWithGarbage_R(1234567891,LCD_SIZE,GrayGetPlane(LIGHT_PLANE));
+//FillScreenWithGarbage_R(1987654321,LCD_SIZE,GrayGetPlane(DARK_PLANE));
+GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),0,0,0,0,COLOR_WHITE);
+GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),0,0,159,99,COLOR_WHITE);
+//ngetchx();
+GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),0,99,159,0,COLOR_LGRAY);
+//ngetchx();
+GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),159,49,0,0,COLOR_DGRAY);
+//ngetchx();
+//FastDrawLine_R(GrayGetPlane(DARK_PLANE),159,0,79,99,A_NORMAL);
+//ngetchx();
+GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),159,0,79,99,COLOR_BLACK);
+ngetchx();
+GrayOff();
+*/
+/*
+ClrScr();
+FilledTriangle_R(0,0,239,63,239,127,LCD_MEM,DrawSpan_OR_R);
+ngetchx();
+ClrScr();
+FilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);
+ngetchx();
+ClrScr();
+ClipFilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);
+ngetchx();
+ClrScr();
+ClipFilledTriangle_R(-50,0,159,49,249,99,LCD_MEM,DrawSpan_OR_R);
+ngetchx();
+ClrScr();
+ClipFilledTriangle_R(0,0,249,49,159,99,LCD_MEM,DrawSpan_OR_R);
+ngetchx();
+*/
+/*ClipFilledTriangle_R(-10,0,249,49,159,99,LCD_MEM,DrawSpan_REVERSE_R);
+ngetchx();
+ClipFilledTriangle_R(-10,0,249,49,159,99,LCD_MEM,DrawSpan_XOR_R);
+ngetchx();
+ClipFilledTriangle_R(-10,0,249,49,159,99,LCD_MEM,DrawSpan_XOR_R);
+ngetchx();*/
 
+/*
+//OSFastArrows = 2;
 // TODO: FIX these routines !
-/*ClrScr();
+ClrScr();
 for (i = 159; i >= 0; i--) {
-FastDrawLine_R(LCD_MEM,0,0,i,99,A_XOR);
+//FastDrawLine_R(LCD_MEM,0,0,i,99,A_XOR);
 //ngetchx();
 FastLine_Invert_R(LCD_MEM,0,0,i,99);
+ngetchx();
+FastLine_Invert_R(LCD_MEM,0,0,i,99);
+//FastDrawLine_R(LCD_MEM,0,0,i,99,A_XOR);
+}
+
+for (i = 99; i >= 0; i--) {
+//FastDrawLine_R(LCD_MEM,0,0,159,i,A_XOR);
 //ngetchx();
-}*/
+FastLine_Invert_R(LCD_MEM,0,0,159,i);
+ngetchx();
+FastLine_Invert_R(LCD_MEM,0,0,159,i);
+//FastDrawLine_R(LCD_MEM,0,0,159,i,A_XOR);
+}
+*/
+/*
+// With the home screen on 92+/V200:
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,0,0,1,1)+'0'); // 0
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,0,0,1,1)+'0'); // 0
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,0,0,1,1)+'0'); // 0
 
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,0,0,2,2)+'0'); // 0
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,0,0,2,2)+'0'); // 0
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,0,0,2,2)+'0'); // 0
 
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,0,0,3,3)+'0'); // 1
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,0,0,3,3)+'0'); // 1
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,0,0,3,3)+'0'); // 1
 
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,0,0,3,4)+'0'); // 1
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,0,0,3,4)+'0'); // 1
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,0,0,3,4)+'0'); // 1
 
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,0,0,3,0)+'0'); // 1
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,0,0,3,0)+'0'); // 1
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,0,0,3,0)+'0'); // 1
+
+printf("%c", !!FastTestLine_LE_R(LCD_MEM,3,0,0,3)+'0'); // 1
+printf("%c", !!FastTestLine_RE_R(LCD_MEM,3,0,0,3)+'0'); // 1
+printf("%c ",!!FastTestLine_BE_R(LCD_MEM,3,0,0,3)+'0'); // 1
+
+ngetchx();
+*/
+/*
+FastLine_Draw_R(LCD_MEM,0,0,159,99);
+FastLine_Draw_R(LCD_MEM,0,99,159,0);
+FastLine_Draw_R(LCD_MEM,0,0,79,99);
+FastLine_Draw_R(LCD_MEM,0,99,79,0);
+ngetchx();
+FastLine_Erase_R(LCD_MEM,0,0,159,99);
+FastLine_Erase_R(LCD_MEM,0,99,159,0);
+FastLine_Erase_R(LCD_MEM,0,0,79,99);
+FastLine_Erase_R(LCD_MEM,0,99,79,0);
+ngetchx();
+FastLine_Invert_R(LCD_MEM,0,0,159,99);
+FastLine_Invert_R(LCD_MEM,0,99,159,0);
+FastLine_Invert_R(LCD_MEM,0,0,79,99);
+FastLine_Invert_R(LCD_MEM,0,99,79,0);
+ngetchx();
+*/
 /*
 // Simple test unrelated to ExtGraph: creating files with strange name and extension !
 // As a side effect, TI-BASIC command DelVar does not want to delete this variable, throwing various

@@ -6,7 +6,6 @@
 | on the stack. plane goes in a0, x1 in d0, x2 in d1, y in d2, mode on the
 | stack.
 
-
 .text
 .even
 0:

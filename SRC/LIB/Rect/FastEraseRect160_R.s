@@ -9,6 +9,7 @@ FastEraseRect160_R:
     sub.w    %d0,%d2
     adda.w   %d2,%a0
     moveq    #0,%d0
+    bra.s    1f
 0:
     move.l   %d0,(%a0)+
     move.l   %d0,(%a0)+
@@ -16,5 +17,6 @@ FastEraseRect160_R:
     move.l   %d0,(%a0)+
     move.l   %d0,(%a0)
     lea      14(%a0),%a0
+1:
     dbf      %d1,0b
     rts

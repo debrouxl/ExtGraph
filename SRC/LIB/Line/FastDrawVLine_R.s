@@ -3,20 +3,20 @@
 
 |------------------------------------------------------------------------------
 | This routine uses a very dirty trick to combine 3 loops into one.
-| This trick is called in-memory-patching. Normally each loop has
-| to execute one of the following ASM instructions:
+| This trick is called in-memory-patching / self-modifying code.
+| Normally each loop has to execute one of the following ASM instructions:
 |
-| bset %d1,(%a0) ... 0x03d0 (0x600 - 0x30)
-| bclr %d1,(%a0) ... 0x0390 (0x600 - 0x70)
-| bchg %d1,(%a0) ... 0x0350 (0x500 + 0x50)
+| bset %d1,(%a0) ... 0x03d0 (0x400 - 0x30)
+| bclr %d1,(%a0) ... 0x0390 (0x400 - 0x70)
+| bchg %d1,(%a0) ... 0x0350 (0x300 + 0x50)
 |
 | As you may note the opcodes are almost identical. There is just
 | one byte different (the second byte) and depending on the given mode
 | the routine will set this byte BEFORE entering the loop.
 |------------------------------------------------------------------------------
 |
-| NOTE: The given mode will not be checked. The routine will assume that mode
-|       is A_NORMAL = A_REPLACE = A_OR if it is neither A_REVERSE nor A_XOR.
+| NOTE: The given mode will not be fully checked. The routine will assume that
+|       mode is A_NORMAL = A_REPLACE = A_OR if it is neither A_REVERSE nor A_XOR.
 
 
 .text

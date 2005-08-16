@@ -1,14 +1,14 @@
 | FastLine_Erase_R by Julien Richard-Foy (jackiechan).
 | Converted to GNU as ASM by Lionel Debroux.
 |
-| C prototype: void FastLine_Erase_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
+| C prototype: void FastLine_Erase_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"));
 
 .text
 .globl FastLine_Erase_R
 .even
 
 FastLine_Erase_R:
-	movem.l	%d3-%d5/%a2,-(%sp)
+	movem.l	%d3-%d6/%a2,-(%sp)
 
 	cmp.w	%d0,%d2
 	bhi.s	2f
@@ -52,22 +52,17 @@ FastLine_Erase_R:
 	bset.l	%d4,%d1	| d1 = msk2
 	not.b   %d1
 
-	moveq.l	#30,%d4
-	moveq.l	#-30,%d5
+	moveq.l	#30,%d6
 
 	tst.w	%d3
 	bpl.s	DYPos_FL_E_R
 
-	exg.l	%d4,%d5
+	neg.w   %d6
 	neg.w	%d3
 
 DYPos_FL_E_R:
 	cmp.w	%d2,%d3	| dx < dy ?
 	bhi.s	DY_FL_E_R
-
-	lea     IncLineX_FL_E_R+2(%pc),%a2
-	move.w	%d4,(%a2)
-	move.w	%d5,4(%a2)
 
 	move.w	%d2,%d4	| d4 = dx
 	lsr.w	#1,%d4
@@ -98,23 +93,18 @@ Msk2OkX_FL_E_R:
 	ble.s	NoIncLineX_FL_E_R
 
 	sub.w	%d2,%d4	| e += dx
-IncLineX_FL_E_R:
-	lea.l	30(%a0),%a0
-	lea.l	-30(%a1),%a1
+	adda.w  %d6,%a0
+	suba.w  %d6,%a1
 
 NoIncLineX_FL_E_R:
 	dbf	%d5,XLoop_FL_E_R
 OnePix_FL_E_R:
 	bclr.b	%d0,(%a0)
 
-	movem.l	(%sp)+,%d3-%d5/%a2
+	movem.l	(%sp)+,%d3-%d6/%a2
 	rts
 
 DY_FL_E_R:
-	lea     IncLineY_FL_E_R+2(%pc),%a2
-	move.w	%d4,(%a2)
-	move.w	%d5,4(%a2)
-
 	move.w	%d3,%d4
 	lsr.w	#1,%d4
 	neg.w	%d4	| d4 = -dy/2 = e
@@ -127,9 +117,8 @@ YLoop_FL_E_R:
 	bclr.b	%d0,(%a0)
 	and.b	%d1,(%a1)
 
-IncLineY_FL_E_R:
-	lea.l	30(%a0),%a0
-	lea.l	-30(%a1),%a1
+	adda.w  %d6,%a0
+	suba.w  %d6,%a1
 
 	add.w	%d2,%d4	| e += dx
 	ble.s	NoIncColY_FL_E_R
@@ -150,5 +139,5 @@ NoIncColY_FL_E_R:
 	dbf	%d5,YLoop_FL_E_R
 	bclr.b	%d0,(%a0)
 
-	movem.l	(%sp)+,%d3-%d5/%a2
+	movem.l	(%sp)+,%d3-%d6/%a2
 	rts

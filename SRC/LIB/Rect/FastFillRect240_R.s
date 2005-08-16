@@ -9,6 +9,7 @@ FastFillRect240_R:
     sub.w    %d0,%d2
     adda.w   %d2,%a0
     moveq    #-1,%d0
+    bra.s    1f
 0:
     move.l   %d0,(%a0)+
     move.l   %d0,(%a0)+
@@ -18,5 +19,6 @@ FastFillRect240_R:
     move.l   %d0,(%a0)+
     move.l   %d0,(%a0)+
     move.w   %d0,(%a0)+
+1:
     dbf      %d1,0b
     rts

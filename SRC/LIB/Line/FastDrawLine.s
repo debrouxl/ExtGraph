@@ -3,15 +3,14 @@
 |
 | C prototype: void FastDrawLine (void* plane,unsigned short x1,unsigned short y1,unsigned short x2,unsigned short y2,unsigned short mode) __attribute__ ((__stkparm__));
 
-
 .text
 .globl FastDrawLine
 .even
 
 FastDrawLine:
-    movem.l  %d3/%d4/%d6/%d7/%a2,-(%sp)
+    movem.l  %d3/%d4/%d5/%d6/%d7/%a2,-(%sp)
     
-    lea      4+20+14(%sp),%a0
+    lea      4+24+14(%sp),%a0
     move.w   -(%a0),%d4                     | mode
     move.w   -(%a0),%d3                     | y2
     move.w   -(%a0),%d2                     | x2
@@ -25,15 +24,15 @@ FastDrawLine:
     exg      %d1,%d3
 2:                                          | -> dx will be positive.
 
-    cmp.w   0f(%pc),%d4
-    beq.s   __GetMasks_FDL__
+    cmp.w    0f(%pc),%d4
+    beq.s    __GetMasks_FDL__
 | Initialize the code according to the mode.
-    lea     2f(%pc),%a1
-    lea     1f(%pc),%a2
+    lea      2f(%pc),%a1
+    lea      1f(%pc),%a2
     tst.w    %d4
-    beq.s   __Patch_code_FDL__              | A_REVERSE.
+    beq.s    __Patch_code_FDL__              | A_REVERSE.
     subq.w   #2,%d4
-    beq.s   __NextAttrPatchs_FDL__          | A_XOR, jump once in the table.
+    beq.s    __NextAttrPatchs_FDL__          | A_XOR, jump once in the table.
 | Other mode (A_NORMAL, A_REPLACE, A_OR), jump twice in the table.
     addq.l   #2,%a2
 __NextAttrPatchs_FDL__:
@@ -54,7 +53,7 @@ __Patch_code_FDL__:
     move.b   %d4,__PutInstr1_FDL__+12-2f(%a1)   | bcs.s
 
 __GetMasks_FDL__:
-| Find the mask and the address of the left point.
+| Find the mask and the address of the leftmost point.
     move.l   %a0,%a1
     move.w   %d1,%d4
     add.w    %d4,%d4
@@ -72,7 +71,7 @@ __MaskInstr1_FDL__:
     moveq    #-128,%d6                      | 0b10000000
     ror.b    %d4,%d6                        | mask
 
-|Find the mask and the address of the right point.	
+|Find the mask and the address of the rightmost point.	
     move.w   %d3,%d4
     add.w    %d4,%d4
     move.w   %d4,%d7                        | y2*2
@@ -89,7 +88,7 @@ __MaskInstr2_FDL__:
     moveq    #-128,%d7                      | 0b10000000
     ror.b    %d4,%d7                        | mask
 
-    tst.w    4+20+12(%sp)                   | mode
+    tst.w    4+24+12(%sp)                   | mode
     bne.s    __No_invert_masks_FDL__
     not.b    %d6
     not.b    %d7
@@ -129,6 +128,7 @@ __FirstDiagonal_FDL__:
     lsr.w    #1,%d1                         | dx/2
     subq.w   #1,%d0                         | adjust the dbf for the problem
     lsr.w    #1,%d0                         | with the center of the line.
+    scs.b    %d5
     sub.w    %d2,%d1                        | P(0) = dx/2-dx = -dx/2
 
 | Now we have :
@@ -139,7 +139,7 @@ __FirstDiagonal_FDL__:
 | d4.w : 30 or -30, if the line goes up or goes down (delta_y).
 | d6.b : mask for the left point \ (X1,Y1).
 | d7.b : mask for the right point / (X2,Y2).
-| a0.l : address of of the left point \.
+| a0.l : address of the left point \.
 | a1.l : address of the right point /.
 
 2:
@@ -165,12 +165,12 @@ __SameY_FDL__:
 | Prevent the center from being drawn twice.
 | This is a problem only in A_XOR mode.
 3:
-    lsr.w    #1,%d2
+    tst.b    %d5
     beq.s    4f
 __AttrCenter1_FDL__:
     or.b     %d6,(%a0)                      | Draw the center only once.
 4:
-    movem.l  (%sp)+,%d3/%d4/%d6/%d7/%a2
+    movem.l  (%sp)+,%d3/%d4/%d5/%d6/%d7/%a2
     rts
 
 __ScanY_FDL__:                    | The roles of dx and dy are swapped.
@@ -180,6 +180,7 @@ __ScanY_FDL__:                    | The roles of dx and dy are swapped.
     lsr.w    #1,%d1
     subq.w   #1,%d0               | Adjust the dbf to correct the problem with
     lsr.w    #1,%d0               | center of the line.
+    scs.b    %d5
     sub.w    %d3,%d1                        |P(0) = dy/2-dy = -dy/2
 
     cmp.l    %a1,%a0

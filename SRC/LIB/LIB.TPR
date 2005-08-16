@@ -54,13 +54,11 @@ Save Screen=1
 Optimize ROM Calls=1
 
 [File Editing]
-Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\..\..\lib\extgraph.h
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\essais.c
 
 [Included Files]
 C File 1=essais.c
-GNU Assembler File 1=Misc\stretch\stretch.s
-GNU Assembler File 2=gray.s
+GNU Assembler File 1=gray.s
 Archive File 1=extgraph.a
 Header File 1=..\..\lib\extgraph.h
 Header File 2=..\..\lib\preshift.h
-Header File 3=Misc\stretch\splash.h

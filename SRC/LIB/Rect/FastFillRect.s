@@ -115,10 +115,9 @@ __end_p_FFR__:
 __no_p_FFR__:
     move.w   2f(%pc),%d5
     bne.s    __not_A_REVERSE_FFR__
-| Don't forget to invert the masks for A_REVERSE mode !
     not.w    %d0
     not.w    %d1
-    moveq    #0,%d5
+    moveq    #0,%d5 | or ext.l %d5
     bra.s    __How_long_is_the_line_FFR__
 __not_A_REVERSE_FFR__:
     moveq    #-1,%d5
@@ -129,7 +128,14 @@ __How_long_is_the_line_FFR__:
 | Instead of coding a complete and quite long block testing for mode and
 | writing to the plane accordingly, we can simply branch to __End_FFR__ after
 | doing the necessary operations. This is both faster and smaller...
+    tst.w    %d5
+    bne.s    __not_A_REVERSE_FFR_2__
+    or.w     %d0,%d1
+    bra.s    __short_line_FFR__
+| Don't forget to invert the masks for A_REVERSE mode !
+__not_A_REVERSE_FFR_2__:
     and.w    %d0,%d1
+__short_line_FFR__:
     move.w   %d3,%d4
     bra.s    __End_FFR__
 

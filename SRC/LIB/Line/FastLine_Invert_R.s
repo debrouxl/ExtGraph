@@ -1,14 +1,14 @@
 | FastLine_Invert_R by Julien Richard-Foy (jackiechan).
 | Converted to GNU as ASM by Lionel Debroux.
 |
-| C prototype: void FastLine_Invert_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
+| C prototype: void FastLine_Invert_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"));
 
 .text
 .globl FastLine_Invert_R
 .even
 
 FastLine_Invert_R:
-	movem.l	%d3-%d5/%a2,-(%sp)
+	movem.l	%d3-%d7/%a2,-(%sp)
 
 	cmp.w	%d0,%d2
 	bhi.s	2f
@@ -51,33 +51,29 @@ FastLine_Invert_R:
 	moveq.l	#0,%d1
 	bset.l	%d4,%d1	| d1 = msk2
 
-	moveq.l	#30,%d4
-	moveq.l	#-30,%d5
+	moveq.l	#30,%d6
 
 	tst.w	%d3
 	bpl.s	DYPos_FL_I_R
 
-	exg.l	%d4,%d5
+	neg.w   %d6
 	neg.w	%d3
 
 DYPos_FL_I_R:
 	cmp.w	%d2,%d3	| dx < dy ?
 	bhi.s	DY_FL_I_R
 
-	lea     IncLineX_FL_I_R+2(%pc),%a2
-	move.w	%d4,(%a2)
-	move.w	%d5,4(%a2)
-
 	move.w	%d2,%d4	| d4 = dx
 	lsr.w	#1,%d4
 	neg.w	%d4	| d4 = -dx/2 = e
 
 	move.w	%d2,%d5
-	beq.s	OnePix_FL_I_R
+	beq.s	3f
 	subq.w	#1,%d5
 	lsr.w	#1,%d5	| d5 = (dx - 1)/2 = l
+	scs.b   %d7
 
-XLoop_FL_I_R:
+2:
 	bchg.b	%d0,(%a0)
 	eor.b	%d1,(%a1)
 
@@ -97,27 +93,22 @@ Msk2OkX_FL_I_R:
 	ble.s	NoIncLineX_FL_I_R
 
 	sub.w	%d2,%d4	| e += dx
-IncLineX_FL_I_R:
-	lea.l	30(%a0),%a0
-	lea.l	-30(%a1),%a1
+	adda.w  %d6,%a0
+	suba.w  %d6,%a1
 
 NoIncLineX_FL_I_R:
-	dbf	%d5,XLoop_FL_I_R
+	dbf	%d5,2b
 | Prevent the center from being drawn twice.
 | This is a problem only in A_XOR mode.
-OnePix_FL_I_R:
-	lsr.w    #1,%d2
-	bne.s    __Draw_center_only_once_FL_I_R__
+3:
+	tst.b   %d7
+	beq.s    4f
 	bchg.b   %d0,(%a0)                      | Draw the center only once.
-__Draw_center_only_once_FL_I_R__:
-	movem.l	(%sp)+,%d3-%d5/%a2
+4:
+	movem.l	(%sp)+,%d3-%d7/%a2
 	rts
 
 DY_FL_I_R:
-	lea     IncLineY_FL_I_R+2(%pc),%a2
-	move.w	%d4,(%a2)
-	move.w	%d5,4(%a2)
-
 	move.w	%d3,%d4
 	lsr.w	#1,%d4
 	neg.w	%d4	| d4 = -dy/2 = e
@@ -125,14 +116,14 @@ DY_FL_I_R:
 	move.w	%d3,%d5
 	subq.w	#1,%d5
 	lsr.w	#1,%d5	| d5 = (dy - 1)/2 = l
+	scs.b   %d7
 
-YLoop_FL_I_R:
+2:
 	bchg.b	%d0,(%a0)
 	eor.b	%d1,(%a1)
 
-IncLineY_FL_I_R:
-	lea.l	30(%a0),%a0
-	lea.l	-30(%a1),%a1
+	adda.w  %d6,%a0
+	suba.w  %d6,%a1
 
 	add.w	%d2,%d4	| e += dx
 	ble.s	NoIncColY_FL_I_R
@@ -150,5 +141,5 @@ Msk1OkY_FL_I_R:
 	moveq.l	#1,%d1
 Msk2OkY_FL_I_R:
 NoIncColY_FL_I_R:
-	dbf	%d5,YLoop_FL_I_R
-	bra.s   OnePix_FL_I_R
+	dbf	%d5,2b
+	bra.s   3b

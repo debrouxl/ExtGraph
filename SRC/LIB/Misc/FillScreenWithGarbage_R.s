@@ -8,11 +8,12 @@ FillScreenWithGarbage_R:
     subq.w   #1,%d1 | adjust length.
 
 | 32-bit LFSR...
+    move.l   #0xA3000000,%d2
 0:
     move.l   %d0,(%a0)+
     lsr.l    #1,%d0
     bcc.s    1f
-    eori.l   #0xA3000000,%d0
+    eor.l    %d2,%d0
 1:
     dbf      %d1,0b
 

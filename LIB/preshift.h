@@ -5,26 +5,33 @@
 *
 *******************************************************************************
 *
-* ExtGraph is a compile-time library which contains speed optimized graphics
+* ExtGraph is a compile-time library which contains speed-optimized graphics
 * routines for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
 * (TI-68k calculators).
 *
-* NOTE: using ExtGraph 2.xx requires TIGCC 0.95 and newer.
-* Recompiling ExtGraph is currently not very easy for someone else, but
-* that's not a problem since ExtGraph can be used as is (extgraph.h +
-* tilemap.h + preshift.h + extgraph.a + tilemap.a); recompiling ExtGraph is
-* therefore neither necessary nor recommended.
+* NOTE: using ExtGraph 2.xx requires TIGCC 0.95 and newer (I'm nearly always
+* using the latest version myself).
+* ExtGraph (extgraph.h + tilemap.h + preshift.h + extgraph.a + tilemap.a) can
+* be used as is; recompiling ExtGraph is therefore neither necessary nor
+* recommended. Not to mention that it is not a trivial task, since it requires
+* GNU binutil m68k-coff-ar, which was removed from TIGCC a long time ago. But
+* only contributors might find it an annoyance (they won't necessarily
+* recompile ExtGraph completely), and they can compile the binutil by
+* themselves. Nevertheless, I'll soon provide the binaries I can compile
+* (PC/Win32, PC/Linux) in the ExtGraph repository. I'll add the Mac/MacOS X
+* one if someone provides me it.
 *
 * Please use as few __stkparm__ functions as possible in your programs: most
-* functions have __regparm__ versions (or a mix of __regparm__ and __stkparm__),
-* which are themselves smaller and faster, and lead to smaller and faster code !
+* functions have __regparm__ versions (or a mix of __regparm__ and __stkparm__:
+* excess parameters are passed on the stack), which are themselves smaller and
+* faster, and lead to smaller and faster code !
 *
 *
 * library maintained, improved and extended by:
 *                    Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)
 *                    Lionel Debroux     (lionel_debroux@yahoo.fr)
 *                    Julien Richard-Foy (julien.rf@wanadoo.fr)
-*                    various contributors.
+*                    various contributors (Geoffrey Anneheim, etc.).
 *
 *
 *******************************************************************************

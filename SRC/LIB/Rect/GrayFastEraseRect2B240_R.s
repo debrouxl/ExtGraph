@@ -10,13 +10,15 @@ GrayFastEraseRect2B240_R:
     adda.w   %d2,%a0
     adda.w   %d2,%a1
     moveq    #0,%d0
+    bra.s    1f
 0:
     moveq    #7-1,%d2
-1:
+2:
     move.l   %d0,(%a0)+
     move.l   %d0,(%a1)+
-    dbf      %d2,1b
+    dbf      %d2,2b
     move.w   %d0,(%a0)+
     move.w   %d0,(%a1)+
+1:
     dbf      %d1,0b
     rts
