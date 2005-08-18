@@ -6,8 +6,8 @@
 //       crash !!!
 //=============================================================================
 void __attribute__((__regparm__(2))) ScrollLeft240_R(unsigned short* buffer,unsigned short lines) {
-    register short* tmpbuffer = buffer;
-    register short  tmplines  = lines;
+    short* tmpbuffer = buffer;
+    short  tmplines  = lines;
 
     tmpbuffer += (tmplines<<4) - (tmplines);
     tmplines--;

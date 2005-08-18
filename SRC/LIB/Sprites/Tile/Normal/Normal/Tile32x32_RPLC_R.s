@@ -1,4 +1,4 @@
-| C prototype: void Tile32x32_RPLC_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned long *sprite asm("%a1"),register void *plane asm("%a0")) __attribute__((__regparm__));
+| C prototype: void Tile32x32_RPLC_R(short col asm("%d0"),short y asm("%d1"),unsigned long *sprite asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__));
 
 .text
 .globl Tile32x32_RPLC_R

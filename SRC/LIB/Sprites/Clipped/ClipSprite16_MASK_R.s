@@ -1,4 +1,4 @@
-| C prototype: void ClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),unsigned short *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void ClipSprite16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned short *sprt asm("%a1"),unsigned short *mask,void *dest asm("%a0")) __attribute__((__stkparm__));
 
 .text
 .globl ClipSprite16_MASK_R	

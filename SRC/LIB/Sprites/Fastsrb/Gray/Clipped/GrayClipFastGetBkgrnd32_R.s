@@ -1,4 +1,4 @@
-| C prototype: void GrayClipFastGetBkgrnd32_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src1 asm("%a0"),register void* src2 asm("%a1"),unsigned short* dest) __attribute__((__stkparm__));
+| C prototype: void GrayClipFastGetBkgrnd32_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src1 asm("%a0"),void* src2 asm("%a1"),unsigned short* dest) __attribute__((__stkparm__));
 |
 | This routine is a fast clipped grayscale version of Sprite32Get_R, it must be
 | used in conjunction with GrayClipFastPutBkgrnd32_R.

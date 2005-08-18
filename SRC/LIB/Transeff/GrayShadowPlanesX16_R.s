@@ -1,4 +1,4 @@
-| C prototype: void GrayShadowPlanesX16_R(register short height asm("%d0"),register short wordwidth asm("%d1"), register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__regparm__(4)));
+| C prototype: void GrayShadowPlanesX16_R(short height asm("%d0"),short wordwidth asm("%d1"), void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__regparm__(4)));
 |
 | Derived from Gray..._SHADOW_R routines. This one has a hard-coded white
 | mask (effect applied to all pixels), applied to both planes, whose height 

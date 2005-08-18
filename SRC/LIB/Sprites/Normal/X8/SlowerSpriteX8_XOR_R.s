@@ -1,4 +1,4 @@
-| C prototype: void SlowerSpriteX8_XOR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d2"),register short w asm("%d3"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void SlowerSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),short w asm("%d3"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
 .data

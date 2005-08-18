@@ -1,4 +1,4 @@
-| C prototype: void Sprite8Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src asm("%a0"),register unsigned char* dest asm("%a1"));
+| C prototype: void Sprite8Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src asm("%a0"),unsigned char* dest asm("%a1"));
 |
 | This routine is faster (about 20%) than the previous C routine, because the
 | algorithm was changed.

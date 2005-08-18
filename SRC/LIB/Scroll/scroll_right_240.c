@@ -6,8 +6,8 @@
 //       crash !!!
 //=============================================================================
 void __attribute__((__stkparm__)) ScrollRight240(unsigned short* buffer,unsigned short lines) {
-    register short* tmpbuffer = buffer;
-    register short  tmplines  = lines;
+    short* tmpbuffer = buffer;
+    short  tmplines  = lines;
 
     tmplines--;
 

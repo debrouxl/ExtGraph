@@ -6,9 +6,9 @@
 //       crash !!!
 //=============================================================================
 void __attribute__((__stkparm__)) ScrollDown240(unsigned short* buffer,unsigned short lines) {
-    register short* dest = buffer;
-    register short* src;
-    register short  tmplines  = lines;
+    short* dest = buffer;
+    short* src;
+    short  tmplines  = lines;
 
     dest += (tmplines<<4) - (tmplines);
     src   = dest - 15;

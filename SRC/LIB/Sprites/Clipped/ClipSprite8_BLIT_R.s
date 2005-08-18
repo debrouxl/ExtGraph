@@ -1,4 +1,4 @@
-| C prototype: void ClipSprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register unsigned char maskval asm("%d3"),register void *dest asm("%a0"));
+| C prototype: void ClipSprite8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned char *sprt asm("%a1"),unsigned char maskval asm("%d3"),void *dest asm("%a0"));
 
 .text
 .globl ClipSprite8_BLIT_R

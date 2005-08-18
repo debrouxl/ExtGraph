@@ -11,7 +11,7 @@ tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c ClipFilledTriangle_R.c
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFilledTriangle_R.c
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayClipFilledTriangle_R.c
-cd ..\Grayutil
+cd ../Grayutil
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c graydrawrect2b.c
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c grayinvertrect2b.c
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c graydrawline2b.c
@@ -26,9 +26,9 @@ tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -
 tigcc -Os -Wall -W -Wextra -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFastFillRect_R.c
 cd ..
 
-m68k-coff-ar -rv extgraph.a Misc\versiondef.o Misc\floodfill.o Misc\floodfillmf.o Misc\floodfill_R.o Misc\floodfillmf_R.o Misc\FilledTriangle_R.o Misc\ClipFilledTriangle_R.o Misc\GrayFilledTriangle_R.o Misc\GrayClipFilledTriangle_R.o
-m68k-coff-ar -rv extgraph.a Grayutil\graydrawrect2b.o Grayutil\grayinvertrect2b.o Grayutil\graydrawline2b.o Grayutil\grayfastdrawline2b.o Grayutil\grayfastdrawhline2b.o Grayutil\graydrawstr2b.o Grayutil\graydrawstrext2b.o
-m68k-coff-ar -rv extgraph.a Rect\FastOutlineRect.o Rect\FastOutlineRect_R.o Rect\GrayFastOutlineRect_R.o Rect\GrayFastFillRect_R.o
+..\..\bin\m68k-coff-ar -rv extgraph.a Misc\versiondef.o Misc\floodfill.o Misc\floodfillmf.o Misc\floodfill_R.o Misc\floodfillmf_R.o Misc\FilledTriangle_R.o Misc\ClipFilledTriangle_R.o Misc\GrayFilledTriangle_R.o Misc\GrayClipFilledTriangle_R.o
+..\..\bin\m68k-coff-ar -rv extgraph.a Grayutil\graydrawrect2b.o Grayutil\grayinvertrect2b.o Grayutil\graydrawline2b.o Grayutil\grayfastdrawline2b.o Grayutil\grayfastdrawhline2b.o Grayutil\graydrawstr2b.o Grayutil\graydrawstrext2b.o
+..\..\bin\m68k-coff-ar -rv extgraph.a Rect\FastOutlineRect.o Rect\FastOutlineRect_R.o Rect\GrayFastOutlineRect_R.o Rect\GrayFastFillRect_R.o
 
 copy extgraph.a ..\..\lib
 REM del extgraph.a

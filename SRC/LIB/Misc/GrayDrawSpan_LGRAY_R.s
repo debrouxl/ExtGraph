@@ -1,12 +1,13 @@
-| C prototype: void GrayDrawSpan_LGRAY_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+| C prototype: void GrayDrawSpan_LGRAY_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0"));
 |
 | This routine draws lines from x1 to x2 in line starting at addr, in
-| light gray color. It is primarily intended as callback for Gray(Clip)FilledTriangle_R.
+| light gray color. It is primarily intended as callback for Gray(Clip)FilledTriangle_R
+| and Gray(Clip)FilledCircle_R.
 |--------------------------------** WARNING **--------------------------------
 | Gray(Clip)FilledTriangle_R and all GrayDrawSpan require consecutive grayscale
 | planes (see the root of the ExtGraph documentation, paragraph about the
 | tilemap engine, for more information) so as not to use too many registers,
-| which makes the algorithm used less efficient.
+| which makes the used algorithm less efficient.
 | NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
 |--------------------------------** WARNING **--------------------------------
 

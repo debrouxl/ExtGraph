@@ -1,4 +1,4 @@
-| C prototype: void FadeOutToWhite_RL28_R(register void *lightplane asm("%a0"),register void *darkplane asm("%a1"),register short height asm("%d0"),register short bytewidth asm("%d1"),register short wait asm("%d2"));
+| C prototype: void FadeOutToWhite_RL28_R(void *lightplane asm("%a0"),void *darkplane asm("%a1"),short height asm("%d0"),short bytewidth asm("%d1"),short wait asm("%d2"));
 
 .text
 .globl FadeOutToWhite_RL28_R

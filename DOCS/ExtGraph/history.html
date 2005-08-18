@@ -53,8 +53,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <tr><td>           </td><td>          </td><td>Optimized and added single sprite -> 2 plane routines.
                                         Thanks to David Randall (Ranman) for the contribution and part
                                         of the coding.</td></tr>
-<tr><td>           </td><td>          </td><td>Optimized extgraph.h for size: removed many useless
-                                        "extern" and "register" keywords, saving ~12 KB.</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized the source files for size: removed many useless
+                                        "extern" and "register" keywords, saving ~12 KB in extgraph.h.</td></tr>
 <tr><td>           </td><td>          </td><td>Switched to TIGCC 0.96 and its GCC 4.x, which required
                                         small changes in the build batchfile (which you should hardly
                                         ever use anyway).</td></tr>
@@ -79,7 +79,7 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         Anonymous checkout allowed, but recommended only to check if
                                         particular bugs were fixed since the latest beta/release.
                                         Indeed, the trunk may contain broken things or break the API
-                                        without notice (and it did multiple times in the few days
+                                        without notice (and it did multiple times in the few weeks
                                         before this beta !).</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed GrayClip(I)Sprite32_MASK_R. Thanks to Olivier
                                         Givaudan for the report.</td></tr>
@@ -91,7 +91,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <tr><td>           </td><td>          </td><td>Tested in unusual conditions (low bytewidths,
                                         both dimensions odd) and eventually fixed
                                         (Clip)SpriteX8(_R) routines.</td></tr>
-<tr><td>           </td><td>          </td><td>Changed several function names, only rarely-used ones.</td></tr>
+<tr><td>           </td><td>          </td><td>Changed several function names, only rarely-used ones, to
+                                        make them more consistent with other names.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed a number of simple rectangle functions.</td></tr>
 <tr><td>           </td><td>          </td><td>Added FastTestLine_*_R.</td></tr>
 <tr><td>           </td><td>          </td><td>Optimized FastLine_*_R for both size and speed.</td></tr>
@@ -103,6 +104,17 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         Genlib, with good reason. The grayscale versions require
                                         modified grayscale routines (see an item above).</td></tr>
 <tr><td>           </td><td>          </td><td>Added GrayFastDrawLine_R.</td></tr>
+<tr><td>           </td><td>          </td><td>Added ClipLine_R and (Gray)ClipDrawLine_R.
+                                        The architecture (routine + callback) is close to that of
+                                        Genlib, with good reason.</td></tr>
+<tr><td>           </td><td>          </td><td>Made the prototypes of most X8 functions more explicit,
+                                        using "bytewidth" instead of "w". Thanks to MathStuf for the
+                                        report.</td></tr>
+<tr><td>           </td><td>          </td><td>Added m68k-coff-ar for PC/Win32 and PC/Linux in /bin. If
+                                        someone provides me binaries for other architectures, I can add them.</td></tr>
+<tr><td>           </td><td>          </td><td>Added more B/W and grayscale outlined and filled
+                                        circle drawing routines. The grayscale versions require
+                                        modified grayscale routines (see an item above).</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>removed (I)SHADOW(2) routines: they are nearly
                                         useless thanks to Create(I)Sprite(I)Shadow and OR routines
                                         (which require a small additional amount of space) and

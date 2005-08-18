@@ -1,4 +1,4 @@
-| C prototype: void DoubleSpriteDimensions16x16_R(register unsigned char* src asm("%a0"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(2)));
+| C prototype: void DoubleSpriteDimensions16x16_R(unsigned char* src asm("%a0"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(2)));
 
 | I love dbxx instruction, especially dbf !
 

@@ -1,4 +1,4 @@
-| C prototype: void Tile8x8_MASK_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned char *sprite asm("%a1"),unsigned char* mask,register void *plane asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void Tile8x8_MASK_R(short col asm("%d0"),short y asm("%d1"),unsigned char *sprite asm("%a1"),unsigned char* mask,void *plane asm("%a0")) __attribute__((__stkparm__));
 
 .text
 .globl Tile8x8_MASK_R

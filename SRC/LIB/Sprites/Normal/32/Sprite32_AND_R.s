@@ -1,4 +1,4 @@
-| C prototype: void Sprite32_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0"));
+| C prototype: void Sprite32_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned long *sprt asm("%a1"),void *dest asm("%a0"));
 
 .text
 .globl Sprite32_AND_R

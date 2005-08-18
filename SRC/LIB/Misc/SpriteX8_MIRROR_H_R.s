@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_MIRROR_H_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
+| C prototype: void SpriteX8_MIRROR_H_R(short h asm("%d0"),unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 |
 | This routine is ~3 times faster than the previous C routine (the algorithm
 | is different).

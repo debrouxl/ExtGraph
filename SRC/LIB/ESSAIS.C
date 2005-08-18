@@ -183,6 +183,51 @@ sprite_24:
 #define sprite2_32 \
 ((unsigned long[32]){0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA,0x55555555,0xAAAAAAAA})
 
+#define sprite_40 \
+((unsigned char[40*40/8]) \
+{ \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA, \
+0x55,0xAA,0x55,0xAA,0x55, \
+0xAA,0x55,0xAA,0x55,0xAA\
+})
+
 // TICT's logo, inclued because it's a nontrivial 64x64 sprite.
 #define tictlogo64 \
 ((unsigned long long[64]){\
@@ -459,34 +504,36 @@ void Circle_Clipped(register void *plane asm("%a0"),register short CX asm("%d0")
 }
 */
 
-/*
-void __attribute__((__regparm__)) fcircle(int xc, int yc, int r) {        // filled circle
-        int x = 0, y = r, d = 2 * (1 - r);
+
+void __attribute__((__stkparm__)) fcircle(void *plane asm("%a0"), short mode, short xcenter asm("%d0"), short ycenter asm("%d1"), short radius asm("%d2")) {        // filled circle
+        int x = 0, y = radius, d = 2 * (1 - radius);
         int x1, y1, x2;
         while (y >= 0) {
-                x1 = xc - x;
-                x2 = xc + x;
-                y1 = yc + y;
-                if (x >> 3) {
-                        FastDrawHLine_R(LCD_MEM, x1, x2, y1, A_NORMAL);
-                        y1 = yc -y;
-                        FastDrawHLine_R(LCD_MEM, x1, x2, y1, A_NORMAL);
-                } else {
-                        FastDrawLine_R(LCD_MEM, x1, y1, x2, y1, A_NORMAL);
+                x1 = xcenter - x;
+                x2 = xcenter + x;
+                y1 = ycenter + y;
+/*                if (x >> 3) {
+                        FastDrawHLine_R(plane, x1, x2, y1, mode);
                         y1 = yc - y;
-                        FastDrawLine_R(LCD_MEM, x1, y1, x2, y1, A_NORMAL);
+                        FastDrawHLine_R(plane, x1, x2, y1, mode);
+/                } else*/ {
+                        FastDrawHLine_R(plane, x1, x2, y1, mode);
+//                        FastDrawLine_R(plane, x1, y1, x2, y1, A_NORMAL);
+                        y1 = ycenter - y;
+                        FastDrawHLine_R(plane, x1, x2, y1, mode);
+//                        FastDrawLine_R(plane, x1, y1, x2, y1, A_NORMAL);
                 }
-                if(d + y > 0) {
+                if (d + y > 0) {
                         y--;
-                        d -= (y << 1) - 1;
+                        d -= (y * 2) - 1;
                 }
-                if(x > d) {
+                if (x > d) {
                         x++;
-                        d += (x << 1) + 1;
+                        d += (x * 2) + 1;
                 }
         }
 }
-*/
+
 
 /*
 void __attribute__((__regparm__)) clip_fcircle(int xc, int yc, int r) {        // clipped filled circle
@@ -748,6 +795,95 @@ unsigned long animations_mask[1][5][32] =
 };
 */
 
+//==========================================================================//
+//  Utilise les symétries du cercle pour en dessiner un plein
+//==========================================================================//
+
+void GrayDessineLignes(void * screen_0, void * screen_1, short color, short x, short y, short x_centre, short y_centre)
+{
+ GrayFastDrawHLine2B_R(screen_0, screen_1, y_centre+y, y_centre-y, x_centre+x, color);
+ GrayFastDrawHLine2B_R(screen_0, screen_1, y_centre+y, y_centre-y, x_centre-x, color);
+ GrayFastDrawHLine2B_R(screen_0, screen_1, y_centre+x, y_centre-x, x_centre+y, color);
+ GrayFastDrawHLine2B_R(screen_0, screen_1, y_centre+x, y_centre-x, x_centre-y, color);
+}
+
+//==========================================================================//
+// algo de Brensenham
+
+void GrayDessineCerclePlein(void * screen_0, void * screen_1, short color, short rayon, short x_centre, short y_centre)
+{
+ register short x, y, d;
+
+ x = 0;
+ y = rayon;
+ d = (5-rayon)/4;
+
+ GrayDessineLignes(screen_0, screen_1, color, x, y, y_centre, x_centre);
+
+ while(y > x)
+ {
+   if(d < 0)
+   {
+     d += x+x+3;
+   }
+   else
+   {
+     d += x+x-y-y+5;
+     y --;
+   }
+
+   x ++;
+   GrayDessineLignes(screen_0, screen_1, color, x, y, y_centre, x_centre);
+ }
+
+}
+
+
+
+//==========================================================================//
+//  Utilise les symétries du cercle pour en dessiner un plein
+//==========================================================================//
+
+void DessineLignes(void * screen_0, short mode, short x, short y, short x_centre, short y_centre)
+{
+ FastDrawHLine_R(screen_0, y_centre+y, y_centre-y, x_centre+x, mode);
+ FastDrawHLine_R(screen_0, y_centre+y, y_centre-y, x_centre-x, mode);
+ FastDrawHLine_R(screen_0, y_centre+x, y_centre-x, x_centre+y, mode);
+ FastDrawHLine_R(screen_0, y_centre+x, y_centre-x, x_centre-y, mode);
+}
+
+//==========================================================================//
+// algo de Brensenham
+
+void DessineCerclePlein(void * screen_0, short mode, short rayon, short x_centre, short y_centre)
+{
+ register short x, y, d;
+
+ x = 0;
+ y = rayon;
+ d = (5-rayon)/4;
+
+ DessineLignes(screen_0, mode, x, y, y_centre, x_centre);
+
+ while(y > x)
+ {
+   if(d < 0)
+   {
+     d += x+x+3;
+   }
+   else
+   {
+     d += x+x-y-y+5;
+     y --;
+   }
+
+   x ++;
+   DessineLignes(screen_0, mode, x, y, y_centre, x_centre);
+ }
+
+}
+
+
 
 // Main Function
 void _main(void) {
@@ -1005,10 +1141,98 @@ ClipFilledTriangle_R(-10,0,249,49,159,99,LCD_MEM,DrawSpan_XOR_R);
 ngetchx();
 ClipFilledTriangle_R(-10,0,249,49,159,99,LCD_MEM,DrawSpan_XOR_R);
 ngetchx();*/
+//unsigned short orig[4], clipped[4];
+//printf("%d",!!ClipLine_R(0,0,159,99,clipped));
+/*
+orig[0] = 120;
+orig[1] = -20;
+orig[2] = 160;
+orig[3] = -10;
+*/
+/*
+orig[0] = 120;
+orig[1] = -20;
+orig[2] = -60;
+orig[3] =  89;
+*/
+/*
+orig[0] = 120;
+orig[1] = -20;
+orig[2] = -60;
+orig[3] = 689;
+*/
+/*
+orig[0] = 120;
+orig[1] = -20;
+orig[2] = 139;
+orig[3] = 169;
+*/
+/*
+orig[0] = 120;
+orig[1] = -20;
+orig[2] = 289;
+orig[3] =  49;
+*/
+//ClipDrawLine_R(orig[0],orig[1],orig[2],orig[3],clipped,A_XOR,LCD_MEM,FastDrawLine_R);
+//GrayClipDrawLine_R(orig[0],orig[1],orig[2],orig[3],clipped,COLOR_BLACK,LCD_MEM,LCD_MEM,GrayFastDrawLine2B_R);
+/*
+if (ClipLine_R(orig[0],orig[1],orig[2],orig[3],clipped)) {
+    DrawChar(128,64,169,A_REPLACE);
+    FastDrawLine_R(LCD_MEM,clipped[0],clipped[1],clipped[2],clipped[3],A_XOR);
+    ngetchx();
+//    DrawLine(clipped[0],clipped[1],clipped[2],clipped[3],A_XOR);
+//    ngetchx();
+}
+DrawClipLine((WIN_RECT *)orig,&(SCR_RECT){{0,0,239,127}},A_XOR);
+ngetchx();
+*/
+// This leaves several parallel traces on the screen. No wonder, since the two
+// routines use different drawing algorithms, and rounding errors can cause
+// small coordinate differences.
+/*
+for (i = 0; i < 1000; i++) {
+    orig[0] = random(1200)-600;
+    orig[1] = random(1200)-600;
+    orig[2] = random(1200)-600;
+    orig[3] = random(1200)-600;
+    if (ClipLine_R(orig[0],orig[1],orig[2],orig[3],clipped)) {
+        DrawChar(128,64,169,A_REPLACE);
+        FastDrawLine_R(LCD_MEM,clipped[0],clipped[1],clipped[2],clipped[3],A_XOR);
+    }
+    DrawClipLine((WIN_RECT *)orig,&(SCR_RECT){{0,0,239,127}},A_XOR);
+}
+ngetchx();
+*/
+/*
+GrayOn();
+unsigned char temp[800] ;
+//unsigned char current_template[400] ;
+DoubleSpriteDimensionsX8_R(40, sprite_40, 5, temp);
+SpriteX8_OR_R(0, 0, 80, temp, 10, GrayGetPlane(LIGHT_PLANE));
+DoubleSpriteDimensionsX8_R(40, sprite_40, 5, temp);
+SpriteX8_OR_R(4, 4, 80, temp, 10, GrayGetPlane(DARK_PLANE));
 
+ngetchx();
+GrayOff();
+*/
+/*
+unsigned char temp[800] ;
+unsigned char current_template[400] ;
+DoubleSpriteDimensionsX8_R(40, current_template, 5, temp);
+SpriteX8_OR_R(0, 0, 80, temp, 10, buffer);
+DoubleSpriteDimensionsX8_R(40, current_template+200, 5, temp);
+SpriteX8_OR_R(0, 0, 80, temp, 10, buffer+LCD_SIZE);
+*/
+/*
+GrayOn();
+GrayClipFastFilledCircle_R(__D_plane,80,50,50,GrayDrawSpan_LGRAY_R);
+GrayClipFastFilledCircle_R(__D_plane,40,30,25,GrayDrawSpan_DGRAY_R);
+ngetchx();
+
+GrayOff();
+*/
 /*
 //OSFastArrows = 2;
-// TODO: FIX these routines !
 ClrScr();
 for (i = 159; i >= 0; i--) {
 //FastDrawLine_R(LCD_MEM,0,0,i,99,A_XOR);
@@ -3769,6 +3993,7 @@ Sprite32_OR_R(0,0,32,dest_32,LCD_MEM);
 //    t1 = FiftyMsecTick;
 
 //GrayOff();
+//GrayOn();
     t1 = counter;
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000*20);
@@ -3779,6 +4004,8 @@ Sprite32_OR_R(0,0,32,dest_32,LCD_MEM);
         Sprite32_OR(80,20,32,dest,LCD_MEM);
         GKeyIn(NULL,0);*/
 
+//    GrayDessineCerclePlein(__L_plane, __D_plane, COLOR_BLACK, 25, 80, 50);
+    DessineCerclePlein(LCD_MEM, A_NORMAL, 50, 80, 50);
 //        clip_ocircle(LCD_MEM,30,30,25);
 //        ClipFastOutlinedCircle_R(LCD_MEM,30,30,25);
 //        FastOutlinedCircle_R(LCD_MEM,30,30,25);
@@ -3827,6 +4054,8 @@ FastDrawHLine_faster_regparm(LCD_MEM,i,0,j,A_REVERSE);
 
 //    t1 = FiftyMsecTick - t1;
     t1 = counter - t1;
+ClrScr();
+DrawStr(0,0,"foo",A_REPLACE);
 
 //    ClrScr();
 //memset(LCD_MEM,0xFFFF,LCD_SIZE);
@@ -3842,6 +4071,8 @@ FastDrawHLine_faster_regparm(LCD_MEM,i,0,j,A_REVERSE);
         /*Sprite32_OR(0,20,32,sprite,LCD_MEM);
         Sprite32_OR(80,20,32,dest,LCD_MEM);
         GKeyIn(NULL,0);*/
+    ClipFastFilledCircle_R(LCD_MEM, 80, 50, 50, DrawSpan_OR_R);
+//    fcircle(LCD_MEM, A_NORMAL, 80, 50, 50);
 //        Circle_Clipped(LCD_MEM,30,30,25);
 //        DrawClipEllipse(30,30,25,25,&(SCR_RECT){{0,0,159,99}},A_NORMAL);
 //        for (j = 99-0+1; (j--);) {
@@ -3879,7 +4110,7 @@ FastDrawHLine_faster_regparm(LCD_MEM,i,0,j,A_REVERSE);
     printf_xy(0,10,"%hu",t2);
 
 //    end:
-//    GrayOff();
+    GrayOff();
     SetIntVec(AUTO_INT(5),s5);
     GKeyFlush();
 

@@ -1,4 +1,4 @@
-| C prototype: void Scale1Plane160to240_R(register void *src asm("%a0"),register void *dest asm("%a1"));
+| C prototype: void Scale1Plane160to240_R(void *src asm("%a0"),void *dest asm("%a1"));
 |
 | Routine courtesy of GoldenCrystal. It gives better-looking results than
 | my attempt to "reverse" geogeo's routine, commented below, does.

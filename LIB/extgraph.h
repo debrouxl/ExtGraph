@@ -13,13 +13,11 @@
 * using the latest version myself).
 * ExtGraph (extgraph.h + tilemap.h + preshift.h + extgraph.a + tilemap.a) can
 * be used as is; recompiling ExtGraph is therefore neither necessary nor
-* recommended. Not to mention that it is not a trivial task, since it requires
-* GNU binutil m68k-coff-ar, which was removed from TIGCC a long time ago. But
-* only contributors might find it an annoyance (they won't necessarily
-* recompile ExtGraph completely), and they can compile the binutil by
-* themselves. Nevertheless, I'll soon provide the binaries I can compile
-* (PC/Win32, PC/Linux) in the ExtGraph repository. I'll add the Mac/MacOS X
-* one if someone provides me it.
+* recommended. Not to mention that it requires the Windows shell, and the GNU
+* binutil m68k-coff-ar, which was removed from TIGCC a long time ago. The
+* ExtGraph SVN repository contains PC/Win32 and PC/Linux m68k-coff-ar binaries.
+* I can add binaries for other architectures, starting with MacOS X, if someone
+* provides me them.
 *
 * Please use as few __stkparm__ functions as possible in your programs: most
 * functions have __regparm__ versions (or a mix of __regparm__ and __stkparm__:
@@ -362,15 +360,16 @@ void ScrollDown240_R(unsigned short* buffer,unsigned short lines) __attribute__(
 
 
 //-----------------------------------------------------------------------------
-// fast alternative functions for line drawing (NOT CLIPPED)
+// fast alternative functions for line drawing.
 // FastDrawLine(_R) rewritten by ExtendeD and optimized a bit by Lionel. Added
 // GrayFastDrawLine(_R) in 2.00 Beta 5.
 // FastLine_... written by jackiechan.
 // FastTestLine_... modified from FastLine_Invert_R: BE checks both ends at
 // the same time, LE starts from the left end, RE from the right end. Added in
 // 2.00 Beta 5.
-// Missing: "ClipLine" and "(Gray)ClipAndDrawLine" (ClipLine + callback to a
-// (Gray)Fast*_R-compatible line function).
+// ClipLine, (Gray)ClipDrawLine" (ClipLine + callback to a
+// (Gray)Fast*_R-compatible line function) added in 2.00 Beta 5 too. Upon exit,
+// a0 = NULL if there's nothing to draw.
 //-----------------------------------------------------------------------------
 void FastDrawLine(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
 void FastDrawLine_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
@@ -390,6 +389,11 @@ void FastLine_Invert_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("
 char FastTestLine_BE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
 char FastTestLine_LE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
 char FastTestLine_RE_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3")) __attribute__((__regparm__));
+
+void * ClipLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short *clippedcoord asm("%a1")) __attribute__((__regparm__));
+// In assembly, you can use _ClipLine_R, which returns the clipped coordinates in d0-d3 and the result (NULL if nothing to draw) in a0.
+void ClipDrawLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short *clippedcoord asm("%a1"),short mode,void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode)) __attribute__((__stkparm__));
+void GrayClipDrawLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short *clippedcoord asm("%a1"),short color,void *plane0,void *plane,void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"),void *plane1 asm("%a1"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color)) __attribute__((__stkparm__));
 
 
 
@@ -428,14 +432,31 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1
 
 
 //-----------------------------------------------------------------------------
-// Functions for circle drawing. Much faster than the AMS routines, which
+// Functions for circle drawing. Much faster than the AMS routine, which
 // support multiple drawing modes and can draw ellipses, but are rarely used
-// to draw ellipses in games. Any bench between the two types is a bit unfair,
-// though.
-// Missing: filled circle drawing.
+// to draw ellipses in games. Any bench between DrawClipEllipse and these
+// routines is unfair, though.
+//--------------------------------** WARNING **--------------------------------
+// GrayClipFastOutlined/FilledCircle_R and all GrayDrawSpan (see below)
+// require consecutive grayscale planes (see the root of the ExtGraph
+// documentation, paragraph about the tilemap engine, for more information)
+// so as not to use too many registers, which makes the used algorithm less
+// efficient.
+// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
+//--------------------------------** WARNING **--------------------------------
+// Most routines added in 2.00 Beta 5.
 //-----------------------------------------------------------------------------
-void FastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
-void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void FastOutlinedCircle_DRAW_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void FastOutlinedCircle_ERASE_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void FastOutlinedCircle_INVERT_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void ClipFastOutlinedCircle_ERASE_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+void ClipFastOutlinedCircle_INVERT_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+
+void ClipFastFilledCircle_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"),void * addr asm("%a0")) asm("%a2"));
+
+void GrayClipFastOutlinedCircle_R(void *planes asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+void GrayClipFastFilledCircle_R(void *planes asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
 
 
 
@@ -447,7 +468,7 @@ void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter
 // Gray(Clip)FilledTriangle_R and all GrayDrawSpan require consecutive grayscale
 // planes (see the root of the ExtGraph documentation, paragraph about the
 // tilemap engine, for more information) so as not to use too many registers,
-// which makes the algorithm used less efficient.
+// which makes the used algorithm less efficient.
 // NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
 //--------------------------------** WARNING **--------------------------------
 // All DrawSpan are clipped.
@@ -463,19 +484,19 @@ void ClipFastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter
 // Does anyone have an algorithm which would be more or even slightly less
 // efficient, and better-looking ?
 //-----------------------------------------------------------------------------
-void FilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0")) asm("%a2"));
-void ClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0")) asm("%a2"));
-void DrawSpan_OR_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
-void DrawSpan_XOR_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
-void DrawSpan_REVERSE_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
+void FilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
+void ClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
+void DrawSpan_OR_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addr asm("%a0"));
+void DrawSpan_XOR_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addr asm("%a0"));
+void DrawSpan_REVERSE_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addr asm("%a0"));
 
-void GrayFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0")) asm("%a2"));
-void GrayClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0")) asm("%a2"));
-void GrayDrawSpan_WHITE_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
-void GrayDrawSpan_LGRAY_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
-void GrayDrawSpan_DGRAY_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
-void GrayDrawSpan_BLACK_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
-void GrayDrawSpan_INVERT_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addrs asm("%a0"));
+void GrayFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+void GrayClipFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+void GrayDrawSpan_WHITE_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs asm("%a0"));
+void GrayDrawSpan_LGRAY_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs asm("%a0"));
+void GrayDrawSpan_DGRAY_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs asm("%a0"));
+void GrayDrawSpan_BLACK_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs asm("%a0"));
+void GrayDrawSpan_INVERT_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs asm("%a0"));
 
 
 
@@ -532,10 +553,10 @@ void Scale1Plane160to240_R(void *src asm("%a0"),void *dest asm("%a1"));
 // Two-plane versions would have two of the same drawbacks as the two-plane
 // versions of plane scaling routines (the last one does not apply to plane
 // copy routines).
-// 160to240(NC) added in 2.00 Beta 5. NC stands for "Nearly Centered": the
+// 160to240(NC) added in 2.00 Beta 5, they copy a 160xheight screen
+// (bytewidth = 20) to a 240x128 screen. NC stands for "Nearly Centered": the
 // upper corner of the 160x100 screen is drawn at (32,14+(100-height)/2)
-// instead of (40,14+(100-height)/2). This makes the copy process much
-// more efficient.
+// instead of (40,14+(100-height)/2). This makes the copy process more efficient.
 //-----------------------------------------------------------------------------
 void FastCopyScreen(void* src,void* dest) __attribute__((__stkparm__));
 void FastCopyScreen_R(void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
@@ -568,97 +589,69 @@ void FloodFillMF_R(short x,short y,unsigned short shade,void* dest) __attribute_
 //-----------------------------------------------------------------------------
 void Sprite8_AND(short x,short y,short h,const unsigned char *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite8_BLIT(short x,short y,short h,const unsigned char *sprt,unsigned char maskval,void *dest) __attribute__((__stkparm__));
 void Sprite8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),unsigned char maskval asm("%d3"),void *dest asm("%a0"));
-
 void Sprite8Get(short x,short y,short h,void* src,unsigned char* dest) __attribute__((__stkparm__));
 void Sprite8Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src asm("%a0"),unsigned char* dest asm("%a1")) __attribute__((__regparm__));
-
 void Sprite8_MASK(short x,short y,short h,const unsigned char *sprt,const unsigned char *mask,void *dest) __attribute__((__stkparm__));
 void Sprite8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *mask,void *dest asm("%a0")) __attribute__((__stkparm__));
-
 void Sprite8_OR(short x,short y,short h,const unsigned char *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite8_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite8_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite8_XOR(short x,short y,short h,const unsigned char *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite8_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
 void Sprite16_AND(short x,short y,short h,const unsigned short *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite16_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite16_BLIT(short x,short y,short h,const unsigned short *sprt,unsigned short maskval,void *dest) __attribute__((__stkparm__));
 void Sprite16_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),unsigned short maskval asm("%d3"),void *dest asm("%a0"));
-
 void Sprite16Get(short x,short y,short h,void* src,unsigned short* dest) __attribute__((__stkparm__));
 void Sprite16Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src asm("%a0"),unsigned short* dest asm("%a1")) __attribute__((__regparm__));
-
 void Sprite16_MASK(short x,short y,short h,const unsigned short *sprt,const unsigned short *mask,void *dest) __attribute__((__stkparm__));
 void Sprite16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),const unsigned short *mask,void *dest asm("%a0")) __attribute__((__stkparm__));
-
 void Sprite16_OR(short x,short y,short h,const unsigned short *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite16_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite16_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite16_XOR(short x,short y,short h,const unsigned short *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite16_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
 void Sprite32_AND(short x,short y,short h,const unsigned long *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite32_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite32_BLIT(short x,short y,short h,const unsigned long *sprt,unsigned long maskval,void *dest) __attribute__((__stkparm__));
 void Sprite32_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),unsigned long maskval asm("%d3"),void *dest asm("%a0"));
-
 void Sprite32Get(short x,short y,short h,void* src,unsigned long* dest) __attribute__((__stkparm__));
 void Sprite32Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src asm("%a0"),unsigned long* dest asm("%a1")) __attribute__((__regparm__));
-
 void Sprite32_MASK(short x,short y,short h,const unsigned long *sprt,const unsigned long *mask,void *dest) __attribute__((__stkparm__));
 void Sprite32_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),const unsigned long *mask,void *dest asm("%a0")) __attribute__((__stkparm__));
-
 void Sprite32_OR(short x,short y,short h,const unsigned long *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite32_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite32_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
-
 void Sprite32_XOR(short x,short y,short h,const unsigned long *sprt,void *dest) __attribute__((__stkparm__));
 void Sprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
-void SpriteX8_AND(short x,short y,short h,const unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));
-void SpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
-
+void SpriteX8_AND(short x,short y,short h,const unsigned char *sprt,short bytewidth,void *dest) __attribute__((__stkparm__));
+void SpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
 void SpriteX8_BLIT(short x,short y,short h,const unsigned char *sprt,const unsigned char *maskval,short bytewidth,void *dest) __attribute__((__stkparm__));
-void SpriteX8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *maskval,short w asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
-
+void SpriteX8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *maskval,short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
 void SpriteX8Get(short x,short y,short h,void* src,unsigned char* dest,short bytewidth) __attribute__((__stkparm__));
 void SpriteX8Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void *src asm("%a1"),unsigned char *dest asm("%a0"),short bytewidth asm("%d3")) __attribute__((__regparm__));
-
 void SpriteX8_MASK(short x,short y,short h,const unsigned char *sprt,const unsigned char *mask,short bytewidth,void *dest) __attribute__((__stkparm__));
-void SpriteX8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *mask,short w asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
-
-void SpriteX8_OR(short x,short y,short h,const unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));
-void SpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
-
-void SpriteX8_XOR(short x,short y,short h,const unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));
-void SpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
+void SpriteX8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *mask,short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
+void SpriteX8_OR(short x,short y,short h,const unsigned char *sprt,short bytewidth,void *dest) __attribute__((__stkparm__));
+void SpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
+void SpriteX8_XOR(short x,short y,short h,const unsigned char *sprt,short bytewidth,void *dest) __attribute__((__stkparm__));
+void SpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
-void SlowerSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
-void SlowerSpriteX8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *maskval,short w asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
+void SlowerSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
+void SlowerSpriteX8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *maskval,short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
 void SlowerSpriteX8Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void *src asm("%a1"),unsigned char *dest asm("%a0"),short bytewidth asm("%d3")) __attribute__((__regparm__));
-void SlowerSpriteX8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *mask,short w asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
-void SlowerSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
-void SlowerSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
-
-
-void ClipSpriteX8_AND_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_OR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_XOR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
+void SlowerSpriteX8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),const unsigned char *mask,short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__stkparm__));
+void SlowerSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
+void SlowerSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short bytewidth asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
 
@@ -696,9 +689,9 @@ void ClipSprite32_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"
 void ClipSprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprt asm("%a1"),void *dest asm("%a0"));
 
 
-void ClipSpriteX8_AND_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_OR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_XOR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),short bytewidth asm("%d2"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),short bytewidth asm("%d2"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),short bytewidth asm("%d2"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 
 
 
@@ -885,7 +878,7 @@ void GrayClipISprite32_TRANW_R(short x asm("%d0"),short y asm("%d1"),short h asm
 void GrayClipISprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned long *sprite,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 
-void GrayClipISpriteX16_MASK_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),unsigned short *sprt,register short wordwidth asm("%d2"),register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISpriteX16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 
 //-----------------------------------------------------------------------------
@@ -1303,7 +1296,7 @@ typedef struct {
 #endif
 
 //#############################################################################
-// Revision History 
+// Revision History
 //#############################################################################
 //
 // Huge changes for v2.00 (rewrites, internal organization of library...).

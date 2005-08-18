@@ -16,7 +16,7 @@
 //=============================================================================
 // draws a filled triangle, using callback
 //=============================================================================
-void GrayFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"), void(*drawfunc)(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0")) asm("%a2")) {
+void GrayFilledTriangle_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *planes asm("%a0"),void(*drawfunc)(short x1 asm("%d0"),short x2 asm("%d1"),void * addr asm("%a0")) asm("%a2")) {
     short m1,m2,m3,y,xa,xb;
 //    short d1,d2;
     unsigned char* addr;

@@ -1,4 +1,4 @@
-| C prototype: void CreateISpriteShadow32_R(register short height asm("%d0"),register unsigned long* src asm("%a0"),register unsigned long* dest asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void CreateISpriteShadow32_R(short height asm("%d0"),unsigned long* src asm("%a0"),unsigned long* dest asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl CreateISpriteShadow32_R

@@ -1,4 +1,4 @@
-| C prototype: void Tile16x16_XOR_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned short *sprite asm("%a1"),register void *plane asm("%a0")) __attribute__((__regparm__));
+| C prototype: void Tile16x16_XOR_R(short col asm("%d0"),short y asm("%d1"),unsigned short *sprite asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__));
 
 .text
 .globl Tile16x16_XOR_R

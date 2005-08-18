@@ -1,4 +1,4 @@
-| C prototype: void Tile32x32_BLIT_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned long *sprite asm("%a1"),register unsigned long maskval asm("%d3"),register void *plane asm("%a0")) __attribute__((__regparm__));
+| C prototype: void Tile32x32_BLIT_R(short col asm("%d0"),short y asm("%d1"),unsigned long *sprite asm("%a1"),unsigned long maskval asm("%d3"),void *plane asm("%a0")) __attribute__((__regparm__));
 
 .text
 .globl Tile32x32_BLIT_R

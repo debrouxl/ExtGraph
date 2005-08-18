@@ -3,7 +3,7 @@ Library ExtGraph (TIGCC-AddOn)               (c) 2001-2005 TICT (TI-Chess Team)
 ===============================================================================
 
 Read file docs/extgraph.html to get details about the API of the ExtGraph-Lib.
-NOTE: the documentation in most betas in the ExtGraph 2.xx series is not fully
+NOTE: in betas of the ExtGraph 2.xx series, the documentation is not fully
 updated. The header extgraph.h is up to date, though, and the demos cover most
 functions.
 
@@ -12,13 +12,13 @@ ExtGraph is a compile-time library (used functions are fetched from the library
 during the linking stage) and it contains various useful graphics related
 routines which are missing in the TIGCCLIB or modified routines which are
 implemented with high speed in mind (without stupid excessive speed
-optimizations, though).
-ExtGraph can be used as is (extgraph.h + tilemap.h + extgraph.a + tilemap.a in
-folder lib), building it before using it for the first time is neither necessary
-nor recommended. I removed the instructions for building from this file: not
-so few did not understand that ExtGraph was ready for use (this information
-was missing in this file...), therefore they wanted to recompile it and they
-were experiencing trouble, since it's not trivial.
+optimizations, though, except preshifted sprites, which are brute-force).
+ExtGraph can be used as is (extgraph.h + tilemap.h + preshift.h + extgraph.a +
+tilemap.a in folder lib), building it before using it for the first time is
+neither necessary nor recommended. I removed the instructions for building
+from this file: not so few did not understand that ExtGraph was ready for use
+(this information was missing in this file...), therefore they wanted to
+recompile it and they were experiencing trouble.
 
 To use the ExtGraph Library
 Copy files from the folder /lib into the directory where the rest of your
@@ -57,7 +57,8 @@ The sources of ExtGraph are provided, so that you can customize the functions
 to make them best fit your needs, even if you hardly know any assembly:
 * customizing clipped sprite routines to different screen sizes can be simply
 achieved through replacing all occurrences of 239 (width - 1) and 127
-(height - 1) by other values.
+(height - 1) by other values. Several functions have equates (.set ...),
+maybe I'll modify all functions to use them, since this should not add bugs.
 * customizing non-interlaced sprite routines to use the not-so-infrequent
 "block" (M/)L/D sprite format, consisting of h consecutive lines of mask
 (applied to both planes) if that applies, h consecutive lines of light, h
@@ -71,10 +72,10 @@ function call (GrayGetPlane(DARK_PLANE) as light plane, and vice-versa) or in
 the function itself (swap all occurrences of a0 and a1 in the drawing loops).
 * light gray and dark gray transparencies (TRANL / TRAND) can be made from
 TRANW / TRANB ones. I made the GrayClipISprite16 ones, after a user wanted
-TRANL/TRAND routines, but the information I had put here turned out to be wrong.
-The same goes for the routines in the tilemap engine.
-Note that as of 2005/08/05, "32" routines were not optimized, and this way of
-doing does not apply to them.
+TRANL / TRAND routines, but the information I had put here turned out to be
+wrong. The same goes for the routines in the tilemap engine.
+Note that as of ExtGraph 2.00 Beta 5, "32" routines were not optimized, and
+this way of doing does not apply to them.
 * making non-clipped grayscale interlaced sprite routines just requires removing
 the clipping code and loops.
 
@@ -86,10 +87,11 @@ modifications, like Dave Randall did for the single sprite -> two planes
 routines, for example.
 
 
-If you think you've found a bug, send me information about the faulty functions:
-I have a small test suite, which suits well for sprite routines. I'll try to
-reply within several days, the delay depends on how busy I am. If I forget to
-reply after a while, remind me about you !
+If you think you've found a bug, send me information about the faulty functions,
+with a complete testcase if possible (like Kevin, I won't disclose your project
+if you send me an entire project): I have a small test suite, which suits well
+for sprite routines. I'll try to reply within several days, the delay depends
+on how busy I am. If I forget to reply after a while, remind me about you !
 But first, please check out the ExtGraph library (at least the /LIB directory)
 from its SVN repository, created 2005/08/12, located at
 http://opensvn.csie.org/ExtGraph, and see if the bug is still there in the

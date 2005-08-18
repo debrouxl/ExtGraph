@@ -1,4 +1,4 @@
-| void FastFillScreen_R(register void *plane asm("%a0"));
+| void FastFillScreen_R(void *plane asm("%a0"));
 
 .text
 .globl FastFillScreen_R

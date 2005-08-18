@@ -1,17 +1,14 @@
 Roadmap after Beta 4 (more or less sorted):
 
-/* Fix bugs (pixel macros if any, etc.), update documentation (update links, check prototypes, document new functions,
-etc.) and header...
+/* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
 
 0* Make double-buffered versions of the tilemap engine demos. Check Kevin's patch.
 
-0* Modify demo26 to behave the following way:
-    * not crash the calculator;
+/* Modify demo26 to bench ExtGraph / Graphlib / Genlib.
     * bench generic lines, horiz lines, rectangles, triangles (remove vert lines);
-    * bench ExtGraph if passed nothing or integer 0;
-    * bench Graphlib if passed integer 1 (no triangles);
-    * bench Genlib if passed integer 2;
     * bail out otherwise.
+
+/* clipped and non-clipped draw / fill circles.
 
 /* Make (Gray)ClipISpriteX16_OR/RPLC/TRANB/TRANW_R. ClipSpriteX16_MASK_R: which calling convention ?
 
@@ -38,17 +35,14 @@ frames during 300 AI5 ticks.
 
 0* optimize sprite routines:
     0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
-    /* Make fast non-clipped GrayISpriteX_Y_R.
+    0* Make fast non-clipped GrayISpriteX_Y_R.
 
 0* Make more X8 routines, especially grayscale ones, including transparencies.
 0* Make more X16 routines (B/W and grayscale clipped and non-clipped, all modes) + demo27 = demo6 with X16 routines.
-
+0* Make more Gray(Clip)SingleSprite routines.
 
 /* Lines, triangles, circles, etc:
-    0* ClipLine, ClipAndDrawLine (with callback). Which simple and efficient algorithm ?
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
-    /* clipped and non-clipped draw / fill circles.
-    X* clipped fill triangles - users should be smart enough to figure out how to do the corresponding outlined function ;-).
     Note: an algorithm for circles, triangles and lines could be: use the stack (max 2*128 bytes) to store endpoints, call
 DrawMultiHLines.
     0* "Extremely Fast Line Algorithm" (EFLA) by Po-Han Lin: what does "Freely useable in non-commercial applications as

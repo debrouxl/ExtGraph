@@ -1,4 +1,4 @@
-| C prototype: void GrayClipFastPutBkgrnd8_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt,register void *dest1 asm("%a0"),register void *dest2 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipFastPutBkgrnd8_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned long *sprt,void *dest1 asm("%a0"),void *dest2 asm("%a1")) __attribute__((__stkparm__));
 |
 | This routine is a fast version of GrayClipSprite8_RPLC_R, it must be used in
 | conjunction with GrayClipFastGetBkgrnd8_R.

@@ -1,4 +1,4 @@
-| C prototype: void FastFillRect160_R(register void* plane asm("%a0"),register short starty asm("%d0"), register unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+| C prototype: void FastFillRect160_R(void* plane asm("%a0"),short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
 .text
 .globl FastFillRect160_R
 .even

@@ -1,4 +1,4 @@
-| void GrayFillScreen2B_R(register void* lightplane asm("%a0"),register void* darkplane asm("%a1"),register unsigned long lcolor asm("%d0"),register unsigned long dcolor asm("%d1")) __attribute__((__regparm__(4))); // C prototype
+| void GrayFillScreen2B_R(void* lightplane asm("%a0"),void* darkplane asm("%a1"),unsigned long lcolor asm("%d0"),unsigned long dcolor asm("%d1")) __attribute__((__regparm__(4))); // C prototype
 
 .text
 .globl GrayFillScreen2B_R

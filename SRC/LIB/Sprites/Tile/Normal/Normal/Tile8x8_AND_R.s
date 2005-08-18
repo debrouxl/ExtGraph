@@ -1,4 +1,4 @@
-| C prototype: void Tile8x8_AND_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned char *sprite asm("%a1"),register void *plane asm("%a0")) __attribute__((__regparm__));
+| C prototype: void Tile8x8_AND_R(short col asm("%d0"),short y asm("%d1"),unsigned char *sprite asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__));
 
 .text
 .globl Tile8x8_AND_R

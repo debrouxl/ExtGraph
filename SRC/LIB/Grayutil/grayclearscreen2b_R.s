@@ -1,4 +1,4 @@
-| void GrayClearScreen2B_R(register void* lightplane asm("%a0"),register void* darkplane asm("%a1")) __attribute__((__regparm__(2))); // C prototype
+| void GrayClearScreen2B_R(void* lightplane asm("%a0"),void* darkplane asm("%a1")) __attribute__((__regparm__(2))); // C prototype
 
 .text
 .globl GrayClearScreen2B_R

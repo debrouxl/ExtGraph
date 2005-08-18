@@ -1,4 +1,4 @@
-| void FillScreenWithGarbage_R(register unsigned long seed asm("%d0"),register unsigned short len asm("%d1"), register void *plane asm("%a0"));
+| void FillScreenWithGarbage_R(unsigned long seed asm("%d0"),unsigned short len asm("%d1"), void *plane asm("%a0"));
 
 .text
 .globl FillScreenWithGarbage_R

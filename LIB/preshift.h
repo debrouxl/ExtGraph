@@ -13,13 +13,11 @@
 * using the latest version myself).
 * ExtGraph (extgraph.h + tilemap.h + preshift.h + extgraph.a + tilemap.a) can
 * be used as is; recompiling ExtGraph is therefore neither necessary nor
-* recommended. Not to mention that it is not a trivial task, since it requires
-* GNU binutil m68k-coff-ar, which was removed from TIGCC a long time ago. But
-* only contributors might find it an annoyance (they won't necessarily
-* recompile ExtGraph completely), and they can compile the binutil by
-* themselves. Nevertheless, I'll soon provide the binaries I can compile
-* (PC/Win32, PC/Linux) in the ExtGraph repository. I'll add the Mac/MacOS X
-* one if someone provides me it.
+* recommended. Not to mention that it requires the Windows shell, and the GNU
+* binutil m68k-coff-ar, which was removed from TIGCC a long time ago. The
+* ExtGraph SVN repository contains PC/Win32 and PC/Linux m68k-coff-ar binaries.
+* I can add binaries for other architectures, starting with MacOS X, if someone
+* provides me them.
 *
 * Please use as few __stkparm__ functions as possible in your programs: most
 * functions have __regparm__ versions (or a mix of __regparm__ and __stkparm__:
@@ -91,7 +89,7 @@
 // grayscale sprites per 65518 bytes block.
 //
 // Credits go to PpHd for the movem.l (sprt)+,d0-d7; or.l d0...d7,(dest)+
-// trick, taken in GenLib. It is <~1% faster than repeated 2-instruction
+// trick, taken in GenLib. It is roughly as fast as repeated 2-instruction
 // move / or sequences, with a simple test code (it might be slightly slower
 // with real-life programs, since it clobbers more registers, I don't know),
 // but it is significantly smaller.

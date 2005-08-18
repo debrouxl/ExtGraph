@@ -1,4 +1,4 @@
-| C prototype: void CreateSpriteIShadow8_R(register short height asm("%d0"),register unsigned char* src0 asm("%a0"),register unsigned char* src1 asm("%a1"),unsigned char* mask, unsigned char* dest0, unsigned char* dest1) __attribute__((__stkparm__));
+| C prototype: void CreateSpriteIShadow8_R(short height asm("%d0"),unsigned char* src0 asm("%a0"),unsigned char* src1 asm("%a1"),unsigned char* mask, unsigned char* dest0, unsigned char* dest1) __attribute__((__stkparm__));
 
 .text
 .globl CreateSpriteIShadow8_R

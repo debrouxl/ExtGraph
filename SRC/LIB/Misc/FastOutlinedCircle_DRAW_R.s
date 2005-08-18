@@ -1,4 +1,4 @@
-| C prototype: void FastOutlinedCircle_DRAW_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));
+| C prototype: void FastOutlinedCircle_DRAW_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from
@@ -60,7 +60,6 @@ FastOutlinedCircle_DRAW_R:
     moveq    #30,%d4
 
 0:
-| bclr if you want A_REVERSE mode, bchg if you want A_XOR mode.
     bset     %d5,(%a0)
     bset     %d6,(%a1)
     bset     %d5,(%a2)

@@ -1,6 +1,6 @@
 | Modified from FastDrawLine_R and FastDrawVLine_R.
 |
-| C prototype: void GrayFastDrawLine2B_R (register void* plane0 asm("%a0"),register void* plane1 asm("%a1"),register unsigned short x1 asm("%d0"),register unsigned short y1 asm("%d1"),register unsigned short x2 asm("%d2"),register unsigned short y2 asm("%d3"),unsigned short color) __attribute__ ((__stkparm__));
+| C prototype: void GrayFastDrawLine2B_R (void* plane0 asm("%a0"),void* plane1 asm("%a1"),unsigned short x1 asm("%d0"),unsigned short y1 asm("%d1"),unsigned short x2 asm("%d2"),unsigned short y2 asm("%d3"),unsigned short color) __attribute__ ((__stkparm__));
 
 .text
 .globl GrayFastDrawLine2B_R

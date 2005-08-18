@@ -1,4 +1,4 @@
-| C prototype: void FastInvertRectX8_R(register void* plane asm("%a0"),register short startx asm("%d0"),register short starty asm("%d1"),register unsigned short lines asm("%d2"),register unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
+| C prototype: void FastInvertRectX8_R(void* plane asm("%a0"),short startx asm("%d0"),short starty asm("%d1"),unsigned short lines asm("%d2"),unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
 .text
 .globl FastInvertRectX8_R
 .even

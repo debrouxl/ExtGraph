@@ -6,9 +6,9 @@
 //       crash !!!
 //=============================================================================
 void __attribute__((__stkparm__)) ScrollUp160(unsigned short* buffer,unsigned short lines) {
-    register short* dest = buffer;
-    register short* src  = dest + 15;
-    register short  tmplines = lines;
+    short* dest = buffer;
+    short* src  = dest + 15;
+    short  tmplines = lines;
 
     tmplines -= 2;
 

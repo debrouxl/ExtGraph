@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_AND_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register short w asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));
+| C prototype: void SpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
 | see SpriteX8_OR_R for comments
 
 .data

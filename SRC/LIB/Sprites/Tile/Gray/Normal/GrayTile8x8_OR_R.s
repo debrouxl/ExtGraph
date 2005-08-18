@@ -1,4 +1,4 @@
-| C prototype: void GrayTile8x8_OR_R(register short col asm("%d0"),register short y asm("%d1"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayTile8x8_OR_R(short col asm("%d0"),short y asm("%d1"),unsigned char *sprt0,unsigned char *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl GrayTile8x8_OR_R

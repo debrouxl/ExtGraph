@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void *src asm("%a1"),register unsigned char *dest asm("%a0"),register short bytewidth asm("%d3"));
+| C prototype: void SpriteX8Get_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void *src asm("%a1"),unsigned char *dest asm("%a0"),short bytewidth asm("%d3"));
 
 .data
 .globl SpriteX8Get_R

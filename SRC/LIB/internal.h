@@ -30,15 +30,15 @@ typedef struct {
 
 
 extern void FastDrawLine(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
-extern void FastDrawLine_R(register void* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
+extern void FastDrawLine_R(void* plane asm("%a0"),short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
 
 extern void FastDrawHLine(void* plane,short x1,short x2,short y,short mode) __attribute__((__stkparm__));
-extern void FastDrawHLine_R(register void* plane asm("a0"), register short x1 asm("d0"), register short x2 asm("d1"), register short y asm("d2"),short mode) __attribute__((__stkparm__));
+extern void FastDrawHLine_R(void* plane asm("a0"),  short x1 asm("d0"),  short x2 asm("d1"),  short y asm("d2"),short mode) __attribute__((__stkparm__));
 
 extern void FastDrawVLine(void* plane,short x,short y1,short y2,short mode) __attribute__((__stkparm__));
-extern void FastDrawVLine_R(register void* plane asm("%a0"),register short x asm("%d0"),register short y1 asm("%d1"),register short y2 asm("%d2"),short mode) __attribute__((__stkparm__));
+extern void FastDrawVLine_R(void* plane asm("%a0"), short x asm("%d0"), short y1 asm("%d1"), short y2 asm("%d2"),short mode) __attribute__((__stkparm__));
 
-extern void FastFillRect_R(register void* plane asm("%a0"),register short x1 asm("%d0"),register short y1 asm("%d1"),register short x2 asm("%d2"),register short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
+extern void FastFillRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
 
 //#define _rom_call(type,args,ind) (*(type(**)args)(*(long*)0xC8+0x##ind*4))
 #define ScrRectFill  _rom_call(void,(SCR_RECT*,SCR_RECT*,short),189)

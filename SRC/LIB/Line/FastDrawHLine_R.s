@@ -1,4 +1,4 @@
-| C prototype: void FastDrawHLine_R(register void* plane asm("a0"), register short x1 asm("d0"), register short x2 asm("d1"), register short y asm("d2"),short mode) __attribute__((__stkparm__));
+| C prototype: void FastDrawHLine_R(void* plane asm("a0"), short x1 asm("d0"), short x2 asm("d1"), short y asm("d2"),short mode) __attribute__((__stkparm__));
 | Valid values for mode are: A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR.
 |
 | This routine draws a horizontal line from (x1;y) to (x2;y).

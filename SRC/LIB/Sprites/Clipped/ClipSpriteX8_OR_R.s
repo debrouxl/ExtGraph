@@ -1,4 +1,4 @@
-| C prototype: void ClipSpriteX8_OR_R(register short x asm("%d0"), register short y asm("%d1"),register short h asm("%d3"),register short w asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));
+| C prototype: void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d3"),short w asm("%d2"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 |
 | Based on a routine from GFA-Basic, made by Geoffrey Anneheim.
 | Modified by Lionel Debroux:

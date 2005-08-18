@@ -1,7 +1,8 @@
-| C prototype: void DrawSpan_OR_R(unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned char * addr asm("%a0"));
+| C prototype: void DrawSpan_OR_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0"));
 |
 | This routine draws lines from x1 to x2 in line starting at addr, in
-| A_NORMAL mode. It is primarily intended as callback for (Clip)FilledTriangle_R.
+| A_NORMAL mode. It is primarily intended as callback for (Clip)FilledTriangle_R
+| and (Clip)FilledCircle_R.
 
 .text
 .even

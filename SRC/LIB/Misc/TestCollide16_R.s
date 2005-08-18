@@ -1,4 +1,4 @@
-| C prototype: short TestCollide16_R(register short x0 asm("%d0"),register short y0 asm("%d1"),register short x1 asm("%d2"),register short y1 asm("%d3"),short height,register unsigned short* data0 asm("%a0"),register unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: short TestCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height,unsigned short* data0 asm("%a0"),unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl TestCollide16_R
