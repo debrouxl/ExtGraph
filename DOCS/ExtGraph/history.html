@@ -60,7 +60,9 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         ever use anyway).</td></tr>
 <tr><td>           </td><td>          </td><td>Switched to a more general and powerful cleanup script
                                         which uses GNU tools under an Unix shell. Requires Cygwin
-                                        or MSYS (untested) on Win32.</td></tr>
+                                        or MSYS (untested) on Win32. Next step: port all batches to
+                                        an Unix shell, so that building ExtGraph is trivial on *nix.
+                                        I will have to do the same thing in most other TICT programs.</td></tr>
 <tr><td>           </td><td>          </td><td>Added a fork of the TIGCCLIB grayscale routine, which
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
@@ -69,8 +71,7 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         put_masked_big_sprite, made by Julien RF; made several other
                                         X16 routines.</td></tr>
 <tr><td>           </td><td>          </td><td>Added three ClipSpriteX8 routines, based on code by
-                                        Geoffrey Anneheim (geogeo), which I significantly optimized;
-                                        it.</td></tr>
+                                        Geoffrey Anneheim (geogeo), which I significantly optimized.</td></tr>
 <tr><td>           </td><td>          </td><td>Created GrayClipISprite16_TRAND/L_R as an example of
                                         TRAND/L routines. The readme used to be wrong about making
                                         TRAND/L from TRANB/W, and making TRAND/L was not so easy.</td></tr>
@@ -79,8 +80,9 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         Anonymous checkout allowed, but recommended only to check if
                                         particular bugs were fixed since the latest beta/release.
                                         Indeed, the trunk may contain broken things or break the API
-                                        without notice (and it did multiple times in the few weeks
-                                        before this beta !).</td></tr>
+                                        without notice - and it did multiple times in the few weeks
+                                        before this beta, especially when I was adding triangle/circle
+                                        functions and their DrawSpan subroutines !</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed GrayClip(I)Sprite32_MASK_R. Thanks to Olivier
                                         Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed *SpriteX8Get(_R), they used to crash the
@@ -115,6 +117,14 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <tr><td>           </td><td>          </td><td>Added more B/W and grayscale outlined and filled
                                         circle drawing routines. The grayscale versions require
                                         modified grayscale routines (see an item above).</td></tr>
+<tr><td>           </td><td>          </td><td>Checked and fixed several types in the prototypes,
+                                        after MathStuf reported a crash which turned out to be due
+                                        to a char array being at an odd address, where an even
+                                        address was assumed by DoubleSpriteDimensionsX8_R. As far as
+                                        I could see, it was the only true such problem in the
+                                        prototypes... While I was at it, I switched to explicit
+                                        registers in ScrollX_R routines, checking that I didn't
+                                        break the ABI.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>removed (I)SHADOW(2) routines: they are nearly
                                         useless thanks to Create(I)Sprite(I)Shadow and OR routines
                                         (which require a small additional amount of space) and

@@ -348,14 +348,14 @@ void ScrollUp240(unsigned short* buffer,unsigned short lines) __attribute__((__s
 void ScrollDown160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));
 void ScrollDown240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));
 
-void ScrollLeft160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollLeft240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollRight160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollRight240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollUp160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollUp240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollDown160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
-void ScrollDown240_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));
+void ScrollLeft160_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollLeft240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollRight160_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollRight240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollUp160_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollUp240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollDown160_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
+void ScrollDown240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) __attribute__((__regparm__(2)));
 
 
 
@@ -402,11 +402,11 @@ void GrayClipDrawLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d
 //-----------------------------------------------------------------------------
 void FastFillRect(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
 void FastFillRect_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
-void GrayFastFillRect_R(void* dest1 asm("%a0"),void* dest2 asm("%a1"), short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color) __attribute__((__stkparm__));
+void GrayFastFillRect_R(void* dest0 asm("%a0"),void* dest1 asm("%a1"), short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color) __attribute__((__stkparm__));
 
 void FastOutlineRect(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
 void FastOutlineRect_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode) __attribute__((__stkparm__));
-void GrayFastOutlineRect_R(void* dest1 asm("%a0"),void* dest2 asm("%a1"), short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color) __attribute__((__stkparm__));
+void GrayFastOutlineRect_R(void* dest0 asm("%a0"),void* dest1 asm("%a1"), short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color) __attribute__((__stkparm__));
 
 void FastEraseRect160_R(void* plane asm("%a0"),short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
 void FastEraseRect240_R(void* plane asm("%a0"),short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
@@ -526,7 +526,7 @@ void ScaleSprite16_XOR(const unsigned short *sprite,void *dest,short x0,short y0
 void ScaleSprite32_XOR(const unsigned long *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
 void ScaleSprite64_XOR(const unsigned long long *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
 
-void DoubleSpriteDimensionsX8_R(short h asm("%d0"),const unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
+void DoubleSpriteDimensionsX8_R(short h asm("%d0"),const unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
 void DoubleSpriteDimensions16x16_R(const unsigned short* src asm("%a0"),unsigned long* dest asm("%a1")) __attribute__((__regparm__(2)));
 
 
@@ -1116,7 +1116,8 @@ void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"),void *dest1 asm
 // tilemap engine.
 // NOTE2: ExtGraph 2.00 Beta 5 is still incompatible with the official TIGCCLIB
 // grayscale doublebuffering support, because the TIGCCLIB grayscale support
-// does not allocate both planes consecutively on HW1), _BUT_ there is a fork.
+// does not allocate both planes consecutively on HW1), _BUT_ there is a fork,
+// which is one of the two ways to use this tilemap engine with doublebuffering.
 // Read the root of the ExtGraph documentation for more information.
 
 
@@ -1163,10 +1164,10 @@ void SpriteX8X8_ROTATE_LEFT_R(short h asm("%d0"),const unsigned char* src asm("%
 void SpriteX8X8_RR_MH_R(short h asm("%d0"),const unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 void SpriteX8X8_RL_MH_R(short h asm("%d0"),const unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
-void FastSprite8_MIRROR_H_R(short h asm("%d2"),void *sprt asm("%a0"),void *dest asm("%a1"));
-void FastSprite16_MIRROR_H_R(short h asm("%d2"),void *sprt asm("%a0"),void *dest asm("%a1"));
-void FastSprite32_MIRROR_H_R(short h asm("%d2"),void *sprt asm("%a0"),void *dest asm("%a1"));
-void FastSpriteX8_MIRROR_H_R(short h asm("%d2"),short bytewidth asm("%d1"),void *sprt asm("%a0"),void *dest asm("%a1"));
+void FastSprite8_MIRROR_H_R(short h asm("%d2"),unsigned char *sprt asm("%a0"),unsigned char *dest asm("%a1"));
+void FastSprite16_MIRROR_H_R(short h asm("%d2"),unsigned short *sprt asm("%a0"),unsigned short *dest asm("%a1"));
+void FastSprite32_MIRROR_H_R(short h asm("%d2"),unsigned long *sprt asm("%a0"),unsigned long *dest asm("%a1"));
+void FastSpriteX8_MIRROR_H_R(short h asm("%d2"),short bytewidth asm("%d1"),char *sprt asm("%a0"),unsigned char *dest asm("%a1"));
 
 
 

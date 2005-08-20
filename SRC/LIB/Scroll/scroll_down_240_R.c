@@ -5,7 +5,7 @@
 // NOTE: given buffer has to start on an even address, otherwise function will
 //       crash !!!
 //=============================================================================
-void __attribute__((__regparm__(2))) ScrollDown240_R(unsigned short* buffer,unsigned short lines) {
+void __attribute__((__regparm__(2))) ScrollDown240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm("%d0")) {
     short* dest = buffer;
     short* src;
     short  tmplines  = lines;

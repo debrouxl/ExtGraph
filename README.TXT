@@ -92,10 +92,14 @@ with a complete testcase if possible (like Kevin, I won't disclose your project
 if you send me an entire project): I have a small test suite, which suits well
 for sprite routines. I'll try to reply within several days, the delay depends
 on how busy I am. If I forget to reply after a while, remind me about you !
-But first, please check out the ExtGraph library (at least the /LIB directory)
-from its SVN repository, created 2005/08/12, located at
-http://opensvn.csie.org/ExtGraph, and see if the bug is still there in the
-repository version.
+But first, please:
+* check out the ExtGraph library (at least the /LIB directory) from its SVN
+repository, created 2005/08/12, located at http://opensvn.csie.org/ExtGraph,
+and see if the bug is still there in the repository version.
+* if the problem is Address Error, check whether forcing the pointer alignment
+to be even fixes the problem. As a general rule, all planes *must* start at an
+even address, but there may be more non-conforming code, for efficiency.
+
 
 ===============================================================================
 thomas.nussbaumer@gmx.net                                          Graz/Austria

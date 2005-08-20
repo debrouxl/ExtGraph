@@ -8,8 +8,6 @@ Roadmap after Beta 4 (more or less sorted):
     * bench generic lines, horiz lines, rectangles, triangles (remove vert lines);
     * bail out otherwise.
 
-/* clipped and non-clipped draw / fill circles.
-
 /* Make (Gray)ClipISpriteX16_OR/RPLC/TRANB/TRANW_R. ClipSpriteX16_MASK_R: which calling convention ?
 
 0* DrawPattern_R (Slimeball).
@@ -50,7 +48,6 @@ long as credits to Po-Han Lin and link to http://www.edepot.com is provided in s
 EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel is
 faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM version of
 Bresenham.
-    ?* Specialized versions of GrayFastDrawHLine_X (NTS: more or less done in modified Extreme Racing), like in Genlib ?
 
 0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
 possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5
@@ -93,3 +90,4 @@ Always check:
 * all parameters plane should be void *.
 * all constant parameters should be const...
 * using "extern" and "register" in prototypes is not usually necessary.
+* a parameter which can be negative shouldn't be declared unsigned.

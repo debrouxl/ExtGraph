@@ -1,6 +1,4 @@
-| C prototype: void DoubleSpriteDimensionsX8_R(short h asm("%d0"),unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
-
-| I love dbxx instruction, especially dbf !
+| C prototype: void DoubleSpriteDimensionsX8_R(short h asm("%d0"),unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
 
 .text
 .globl DoubleSpriteDimensionsX8_R
@@ -11,12 +9,11 @@ DoubleSpriteDimensionsX8_R:
 | See also the comments below. For example, using a2, so saving/restoring
 | it, can be superfluous.
 
-    dbf      %d0,1f
-    rts
+    subq.w   #1,%d0
+    blt.s    6f
 
-1:
-    dbf      %d1,2f
-    rts
+    subq.w   #1,%d1
+    blt.s    6f
 
 2:
     movem.l  %d3-%d5/%a2,-(%sp)
@@ -68,5 +65,6 @@ DoubleSpriteDimensionsX8_R:
 
     dbf      %d0,0b
 
+6:
     movem.l  (%sp)+,%d3-%d5/%a2
     rts

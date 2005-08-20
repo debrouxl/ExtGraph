@@ -1,4 +1,4 @@
-| C prototype: void FastSprite16_MIRROR_H_R (short h asm("%d2"), void *sprt asm("%a0"), void *dest asm("%a1"));
+| C prototype: void FastSprite16_MIRROR_H_R (short h asm("%d2"), unsigned short *sprt asm("%a0"), unsigned short *dest asm("%a1"));
 
 .text
 .globl FastSprite16_MIRROR_H_R
