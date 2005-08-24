@@ -29,7 +29,7 @@ ClipSpriteX8_XOR_R:
     beq.s    0f 				|(d5 == 0)?exit:keep going.
     neg.w    %d5				|%d5 = -h
     cmp.w    %d5,%d1
-    jbls     0f
+    jble     0f
     cmpi.w   #_EXT_MAX_LCD_HEIGHT+1,%d1
     jblt     10f
 0:
@@ -69,6 +69,9 @@ ClipSpriteX8_XOR_R:
     moveq.l  #8,%d4
     sub.w    %d1,%d4				|8-%d1
 
+    moveq    #30,%d5
+    sub.w    %d2,%d5
+
 |x<0
     tst.w    %d0
     jblt     7f
@@ -77,9 +80,6 @@ ClipSpriteX8_XOR_R:
     add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
     subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
     jbge     8f
-
-    moveq    #30,%d5
-    sub.w    %d2,%d5
 
     subq.w   #2,%d2
     subq.w   #1,%d3
@@ -122,6 +122,8 @@ ClipSpriteX8_XOR_R:
     jbeq     10f
     addq.w   #1,%d6
 10:
+    add.w    %d6,%d5
+
     move.w   %d2,%d7
     sub.w    %d6,%d7
 
@@ -155,8 +157,6 @@ ClipSpriteX8_XOR_R:
 8:
     lsr.w    #3,%d6
 
-    moveq    #30,%d5
-    sub.w    %d2,%d5
     add.w    %d6,%d5
 
     move.w   %d2,%d7

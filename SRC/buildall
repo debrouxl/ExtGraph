@@ -1,0 +1,7 @@
+cd lib
+./buildlib
+cd ..
+cd demos
+./builddemos
+cd ..
+./cleanup

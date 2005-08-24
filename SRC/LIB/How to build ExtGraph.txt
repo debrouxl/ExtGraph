@@ -1,6 +1,7 @@
-Building extgraph.a is neither necessary nor recommended, since
-ExtGraph comes already built as a static library.
+Building extgraph.a is neither necessary nor recommended, since ExtGraph comes already built as a static library.
 
-Instructions:
-1) Compile ExtGraph.tpr in the IDE or with tprbuilder.
-2) Execute buildlib.bat (TIGCC 0.95 and GNU tool ar (m68k-coff) needed).
+Instructions: Either
+* Execute buildcompletelib.bat under Dos/Windows or buildcompletelib under a *nix shell.
+or
+* Compile ExtGraph.tpr in the IDE or with tprbuilder.
+* Execute buildlib.bat or buildlib (TIGCC 0.95 and GNU tool ar (m68k-coff) needed).

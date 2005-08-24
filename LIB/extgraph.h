@@ -879,6 +879,7 @@ void GrayClipISprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("
 
 
 void GrayClipISpriteX16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISpriteX16_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 
 //-----------------------------------------------------------------------------

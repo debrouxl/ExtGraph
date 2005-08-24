@@ -319,22 +319,40 @@ sprite_24:
 /*
 #define dest_8 \
 ((unsigned char[3*8]){})
+*/
+/*
 #define dest_16 \
 ((unsigned short[3*16]){})
+*/
+/*
 #define dest_24 \
 ((unsigned char[3*24]){})
+*/
+/*
 #define dest_32 \
 ((unsigned long[3*32]){})
-#define dest_64 \
-((unsigned long[3*64]){})
-#define dest2_64 \
-((unsigned long[3*64]){})
 */
-//static unsigned long dest_64[3*64];
-//static unsigned long dest2_64[3*64];
-
+/*
+#define dest_64 \
+((unsigned long long[3*64]){})
+*/
+/*
+#define dest2_64 \
+((unsigned long long[3*64]){})
+*/
+/*
 #define preshiftbuf \
 ((unsigned long[256]){})
+*/
+static unsigned char dest_8[3*8];
+static unsigned short dest_16[3*16];
+static unsigned char dest_24[3*3*24];
+static unsigned long dest_32[3*32];
+static unsigned long long dest_64[3*64];
+static unsigned long long dest2_64[3*64];
+
+static unsigned long preshiftbuf[256];
+
 
 /*
 static const unsigned short sprite1[16] =
@@ -794,7 +812,7 @@ unsigned long animations_mask[1][5][32] =
 }
 };
 */
-
+/*
 //==========================================================================//
 //  Utilise les symétries du cercle pour en dessiner un plein
 //==========================================================================//
@@ -882,7 +900,7 @@ void DessineCerclePlein(void * screen_0, short mode, short rayon, short x_centre
  }
 
 }
-
+*/
 
 
 // Main Function
@@ -999,7 +1017,7 @@ GrayOff();
 OSFastArrows = 2;
 for (i = 0; i < 64; i++) {
     SpriteX8Get_R(i,0,21,LCD_MEM,(unsigned char *)dest_64,9);
-    FastFillRect_R(LCD_MEM,i,0,i+9*8-1,20,A_NORMAL);
+    FastFillRect_R(LCD_MEM,i,0,i+9*8-1,20,A_REVERSE);
 //    SpriteX8_MASK_R(i,0,21,(unsigned char *)dest_64,(unsigned char *)dest_64,9,LCD_MEM);
 //    SpriteX8_AND_R(i,0,21,(unsigned char *)dest_64,9,LCD_MEM);
 //    SpriteX8_BLIT_R(i,0,21,(unsigned char *)dest_64,(unsigned char *)0x400,9,LCD_MEM);
@@ -1011,17 +1029,21 @@ for (i = 0; i < 64; i++) {
 }
 */
 /*
+//FillScreenWithGarbage_R(1234567891,LCD_SIZE,LCD_MEM);
 OSFastArrows = 2;
-for (i = -64; i < 64; i++) {
+for (i = -64; i <= 64; i++) {
     ClipSpriteX8_OR_R(i,i,64,8,(unsigned char *)tictlogo64,LCD_MEM);
+    asm("move.w #0xFFFF,%%d0; 0: dbf %%d0,0b" : : : "d0","cc");
 }
 ngetchx();
 exit(0);
 */
 /*
+//FillScreenWithGarbage_R(1234567891,LCD_SIZE,LCD_MEM);
 OSFastArrows = 2;
-for (i = -64; i < 64; i++) {
-    ClipSpriteX8_OR_R(i+240,i,64,8,(unsigned char *)tictlogo64,LCD_MEM);
+for (i = -64; i <= 64; i++) {
+    ClipSpriteX8_AND_R(i+240,i,64,8,(unsigned char *)tictlogo64,LCD_MEM);
+    asm("move.w #0xFFFF,%%d0; 0: dbf %%d0,0b" : : : "d0","cc");
 }
 ngetchx();
 exit(0);
@@ -1034,10 +1056,13 @@ GrayOn();
 FillScreenWithGarbage_R(1234567891,LCD_SIZE,GrayGetPlane(LIGHT_PLANE));
 FillScreenWithGarbage_R(1987654321,LCD_SIZE,GrayGetPlane(DARK_PLANE));
 for (i = -64; i < 240 + 64; i++) {
+//    GrayClipISpriteX16_OR_R(i,1,64,(unsigned short *)tictlogo64,4,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
     GrayClipISpriteX16_MASK_R(i,1,64,(unsigned short *)mtictlogo64,4,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    asm("move.w #0xFFFF,%%d0; 0: dbf %%d0,0b" : : : "d0","cc");
 }
 ngetchx();
 GrayOff();
+exit(0);
 */
 /*
 if (!GrayOn()) exit(1);
@@ -1355,6 +1380,7 @@ printf_xy(0,10,"Dark: %lp",GrayGetPlane(DARK_PLANE));
 ngetchx();
 GrayOff();
 */
+//if (ngetchx() == (0x1000 | KEY_F4)) asm("illegal");
 
 /*
 unsigned char i;
@@ -4005,7 +4031,7 @@ Sprite32_OR_R(0,0,32,dest_32,LCD_MEM);
         GKeyIn(NULL,0);*/
 
 //    GrayDessineCerclePlein(__L_plane, __D_plane, COLOR_BLACK, 25, 80, 50);
-    DessineCerclePlein(LCD_MEM, A_NORMAL, 50, 80, 50);
+//    DessineCerclePlein(LCD_MEM, A_NORMAL, 50, 80, 50);
 //        clip_ocircle(LCD_MEM,30,30,25);
 //        ClipFastOutlinedCircle_R(LCD_MEM,30,30,25);
 //        FastOutlinedCircle_R(LCD_MEM,30,30,25);
@@ -4054,8 +4080,8 @@ FastDrawHLine_faster_regparm(LCD_MEM,i,0,j,A_REVERSE);
 
 //    t1 = FiftyMsecTick - t1;
     t1 = counter - t1;
-ClrScr();
-DrawStr(0,0,"foo",A_REPLACE);
+//ClrScr();
+//DrawStr(0,0,"foo",A_REPLACE);
 
 //    ClrScr();
 //memset(LCD_MEM,0xFFFF,LCD_SIZE);
@@ -4071,7 +4097,7 @@ DrawStr(0,0,"foo",A_REPLACE);
         /*Sprite32_OR(0,20,32,sprite,LCD_MEM);
         Sprite32_OR(80,20,32,dest,LCD_MEM);
         GKeyIn(NULL,0);*/
-    ClipFastFilledCircle_R(LCD_MEM, 80, 50, 50, DrawSpan_OR_R);
+//    ClipFastFilledCircle_R(LCD_MEM, 80, 50, 50, DrawSpan_OR_R);
 //    fcircle(LCD_MEM, A_NORMAL, 80, 50, 50);
 //        Circle_Clipped(LCD_MEM,30,30,25);
 //        DrawClipEllipse(30,30,25,25,&(SCR_RECT){{0,0,159,99}},A_NORMAL);
@@ -4110,7 +4136,7 @@ DrawStr(0,0,"foo",A_REPLACE);
     printf_xy(0,10,"%hu",t2);
 
 //    end:
-    GrayOff();
+//    GrayOff();
     SetIntVec(AUTO_INT(5),s5);
     GKeyFlush();
 

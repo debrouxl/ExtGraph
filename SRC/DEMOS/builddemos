@@ -1,0 +1,34 @@
+echo ======= building demos =======
+./buildsep demo1
+./buildcmp demo2
+./buildcmp demo3
+./buildcmp demo4
+./buildcmp demo5
+echo demo6
+./buildsep demo6
+./buildcmp demo7
+./buildcmp demo8
+./buildcmp demo9
+./buildcmp demo10
+./buildsep demo11
+echo demo12
+./buildsep demo12
+./buildsep demo13
+./buildsep demo14
+echo demo15
+./buildsep demo15
+./buildsep demo16
+./buildsep demo17
+echo demo18
+./buildcmp demo18
+./buildcmp demo19
+./buildcmp demo20
+./buildcmp demo21
+./buildsep demo22
+echo demo24
+./buildsep demo24
+./buildsep demo25
+tigcc demo26.asm ../../lib/extgraph.a ../../lib/tilemap.a ../../lib/gray.o
+mv demo26.89z ../../bin89
+mv demo26.9xz ../../bin92p
+#mv demo26.v2z ../../binv200 Commented for now.

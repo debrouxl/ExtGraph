@@ -1,6 +1,6 @@
 @echo off
 cd lib
-call buildlib.bat
+call buildentirelib.bat
 cd..
 @echo off
 cd demos

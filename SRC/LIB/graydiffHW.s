@@ -29,6 +29,8 @@
 | EXPORTED: GrayOn function (turn grayscales on) - trashes d1/a0/a1
 |==============================================================================
 GrayOn:
+	move.w   (__gray_handle,%pc),%d0   | if __gray_handle is not 0 we have
+	bne      __gray_return_immediately | already allocated memory -> out here
 	movem.l  %d2-%d7/%a2-%a6,-(%a7)
 	lea      (__switch_cnt,%pc),%a0       | reset plane switch counter to 0
 	clr.l	   (%a0)|move.l   #0,(%a0)
@@ -195,8 +197,6 @@ __switch_cnt:
 |==============================================================================
 __gray_init_mem:
 	lea      (__gray_handle,%pc),%a5            | if __gray_handle is not 0
-	tst.w    (%a5)                              | we have already allocated
-	bne.s    __gray_init_return                 | memory -> out here
     |--------------------------------------------------------------------------
     | HeapAllocHigh(HW1=3848 bytes or HW2=7688 bytes)
     |--------------------------------------------------------------------------
@@ -536,6 +536,7 @@ __gray_ok:
 	lea (__L_plane2,%pc),%a1
 	move.l (%a0)+,(%a1)+        | copy __L_plane to __L_plane2
 	move.l (%a0)+,(%a1)+        | copy __D_plane to __D_plane2
+__gray_return_immediately:
 	moveq    #0x1,%d0
 	rts
 |==============================================================================
@@ -607,6 +608,14 @@ __gray_off_out:
 | #############################################################################
 |
 | $Log: gray.s,v $
+| Revision 3.15 2005/08/22 20:23:40  Kevin Kofler
+| Bumped version to 3.53.
+| Fixed calls to GrayOn with grayscale already enabled.
+| Changes integrated by Lionel Debroux.
+|
+| This is the version that does not use two consecutive planes outside of
+| LCD_MEM on HW1.
+|
 | Revision 3.12 2005/06/07 16:51:00  Lionel Debroux
 | Optimized the routine for size: saved 40 bytes.
 | I plan on making a version which always uses two consecutive planes outside
@@ -623,7 +632,7 @@ __gray_off_out:
 |     setting a buffer first. Nevertheless NO program should call one of the
 |     doublebuffer macros without setting a buffer previously.
 | (2) Some further size optimizations. Now the size is exactly as long as
-|     without before the integration of doublebuffering. Quite smart, isn't it?
+|     without before the integration of doublebuffering. Quite good, isn't it?
 |     More functionality, some minor drawbacks fixed and no increase in size ...
 | (3) Changed return value of GrayOff() function to void.
 |
