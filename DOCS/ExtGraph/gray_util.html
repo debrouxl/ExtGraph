@@ -20,12 +20,12 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#gray_util"><h1>Misc. Grayscale Support Routines</h1></a>
+<a name="gray_util"></a><h1>Misc. Grayscale Support Routines</h1>
 <h1>"Gray..." names reflect the new TIGCCLIB naming convention, "...Gray" names are left for compatibility</h1>
 <hr>
 <p>
 <br>
-<a name="#GrayClearScreen"></a>
+<a name="GrayClearScreen"></a>
 <h3>void GrayClearScreen();</h3>
 <h3>void GrayClearScreen2B(void* lightplane,void *darkplane);</h3>
 <h3>void ClearGrayScreen();</h3>
@@ -33,14 +33,14 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 GrayClearScreen/ClearGrayScreen clears both standard grayplanes at once whereas
 GrayClearScreen2B/ClearGrayScreen2B clears the specified buffers.
 Internally it is implemented using a very fast ASM loop which outweights any other approach
-(memset() for example - <strong>especially on PedroM, since to date, the PedroM memset is extremely slow</strong>) in speed.<br>
+(memset() for example - <strong>especially on PedroM, since up to 0.81, the PedroM memset is extremely slow</strong>) in speed.<br>
 Note that <em>lightplane</em> and <em>darkplane</em> have to be of size 240 x 128 pixels
 and they have to start at an even address (buffers allocated with malloc always starts at
 an even address).<br>
 <br><br><br><br>
 
-<a name="#GrayDrawRect"></a>
-<a name="#GrayFastFillRect"></a>
+<a name="GrayDrawRect"></a>
+<a name="GrayFastFillRect"></a>
 <h3>void GrayDrawRect(short x0,short y0,short x1,short y1,short color,short fill);</h3>
 <h3>void GrayDrawRect2B(short x0,short y0,short x1,short y1,short color,short fill,void* lightplane,void *darkplane);</h3>
 <h3>void DrawGrayRect(short x0,short y0,short x1,short y1,short color,short fill);</h3>
@@ -65,7 +65,7 @@ therefore no longer valid after calling it.
 <br><br><br><br>
 
 
-<a name="#GrayInvertRect"></a>
+<a name="GrayInvertRect"></a>
 <h3>void GrayInvertRect(short x0,short y0,short x1,short y1);</h3>
 <h3>void GrayInvertRect2B(short x0,short y0,short x1,short y1,void* lightplane,void *darkplane);</h3>
 <h3>void InvertGrayRect(short x0,short y0,short x1,short y1);</h3>
@@ -83,7 +83,7 @@ uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destinat
 therefore no longer valid after calling it.
 <br><br><br><br>
 
-<a name="#GrayDrawLine"></a>
+<a name="GrayDrawLine"></a>
 <h3>void GrayDrawLine(short x0,short y0,short x1,short y1,short color);</h3>
 <h3>void GrayDrawLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
 <h3>void DrawGrayLine(short x0,short y0,short x1,short y1,short color);</h3>
@@ -99,7 +99,7 @@ the given parameters <em>lightplane</em> and <em>darkplane</em> as destination p
 therefore no longer valid after calling it.
 <br><br><br><br>
 
-<a name="#GrayFastDrawLine"></a>
+<a name="GrayFastDrawLine"></a>
 <h3>void GrayFastDrawLine(short x0,short y0,short x1, short y1, short color);</h3>
 <h3>void GrayFastDrawLine(short x0,short y0,short x1, short y1, short color);</h3>
 <h3>void FastDrawGrayLine2B(short x0,short y0,short x1,short y1,short color,void* lightplane,void *darkplane);</h3>
@@ -118,7 +118,7 @@ uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destinat
 therefore no longer valid after calling it.
 <br><br><br><br>
 
-<a name="#GrayFastDrawHLine"></a>
+<a name="GrayFastDrawHLine"></a>
 <h3>void GrayFastDrawHLine(short x0,short x1, short y, short color);</h3>
 <h3>void GrayFastDrawHLine2B(short x0,short x1,short y,short color,void* lightplane,void *darkplane);</h3>
 <h3>void FastDrawGrayHLine(short x0,short x1, short y, short color);</h3>
@@ -136,7 +136,7 @@ GrayFastDrawHLine2B/FastDrawGrayHLine2B uses the given parameters <em>lightplane
 therefore no longer valid after calling it.
 <br><br><br><br>
 
-<a name="#GrayDrawChar"></a>
+<a name="GrayDrawChar"></a>
 <h3>void GrayDrawChar(short x,short y,char c,short attr);</h3>
 <h3>void GrayDrawChar2B(short x,short y,char c,short attr,void* lightplane,void *darkplane);</h3>
 <h3>void DrawGrayChar(short x,short y,char c,short attr);</h3>
@@ -153,7 +153,7 @@ therefore no longer valid after calling it.
 <br><br><br><br>
 
 
-<a name="#GrayDrawStr"></a>
+<a name="GrayDrawStr"></a>
 <h3>void GrayDrawStr(short x,short y,char* s,short attr);</h3>
 <h3>void GrayDrawStr2B(short x,short y,char* s,short attr,void* lightplane,void *darkplane);</h3>
 <h3>void DrawGrayStr(short x,short y,char* s,short attr);</h3>
@@ -169,7 +169,7 @@ therefore no longer valid after calling it.
 <br><br><br><br>
 
 
-<a name="#GrayDrawStrExt"></a>
+<a name="GrayDrawStrExt"></a>
 <h3>void GrayDrawStrExt(short x,short y,char* s,short attr,short font);</h3>
 <h3>void GrayDrawStrExt2B(short x,short y,char* s,short attr,short font,void* lightplane,void *darkplane);</h3>
 <h3>void DrawGrayStrExt(short x,short y,char* s,short attr,short font);</h3>
@@ -193,7 +193,6 @@ GrayGetPlane(DARK_PLANE) as destination planes whereas GrayDrawStrExt2B/DrawGray
 uses the given parameters <em>lightplane</em> and <em>darkplane</em> as destination planes.
 <br><br>NOTE: This function uses PortSet internally, the previously active plane is
 therefore no longer valid after calling it.
-</p>
 <br>
 <br>
 

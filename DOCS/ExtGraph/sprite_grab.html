@@ -20,11 +20,9 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#sprite_grab"><h1>Fast Sprite Grabbing Routines</h1></a>
+<a name="sprite_grab"></a><h1>Fast Sprite Grabbing Routines</h1>
 <hr>
-<p>
-<br>
-<a name="#SpriteXGet"></a>
+<a name="SpriteXGet"></a>
 <h3>void Sprite8Get(short x,short y,short h,void* src,unsigned char* dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8Get_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register void* src asm("%a0"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16Get(short x,short y,short h,void* src,unsigned short* dest) __attribute__((__stkparm__));</h3>
@@ -38,7 +36,7 @@ SpriteXGet copies a sprite from the screen at x and y to <em>dest</em>.
 This routine is many times faster than the TIOS routine BitmapGet.
 Additonally sprites retrieved using SpriteXGet can be used as arguments
 for all the Sprite routines found in this header, unlike the bitmaps obtained
-with BitmapGet. </span><em>x</em> and <em>y</em>
+with BitmapGet. <em>x</em> and <em>y</em>
 are the coordinates of the upper left corner of the sprite. <em>h</em> is the
 height of the sprite. <em>src</em> is a pointer to a video plane of size 240x128 pixels
 from which one wants to retrieve the sprite. <em>dest</em> is the pointer to a
@@ -49,8 +47,5 @@ The sprite data fetched by SpriteX8Get is organized like this (example for <em>b
 line1/byte1, line1/byte2, line1/byte3, line2/byte1, line2/byte2, line2/byte3 etc.<br>
 <br>
 <em>You can use SpriteX8Get_R twice to simulate "FastCopyRectangleX8_R" (see Fast...RectanglesX8_R in another section).</em>
-</p>
-<br>
-
 </BODY>
 </HTML>

@@ -20,16 +20,13 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#other_gfx"><h1>Other graphical routines</h1></a>
+<a name="other_gfx"></a><h1>Other graphical routines</h1>
 <hr>
-<p>
-
 <h3>extern void FastOutlinedCircle_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));</h3>
 <h3>extern void ClipFastOutlinedCircle_R(register void *plane asm("%a0"),register unsigned short xcenter asm("%d0"),register unsigned short ycenter asm("%d1"),register unsigned short radius asm("%d2"));</h3>
 These routines draw an outlined circle whose center is (<em>xcenter</em>,<em>ycenter</em>), whose radius
 is <em>radius</em>, in 240x128 plane <em>plane</em>.<br>
 The non-clipped version is nearly twice faster than the clipped one.
-</p>
 <br>
 
 </BODY>

@@ -20,14 +20,12 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#floodfill"><h1>Floodfill Routines</h1></a>
+<a name="floodfill"></a><h1>Floodfill Routines</h1>
 <PRE>
 Courtesy of Zeljko Juric <a href="mailto:zjuric@utic.net.ba">(zjuric@utic.net.ba)</a>
 [routine slightly modified to fit the needs]
 </PRE>
 <hr>
-<p>
-<br>
 <h3>void FloodFill(short x,short y,unsigned short shade,void* tmpplane,void* dest) __attribute__((__stkparm__));</h3>
 <h3>void FloodFill_R(short x,short y,unsigned short shade,void* tmpplane,void* dest) __attribute__((__regparm__(5)));</h3>
 
@@ -48,7 +46,6 @@ already set the routine returns immediately.<br>
 NOTE: Due to the fact that FloodFill utilizes heavily the common program stack for its
 operation the given <em>tmpplane</em> buffer shouldn't be a local LCD_BUFFER variable, but
 it should be allocated dynamically by using malloc() like FloodFillMF does internally.
-</p>
 <br>
 
 </BODY>

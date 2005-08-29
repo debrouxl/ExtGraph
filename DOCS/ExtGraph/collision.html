@@ -20,9 +20,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#collision"><h1>Collision Detection Functions and Macros</h1></a>
+<a name="collision"></a><h1>Collision Detection Functions and Macros</h1>
 <hr>
-<p>
 
 <h3>BOUNDS_COLLIDE(x0,y0,x1,y1,w,h)</h3>
 Checks if two rectangle areas of width <em>w</em> and height <em>h</em> starting at (<em>x0</em>,<em>y0</em>)
@@ -63,7 +62,6 @@ to the content of the two sprites. For grayscale sprites it is a good idea to us
 <em>data0</em> and <em>data1</em> where every pixel is set which should be involved in testing. A simple way to
 generate such a mask is to OR the data of the dark plane and the light plane together into one plane. If you use
 such a mask you'll need to call TestCollide16 only once.
-</p>
 
 </BODY>
 </HTML>

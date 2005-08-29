@@ -29,7 +29,7 @@
 @echo demo24
 @call buildsep.bat demo24
 @call buildsep.bat demo25
-@tigcc demo26.asm ..\..\lib\extgraph.a ..\..\lib\tilemap.a ..\..\lib\gray.s
+@tigcc demo26.asm ..\..\lib\extgraph.a ..\..\lib\tilemap.a ..\..\lib\gray.o
 @move demo26.89z ..\..\bin89
 @move demo26.9xz ..\..\bin92p
 REM @move demo26.v2z ..\..\binv200

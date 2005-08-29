@@ -162,9 +162,11 @@ short TestCollide162h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d
 
 // checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
 // Added in 2.00 Beta 5.
-char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollideX8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short bytewidth asm("%d4"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(7)));
+char PixCollideX16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short wordwidth asm("%d4"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(7)));
 
 //-----------------------------------------------------------------------------
 // enums used by some extgraph functions

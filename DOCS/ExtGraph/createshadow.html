@@ -20,9 +20,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#createshadow"><h1>Sprite shadow creating routines</h1></a>
+<a name="createshadow"></a><h1>Sprite shadow creating routines</h1>
 <hr>
-<p>
 <h3>void CreateSpriteIShadow8_R(register short height asm("%d0"),register unsigned char* src0 asm("%a0"),register unsigned char* src1 asm("%a1"),unsigned char* mask, unsigned char* dest0, unsigned char* dest1) __attribute__((__stkparm__));</h3>
 <h3>void CreateSpriteIShadow16_R(register short height asm("%d0"),register unsigned short* src0 asm("%a0"),register unsigned short* src1 asm("%a1"),unsigned short* mask, unsigned short* dest0, unsigned short* dest1) __attribute__((__stkparm__));</h3>
 <h3>void CreateSpriteIShadow32_R(register short height asm("%d0"),register unsigned long* src0 asm("%a0"),register unsigned long* src1 asm("%a1"),unsigned long* mask, unsigned long* dest0, unsigned long* dest1) __attribute__((__stkparm__));</h3>
@@ -69,7 +68,6 @@ MASK routines to display these shadowed sprites.<br>
 <em>Starting from 2.00 Beta 4, Create(I)Sprite(I)ShadowX_R remain the only routines dealing with
 SHADOW and ISHADOW mode: Gray(Clip)SpriteX_(I)SHADOW(2)_R were slow, made maintaining ExtGraph
 even more complicated and mostly useless thanks to Create(I)Sprite(I)ShadowX_R routines.</em>
-</p>
 
 </BODY>
 </HTML>

@@ -4,22 +4,23 @@ Roadmap after Beta 4 (more or less sorted):
 
 0* Make double-buffered versions of the tilemap engine demos. Check Kevin's patch.
 
-/* Modify demo26 to bench ExtGraph / Graphlib / Genlib.
-    * bench generic lines, horiz lines, rectangles, triangles (remove vert lines);
-    * bail out otherwise.
-
-/* Make (Gray)ClipISpriteX16_OR/RPLC/TRANB/TRANW_R. ClipSpriteX16_MASK_R: which calling convention ?
-
-0* DrawPattern_R (Slimeball).
-
+/* Check demo26 (generic lines, horiz lines, rectangles, triangles - remove vert lines) works.
+   Do not make bench against Genlib for now ?
 
 
 -- Beta 5 --
 
 /* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
 
-/* Generic font routines, OS or custom. Two sets of pointers, one should always contain the OS fonts (i.e., mandatory
-SetupCharSet).
+0* DrawPattern_R (Slimeball).
+
+0* optimize sprite routines:
+    0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
+    0* Make fast non-clipped GrayISpriteX_Y_R.
+
+0* Make more X8 routines, especially grayscale ones, including transparencies.
+0* Make (Gray)(Clip)ISpriteX16_AND/MASK/OR/RPLC/TRANB/TRANW/XOR_R. Make demo27 = demo6 with X16 routines ?
+0* Make more Gray(Clip)SingleSprite routines.
 
 /* fastsrb:
     0* Macros for Put with callback, to make programmers' life a bit easier.
@@ -29,15 +30,16 @@ drawn with clipped routines, in TRANW mode, over a background that scrolls very 
 Redraw each frame if not using fastsrb functions, redraw only when needed otherwise. No waiting loop. Count the number of
 frames during 300 AI5 ticks.
 
+0* Add bench against Genlib to demo26.
+
 0* __regparm__ grayscale utilities, while rewriting them all into GNU as ASM.
 
-0* optimize sprite routines:
-    0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
-    0* Make fast non-clipped GrayISpriteX_Y_R.
+/* Generic font routines, OS or custom. Two sets of pointers, one should always contain the OS fonts (i.e., mandatory
+SetupCharSet).
 
-0* Make more X8 routines, especially grayscale ones, including transparencies.
-0* Make more X16 routines (B/W and grayscale clipped and non-clipped, all modes) + demo27 = demo6 with X16 routines.
-0* Make more Gray(Clip)SingleSprite routines.
+0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
+possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5
+becomes ugly).
 
 /* Lines, triangles, circles, etc:
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
@@ -48,10 +50,6 @@ long as credits to Po-Han Lin and link to http://www.edepot.com is provided in s
 EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel is
 faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM version of
 Bresenham.
-
-0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
-possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5
-becomes ugly).
 
 0* Preshifted 8x8.
 

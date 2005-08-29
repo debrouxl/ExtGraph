@@ -20,9 +20,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#exepack"><h1>Exepack-Decompression and TTArchive Support</h1></a>
+<a name="exepack"></a><h1>Exepack-Decompression and TTArchive Support</h1>
 <hr>
-<br>
 <p>
 Exepack-Compression is a compression algorithm which was initially developed to compress
 executables (-pack option of TIGCC compiler) and to generate eBooks for TICT's eBookReader.
@@ -48,7 +47,6 @@ TTArchive file. Tool ttarchive won't care about the content of the entries at al
 <br><br>
 
 <h2>How to get the Pointer to the Beginning of a File?</h2>
-<p>
 To use the exepack decompression routine and/or the ttarchive access macros you'll need
 a pointer to the memory where the external variable is stored first. This can be simply
 done function like the following:
@@ -79,10 +77,9 @@ unsigned char* GetPointerToFile(char* fname,HANDLE* h) {
     }
 }
 </pre>
-</p>
+
 
 <h2>How to use the ExePack Decompression Routine?</h2>
-<p>
 The Exepack decompression routine needs takes two pointers. A source and a destination pointer.
 The source pointer points to the memory which holds the exepacked destination and the destination
 pointer should point to a buffer which is large enough to hold the decompressed data. Suppose
@@ -127,11 +124,9 @@ unsigned char* GetDecompressedData(char* fname) {
     return dest;
 }
 </pre>
-</p>
 
 
 <h2>How to get an Entry of an TTArchive file?</h2>
-<p>
 The first step to retrieve an entry of an archive is to get again a pointer to the start of
 the external variable which holds the ttarchive. The following code shows how to loop through
 all entries of an ttarchive which is stored in a variabled called "mydata". Of course, the
@@ -191,11 +186,10 @@ ttarchive.h from the TIGCC Tools Suite, please <strong>REMOVE</strong> all #incl
 lines in your sourcecode. Including one of these files is not longer necessary NOR recommended, all the more ExtGraph
 contains newer, faster and smaller versions. Just include extgraph.h, that's enough.<br>
 <br>
-<font color=red>
+<font color="red">
 <strong>BTW: Is anyone out there who may extend the docs about Exepack and TTArchive to become more useful?
 A short demo, which shows the usage of the decompression and the ttarchive stuff would be nice, too.<br>
 <br>If "yes", please send me a mail at <a href="mailto:thomas.nussbaumer@gmx.net">thomas.nussbaumer@gmx.net</a>.</strong></font>
-</p>
 
 </BODY>
 </HTML>

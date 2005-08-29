@@ -14,16 +14,15 @@ H3 {FONT-SIZE: 10pt}
 .subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
 PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+.under {text-decoration: underline}
 -->
 </STYLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#tile_func"><h1>Tile (aligned sprites) routines</h1></a>
+<a name="tile_func"></a><h1>Tile (aligned sprites) routines</h1>
 <hr>
-<p>
-<br>
 <h3>void Tile8x8_AND_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned char *sprite asm("%a1"),register void *plane asm("%a0")) __attribute__((__stkparm__));</h3>
 <h3>void Tile8x8_BLIT_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned char *sprite asm("%a1"),register unsigned char maskval asm("%d3"),register void *plane asm("%a0")) __attribute__((__stkparm__));</h3>
 <h3>void Tile8x8_MASK_R(register short col asm("%d0"),register short y asm("%d1"),register unsigned char *sprite asm("%a1"),unsigned char* mask,register void *plane asm("%a0")) __attribute__((__stkparm__));</h3>
@@ -72,18 +71,18 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <h3>void GrayTile32x32_TRANW_R(register short col asm("%d0"),register short y asm("%d1"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GrayTile32x32_XOR_R(register short col asm("%d0"),register short y asm("%d1"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <br>
-These routines draw <u>square</u> sprites at coordinates multiple of 8 (Tile8x8) or 16
+These routines draw <span class="under">square</span> sprites at coordinates multiple of 8 (Tile8x8) or 16
 (Tile16x16, Tile32x32) in 240x128 video planes.
 The x coordinate <em>col</em> is interpreted as a multiple of 8 or 16 (0 means 0, 1 means 8 for
 Tile8x8 and 16 for Tile16x16 and Tile32x32), the y coordinate <em>y</em> is arbitrary (within
-the bounds of the plane, <u>these routines are NOT clipped</u>).<br>
+the bounds of the plane, <span class="under">these routines are NOT clipped</span>).<br>
 NOTE1: the functions prefixed with "Gray" are the grayscale variants of the normal (single plane) functions.<br>
 NOTE2: if you want variable height tiles, it's easy: add the "h" parameter in d2, modify the functions (everything
 outside the loops related to d2). <em>Warning</em>, most loops are unrolled: if you don't modify the routine more
 thoroughly, the height will often have to be multiple of 2 or 4.<br>
-</p>
+
 <br><br>
-<p>
+
 <h3>void GrayITile8x8_AND_R(register short col asm("%d0"),register short y asm("%d1"),unsigned char *sprite,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GrayITile8x8_BLIT_R(register short col asm("%d0"),register short y asm("%d1"),unsigned char *sprite,unsigned char maskval,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GrayITile8x8_MASK_R(register short col asm("%d0"),register short y asm("%d1"),unsigned char *sprite,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
@@ -121,7 +120,7 @@ without mask.</li>
 usually LIGHT_PLANE and DARK_PLANE respectively, but you can do otherwise), mask is applied to
 both planes.</li>
 </ul>
-</p>
+
 <br>
 
 </BODY>

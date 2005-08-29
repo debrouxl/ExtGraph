@@ -14,33 +14,31 @@ H3 {FONT-SIZE: 10pt}
 .subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
 PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
+.under {text-decoration: underline}
 -->
 </STYLE>
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#sprite_scale"><h1>Sprite Scaling Routines</h1></a>
+<a name="sprite_scale"></a><h1>Sprite Scaling Routines</h1>
 <pre>
 Courtesy of Jim Haskell <a href="mailto:jimhaskell@yahoo.com">(jimhaskell@yahoo.com)</a>
 [routines slightly modified (and bugfixed) to fit the needs]
 New (faster) routines by Julien Richard-Foy <a href="mailto:julien.rf@wanadoo.fr">(julien.rf@wanadoo.fr)</a> are on the way.
 </pre>
 <hr>
-<p>
-<br>
-
-<a name="#ScaleSpriteX_OR"></a>
+<a name="ScaleSpriteX_OR"></a>
 <h3>void ScaleSprite8_OR(unsigned char *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite16_OR(unsigned short *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite32_OR(unsigned long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite64_OR(unsigned long long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 
 ScaleSpriteX_OR
-scales a <u>square</u> input sprite with a width of X pixels or less and then draws
+scales a <span class="under">square</span> input sprite with a width of X pixels or less and then draws
 the scaled sprite on the screen using OR logic. <em>x0</em>
 and <em>y0</em> are the coordinates of the upper left corner of the sprite. <em>sizex</em>
-and <em>sizey</em> are the desired dimensions of the <u>scaled</u> sprite. <em>sprite</em>
+and <em>sizey</em> are the desired dimensions of the <span class="under">scaled</span> sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
 type is unsigned char; for X=16 type is unsigned short; for X=32 type is
 unsigned long; and for X=64 type is unsigned long long) which define the shape
@@ -51,17 +49,17 @@ If you are using grayscales use function GrayGetPlane to retrieve the pointer to
 <br><br><br><br>
 
 
-<a name="#ScaleSpriteX_AND"></a>
+<a name="ScaleSpriteX_AND"></a>
 <h3>void ScaleSprite8_AND(unsigned char *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite16_AND(unsigned short *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite32_AND(unsigned long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite64_AND(unsigned long long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 
 ScaleSpriteX_AND
-scales a <u>square</u> input sprite with a width of X pixels or less and then draws
+scales a <span class="under">square</span> input sprite with a width of X pixels or less and then draws
 the scaled sprite on the screen using AND logic. <em>x0</em>
 and <em>y0</em> are the coordinates of the upper left corner of the sprite. <em>sizex</em>
-and <em>sizey</em> are the desired dimensions of the <u>scaled</u> sprite. <em>sprite</em>
+and <em>sizey</em> are the desired dimensions of the <span class="under">scaled</span> sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
 type is unsigned char; for X=16 type is unsigned short; for X=32 type is
 unsigned long; and for X=64 type is unsigned long long) which define the shape
@@ -71,17 +69,17 @@ can use constant LCD_MEM for dest.
 If you are using grayscales use function GrayGetPlane to retrieve the pointer to the video planes.
 <br><br><br><br>
 
-<a name="#ScaleSpriteX_XOR"></a>
+<a name="ScaleSpriteX_XOR"></a>
 <h3>void ScaleSprite8_XOR(unsigned char *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite16_XOR(unsigned short *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite32_XOR(unsigned long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 <h3>void ScaleSprite64_XOR(unsigned long long *sprite,unsigned char *dest,short x0,short y0,short sizex,short sizey);</h3>
 
 ScaleSpriteX_XOR
-scales a <u>square</u> input sprite with a width of X pixels or less and then draws
+scales a <span class="under">square</span> input sprite with a width of X pixels or less and then draws
 the scaled sprite on the screen using XOR logic. <em>x0</em>
 and <em>y0</em> are the coordinates of the upper left corner of the sprite. <em>sizex</em>
-and <em>sizey</em> are the desired dimensions of the <u>scaled</u> sprite. <em>sprite</em>
+and <em>sizey</em> are the desired dimensions of the <span class="under">scaled</span> sprite. <em>sprite</em>
 is a pointer to the array of unsigned numbers of type equal to X (i.e. for X=8
 type is unsigned char; for X=16 type is unsigned short; for X=32 type is
 unsigned long; and for X=64 type is unsigned long long) which define the shape
@@ -91,12 +89,12 @@ can use constant LCD_MEM for dest.
 If you are using grayscales use function GrayGetPlane to retrieve the pointer to the video planes.
 <br><br><br><br>
 
-<a name="#DoubleSpriteDimensions"></a>
+<a name="DoubleSpriteDimensions"></a>
 <h3>void DoubleSpriteDimensionsX8_R(register short h asm("%d0"),register unsigned char* src asm("%a0"),register short bytewidth asm("%d1"),register unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));</h3>
 <h3>void DoubleSpriteDimensions16x16_R(register unsigned short* src asm("%a0"),register unsigned long* dest asm("%a1")) __attribute__((__regparm__(2)));</h3>
 DoubleSpriteDimensionsX8_R is a fast alternative to ScaleSprite routines if the scale factor
 is 2. DoubleSpriteDimensions16x16_R was designed specifically for the "AMS native comment
 format" icon type available since TIGCC 0.95.
-</p>
+
 </BODY>
 </HTML>

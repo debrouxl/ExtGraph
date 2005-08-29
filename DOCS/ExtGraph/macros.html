@@ -20,10 +20,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#macros"><h1>Fast Pixel Access Macros / utility macros</h1></a>
+<a name="macros"></a><h1>Fast Pixel Access Macros / utility macros</h1>
 <hr>
-<p>
-<br>
 <h3>EXT_PIXOFFSET(x,y)</h3>
 calculates the byte offset of a pixel within a 240x128 pixels large video plane (used internally by EXT_PIXADDR).
 <h3>EXT_PIXADDR(plane,x,y)</h3>
@@ -91,7 +89,6 @@ returns the word swapped value (upper and lower word swapped) of the given long 
 ASM <code>swap</code> instruction.
 <h3>DEREFSMALL(p,i)</h3>
 dereferences i-th element of pointer p (optimized version of p[i]).
-</p>
 <br>
 
 </BODY>

@@ -20,10 +20,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#trans_effects"><h1>Transition effects</h1></a>
+<a name="trans_effects"></a><h1>Transition effects</h1>
 <hr>
-<p>
-<br>
 <h3>void FadeOutToBlack_CWS1_R(register void* lightplane asm("%a0"),register void* darkplane asm("%a1"),register short height asm("%d0"),register short bytewidth asm("%d1"),register short wait asm("%d2"));</h3>
 <h3>void FadeOutToWhite_CWS1_R(register void* lightplane asm("%a0"),register void* darkplane asm("%a1"),register short height asm("%d0"),register short bytewidth asm("%d1"),register short wait asm("%d2"));</h3>
 <h3>void FadeOutToBlack_CCWS1_R(register void* lightplane asm("%a0"),register void* darkplane asm("%a1"),register short height asm("%d0"),register short bytewidth asm("%d1"),register short wait asm("%d2"));</h3>
@@ -61,7 +59,6 @@ parameter <em>wait</em>, since demo18 contains the wait values which seem to me 
 the best speed, not too slow, not too fast). I'm unable to describe most of those routines
 in an interesting and not fastidious way...<br>
 Gray(I)ShadowPlanesTo_R act like a combination of GrayIShadowPlanes240_R and FastCopyScreen_R.
-</p>
 <br>
 
 </BODY>

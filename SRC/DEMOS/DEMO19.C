@@ -17,8 +17,6 @@
 short* x = NULL;
 short* y = NULL;
 
-void ClipFilledTriangle_INVERT_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short x3 asm("%d4"),short y3 asm("%a1"),void *plane asm("%a0"));
-
 //=============================================================================
 // allocate and initialize global points arrays with "random" values
 //=============================================================================

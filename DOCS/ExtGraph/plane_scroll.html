@@ -20,11 +20,9 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#plane_scroll"><h1>Plane Scrolling Routines</h1></a>
+<a name="plane_scroll"></a><h1>Plane Scrolling Routines</h1>
 <hr>
-<p>
-<br>
-<a name="#ScrollLeftX"></a>
+<a name="ScrollLeftX"></a>
 <h3>void ScrollLeft160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
 <h3>void ScrollLeft160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
 <h3>void ScrollLeft240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
@@ -34,7 +32,7 @@ ScrollLeftX scroll X pixels of <EM>nr</EM> number of lines of a video plane
 (240x128 pixels in size) 1 pixel to the left.
 <br><br><br><br>
 
-<a name="#ScrollRightX"></a>
+<a name="ScrollRightX"></a>
 <h3>void ScrollRight160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
 <h3>void ScrollRight160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
 <h3>void ScrollRight240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
@@ -45,7 +43,7 @@ ScrollRightX scroll X pixels of <EM>nr</EM> number of lines of a video plane
 <br><br><br><br>
 
 
-<a name="#ScrollUpX"></a>
+<a name="ScrollUpX"></a>
 <h3>void ScrollUp160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
 <h3>void ScrollUp160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
 <h3>void ScrollUp240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
@@ -56,7 +54,7 @@ ScrollUpX scroll X pixels of <EM>nr</EM> number of lines of a video plane
 <br><br><br><br>
 
 
-<a name="#ScrollDownX"></a>
+<a name="ScrollDownX"></a>
 <h3>void ScrollDown160(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
 <h3>void ScrollDown160_R(unsigned short* buffer,unsigned short lines) __attribute__((__regparm__(2)));</h3>
 <h3>void ScrollDown240(unsigned short* buffer,unsigned short lines) __attribute__((__stkparm__));</h3>
@@ -64,7 +62,6 @@ ScrollUpX scroll X pixels of <EM>nr</EM> number of lines of a video plane
 
 ScrollDownX scroll X pixels of <EM>nr</EM> number of lines of a video plane
 (240x128 pixels in size) 1 line downwards.
-</p>
 <br>
 
 </BODY>

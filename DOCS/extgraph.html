@@ -16,6 +16,9 @@ PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 .strongcentered {text-align: center; text-decoration: bold}
 .startofblock {font-size: 18pt; COLOR: #000000; text-decoration: bold}
+.under {text-decoration: underline}
+}
+
 -->
 </STYLE>
 </HEAD>
@@ -172,7 +175,7 @@ the planes are allocated consecutively.<br>
 
 <hr>
 <p>
-<a name="#contents" class=startofblock>Contents</a>
+<a name="contents" class=startofblock>Contents</a>
 <ul>
 <li><a href="ExtGraph/howto.html"><strong>How to use the ExtGraph Library ?</strong></a></li>
 <li><a href="ExtGraph/sprite_draw.html"><strong>Fast Sprite Drawing Routines</strong></a></li>
@@ -204,7 +207,7 @@ the planes are allocated consecutively.<br>
 </ul>
 <br>
 
-<a name="#functions" class=startofblock>Functions, Types, Globals and Macros</a><br>
+<a name="functions" class=startofblock>Functions, Types, Globals and Macros</a><br>
 Library ExtGraph contains the following functions (<strong>note that this list may be outdated, the correct list is always
 available in the header</strong>):
 <PRE><strong>
@@ -281,15 +284,15 @@ available in the header</strong>):
 
 
 <a href="ExtGraph/rect_draw.html">FastFillRect</a>                 <a href="ExtGraph/rect_draw.html">FastFillRect_R</a>
-<a href="ExtGraph/rect_draw.html">FastFilledRect_Draw_R</a>        <a href="ExtGraph/rect_draw.html">FastFilledRect_Erase_R</a>        <a href="#rect_draw">FastFilledRect_Invert_R</a>
-<a href="ExtGraph/rect_draw.html">FastOutlineRect</a>              <a href="ExtGraph/rect_draw.html">FastOutlineRect_R</a>             <a href="#rect_draw">GrayFastOutlineRect_R</a>
+<a href="ExtGraph/rect_draw.html">FastFilledRect_Draw_R</a>        <a href="ExtGraph/rect_draw.html">FastFilledRect_Erase_R</a>        <a href="ExtGraph/rect_draw.html">FastFilledRect_Invert_R</a>
+<a href="ExtGraph/rect_draw.html">FastOutlineRect</a>              <a href="ExtGraph/rect_draw.html">FastOutlineRect_R</a>             <a href="ExtGraph/rect_draw.html">GrayFastOutlineRect_R</a>
 <a href="ExtGraph/rect_draw.html">FastEraseRect160_R</a>           <a href="ExtGraph/rect_draw.html">FastEraseRect240_R</a>
 <a href="ExtGraph/rect_draw.html">GrayFastEraseRect2B160_R</a>     <a href="ExtGraph/rect_draw.html">GrayFastEraseRect2B240_R</a>
 <a href="ExtGraph/rect_draw.html">FastFillRect160_R</a>            <a href="ExtGraph/rect_draw.html">FastFillRect240_R</a>
 <a href="ExtGraph/rect_draw.html">GrayFastFillRect2B160_R</a>      <a href="ExtGraph/rect_draw.html">GrayFastFillRect2B240_R</a>
 <a href="ExtGraph/rect_draw.html">FastInvertRect160_R</a>          <a href="ExtGraph/rect_draw.html">FastInvertRect240_R</a>
 <a href="ExtGraph/rect_draw.html">GrayFastInvertRect2B160_R</a>    <a href="ExtGraph/rect_draw.html">GrayFastInvertRect2B240_R</a>
-<a href="ExtGraph/rect_draw.html">FastEraseRectX8_R</a>            <a href="ExtGraph/rect_draw.html">FastFillRectX8_R</a>              <a href="#rect_draw">FastEraseRectX8_R</a>
+<a href="ExtGraph/rect_draw.html">FastEraseRectX8_R</a>            <a href="ExtGraph/rect_draw.html">FastFillRectX8_R</a>              <a href="ExtGraph/rect_draw.html">FastEraseRectX8_R</a>
 
 
 <a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen</a>              <a href="ExtGraph/gray_util.html#GrayClearScreen">ClearGrayScreen2B</a>             <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen</a>                <a href="ExtGraph/gray_util.html#GrayClearScreen">GrayClearScreen2B</a>
@@ -411,7 +414,7 @@ and the following macros/definitions:
 <br><br><br>
 
 <hr>
-<a name="#reportingbugsnote" class=startofblock>A note on reporting bugs...</a>
+<a name="reportingbugsnote" class=startofblock>A note on reporting bugs...</a>
 <hr>
 <p>
 We tried to do our best to provide something bug-free, but we may have failed (many bugs
@@ -434,7 +437,7 @@ Thanks in advance.
 <br>
 <br>
 <hr>
-<a name="#extgraphindistros" class=startofblock>Including ExtGraph in your projects' distributions...</a>
+<a name="extgraphindistros" class=startofblock>Including ExtGraph in your projects' distributions...</a>
 <hr>
 <p>
 If you distribute ExtGraph within your projects' distributions, please include both extgraph.a and
@@ -450,7 +453,7 @@ risks of spreading modified versions which don't behave like the original ones.<
 <br>
 <br>
 <hr>
-<a name="#specialthanks" class=startofblock>Special thanks to...</a>
+<a name="specialthanks" class=startofblock>Special thanks to...</a>
 <hr>
 <p>
 I'd like to thank the contributors, especially Julien Richard-Foy (jackiechan / Sasume -

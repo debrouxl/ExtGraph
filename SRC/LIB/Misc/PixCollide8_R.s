@@ -24,7 +24,7 @@ PixCollide8_R:
     cmp.w    %a1,%d1
     bge.s    0f
 
-    btst.b   %d2,(%a0, %d1.w)
+    btst.b   %d2,0(%a0,%d1.w)
     sne.b    %d0
     rts
 

@@ -20,12 +20,12 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#history"><h1>History</h1></a>
+<a name="history"></a><h1>History</h1>
 <hr>
 <blockquote>
 <table border=1>
 <tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
-<tr><td>2.00 Beta 5</td><td>xx/08/2005</td><td>Fixed silly bugs on pixel macros (yes, once more !).
+<tr><td>2.00 Beta 5</td><td>xx/xx/2005</td><td>Fixed silly bugs on pixel macros (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>
 <tr><td>           </td><td>          </td><td>Restructured the entire documentation, so that it
@@ -107,12 +107,16 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         Genlib, with good reason. The grayscale versions require
                                         modified grayscale routines (see an item above).</td></tr>
 <tr><td>           </td><td>          </td><td>Added GrayFastDrawLine_R.</td></tr>
-<tr><td>           </td><td>          </td><td>Added ClipLine_R and (Gray)ClipDrawLine_R.
+<tr><td>           </td><td>          </td><td>Added ClipLine_R and (Gray)ClipDrawLine_R. They use the
+                                        Cohen-Sutherland line clipping algorithm. I know of another
+                                        algorithm, which is said to be faster, and I have a 68000
+                                        assembly implementation of it, but the code is so much larger
+                                        than it needs to be optimized for size or dropped.
                                         The architecture (routine + callback) is close to that of
                                         Genlib, with good reason.</td></tr>
 <tr><td>           </td><td>          </td><td>Made the prototypes of most X8 functions more explicit,
                                         using "bytewidth" instead of "w". Thanks to MathStuf for the
-                                        report.</td></tr>
+                                        report. Likewise, X16 functions use "wordwidth".</td></tr>
 <tr><td>           </td><td>          </td><td>Added m68k-coff-ar for PC/Win32 and PC/Linux in /bin. If
                                         someone provides me binaries for other architectures,
                                         I can add them.</td></tr>
@@ -129,24 +133,24 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         break the ABI. Kevin suggests using <code>__attribute__((__aligned__))</code>,
                                         I don't know if I'll add that, because it bloats the header only
                                         to fix extremely infrequent problems.</td></tr>
-<tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>removed (I)SHADOW(2) routines: they are nearly
+<tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed (I)SHADOW(2) routines: they are nearly
                                         useless thanks to Create(I)Sprite(I)Shadow and OR routines
                                         (which require a small additional amount of space) and
                                         they increase maintenance (more than one quarter of all
                                         drawing modes).</td></tr>
-<tr><td>           </td><td>          </td><td>added Gray(Clip)S[ame]MASK routines.</td></tr>
-<tr><td>           </td><td>          </td><td>added a number of hints in the readme, to help
+<tr><td>           </td><td>          </td><td>Added Gray(Clip)S[ame]MASK routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Added a number of hints in the readme, to help
                                         users customizing routines by themselves.</td></tr>
-<tr><td>           </td><td>          </td><td>added fast background save&amp;restore routines,
+<tr><td>           </td><td>          </td><td>Added fast background save&amp;restore routines,
                                         with the corresponding demo (demo22): faster replacement
                                         for Get + RPLC, i.e. another way to do without redrawing
                                         everything all the time. This one can outperform all other
                                         approaches under some conditions.<br>
                                         Thanks to the input of Julien, they are better.</td></tr>
-<tr><td>           </td><td>          </td><td>fixed once more pixel macros, thanks to Kevin.</td></tr>
-<tr><td>           </td><td>          </td><td>added missing "const" keyword to most prototypes:
+<tr><td>           </td><td>          </td><td>Fixed once more pixel macros, thanks to Kevin.</td></tr>
+<tr><td>           </td><td>          </td><td>Added missing "const" keyword to most prototypes:
                                         at last, no more warnings about discarded qualifiers.</td></tr>
-<tr><td>           </td><td>          </td><td>nearly all occurences of ".data" were replaced by
+<tr><td>           </td><td>          </td><td>Nearly all occurences of ".data" were replaced by
                                         ".text". This suits better to the latest TIGCC Betas
                                         (better code with -ffunction-sections -fdata-sections
                                         --reorder-sections). No impact on compression ratio.</td></tr>
@@ -162,19 +166,19 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <tr><td>           </td><td>          </td><td>Julien told me about speed optimizations on TRANW
                                         and TRANB sprite routines (found in programs by pad and
                                         PpHd): +15% for TRANW, +&gt;30 % for TRANB.</td></tr>
-<tr><td>           </td><td>          </td><td>small optimization (2 bytes, 4 clocks) on a number
+<tr><td>           </td><td>          </td><td>Small optimization (2 bytes, 4 clocks) on a number
                                         of sprite routines. [A and B] is equivalent to [B and A]...</td></tr>
-<tr><td>           </td><td>          </td><td>small optimization on several routines: d3 or d4
+<tr><td>           </td><td>          </td><td>Small optimization on several routines: d3 or d4
                                         can be saved to a1 instead of the stack.</td></tr>
-<tr><td>           </td><td>          </td><td>fixed long-hidden bugs. Most B/W Sprite32 routines
+<tr><td>           </td><td>          </td><td>Fixed long-hidden bugs. Most B/W Sprite32 routines
                                         were buggy, thanks to Jesse Frey for the report. I found
                                         other long-hidden bugs retesting the entire library.</td></tr>
-<tr><td>           </td><td>          </td><td>updated the tilemap engine. The API was reduced
+<tr><td>           </td><td>          </td><td>Updated the tilemap engine. The API was reduced
                                         somewhat: Julien took out with the most useless modes
                                         to reduce maintenance. Two demos were added. However,
                                         the tilemap engine is still incompatible with the
                                         TIGCCLIB grayscale doublebuffering.</td></tr>
-<tr><td>           </td><td>          </td><td>brand-new pure ASM ttunpack routines by Samuel
+<tr><td>           </td><td>          </td><td>Brand-new pure ASM ttunpack routines by Samuel
                                         Stearley. The fast version gives a huge speed increase
                                         (now over 80 KB/sec !), interesting size decrease (while
                                         the routine is definitely optimized for speed, with
@@ -183,22 +187,22 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         later I had optimized. The small version is 240 bytes
                                         (more than 300 bytes smaller than the other version),
                                         but it is slow (~&lt;20 KB/sec).</td></tr>
-<tr><td>           </td><td>          </td><td>updated SpriteX8 functions, splitting them into
+<tr><td>           </td><td>          </td><td>Updated SpriteX8 functions, splitting them into
                                         normal and slower versions.</td></tr>
-<tr><td>           </td><td>          </td><td>several new routines related to planes (Fill,
+<tr><td>           </td><td>          </td><td>Several new routines related to planes (Fill,
                                         FillWithGarbage). To be fair, I want to mention that I
                                         received suggestions and code from Dave Randall, but I
                                         had already thought about implementing such routines,
                                         and I made a different implementation.</td></tr>
-<tr><td>           </td><td>          </td><td>added GrayFastDrawHLine_R, done by Julien.</td></tr>
-<tr><td>           </td><td>          </td><td>probably added bugs, forgot fixes, forgot to
+<tr><td>           </td><td>          </td><td>Added GrayFastDrawHLine_R, done by Julien.</td></tr>
+<tr><td>           </td><td>          </td><td>Probably added bugs, forgot fixes, forgot to
                                         mention fixes...</td></tr>
-<tr><td>           </td><td>          </td><td>not updated the documentation much: most new
+<tr><td>           </td><td>          </td><td>Not updated the documentation much: most new
                                         functions are not described, some prototypes in this
                                         documentation may be wrong, etc... There are several
                                         annoying bugs in ExtGraph, and I'm on holiday, so I'm
                                         spending some time making a bugfix release</td></tr>
-<tr><td>           </td><td>          </td><td>translated and released the todo list.</td></tr>
+<tr><td>           </td><td>          </td><td>Translated and released the todo list.</td></tr>
 <tr><td>2.00 Beta 3</td><td>11/06/2004</td><td>4 distributions are now available. .tar.bz2 is
                                         not the most powerful format, but it's OS-independent,
                                         and significantly reduces the size of the library.<br>

@@ -20,12 +20,9 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="#sprite_draw"><h1>Fast Sprite Drawing Routines</h1></a>
+<a name="sprite_draw"></a><h1>Fast Sprite Drawing Routines</h1>
 <hr>
-<p>
-<br>
-<a name="#SpriteX_AND"></a>
-<p>
+<a name="SpriteX_AND"></a>
 <h3>void Sprite8_AND(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16_AND(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
@@ -72,11 +69,9 @@ NOTE1: the functions prefixed with "Gray" are the grayscale variants of the norm
 NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
-<a name="#SpriteX_OR"></a>
-<p>
+<a name="SpriteX_OR"></a>
 <h3>void Sprite8_OR(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8_OR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16_OR(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
@@ -123,11 +118,9 @@ NOTE1: the functions prefixed with "Gray" are the grayscale variants of the norm
 NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
-<a name="#SpriteX_XOR"></a>
-<p>
+<a name="SpriteX_XOR"></a>
 <h3>void Sprite8_XOR(short x,short y,short h,unsigned char *sprt,void *dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8_XOR_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16_XOR(short x,short y,short h,unsigned short *sprt,void *dest) __attribute__((__stkparm__));</h3>
@@ -174,11 +167,9 @@ NOTE1: the functions prefixed with "Gray" are the grayscale variants of the norm
 NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
-<a name="#SpriteX_MASK"></a>
-<p>
+<a name="SpriteX_MASK"></a>
 <h3>void Sprite8_MASK(short x,short y,short h,unsigned char *sprt,unsigned char *mask,void *dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),unsigned char *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));</h3>
 <h3>void Sprite16_MASK(short x,short y,short h,unsigned short *sprt,unsigned short *mask,void *dest) __attribute__((__stkparm__));</h3>
@@ -231,12 +222,10 @@ extreme points are (0,0) and (239,127).<br>
 NOTE3: GrayClipISprite8/16/32_MASK_R are noticeably faster than GrayClipSprite8/16/32_MASK_R. Indeed,
 the latter apply the same mask to both planes, the former apply one mask per plane. One mask per
 plane is more powerful, but often overkill and of course bigger and slower. See also TRAN[BDLW] routines below.
-</p>
 <br><br><br>
 
 
-<a name="#SpriteX_BLIT"></a>
-<p>
+<a name="SpriteX_BLIT"></a>
 <h3>void Sprite8_BLIT(short x,short y,short h,unsigned char *sprt,unsigned char maskval,void *dest) __attribute__((__stkparm__));</h3>
 <h3>void Sprite8_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register unsigned char maskval asm("%d3"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16_BLIT(short x,short y,short h,unsigned short *sprt,unsigned short maskval,void *dest) __attribute__((__stkparm__));</h3>
@@ -285,11 +274,9 @@ NOTE1: the functions prefixed with "Gray" are the grayscale variants of the norm
 NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
-<a name="#SpriteX_RPLC"></a>
-<p>
+<a name="SpriteX_RPLC"></a>
 <h3>void Sprite8_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned char *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite16_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
 <h3>void Sprite32_RPLC_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),register void *dest asm("%a0")) __attribute__((__regparm__));</h3>
@@ -312,12 +299,10 @@ NOTE1: the functions prefixed with "Gray" are the grayscale variants of the norm
 NOTE2: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
 
-<a name="#GraySpriteX_TRANB"></a>
-<p>
+<a name="GraySpriteX_TRANB"></a>
 <h3>void GraySprite8_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GraySprite16_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GraySprite32_TRANB_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
@@ -335,12 +320,10 @@ size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the
 NOTE: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br><br>
 
 
-<a name="#GraySpriteX_TRANW"></a>
-<p>
+<a name="GraySpriteX_TRANW"></a>
 <h3>void GraySprite8_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned char *sprt0,unsigned char *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GraySprite16_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
 <h3>void GraySprite32_TRANW_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));</h3>
@@ -358,7 +341,6 @@ size 240 x 128 pixels. Use function GrayGetPlane to retrieve the pointers to the
 NOTE: the functions whose name contains "Clip" are the clipped variants of the normal
 (single or double plane) functions, the sprites are clipped outside the rectangle whose
 extreme points are (0,0) and (239,127).
-</p>
 <br><br>
 <h3>Read the readme for information on how to make TRANL (transparency color light gray) and
 TRAND (transparency color dark gray) routines.</h3>
