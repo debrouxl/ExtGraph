@@ -44,7 +44,7 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         board user "lachprog"), optimized existing ones.</td></tr>
 <tr><td>           </td><td>          </td><td>Added plane scaling routines. As all such routines,
                                         they eat up a lot of CPU time, they are rather large due to
-                                        unrolled loops and/or lookup tables, they require doubling
+                                        unrolled loops and/or lookup tables, they require increasing
                                         the space allocated to planes, their effect is more or less
                                         ugly (especially when there's text). Some games are more
                                         playable on 89 using that technique, but others should be
@@ -58,16 +58,17 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
 <tr><td>           </td><td>          </td><td>Switched to TIGCC 0.96 and its GCC 4.x, which required
                                         small changes in the build batchfile (which you should hardly
                                         ever use anyway).</td></tr>
-<tr><td>           </td><td>          </td><td>Switched to a more general and powerful cleanup script
-                                        which uses GNU tools under an Unix shell. Requires Cygwin
-                                        or MSYS (untested) on Win32. Next step: port all batches to
-                                        an Unix shell, so that building ExtGraph is trivial on *nix.
-                                        I will have to do the same thing in most other TICT programs.</td></tr>
+<tr><td>           </td><td>          </td><td>Like in several other TICT programs, switched to sh
+                                        scripts, added a make distribution script and a more general
+                                        and powerful cleanup script. They require a compatible shell
+                                        and tools, that is Cygwin or MSYS (untested) on Win32 (builtin
+                                        on Linux, MacOS X, probably BSD). The Win32 batchfiles, when
+                                        they exist, have been left.</td></tr>
 <tr><td>           </td><td>          </td><td>Added a fork of the TIGCCLIB grayscale routine, which
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
-                                        for more information. I integrated the fix for double GrayOn();
-                                        crash.</td></tr>
+                                        for more information. I integrated the fix for the double
+                                        GrayOn(); crash.</td></tr>
 <tr><td>           </td><td>          </td><td>Added GrayClipISpriteX16_MASK_R, based on Genlib's
                                         put_masked_big_sprite, made by Julien RF; made several other
                                         X16 routines.</td></tr>
@@ -75,7 +76,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         Geoffrey Anneheim (geogeo), which I significantly optimized.</td></tr>
 <tr><td>           </td><td>          </td><td>Created GrayClipISprite16_TRAND/L_R as an example of
                                         TRAND/L routines. The readme used to be wrong about making
-                                        TRAND/L from TRANB/W, and making TRAND/L was not so easy.</td></tr>
+                                        TRAND/L from TRANB/W, and making TRAND/L was not so easy after
+                                        all.</td></tr>
 <tr><td>           </td><td>          </td><td>On 12/08/2005, created a SVN repository for ExtGraph at
                                         <a href="http://opensvn.csie.org/ExtGraph">http://opensvn.csie.org/ExtGraph</a>.
                                         Anonymous checkout allowed, but recommended only to check if
@@ -130,9 +132,15 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         destination. As far as I could see, it was the only true such
                                         problem in the prototypes... While I was at it, I switched to
                                         explicit registers in ScrollX_R routines, checking that I didn't
-                                        break the ABI. Kevin suggests using <code>__attribute__((__aligned__))</code>,
-                                        I don't know if I'll add that, because it bloats the header only
-                                        to fix extremely infrequent problems.</td></tr>
+                                        break the ABI. Kevin suggests using <code>__attribute__((__aligned__(n)))</code>,
+                                        but I don't know if I'll add that, because it bloats the header
+                                        only to fix very infrequent problems.</td></tr>
+<tr><td>           </td><td>          </td><td>Added generic sprite rotation routines (8, 16, 32, X8),
+                                        courtesy of Joey Adams.</td></tr>
+<tr><td>           </td><td>          </td><td>Optimized the transition effects for size (stupid
+                                        dbf+rts), fixed a severe bug that would occur only with
+                                        unusual parameters in some of them, optimized their source
+                                        to use local labels: extgraph.a is more than 3 KB smaller now.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed (I)SHADOW(2) routines: they are nearly
                                         useless thanks to Create(I)Sprite(I)Shadow and OR routines
                                         (which require a small additional amount of space) and

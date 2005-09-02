@@ -161,12 +161,13 @@ short TestCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"
 short TestCollide162h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height0,short height1,unsigned short* data0 asm("%a0"),unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 
 // checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
-// Added in 2.00 Beta 5.
+// Added in 2.00 Beta 5. Courtesy of Samuel Stearley, Jesse Frey and someone else.
+// Modified and extended by Lionel Debroux.
 char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollideX8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short bytewidth asm("%d4"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(7)));
-char PixCollideX16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short wordwidth asm("%d4"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(7)));
+char PixCollideX8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short bytewidth asm("%d4"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
+char PixCollideX16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short wordwidth asm("%d4"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__));
 
 //-----------------------------------------------------------------------------
 // enums used by some extgraph functions
@@ -180,9 +181,13 @@ enum ExtAttrs   {A_CENTERED=0x40,A_SHADOWED=0x80};
 
 //-----------------------------------------------------------------------------
 // fast pixel access macros
-// 2.00 introduces new macros in order to have GCC 3.x generate better code.
 // They were coded and most of all fixed numerous times by Julien Richard-Foy,
 // Kevin Kofler, Lionel Debroux, Sebastian Reichelt.
+// 2.00 introduces new macros in order to have GCC 3.x generate better code.
+// GCC 4.x seems to do better with the old macros, but we will keep the old
+// ones, which work starting from 2.00 Beta 5 (at last), until we know GCC
+// can do as well on its own with the old macros as it is forced to do by the
+// new macros.
 //-----------------------------------------------------------------------------
 #define EXT_PIXOFFSET(x,y) ((((y)<<4)-(y))*2+((x)>>3))
 #define EXT_PIXADDR(p,x,y) (((char *)(p))+EXT_PIXOFFSET(x,y))
@@ -1172,6 +1177,17 @@ void FastSprite16_MIRROR_H_R(short h asm("%d2"),unsigned short *sprt asm("%a0"),
 void FastSprite32_MIRROR_H_R(short h asm("%d2"),unsigned long *sprt asm("%a0"),unsigned long *dest asm("%a1"));
 void FastSpriteX8_MIRROR_H_R(short h asm("%d2"),short bytewidth asm("%d1"),char *sprt asm("%a0"),unsigned char *dest asm("%a1"));
 
+//-----------------------------------------------------------------------------
+// Arbitrary angle sprite rotating functions. Courtesy of Joey Adams. Slightly
+// modified to fit the needs.
+//-----------------------------------------------------------------------------
+void RotateSprite8_R(unsigned char *srcSprite asm("%a0"),unsigned char *destSprite asm("%a1"),short height,short originX asm("%d1"),short originY asm("%d2"),long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+void RotateSprite16_R(unsigned short *srcSprite asm("%a0"),unsigned short *destSprite asm("%a1"),short height,short originX asm("%d1"),short originY asm("%d2"),long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+void RotateSprite32_R(unsigned long *srcSprite asm("%a0"),unsigned long *destSprite asm("%a1"),short height,short originX asm("%d1"),short originY asm("%d2"),long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+void RotateSpriteX8_R(unsigned char *srcSprite asm("%a0"),unsigned char *destSprite asm("%a1"),short width,short height,short originX asm("%d1"),short originY asm("%d2"),long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+
+
+
 
 
 //=============================================================================
@@ -1231,6 +1247,7 @@ short UnpackBufferGray(unsigned char *src, unsigned char *dest) __attribute__((_
 #else
 #error EXTGRAPH.H already contains TTUNPACK.H defines (remove ttunpack.h include !)
 #endif
+
 
 
 
@@ -1305,7 +1322,7 @@ typedef struct {
 //
 // Huge changes for v2.00 (rewrites, internal organization of library...).
 // No more using CVS, but using online SVN starting from 2.00 Beta 5.
-// The complete changelog is in the documentation and will stay there.
+// The changelog is in the documentation and will stay there.
 //
 // -- ExtGraph 2.xx --
 //

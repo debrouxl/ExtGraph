@@ -1,3 +1,3 @@
 #!/bin/sh
-rm `find . -iname "*.o" | awk 'BEGIN {ORS = "\x20"} {print $1}'`
+rm -f `find . -iname "*.o" | awk 'BEGIN {ORS = "\x20"} {print $1}'`
 # 'find . -iname "*.o" | awk 'BEGIN {ORS = "\x20"} {print $1}' | xargs rm' is another possibility

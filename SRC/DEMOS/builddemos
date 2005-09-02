@@ -12,23 +12,22 @@ echo demo6
 ./buildcmp demo10
 ./buildsep demo11
 echo demo12
-./buildsep demo12
-./buildsep demo13
-./buildsep demo14
+./buildsep demo12 ../../lib/gray.o
+./buildsep demo13 ../../lib/gray.o
+./buildsep demo14 ../../lib/gray.o
 echo demo15
-./buildsep demo15
-./buildsep demo16
-./buildsep demo17
+./buildsep demo15 ../../lib/gray.o
+./buildsep demo16 ../../lib/gray.o
+./buildsep demo17 ../../lib/gray.o
 echo demo18
 ./buildcmp demo18
-./buildcmp demo19
+./buildcmp demo19 ../../lib/gray.o
 ./buildcmp demo20
 ./buildcmp demo21
-./buildsep demo22
+./buildsep demo22 ../../lib/gray.o
 echo demo24
-./buildsep demo24
-./buildsep demo25
+./buildsep demo24 ../../lib/gray.o
+./buildsep demo25 ../../lib/gray.o
 tigcc demo26.asm ../../lib/extgraph.a ../../lib/tilemap.a ../../lib/gray.o
 mv demo26.89z ../../bin89
-mv demo26.9xz ../../bin92p
-#mv demo26.v2z ../../binv200 Commented for now.
+mv demo26.9xz demo26.v2z ../../bin92pv200

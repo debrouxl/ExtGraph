@@ -5,14 +5,11 @@
 .even
 FadeOutToBlack_CWS1_R:
     lsr.w    #3,%d0
-    dbf      %d0,__rest1_of_FOTB_CWS1_R__
-    rts
+    subq.w   #1,%d0
+    blt.s    0f
+    subq.w   #1,%d1
+    blt.s    0f
 
-__rest1_of_FOTB_CWS1_R__:
-    dbf      %d1,__rest2_of_FOTB_CWS1_R__
-    rts
-
-__rest2_of_FOTB_CWS1_R__:
     movem.l  %d3-%d7/%a2-%a3,-(%sp)
 
     movea.l  %a0,%a2
@@ -20,76 +17,77 @@ __rest2_of_FOTB_CWS1_R__:
 
     move.w   %d0,%d3
     move.w   %d2,%d4
-
+   
     moveq    #7+1,%d5
     moveq    #8-1,%d7
 
-__FOTB_CWS1_R__:
+3:
     move.w   %d7,%d2
-__loop1_FOTB_CWS1_R__:
+1:
     subq.w   #1,%d5
 
-    bsr.s    __outer_loop_FOTB_CWS1_R__
-    dbf      %d2,__loop1_FOTB_CWS1_R__
+    bsr.s    4f
+    dbf      %d2,1b
 
 
     subq.w   #1,%d7
     move.w   %d7,%d2
-__loop2_FOTB_CWS1_R__:
+1:
     lea      30(%a2),%a2
     lea      30(%a3),%a3
 
-    bsr.s    __outer_loop_FOTB_CWS1_R__
-    dbf      %d2,__loop2_FOTB_CWS1_R__
+    bsr.s    4f
+    dbf      %d2,1b
 
 
     move.w   %d7,%d2
-__loop3_FOTB_CWS1_R__:
+1:
     addq.w   #1,%d5
 
-    bsr.s    __outer_loop_FOTB_CWS1_R__
-    dbf      %d2,__loop3_FOTB_CWS1_R__
+    bsr.s    4f
+    dbf      %d2,1b
 
 
     subq.w   #1,%d7
-    bmi.s __end_FOTB_CWS1_R__
+    bmi.s    10f
     move.w   %d7,%d2
-__loop4_FOTB_CWS1_R__:
+1:
     lea      -30(%a2),%a2
     lea      -30(%a3),%a3
 
-    bsr.s    __outer_loop_FOTB_CWS1_R__
-    dbf      %d2,__loop4_FOTB_CWS1_R__
+    bsr.s    4f
+    dbf      %d2,1b
 
-    bra.s    __FOTB_CWS1_R__
+    bra.s    3b
 
 
-__end_FOTB_CWS1_R__:
+10:
     movem.l  (%sp)+,%d3-%d7/%a2-%a3
+0:
     rts
 
 
-__outer_loop_FOTB_CWS1_R__:
+4:
     move.w   %d3,%d0
     movea.l  %a2,%a0
     movea.l  %a3,%a1
-_outer_loop_FOTB_CWS1_R__:
+5:
     moveq    #30-1,%d6
 
-__inner_loop_FOTB_CWS1_R__:
+6:
     bset     %d5,(%a0)+
     bset     %d5,(%a1)+
 
     move.w   %d4,%d1
-__wait_loop_FOTB_CWS1_R__:
-    dbf      %d1,__wait_loop_FOTB_CWS1_R__
+7:
+    dbf      %d1,7b
 
-    dbf      %d6,__inner_loop_FOTB_CWS1_R__
+    dbf      %d6,6b
 
     lea      240-30(%a0),%a0
     lea      240-30(%a1),%a1
 
-    dbf      %d0,_outer_loop_FOTB_CWS1_R__
+    dbf      %d0,5b
 
     rts
 

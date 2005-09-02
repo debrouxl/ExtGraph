@@ -4,8 +4,13 @@ Roadmap after Beta 4 (more or less sorted):
 
 0* Make double-buffered versions of the tilemap engine demos. Check Kevin's patch.
 
-/* Check demo26 (generic lines, horiz lines, rectangles, triangles - remove vert lines) works.
-   Do not make bench against Genlib for now ?
+/* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites) in ExtGraph,
+Graphlib, Genlib.
+
+0* Test PixCollideX8_R, PixCollideX16_R (is the calling convention OK for GCC - too many registers ?).
+
+0* Test RotateSprite*.
+
 
 
 -- Beta 5 --

@@ -5,14 +5,11 @@
 .even
 FadeOutToWhite_CWS1_R:
     lsr.w    #3,%d0
-    dbf      %d0,1f
-    rts
+    subq.w   #1,%d0
+    blt.s    0f
+    subq.w   #1,%d1
+    blt.s    0f
 
-1:
-    dbf      %d1,2f
-    rts
-
-2:
     movem.l  %d3-%d7/%a2-%a3,-(%sp)
 
     movea.l  %a0,%a2
@@ -26,46 +23,47 @@ FadeOutToWhite_CWS1_R:
 
 3:
     move.w   %d7,%d2
-__loop1_FOTW_CWS1_R__:
+1:
     subq.w   #1,%d5
 
     bsr.s    4f
-    dbf      %d2,__loop1_FOTW_CWS1_R__
+    dbf      %d2,1b
 
 
     subq.w   #1,%d7
     move.w   %d7,%d2
-__loop2_FOTW_CWS1_R__:
+1:
     lea      30(%a2),%a2
     lea      30(%a3),%a3
 
     bsr.s    4f
-    dbf      %d2,__loop2_FOTW_CWS1_R__
+    dbf      %d2,1b
 
 
     move.w   %d7,%d2
-__loop3_FOTW_CWS1_R__:
+1:
     addq.w   #1,%d5
 
     bsr.s    4f
-    dbf      %d2,__loop3_FOTW_CWS1_R__
+    dbf      %d2,1b
 
 
     subq.w   #1,%d7
     bmi.s    0f
     move.w   %d7,%d2
-__loop4_FOTW_CWS1_R__:
+1:
     lea      -30(%a2),%a2
     lea      -30(%a3),%a3
 
     bsr.s    4f
-    dbf      %d2,__loop4_FOTW_CWS1_R__
+    dbf      %d2,1b
 
     bra.s    3b
 
 
-0:
+10:
     movem.l  (%sp)+,%d3-%d7/%a2-%a3
+0:
     rts
 
 

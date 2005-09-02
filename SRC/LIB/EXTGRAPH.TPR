@@ -54,7 +54,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Misc\PixCollide8_R.s
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Transeff\FadeOutToWhite_RL28_R.s
 
 [Included Files]
 C File 1=Misc\unpack.c
@@ -499,4 +499,9 @@ GNU Assembler File 404=Misc\GrayDrawSpan_LGRAY_R.s
 GNU Assembler File 405=Misc\GrayDrawSpan_DGRAY_R.s
 GNU Assembler File 406=Misc\GrayDrawSpan_BLACK_R.s
 GNU Assembler File 407=Misc\GrayDrawSpan_INVERT_R.s
+GNU Assembler File 408=Misc\RotateSprite8_R.s
+GNU Assembler File 409=Misc\RotateSprite16_R.s
+GNU Assembler File 410=Misc\RotateSprite32_R.s
+GNU Assembler File 411=Misc\RotateSpriteX8_R.s
+GNU Assembler File 412=Misc\sin8192tab.s
 Header File 1=internal.h

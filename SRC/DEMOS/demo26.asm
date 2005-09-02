@@ -1,21 +1,22 @@
-; Assembler- and linker-side optimization are completely disabled.
-; Branches to the ExtGraph routines are relocated jsr.l, like 
-; branches to graphlib routines. lea LCD_MEM,a0 is long, too.
+; Assembler- and linker-side optimization are not enabled.
+; Branches to the ExtGraph routines are therefore
+; relocated jsr.l, like branches to graphlib routines.
 
-	INCLUDE "os.h"
+;	INCLUDE "os.h"
 ; The header in PreOS, recommended for kernel-based programming by PpHd ("os.h is outdated").
-;	INCLUDE "tios.h"
+; I don't care whether it is supported by Kevin or not.
+	INCLUDE "tios.h"
 ; The header in PreOS.
 	include "graphlib.h"
 ; The header in Genlib.
 	include "genlib.h"
 	xdef	_ti89
-;	xdef	_ti89ti ; Symbol is undefined but used in the documentation of GenLib ?!
+	xdef	_ti89ti
 	xdef	_ti92plus
-;	xdef	_v200 ; Symbol is undefined but used in the documentation of GenLib ?!
+	xdef	_v200
 	xdef	_main
 
-TIMER_VALUE equ 1000*20
+TIMER_VALUE equ 100*20
 NR_GENERIC_LINES equ 5000
 NR_HORIZ_LINES equ 20000
 NR_FILLED_RECT equ 1000
@@ -25,7 +26,7 @@ NR_RESULTS equ 4
 FreeTimer:
 ;   OSFreeTimer(USER_TIMER);
     move.w   #6,-(sp)
-    move.l   OSFreeTimer*4(a5),a0
+    move.l   $F1*4(a5),a0
     jsr      (a0)
     addq.l   #2,sp
     rts
@@ -53,31 +54,27 @@ _main:
 
 ; We need AMS 2.xx due to push_ulong_to_integer, which defacto prevents
 ; PedroM from running this program, until PpHd implements that function.
-    cmpi.l   #push_ulong_to_integer,-4(a5)
+    cmpi.l   #$4E4,-4(a5)
     blt      _end
-    tst.l    push_ulong_to_integer*4(a5)
+    tst.l    $4E4*4(a5)
     beq      _end
 
-;   ClrScr();
-    move.l   ClrScr*4(a5),a0
-    jsr      (a0)
-
     lea      _storage(pc),a2
-    move.l   OSTimerCurVal*4(a5),a3
-    move.l   OSTimerRestart*4(a5),a4
+    move.l   $F2*4(a5),a3
+    move.l   $F4*4(a5),a4
 
     bsr      FreeTimer
 
 ;   OSRegisterTimer(USER_TIMER,TIMER_VALUE);
     pea      TIMER_VALUE
     move.w   #6,-(sp)
-    move.l   OSRegisterTimer*4(a5),a0
+    move.l   $F0*4(a5),a0
     jsr      (a0)
     addq.l   #6,sp
 
 
 ; Test parameter.
-    move.l   top_estack*4(a5),a0
+    move.l   $109*4(a5),a0 ; top_estack
     move.l   (a0),a0
     cmpi.b   #$E5,(a0)
     beq      _bench_ExtGraph ; Bench ExtGraph if nothing is passed.
@@ -96,6 +93,13 @@ _bench_ExtGraph:
     tst.w    d0
     beq      _bench_end
 
+
+; Clear both planes.
+    move.l   __L_plane,a0
+    move.l   __D_plane,a1
+    jsr      GrayClearScreen2B_R
+
+
 ; Generic line function.
     move.w   #NR_GENERIC_LINES,d5
 _loop_GFDL2B_R_:
@@ -111,7 +115,6 @@ _loop_GFDL2B_R_:
     dbf      d5,_loop_GFDL2B_R_
 
     bsr      TimerCurVal
-
     bsr      TimerRestart
 
 
@@ -122,14 +125,13 @@ _loop_GFDHL2B_R_:
     moveq    #0,d2
     move.w   #159,d1
     moveq    #0,d0
-    move.l   __L_plane,a0
-    move.l   __D_plane,a1
+    movea.l  __L_plane,a0
+    movea.l  __D_plane,a1
     jsr.l    GrayFastDrawHLine2B_R
     
     dbf      d5,_loop_GFDHL2B_R_
     
     bsr      TimerCurVal
-
     bsr      TimerRestart
 
 
@@ -141,13 +143,34 @@ _loop_GFFR_R_:
     move.w   #159,d2
     moveq    #0,d1
     move.l   d1,d0
-    move.l   __L_plane,a0
-    move.l   __D_plane,a1
+    movea.l  __L_plane,a0
+    movea.l  __D_plane,a1
     jsr.l    GrayFastFillRect_R
     
     dbf      d5,_loop_GFFR_R_
     
     bsr      TimerCurVal
+    bsr      TimerRestart
+
+
+; Triangle filling function.
+;    move.w   #NR_FILLED_TRIA,d5
+;_loop_GFFR_R_:
+;    move.w   #3,(sp)
+;    moveq    #99,d3
+;    move.w   #159,d2
+;    moveq    #0,d1
+;    move.l   d1,d0
+;    movea.l  __L_plane,a0
+;    movea.l  __D_plane,a1
+;    jsr.l    GrayFastFillRect_R
+    
+;    dbf      d5,_loop_GFFR_R_
+    
+;    bsr      TimerCurVal
+
+
+    jsr.l    GrayOff
 
     bra      ReturnResults
 
@@ -155,38 +178,59 @@ _loop_GFFR_R_:
 
 
 _bench_Graphlib:
+    jsr.l    graphlib::gray4
+    tst.w    d0
+    beq      _bench_end
+
+    move.w   #1,graphlib::choosescreen
+
+; Generic line function.
     move.w   #NR_GENERIC_LINES,d5
 _loop_graphlib_line_:
     moveq    #99,d3
     move.w   #159,d2
     moveq    #0,d1
     move.l   d1,d0
-    lea      LCD_MEM,a0
+    movea.l  graphlib::plane0,a0
+    jsr.l    graphlib::line
+
+    moveq    #99,d3
+    move.w   #159,d2
+    moveq    #0,d1
+    move.l   d1,d0
+    movea.l  graphlib::plane1,a0
     jsr.l    graphlib::line
     
     dbf      d5,_loop_graphlib_line_
     
     bsr      TimerCurVal
-
     bsr      TimerRestart
 
 
+; Horizontal line function.
     move.w   #NR_HORIZ_LINES,d5
 _loop_graphlib_horiz_:
     moveq    #2,d4
     move.w   #159,d2
     moveq    #0,d1
     move.l   d1,d0
-    lea      LCD_MEM,a0
+    movea.l  graphlib::plane0,a1
+    jsr.l    graphlib::horiz
+
+    moveq    #2,d4
+    move.w   #159,d2
+    moveq    #0,d1
+    move.l   d1,d0
+    movea.l  graphlib::plane1,a1
     jsr.l    graphlib::horiz
     
     dbf      d5,_loop_graphlib_horiz_
     
     bsr      TimerCurVal
-
     bsr      TimerRestart
 
     
+; Rectangle filling function.
     move.w   #NR_FILLED_RECT,d5
 _loop_graphlib_fill_:
     moveq    #2,d4
@@ -194,12 +238,24 @@ _loop_graphlib_fill_:
     move.w   #159,d2
     moveq    #0,d1
     move.l   d1,d0
-    lea      LCD_MEM,a0
+    movea.l  graphlib::plane0,a1
+    jsr.l    graphlib::fill
+
+    moveq    #2,d4
+    moveq    #99,d3
+    move.w   #159,d2
+    moveq    #0,d1
+    move.l   d1,d0
+    movea.l  graphlib::plane1,a1
     jsr.l    graphlib::fill
     
     dbf      d5,_loop_graphlib_fill_
     
     bsr      TimerCurVal
+
+; No triangle filling function in graphlib.
+    moveq    #-1,d0
+    move.l   d0,(a2)+
 
     bra      ReturnResults
 
@@ -238,21 +294,21 @@ _bench_Genlib:
 
 
 ReturnResults:
-    move.l   push_END_TAG*4(a5),a0
+    move.l   $263*4(a5),a0 ; push_END_TAG
     jsr      (a0)
 
-    move.l   push_ulong_to_integer*4(a5),a3
+    move.l   $4E4*4(a5),a3 ; push_ulong_to_integer
     moveq    #NR_RESULTS-1,d3
 _push_values_:
     move.l   -(a2),(sp)
     jsr      (a3)
     dbf      d3,_push_values_
     
-    move.l   push_LIST_TAG*4(a5),a0
+    move.l   $264*4(a5),a0 ; push_LIST_TAG
     jsr      (a0)
     
 ; Non-standard way to return expressions on the EStack...
-    move.l   top_estack*4(a5),a0
+    move.l   $109*4(a5),a0 ; top_estack
     move.l   (a0),_RAM_CALL_F
 
 _bench_end:

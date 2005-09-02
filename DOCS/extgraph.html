@@ -128,46 +128,63 @@ already saw a number of more or less severe bugs in all betas.</em>
 <strong>ABOUT GRAYSCALE ROUTINES AND THE TILEMAP ENGINE:</strong>
 <p>
 The tilemap engine is incompatible with the <em>official</em> TIGCCLIB grayscale doublebuffering
-support, and will most probably remain. If you want to use the tilemap engine with the TIGCCLIB
-support API, please use the forked support in /lib/gray.o (just add the file to the TIGCC project,
-or link with it, like all demos now do). Kevin's tilemap engine patch is rejected because it breaks
-the entire tilemap engine API, and it changed the calling convention in a bad way. Using a4, also
-done in a number of rarely-used TIGCCLIB functions, is ... unfortunate because it prevents using
--freg-relative-a4 or global register variables in a4 they are the most efficient ways to access
-global variables (-Wa,-l -mpcrel do not cover writes).<br>
+support, and this is unlikely to change for some time, see below why.<br>
+<strong>If you want to use the tilemap engine or several infrequently-used ExtGraph functions (the
+DrawSpans and the routines needing them) with the TIGCCLIB support API, please use
+the forked support in /lib/gray.o (just add the file to the TIGCC project, or link with it, like
+some demos now do)</strong>. Kevin's tilemap engine patch is rejected because it breaks the entire
+tilemap engine API, and it changed the calling convention in a bad way. Using a4, also done in a
+number of rarely-used TIGCCLIB functions, is bad because it prevents using -freg-relative-a4 or
+global register variables in a4, which are the most efficient (size-wise and speed-wise) ways to
+access global variables (-Wa,-l -mpcrel do not cover writes and are usually not usable for
+programs larger than 32 KB).
+<strong>The two types of routines mentioned above are the only valid reasons to use the forked
+support. Other routines work obviously fine with the official support, and should therefore be
+used with them.</strong><br>
+I know I had written I objected to forking the TIGCCLIB grayscale support, but I decided to bite
+the bullet as we had no other good solution, as written above. Forking was actually downright
+trivial, I knew it from the beginning. Adding the other routine in TIGCCLIB was by far the
+quickest and simplest solution, and it would have benefited to everyone (<em>most grayscale
+routines behave the way the forked TIGCCLIB routine does</em>), and we would not have wasted
+hours of our free time fighting... But we faced Kevin's stubbornness and intolerance. A summary
+of his position, based on real posts and mails, is ~"this crap will never be in TIGCCLIB for
+there is no valid reason, it just wastes memory. And don't insist, this makes me even less
+willing to do so.", already shown in the first private mail I sent him about what I thought to
+be a trivial issue.<br>
 The forked support always allocates planes consecutively, even on HW1, which consumes 3840 more
 bytes of memory on HW1 only (actually a couple dozen of bytes less because the routine is
 simpler, that's neglectable). However, saying that this is an awful pessimization for no purpose
-looks an oversimplification. In short, that memory couldn't be used anyway ! Indeed:
+looks a gross oversimplification, if not a lie. In short, that memory couldn't be used anyway !
+Indeed:
 </p>
 <ul>
-<li>HW2/3 usually run AMS 2.xx/3.xx, whose maximum amount of available memory is lesser or
-equal than that of AMS 1.xx/2.xx used on HW1. Programs have to be designed for the most
-limiting models - and the most limiting ones are also by far the most common models nowadays,
-since no HW1s have been manufactured since ~1999-2000 !<br>New users who have just bought a V200
-(HW2+) or a 89T (HW3), in 2004-2005, couldn't care less if the programs they use are taking up
-more or less memory on some increasingly-infrequent model (HW1) they're not too likely to ever
-encounter...</li>
+<li>HW2/3 usually run AMS 2.xx/3.xx (well, there is AMS 1.05, but that combination is extremely
+infrequent), whose maximum amount of available memory is lesser or equal than that of AMS
+1.xx/2.xx used on HW1. Programs have to be designed for the most limiting models - and the most
+limiting ones are also by far the most common models nowadays, since no HW1s have been
+manufactured since ~1999-2000 !<br>New users who have just bought a V200 (HW2+) or a 89T (HW3),
+in 2004-2005, couldn't care less if the programs they use are taking up more or less memory on
+some increasingly-infrequent model (HW1) they're not too likely to ever encounter...</li>
 <li>There are more TSRs on AMS 2.xx/3.xx, for example Kevin's AutoAlphaLock Off and ExtendeD's
 Integrated Desktop.<br>Programs shouldn't assume that they are the only programs using the memory
-at a time, but in practice, they do, with some reason, as most ASM programs use the AMS
-cooperative multitasking in a non-cooperative way, and many TSRs are event hooks !</li>
+at a time, but in practice, they do. Most ASM programs use the AMS cooperative multitasking in a
+non-cooperative way, and many TSRs are event hooks !</li>
 <li>The default TIGCC options are nearly backwards compatible and have as little side effects
 on the code as possible. But as a consequence, they do not yield optimal code, although the great
 optimizing linker, enabled by default, saves kilobytes on large programs.<br>
-Switching to optimized compilation options saves hundreds of bytes to kilobytes on nearly programs.
-Optimizing the code by hand can save even more. I'm not even talking about on-calc incompatibility.
-For more information on both, see S1P9, which is now inclued in ExtGraph.</li>
+Switching to optimized compilation options saves hundreds of bytes to kilobytes on nearly all
+programs I tried them on. Optimizing the code by hand can save even more. I'm not even talking
+about on-calc incompatibility. For more information on both, see S1P9, which is now inclued in
+ExtGraph.</li>
 <li>Greg Dietsche's HSR, which is &lt; 130 bytes (counting the cost of the call to subroutine
-and return to parent), enables TI-Chess and several others to save 3840 bytes of heap memory
-on all models, by redrawing the home screen instead of saving/restoring it (which costs several
-dozens of bytes, whatever the way it is done, SAVE_SCREEN on the stack or LCD_save/restore on
-the stack or heap).</li>
+and return to parent, the standalone tool being 117 bytes), enables TI-Chess and suprisingly few
+other programs to save 3840 bytes of heap memory - on all models - by redrawing the home screen
+instead of saving/restoring it (which costs several dozens of bytes, whatever the way it is
+done, SAVE_SCREEN on the stack or LCD_save/restore on the stack or heap).</li>
 </ul>
-Most grayscale routines behave the way the forked TIGCCLIB routine does.
 <p>
-Note that Julien Richard-Foy is making a new grayscale library called Grib. It is significantly
-smaller than the TIGCCLIB one, its API looks more like that of Genlib in some aspects (framerate
+Julien Richard-Foy is making a new grayscale library called Grib. It is significantly smaller
+than the TIGCCLIB one, its API looks more like that of Genlib in some aspects (framerate
 synchronization functions). It can use user-allocated planes, which also enables using the
 ExtGraph tilemap engine (his work, like many things in ExtGraph !) with doublebuffering, provided
 the planes are allocated consecutively.<br>
@@ -175,7 +192,7 @@ the planes are allocated consecutively.<br>
 
 <hr>
 <p>
-<a name="contents" class=startofblock>Contents</a>
+<a name="contents" class="startofblock">Contents</a>
 <ul>
 <li><a href="ExtGraph/howto.html"><strong>How to use the ExtGraph Library ?</strong></a></li>
 <li><a href="ExtGraph/sprite_draw.html"><strong>Fast Sprite Drawing Routines</strong></a></li>
@@ -486,7 +503,11 @@ Additional credits for Routines and Updates go to
 <a href="mailto:geoffrey.anneheim@wanadoo.fr">Geoffrey Anneheim (geogeo)</a>,
 <a href="mailto:oragesoft@hotmail.com">Vincent Corfdir (Orage)</a>,
 <a href="mailto:calc@gregd.org">Greg Dietsche (dietsche)</a>,
-<a href="mailto:samuel@nyall.net">Samuel Stearley</a>.<br></strong>
+<a href="mailto:samuel@nyall.net">Samuel Stearley</a>,
+<a href="mailto:m@malcolm-s.net">Malcolm Smith (TRGenius)</a>,
+<a href="mailto:drandall99@charter.net">David Randall (Ranman)</a>,
+<a href="mailto:soring8@hotmail.com">Jesse Frey (jessef)</a>,
+<a href="mailto:joeyadams3.14159@att.net">Joey Adams (joeyadams)</a>.<br></strong>
 <hr>
 <strong>If you need help, please use the <a href="http://p080.ezboard.com/ftichessteamhqfrm5">TIGCC Programming Message Board</a>.</strong>
 </BODY>

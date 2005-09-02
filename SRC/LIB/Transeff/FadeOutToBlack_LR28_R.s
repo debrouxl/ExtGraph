@@ -5,7 +5,7 @@
 .even
 FadeOutToBlack_LR28_R:
     mulu.w   %d0,%d1
-    beq.s    __end_FOTB_LR28_R__
+    beq.s    0f
     subq.w   #1,%d1
 
     movem.l  %d3-%d5/%a2-%a3,-(%sp)
@@ -15,11 +15,10 @@ FadeOutToBlack_LR28_R:
     move.l   %a0,%a2
     move.l   %a1,%a3
 
-__outer_loop_FOTB_LR28_R__:
     moveq    #7,%d0
-_outer_loop_FOTB_LR28_R__:
+1:
     move.w   %d3,%d1
-__inner_loop_FOTB_LR28_R__:
+2:
     move.b   (%a0),%d5
     asr.b    #1,%d5
     bset     #7,%d5
@@ -29,17 +28,17 @@ __inner_loop_FOTB_LR28_R__:
     bset     #7,%d5
     move.b   %d5,(%a1)+
     move.w   %d4,%d2
-__wait_loop_FOTB_LR28_R__:
-    dbf      %d2,__wait_loop_FOTB_LR28_R__
+3:
+    dbf      %d2,3b
 
-    dbf      %d1,__inner_loop_FOTB_LR28_R__
+    dbf      %d1,2b
 
     move.l   %a2,%a0
     move.l   %a3,%a1
 
     subq.w   #1,%d0
-    bge.s    _outer_loop_FOTB_LR28_R__
+    bge.s    1b
 
-__end_FOTB_LR28_R__:
     movem.l  (%sp)+,%d3-%d5/%a2-%a3
+0:
     rts

@@ -13,25 +13,24 @@
 @call buildcmp.bat demo10
 @call buildsep.bat demo11
 @echo demo12
-@call buildsep.bat demo12
-@call buildsep.bat demo13
-@call buildsep.bat demo14
+@call buildsep.bat demo12 ..\..\lib\gray.o
+@call buildsep.bat demo13 ..\..\lib\gray.o
+@call buildsep.bat demo14 ..\..\lib\gray.o
 @echo demo15
-@call buildsep.bat demo15
-@call buildsep.bat demo16
-@call buildsep.bat demo17
+@call buildsep.bat demo15 ..\..\lib\gray.o
+@call buildsep.bat demo16 ..\..\lib\gray.o
+@call buildsep.bat demo17 ..\..\lib\gray.o
 @echo demo18
 @call buildcmp.bat demo18
-@call buildcmp.bat demo19
+@call buildcmp.bat demo19 ..\..\lib\gray.o
 @call buildcmp.bat demo20
 @call buildcmp.bat demo21
-@call buildsep.bat demo22
+@call buildsep.bat demo22 ..\..\lib\gray.o
 @echo demo24
-@call buildsep.bat demo24
-@call buildsep.bat demo25
+@call buildsep.bat demo24 ..\..\lib\gray.o
+@call buildsep.bat demo25 ..\..\lib\gray.o
 @tigcc demo26.asm ..\..\lib\extgraph.a ..\..\lib\tilemap.a ..\..\lib\gray.o
 @move demo26.89z ..\..\bin89
-@move demo26.9xz ..\..\bin92p
-REM @move demo26.v2z ..\..\binv200
+@move demo26.9xz demo26.v2z ..\..\bin92pv200
 @pause
 @echo on

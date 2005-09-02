@@ -1,0 +1,10 @@
+#!/bin/sh
+cd src
+./cleanup
+cd ..
+rm -f srcbin.tar extgraph.zip extgraph.tar extgraph.tar.bz2
+tar -cf srcbin.tar --owner=0 BIN SRC
+zip -r -q -9 extgraph.zip BIN89 BIN92P BINV200 DOCS LIB srcbin.tar LICENSE.txt README.txt todo\ extgraph.txt makedistro
+rm -f srcbin.tar
+tar -cf extgraph.tar --owner=0 BIN BIN89 BIN92P BINV200 DOCS LIB SRC LICENSE.txt README.txt todo\ extgraph.txt makedistro &>/dev/null
+bzip2 --best extgraph.tar

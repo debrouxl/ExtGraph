@@ -5,7 +5,7 @@
 .even
 FadeOutToWhite_RL18_R:
     mulu.w   %d0,%d1
-    beq.s    __end_FOTW_RL18_R__
+    beq.s    0f
     subq.w   #1,%d1
 
     movem.l  %d3-%d4/%a2-%a3,-(%sp)
@@ -15,26 +15,25 @@ FadeOutToWhite_RL18_R:
     move.l   %a0,%a2
     move.l   %a1,%a3
 
-__outer_loop_FOTW_RL18_R__:
     moveq    #0,%d0
-_outer_loop_FOTW_RL18_R__:
+1:
     move.w   %d3,%d1
-__inner_loop_FOTW_RL18_R__:
+2:
     bclr     %d0,(%a0)+
     bclr     %d0,(%a1)+
     move.w   %d4,%d2
-__wait_loop_FOTW_RL18_R__:
-    dbf      %d2,__wait_loop_FOTW_RL18_R__
+3:
+    dbf      %d2,3b
 
-    dbf      %d1,__inner_loop_FOTW_RL18_R__
+    dbf      %d1,2b
 
     move.l   %a2,%a0
     move.l   %a3,%a1
 
     addq.w   #1,%d0
     cmpi.w   #7,%d0
-    bls.s    _outer_loop_FOTW_RL18_R__
+    bls.s    1b
 
-__end_FOTW_RL18_R__:
     movem.l  (%sp)+,%d3-%d4/%a2-%a3
+0:
     rts

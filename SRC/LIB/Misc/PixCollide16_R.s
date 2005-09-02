@@ -1,7 +1,7 @@
 | C prototype: char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
 |
 | Based on a routine programmed on the TIGCC/TICT message board by several users
-| (Jesse Frey - jessef, Samuel Stearley).
+| (Jesse Frey - jessef, Samuel Stearley, someone else).
 | Modified by Lionel Debroux:
 | * changed the calling convention and registers.
 
