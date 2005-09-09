@@ -15,11 +15,6 @@ Sprite8_MASK:
     movea.l  (%a0)+,%a2
     movea.l  (%a0),%a0
 
-|    move.w   4+0+0(%sp),%d0
-|    move.w   4+0+2(%sp),%d1
-|    movea.l  4+0+6(%sp),%a1
-|    movea.l  4+4+10(%sp),%a2
-
     move.w   %d1,%d2
     lsl.w    #4,%d1
     sub.w    %d2,%d1
@@ -31,9 +26,6 @@ Sprite8_MASK:
     add.w    %d1,%d1
 
     adda.w   %d1,%a0
-
-|    movea.w  %d1,%a0
-|    adda.l   4+0+14(%sp),%a0
 
     move.w   4+4+4(%sp),%d2
     beq.s    0f

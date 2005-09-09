@@ -54,7 +54,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Transeff\FadeOutToWhite_RL28_R.s
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Scaling\scalesprite16or.c
 
 [Included Files]
 C File 1=Misc\unpack.c
@@ -503,5 +503,7 @@ GNU Assembler File 408=Misc\RotateSprite8_R.s
 GNU Assembler File 409=Misc\RotateSprite16_R.s
 GNU Assembler File 410=Misc\RotateSprite32_R.s
 GNU Assembler File 411=Misc\RotateSpriteX8_R.s
-GNU Assembler File 412=Misc\sin8192tab.s
+GNU Assembler File 412=Misc\RotateSpriteSubSCO.s
+GNU Assembler File 413=Misc\RotateSpriteSubSC.s
+GNU Assembler File 414=Misc\RS_sin8192tab.s
 Header File 1=internal.h

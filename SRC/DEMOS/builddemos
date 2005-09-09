@@ -31,3 +31,4 @@ echo demo24
 tigcc demo26.asm ../../lib/extgraph.a ../../lib/tilemap.a ../../lib/gray.o
 mv demo26.89z ../../bin89
 mv demo26.9xz demo26.v2z ../../bin92pv200
+./buildcmp demo27

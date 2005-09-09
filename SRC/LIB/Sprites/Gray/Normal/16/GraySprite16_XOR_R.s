@@ -5,10 +5,9 @@
 .even
 
 GraySprite16_XOR_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.w   %d3,-(%sp)
     move.l   %a2,-(%sp)
     move.l   %a3,-(%sp)
@@ -50,4 +49,5 @@ GraySprite16_XOR_R:
     move.l   (%sp)+,%a3
     move.l   (%sp)+,%a2
     move.w   (%sp)+,%d3
+0:
     rts

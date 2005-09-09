@@ -21,7 +21,7 @@
 
 #include <tigcclib.h>         // Include All Header Files
 //#include "extgraph.h"
-#include "..\..\lib\extgraph.h"
+#include "../../lib/extgraph.h"
 
 #define GRAY
 #define FAST_AND_DIRTY
@@ -389,7 +389,7 @@ void _main(void)
 
 	SetIntVec(AUTO_INT_1,DUMMY_HANDLER);
 	SetIntVec(AUTO_INT_5,CountFps);
-	
+
 	xscroll=yscroll=xtile=ytile=0;
 
 	count=fps=0;
@@ -419,13 +419,13 @@ void _main(void)
 
 			FastCopyScreen_R(vscreen0,GetPlane(LIGHT_PLANE));
 			FastCopyScreen_R(vscreen1,GetPlane(DARK_PLANE));
-#endif			
+#endif
 #ifdef FAST_AND_DIRTY
 			Sprite16_BLIT_R_very_special(fpssprite);
 #else
 			DrawStr(0,0,fps_str,A_REPLACE);
 #endif
-                        
+
 			BEGIN_KEYTEST
 			if(_keytest_optimized(RR_RIGHT) && (xscroll || xtile<32-15))
 			{

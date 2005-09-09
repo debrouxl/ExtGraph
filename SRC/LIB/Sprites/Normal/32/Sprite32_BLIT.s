@@ -10,9 +10,6 @@ Sprite32_BLIT:
     move.l   %d5,-(%sp)
     move.w   %d6,-(%sp)
 
-|    move.w   4+10+4(%sp),%d3
-|    beq.s    _end_Sprite32_BLIT
-
     lea.l    4+10(%sp),%a0
     move.w   (%a0)+,%d0
     move.w   (%a0)+,%d1
@@ -23,10 +20,6 @@ Sprite32_BLIT:
     movea.l  (%a0),%a0
 
     subq.w   #1,%d3
-
-|    move.w   4+10+0(%sp),%d0
-|    move.w   4+10+2(%sp),%d1
-|    movea.l  4+10+6(%sp),%a1
 
     move.w   %d1,%d2
     lsl.w    #4,%d1
@@ -40,16 +33,12 @@ Sprite32_BLIT:
 
     adda.w   %d1,%a0
 
-|    movea.w  %d1,%a0
-|    adda.l   4+10+14(%sp),%a0
-
     move.w   %d0,%d1
     and.w    #0xF,%d1
 
     moveq    #16,%d2
     sub.w    %d1,%d2
 
-|    move.l   4+10+10(%sp),%d5
     not.l    %d5
     move.w   %d5,%d6
     lsr.l    %d1,%d5

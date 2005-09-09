@@ -5,10 +5,9 @@
 .even
 
 GraySprite8_OR_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     movem.l  %d3/%a2-%a3,-(%sp)
 
     move.l   4+12(%sp),%a2
@@ -49,6 +48,7 @@ GraySprite8_OR_R:
 
     dbf      %d2,1b
     movem.l  (%sp)+,%d3/%a2-%a3
+0:
     rts
 
 2:

@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // original code courtesy of Zeljko Juric
 //-----------------------------------------------------------------------------
-#include "..\internal.h"  // for LCD_WIDTH and LCD_HEIGHT
+#include "../internal.h"  // for LCD_WIDTH and LCD_HEIGHT
 
 #define EXT_PIXOFFSET(x,y)  ((((y)+(y))<<4)-((y)+(y))+((x)>>3))
 #define EXT_PIXADDR(p,x,y)  (((unsigned char*)(p))+EXT_PIXOFFSET(x,y))

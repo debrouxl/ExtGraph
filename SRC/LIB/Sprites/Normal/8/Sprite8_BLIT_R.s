@@ -5,10 +5,9 @@
 .even
 
 Sprite8_BLIT_R:
-    dbf    %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.l   %d4,-(%sp)
 
     move.w   %d1,%d4
@@ -58,4 +57,5 @@ Sprite8_BLIT_R:
     dbf      %d2,2b
 
     move.l   (%sp)+,%d4
+0:
     rts

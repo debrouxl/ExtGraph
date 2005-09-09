@@ -5,10 +5,9 @@
 .even
 
 GraySprite8_RPLC_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     movem.l  %d3/%a2-%a3,-(%sp)
 
     move.l   4+12(%sp),%a2
@@ -58,23 +57,23 @@ GraySprite8_RPLC_R:
     dbf      %d2,1b
 
     movem.l  (%sp)+,%d3/%a2-%a3
+0:
     rts
 
 3:
     rol.w    %d1,%d3
 2:
-    and.w    %d3,(%a0)
-    and.w    %d3,(%a1)
-
     moveq    #0,%d0
     move.b   (%a2)+,%d0
     lsl.w    %d1,%d0
+    and.w    %d3,(%a0)
     or.w     %d0,(%a0)
     lea      30(%a0),%a0
 
     moveq    #0,%d0
     move.b   (%a3)+,%d0
     lsl.w    %d1,%d0
+    and.w    %d3,(%a1)
     or.w     %d0,(%a1)
     lea      30(%a1),%a1
 

@@ -22,7 +22,7 @@
 //       installed you should use:
 //
 //       #include <extgraph.h>
-#include "..\..\lib\extgraph.h"
+#include "../../lib/extgraph.h"
 
 
 /*===========================================================================*/

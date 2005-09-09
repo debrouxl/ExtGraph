@@ -5,10 +5,9 @@
 .even
 
 Sprite8_XOR_R:
-    dbf    %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     swap     %d2
 
     move.w   %d1,%d2
@@ -48,4 +47,5 @@ Sprite8_XOR_R:
     lsl.w    %d1,%d0
     eor.w    %d0,(%a0)
     dbf      %d2,2b
+0:
     rts

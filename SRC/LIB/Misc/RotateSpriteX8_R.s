@@ -3,7 +3,7 @@
 | Courtesy of Joey Adams.
 | Modified by Lionel Debroux:
 | * renamed labels.
-| * slightly optimized for size (pc-relative SMC code instead of absolute one: smaller, less relocations).
+| * slightly optimized for size.
 
 .text
 .even
@@ -13,31 +13,14 @@ RotateSpriteX8_R:
 	lea 10*4+4(%a7),%a3
 	move.w (%a3)+,%d6 |width  *****
 	move.w (%a3)+,%d5 |height
-
 	lea 10f(%pc),%a3
-	move.l %a7,(%a3)
+	move.w %d1,rsX8_oxdropoff+2-10f(%a3)
+	move.w %d2,rsX8_oydropoff+2-10f(%a3)
+	move.w %d5,rsX8_heightdropoff+2-10f(%a3)
+	move.w %d6,rsX8_widthdropoff1+2-10f(%a3)
+	jbsr RS_detrSCO
+	move.l %a7,(%a3) | Save sp.
 
-	move.w %d1,10f-rs8X_oxdropoff+2(%a3)
-	move.w %d2,10f-rs8X_oydropoff+2(%a3)
-	move.w %d5,10f-rs8X_heightdropoff+2(%a3)
-	move.w %d6,10f-rs8X_widthdropoff1+2(%a3)
-
-	neg.l %d0
-	move.w #360,%d3
-	divs.w %d3,%d0
-	swap %d0
-	tst.w %d0
-	bge 1f
-	add.w %d3,%d0
-1:
-	add.w %d0,%d0
-	lea RS_sin8192tab,%a2
-	move.w 0(%a2,%d0.w),%a4 |sin8192
-	sub.w #270*2,%d0
-	bge 1f
-	add.w #360*2,%d0
-1:
-	move.w 0(%a2,%d0.w),%a5 |cos8192
 	neg.w %d1
 	move.w %a4,%d4
 	move.w %d4,%d7
@@ -58,65 +41,65 @@ RotateSpriteX8_R:
 	muls.w %d6,%d3
 	add.l %a4,%d3 |xvr
 	subq.w #1,%d6
-	move.w %d6,10f-rs8X_widthdropoff2+2(%a3)
+	move.w %d6,rsX8_widthdropoff2+2-10f(%a3)
 	lsr.w #3,%d6
 	addq.w #1,%d6 |bpr
 	mulu.w %d6,%d5
-	lea 0(%a1,%d5.l),%a2 |endDestSprite
+	lea (%a1,%d5.l),%a2 |endDestSprite
 	moveq #7,%d5 |bitTracer
 	moveq #0,%d1 |byteresult
-rs8X_yloop:
+rsX8_yloop:
 	cmpa.l %a2,%a1
-	bcc rs8X_endy
-    rs8X_widthdropoff2:
+	bcc.s rsX8_endy
+    rsX8_widthdropoff2:
 	move.w #0xDEED,%d2
-rs8X_xloop:
+rsX8_xloop:
 	moveq #13,%d7
 	move.l %a7,%d0
 	asr.l %d7,%d0
-    rs8X_oydropoff:
+    rsX8_oydropoff:
 	add.w #0xDEED,%d0 |y2
-	blt rs8X_continue
-    rs8X_heightdropoff:
+	blt.s rsX8_continue
+    rsX8_heightdropoff:
 	cmp.w #0xDEED,%d0
-	bge rs8X_continue
+	bge.s rsX8_continue
 	mulu.w %d6,%d0
-	lea 0(%a0,%d0.l),%a3 |pointer to current row
+	lea (%a0,%d0.l),%a3 |pointer to current row
 	move.l %d4,%d0
 	asr.l %d7,%d0
-    rs8X_oxdropoff:
+    rsX8_oxdropoff:
 	add.w #0xDEED,%d0 |x2
-	blt rs8X_continue
-    rs8X_widthdropoff1:
+	blt.s rsX8_continue
+    rsX8_widthdropoff1:
 	cmp.w #0xDEED,%d0
-	bge rs8X_continue
+	bge.s rsX8_continue
 	move.w %d0,%d7
 	lsr.w #3,%d0 |x2r
 	not.w %d7
 	and.w #7,%d7
-	btst %d7,0(%a3,%d0.w)
-	beq rs8X_continue
+	btst %d7,(%a3,%d0.w)
+	beq.s rsX8_continue
 	bset %d5,%d1
-rs8X_continue:
+rsX8_continue:
 	subq.w #1,%d5
-	bge rs8X_loopback
+	bge.s rsX8_loopback
 	moveq #7,%d5
 	move.b %d1,(%a1)+
 	moveq #0,%d1
-rs8X_loopback:
+rsX8_loopback:
 	add.l %a4,%a7
 	add.l %a5,%d4
-	dbra %d2,rs8X_xloop
+	dbf %d2,rsX8_xloop
 	cmp.w #7,%d5
-	beq rs8X_noresetbyte
+	beq.s rsX8_noresetbyte
 	moveq #7,%d5
 	move.b %d1,(%a1)+
 	moveq #0,%d1
-rs8X_noresetbyte:
+rsX8_noresetbyte:
 	sub.l %a6,%a7
 	sub.l %d3,%d4
-	bra rs8X_yloop
-rs8X_endy:
+	bra.s rsX8_yloop
+rsX8_endy:
 	|%d0.l is general purpose
 	|%d1.w is originX, then byteresult
 	|%d2.w is originY, then x

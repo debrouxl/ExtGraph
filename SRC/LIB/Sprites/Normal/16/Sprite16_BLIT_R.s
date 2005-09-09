@@ -5,10 +5,9 @@
 .even
 
 Sprite16_BLIT_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.l   %d4,-(%sp)
 
     move.w   %d1,%d4
@@ -31,15 +30,14 @@ Sprite16_BLIT_R:
     rol.l    %d1,%d4
 
 1:
-    moveq    #0,%d0 | 4
-    move.w   (%a1)+,%d0 | 8
+    moveq    #0,%d0
+    move.w   (%a1)+,%d0
     lsl.l    %d1,%d0
-    and.l    %d4,(%a0) | 20
-    or.l     %d0,(%a0) | 20
-
-| 52 + shift.
+    and.l    %d4,(%a0)
+    or.l     %d0,(%a0)
     lea      30(%a0),%a0
     dbf      %d2,1b
 
     move.l   (%sp)+,%d4
+0:
     rts

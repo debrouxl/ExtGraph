@@ -5,10 +5,9 @@
 .even
 
 GraySprite32_TRANW_R:
-    dbf      %d2,1f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-1:
     movem.l  %d3-%d7/%a2-%a3,-(%sp)
 
     move.l   4+28(%sp),%a2
@@ -32,7 +31,7 @@ GraySprite32_TRANW_R:
     lsl.l    %d1,%d3
     move.l   %d3,%d4
     not.l    %d4
-0:
+1:
 /*
     move.l   (%a2)+,%d0
     rol.l    %d1,%d0
@@ -83,7 +82,8 @@ GraySprite32_TRANW_R:
 
     lea.l    30(%a0),%a0
     lea.l    30(%a1),%a1
-    dbf      %d2,0b
+    dbf      %d2,1b
 
     movem.l  (%sp)+,%d3-%d7/%a2-%a3
+0:
     rts

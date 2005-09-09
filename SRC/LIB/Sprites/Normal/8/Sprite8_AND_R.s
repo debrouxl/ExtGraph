@@ -5,10 +5,9 @@
 .even
 
 Sprite8_AND_R:
-    dbf    %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     swap     %d2
 
     move.w   %d1,%d2
@@ -48,4 +47,5 @@ Sprite8_AND_R:
     rol.w    %d1,%d0
     and.w    %d0,(%a0)
     dbf      %d2,3b
+0:
     rts

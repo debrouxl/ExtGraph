@@ -1,5 +1,5 @@
 @echo off
 tprbuilder extgraph.tpr
-call buildib.bat
+call buildlib.bat
 copy extgraph.a ..\..\lib
 @echo on

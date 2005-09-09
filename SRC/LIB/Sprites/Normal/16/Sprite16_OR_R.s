@@ -5,10 +5,9 @@
 .even
 
 Sprite16_OR_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     swap     %d2
 
     move.w   %d1,%d2
@@ -28,12 +27,12 @@ Sprite16_OR_R:
 
     swap     %d2
 
-_loop_Sprite16_OR_R:
+1:
     moveq    #0,%d0
     move.w   (%a1)+,%d0
     lsl.l    %d1,%d0
     or.l     %d0,(%a0)
     lea      30(%a0),%a0
-    dbf      %d2,_loop_Sprite16_OR_R
-
+    dbf      %d2,1b
+0:
     rts

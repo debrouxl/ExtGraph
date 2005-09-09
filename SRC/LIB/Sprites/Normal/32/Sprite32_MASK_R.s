@@ -5,10 +5,9 @@
 .even
 
 Sprite32_MASK_R:
-    dbf    %d2,1f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-1:
     move.l   %d3,-(%sp)
     move.w   %d4,-(%sp)
     move.l   %a2,-(%sp)
@@ -30,7 +29,7 @@ Sprite32_MASK_R:
     moveq.l  #16,%d1
     sub.w    %d0,%d1		| %d1=lefshift
 
-0:
+1:
     move.l   (%a2)+,%d3
     not.l    %d3
     move.w   %d3,%d4
@@ -49,9 +48,10 @@ Sprite32_MASK_R:
     or.l     %d3,-(%a0)
 
     lea.l    30(%a0),%a0
-    dbf      %d2,0b
+    dbf      %d2,1b
 
     movea.l  (%sp)+,%a2
     move.w   (%sp)+,%d4
     move.l   (%sp)+,%d3
+0:
     rts

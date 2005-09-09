@@ -32,5 +32,6 @@
 @tigcc demo26.asm ..\..\lib\extgraph.a ..\..\lib\tilemap.a ..\..\lib\gray.o
 @move demo26.89z ..\..\bin89
 @move demo26.9xz demo26.v2z ..\..\bin92pv200
+@call buildcmp.bat demo27
 @pause
 @echo on

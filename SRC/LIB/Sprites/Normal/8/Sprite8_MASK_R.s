@@ -5,10 +5,9 @@
 .even
 
 Sprite8_MASK_R:
-    dbf    %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.l   %a2,-(%sp)
     
     move.l   4+4(%sp),%a2
@@ -69,4 +68,5 @@ Sprite8_MASK_R:
     dbf      %d2,2b
 
     move.l   (%sp)+,%a2
+0:
     rts

@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 volatile short __egvmain__  = EG_VERSION_MAIN;
 volatile short __egvsub__   = EG_VERSION_SUB;
 volatile short __egvrev__   = EG_VERSION_REV;

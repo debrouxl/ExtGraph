@@ -508,10 +508,12 @@ void GrayDrawSpan_INVERT_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs
 
 
 //-----------------------------------------------------------------------------
-// sprite scaling routines by Jim Haskell (jimhaskell@yahoo.com)
+// sprite scaling routines by Julien Richard-Foy (julien.rf@wanadoo.fr)
+// Legally unencumbered; faster, smaller than the routines by Jim Haskell used
+// prior to 2.00 Beta 5.
+// X8 version added in 2.00 Beta 5.
 //
 // scales a square input sprite to any extent (WARNING: no clipping is done!)
-// [routines slightly modified to fit the needs, very slightly optimized]
 //
 //
 // Two scaling routines optimized for fixed size and scale factor,

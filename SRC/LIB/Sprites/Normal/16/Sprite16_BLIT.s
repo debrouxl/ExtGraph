@@ -16,10 +16,6 @@ Sprite16_BLIT:
     move.w   (%a0)+,%d3
     movea.l  (%a0),%a0
 
-|    move.w   0+4+0(%sp),%d0
-|    move.w   0+4+2(%sp),%d1
-|    movea.l  0+4+6(%sp),%a1
-
     move.w   %d1,%d2
     lsl.w    #4,%d1
     sub.w    %d2,%d1
@@ -32,9 +28,6 @@ Sprite16_BLIT:
 
     adda.w   %d1,%a0
 
-|    movea.w  %d1,%a0
-|    adda.l   0+4+12(%sp),%a0
-
     and.w    #0xF,%d0
     moveq    #16,%d1
     sub.w    %d0,%d1
@@ -43,8 +36,6 @@ Sprite16_BLIT:
     beq.s    0f
     subq.w   #1,%d2
 
-|    moveq.l  #-1,%d3
-|    move.w   4+4+10(%sp),%d3
     rol.l    %d1,%d3
 
 1:

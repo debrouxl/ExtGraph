@@ -33,7 +33,7 @@
 //       installed you should use:
 //
 //       #include <extgraph.h>
-#include "..\..\lib\extgraph.h"
+#include "../../lib/extgraph.h"
 
 //=============================================================================
 // simple demo program which demonstrates an earthquake effect
@@ -89,7 +89,7 @@ void _main(void) {
 //
 // $Log: demo1.c,v $
 // Revision 2.1  2004/
-// * now using OSSetSR(0x0200) instead of OSSetSR(0x0700), because 0x0700 (in 
+// * now using OSSetSR(0x0200) instead of OSSetSR(0x0700), because 0x0700 (in
 // fact any value above 0x300) stops the clock on AMS 2.07+.
 //
 // Revision 1.6  2002/02/25 20:43:00  tnussb

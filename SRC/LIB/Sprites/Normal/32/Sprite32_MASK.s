@@ -9,9 +9,6 @@ Sprite32_MASK:
     move.w   %d4,-(%sp)
     move.l   %a2,-(%sp)
 
-|    move.w   4+8+4(%sp),%d3
-|    beq.s    _end_Sprite32_OR
-
     lea.l    4+8(%sp),%a0
     move.w   (%a0)+,%d0
     move.w   (%a0)+,%d1
@@ -23,12 +20,6 @@ Sprite32_MASK:
 
     subq.w   #1,%d3
 
-|    move.w   4+8+0(%sp),%d0
-|    move.w   4+8+2(%sp),%d1
-|    movea.l  4+8+6(%sp),%a1
-|    movea.l  4+8+10(%sp),%a2
-
-    move.w   %d1,%d2
     lsl.w    #4,%d1
     sub.w    %d2,%d1
 
@@ -39,9 +30,6 @@ Sprite32_MASK:
     add.w    %d1,%d1
 
     adda.w   %d1,%a0
-
-|    movea.w  %d1,%a0
-|    adda.l   4+8+14(%sp),%a0
 
     move.w   %d0,%d1
     and.w    #0xF,%d1

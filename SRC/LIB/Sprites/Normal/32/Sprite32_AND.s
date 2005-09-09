@@ -21,10 +21,6 @@ Sprite32_AND:
     movea.l  (%a0)+,%a1
     movea.l  (%a0),%a0
 
-|    move.w   4+4+0(%sp),%d0
-|    move.w   4+4+2(%sp),%d1
-|    movea.l  4+4+6(%sp),%a1
-
     move.w   %d1,%d2
     lsl.w    #4,%d1
     sub.w    %d2,%d1
@@ -36,16 +32,11 @@ Sprite32_AND:
 
     adda.w   %d0,%a0
 
-|    movea.w  %d0,%a0
-|    adda.l   4+4+10(%sp),%a0
-
     andi.w   #0xF,%d2
 
     moveq    #16,%d1
     sub.w    %d2,%d1
 
-|    move.w   4+4+4(%sp),%d3
-|    beq.s    __end_Sprite32_AND
     subq.w   #1,%d3
 
 1:

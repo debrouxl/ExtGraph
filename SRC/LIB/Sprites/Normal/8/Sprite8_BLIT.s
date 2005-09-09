@@ -15,10 +15,6 @@ Sprite8_BLIT:
     movea.l  (%a0)+,%a1
     movea.l  2(%a0),%a0
 
-|    move.w   0+4+0(%sp),%d0
-|    move.w   0+4+2(%sp),%d1
-|    movea.l  0+4+6(%sp),%a1
-
     move.w   %d1,%d3
     lsl.w    #4,%d1
     sub.w    %d3,%d1
@@ -30,11 +26,6 @@ Sprite8_BLIT:
 
     adda.w   %d1,%a0
 
-|    movea.w  %d1,%a0
-|    adda.l   0+4+12(%sp),%a0
-
-|    move.w   0+4+4(%sp),%d2
-|    beq.s    _end_Sprite8_BLIT
     subq.w   #1,%d2
 
     moveq.l  #-1,%d3

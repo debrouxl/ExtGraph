@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 
 void GrayDrawRect2B(short x0,short y0,short x1, short y1, short color,short fill,void* lightplane,void* darkplane) {
     WIN_RECT wrect;

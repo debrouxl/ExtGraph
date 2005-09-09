@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 
 /*===========================================================================*/
 /* draw a horizontal line with given color from (x0,y) to (x1,y)             */

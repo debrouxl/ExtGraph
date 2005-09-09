@@ -1,47 +1,50 @@
-/* Generic Sprite Scaling routine
- * by Jim Haskell
- * email: jimhaskell@yahoo.com
- * ICQ: 7448076
- *
- * Copyleft: The usual. This program was released as and should stay open-source.
- *           Feel free to edit/delete/add to these routines as you wish, just give
- *             me credit for the original work. If you do anything spectacular to
- *             increase the speed, please let me know.
- *           If you want to use it to make money, talk to me and get permission.
- *           If this program crashes or other bad things happens to your calculator,
- *             then you are SOL. It's not my fault.
- *
- * [modified and integrated into ExtGraph library by thomas.nussbaumer@gmx.net]
- */
-extern const unsigned char bit_table[8];
+// Generic Sprite Scaling routine by Julien Richard-Foy.
+// Significantly faster than the routine by Jim Haskell, Julien allowed me
+// to relicense his routines under the LGPL, and I cannot reach Jim
+// Haskell to ask him for the same thing.
 
-#define getpixel8(s,x,y)  (*((unsigned char *)(s)+(y)+((x)>>3)))&bit_table[(x)&7]
+void __attribute__((__stkparm__)) ScaleSprite8_OR(unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey)
+{
+	short dx,dy;
+	unsigned char maskorig,mask;
+	unsigned char masksrc;
+	char *tmpdest;
 
-void ScaleSprite8_XOR(const unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey) {
-    short x;//,y;
-    unsigned short u,v=0,du=(unsigned short)(8<<8)/(unsigned short)sizex,dv=(unsigned short)(8<<8)/(unsigned short)sizey,pix8,pixscreen,tempv;
-    unsigned char *src;
-    unsigned char mask,origmask=0x80>>(x0&7);
+	(unsigned char *)dest+=((((y0)+(y0))<<4)-((y0)+(y0)))+((x0)>>3);
+	maskorig=(0x80)>>(x0&7);
 
-    dest = ((unsigned char *)(dest))+((((y0)+(y0))<<4)-((y0)+(y0)))+((x0)>>3);
-//    for (y = sizey;(y--);) {
-    for (sizey = sizey;(sizey--);) {
-        u=0;
-        mask=origmask;
-        tempv=v>>8;
-        src = dest;
-        for (x = sizex;(x--);) {
-            pix8=getpixel8(sprite,u>>8,tempv);
-            pixscreen=*src&mask;
+	dy=8/1-sizey;
 
-            if (pix8&&pixscreen) *src&=~mask;
-            else if (!pix8&&!pixscreen) *src&=~mask;
-            else *src|=mask;
-            asm("ror.b #1,%0;bcc.s 0f;addq.l #1,%1;0:":"=d" (mask),"=g" (src):"0"(mask),"1"(src));
-            u+=du;
-        }
-        v+=dv;
-        
-        (unsigned char *)dest += 30;
-    }
+	for(y0=sizey;y0--;)
+	{
+		if(dy>=0) {
+			do
+			{
+				dy-=sizey, sprite++;
+			} while(dy>0);
+                }
+
+		tmpdest=dest;
+		masksrc=0x80;
+		mask=maskorig;
+		dx=8/1-sizex;
+		for(x0=sizex;x0--;)
+		{
+			if(dx>=0) {
+				do
+				{
+					dx-=sizex;
+					masksrc>>=1;
+				} while(dx>0);
+                        }
+
+			if(*sprite & masksrc) {
+				*tmpdest ^= mask;
+                        }
+			asm("ror.b #1,%0;bcc.s 0f;addq.l #1,%1;0:":"=d" (mask),"=g" (tmpdest):"0"(mask),"1"(tmpdest));
+			dx+=8;
+		}
+		(unsigned char *)dest+=30;
+		dy+=8;
+	}
 }

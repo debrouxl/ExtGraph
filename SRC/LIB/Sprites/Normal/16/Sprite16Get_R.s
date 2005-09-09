@@ -9,10 +9,9 @@
 .even
 
 Sprite16Get_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     swap     %d2
 
     move.w   %d1,%d2
@@ -38,5 +37,5 @@ Sprite16Get_R:
     move.w   %d0,(%a1)+
     lea      30(%a0),%a0
     dbf      %d2,1b
-
+0:
     rts

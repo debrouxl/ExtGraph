@@ -3,7 +3,7 @@
 #define NO_AMS_CHECK
 #define NO_CALC_DETECT
 #include <tigcclib.h>         // Include All Header Files
-#include "..\..\lib\extgraph.h"
+#include "../../lib/extgraph.h"
 
 
 // Main Function

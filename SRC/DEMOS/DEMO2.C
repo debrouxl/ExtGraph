@@ -17,7 +17,7 @@
 #define MIN_AMS 100
 
 #include <tigcclib.h>
-#include "..\..\lib\extgraph.h"  // NOTE: this path is just for this demo !!
+#include "../../lib/extgraph.h"  // NOTE: this path is just for this demo !!
                                  //       if the extgraph library is correctly
                                  //       installed you should use:
                                  //

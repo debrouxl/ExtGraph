@@ -5,10 +5,9 @@
 .even
 
 Sprite16_RPLC_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.l   %d3,-(%sp)
 
     move.w   %d1,%d3
@@ -41,4 +40,5 @@ Sprite16_RPLC_R:
     dbf      %d2,1b
 
     move.l   (%sp)+,%d3
+0:
     rts

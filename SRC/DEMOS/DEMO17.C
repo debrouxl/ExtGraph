@@ -21,8 +21,8 @@
 #include <tigcclib.h>         // Include All Header Files
 //#include "extgraph.h"
 //#include "tilemap.h"
-#include "..\..\lib\extgraph.h"
-#include "..\..\lib\tilemap.h"
+#include "../../lib/extgraph.h"
+#include "../../lib/tilemap.h"
 
 #define GRAY
 #define FAST_AND_DIRTY
@@ -390,7 +390,7 @@ void _main(void)
 
 	SetIntVec(AUTO_INT_1,DUMMY_HANDLER);
 	SetIntVec(AUTO_INT_5,CountFps);
-	
+
 	x=y=0;
 
       plane.matrix=tabtiles;
@@ -428,13 +428,13 @@ void _main(void)
 				GrayIShadowPlanesTo_R(vscreen,vscreen+LCD_SIZE,GetPlane(LIGHT_PLANE),GetPlane(DARK_PLANE));
 			}
 
-#endif			
+#endif
 #ifdef FAST_AND_DIRTY
 			Sprite16_BLIT_R_very_special(C89_92V200(0xF,0),fpssprite);
 #else
 			DrawStr(0,0,fps_str,A_REPLACE);
 #endif
-                        
+
 			BEGIN_KEYTEST
 			if(_keytest_optimized(RR_RIGHT) && x<16*32-WIDTH)
 				x++;

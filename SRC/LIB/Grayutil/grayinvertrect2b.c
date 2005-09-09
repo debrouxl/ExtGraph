@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 
 void GrayInvertRect2B(short x0,short y0,short x1, short y1,void* lightplane,void* darkplane) {
     SCR_RECT sr = {{x0,y0,x1,y1}};

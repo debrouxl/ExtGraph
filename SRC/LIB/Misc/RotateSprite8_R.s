@@ -3,7 +3,7 @@
 | Courtesy of Joey Adams.
 | Modified by Lionel Debroux:
 | * renamed labels.
-| * slightly optimized for size (pc-relative SMC code instead of absolute one: smaller, less relocations).
+| * slightly optimized for size.
 
 .text
 .even
@@ -11,55 +11,23 @@
 RotateSprite8_R:
 	movem.l %d3-%d7/%a2-%a6,-(%a7)
 	move.w 10*4+4(%a7),%d5 |height
-
-	lea 10f(%pc),%a3
+	jbsr RS_detrSC
+	lea 10f(%pc),%a3 | Save sp.
 	move.l %a7,(%a3)
-	
-	neg.l %d0
-	move.w #360,%d3
-	divs.w %d3,%d0
-	swap %d0
-	tst.w %d0
-	bge rs8_1
-	add.w %d3,%d0
-rs8_1:
-	add.w %d0,%d0
-	lea RS_sin8192tab,%a2
-	move.w 0(%a2,%d0.w),%a4 |sin8192
-	sub.w #270*2,%d0
-	bge rs8_2
-	add.w #360*2,%d0
-rs8_2:
-	move.w 0(%a2,%d0.w),%a5 |cos8192
-	neg.w %d1
-	sub.w %d5,%d2
-	move.w %a5,%d0
-	muls.w %d1,%d0
-	move.w %a4,%d4
-	muls.w %d2,%d4
-	add.l %d0,%d4 |xv
-	move.w %a5,%d0
-	muls.w %d2,%d0
-	move.w %a4,%d3
-	muls.w %d1,%d3
-	sub.l %d0,%d3
 	move.l %d3,%a7 |yv
-	add.w %d5,%d2
-	neg.w %d1
-	move.l %a4,%d0
 	lsl.l #3,%d0
 	add.l %a5,%d0
 	move.l %d0,%a6 |yvr
 	move.l %a5,%d0
 	lsl.l #3,%d0
 	sub.l %a4,%d0
-	move.w %d5,10f-rs8_heightdropoff+2(%a3)
+	move.w %d5,rs8_heightdropoff+2-10f(%a3)
 	move.l %d0,%a3 |xvr
 	move.l %a1,%a2 |origDestSprite
 	adda.w %d5,%a1
 rs8_yloop:
 	cmpa.l %a2,%a1
-	bls rs8_endy
+	bls.s rs8_endy
 	moveq #0,%d6
 	moveq #7,%d5
 rs8_xloop:
@@ -67,29 +35,29 @@ rs8_xloop:
 	move.l %a7,%d0
 	asr.l %d7,%d0
 	add.w %d2,%d0 |y2
-	blt rs8_continue
+	blt.s rs8_continue
     rs8_heightdropoff:
 	cmp.w #0xDEED,%d0
 	bge rs8_continue
-	move.b 0(%a0,%d0.w),%d3 |current row data
+	move.b (%a0,%d0.w),%d3 |current row data
 	move.l %d4,%d0
 	asr.l %d7,%d0
 	add.w %d1,%d0 |x2
-	blt rs8_continue
+	blt.s rs8_continue
 	cmp.w #8,%d0
-	bge rs8_continue
+	bge.s rs8_continue
 	eor.w #7,%d0
 	btst %d0,%d3
-	beq rs8_continue
+	beq.s rs8_continue
 	bset %d5,%d6
 rs8_continue:
 	add.l %a4,%a7
 	add.l %a5,%d4
-	dbra %d5,rs8_xloop
+	dbf %d5,rs8_xloop
 	move.b %d6,-(%a1)
 	sub.l %a6,%a7
 	sub.l %a3,%d4
-	bra rs8_yloop
+	bra.s rs8_yloop
 rs8_endy:
 	|%d0.l is general purpose
 	|%d1.w is originX

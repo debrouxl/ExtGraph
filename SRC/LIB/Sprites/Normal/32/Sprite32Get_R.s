@@ -8,10 +8,9 @@
 .even
 
 Sprite32Get_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     move.w   %d3,-(%sp)
     move.w   %d4,-(%sp)
 
@@ -43,4 +42,5 @@ Sprite32Get_R:
 
     move.w  (%sp)+,%d4
     move.w  (%sp)+,%d3
+0:
     rts

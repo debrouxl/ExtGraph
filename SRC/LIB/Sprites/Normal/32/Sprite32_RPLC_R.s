@@ -5,10 +5,9 @@
 .even
 
 Sprite32_RPLC_R:
-    dbf    %d2,1f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-1:
     move.l   %d3,-(%sp)
     move.w   %d4,-(%sp)
     move.l   %d5,-(%sp)
@@ -37,7 +36,7 @@ Sprite32_RPLC_R:
     not.l    %d3
     swap     %d3
 
-0:
+1:
     move.l   (%a1)+,%d0
     move.w   %d0,%d6
     lsl.w    %d5,%d6
@@ -48,10 +47,11 @@ Sprite32_RPLC_R:
     or.w     %d6,(%a0)
 
     lea      26(%a0),%a0
-    dbf      %d2,0b
+    dbf      %d2,1b
 
     move.w  (%sp)+,%d6
     move.l  (%sp)+,%d5
     move.w  (%sp)+,%d4
     move.l  (%sp)+,%d3
+1:
     rts

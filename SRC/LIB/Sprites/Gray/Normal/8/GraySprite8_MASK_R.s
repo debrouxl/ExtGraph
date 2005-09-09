@@ -5,10 +5,9 @@
 .even
 
 GraySprite8_MASK_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     movem.l  %d3/%a2-%a5,-(%sp)
 
     lea.l    4+20(%sp),%a5
@@ -16,11 +15,6 @@ GraySprite8_MASK_R:
     movea.l  (%a5)+,%a3
     movea.l  (%a5)+,%a4
     movea.l  (%a5),%a5
-
-|    move.l   4+20(%sp),%a2
-|    move.l   4+20+4(%sp),%a3
-|    move.l   4+20+4+4(%sp),%a4
-|    move.l   4+20+4+4+4(%sp),%a5
 
     move.w   %d1,%d3	| d3 = y
     lsl.w    #4,%d1	| d1 = 16*y
@@ -70,6 +64,7 @@ GraySprite8_MASK_R:
 
     dbf      %d2,1b
     movem.l   (%sp)+,%d3/%a2-%a5
+0:
     rts
 
 2:

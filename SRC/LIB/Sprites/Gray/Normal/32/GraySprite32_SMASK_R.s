@@ -5,10 +5,9 @@
 .even
 
 GraySprite32_SMASK_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    blt.s    0f
 
-0:
     movem.l  %d3-%d5/%a2-%a4,-(%sp)
 
     lea.l    4+24(%sp),%a4
@@ -68,4 +67,5 @@ GraySprite32_SMASK_R:
     dbf      %d2,1b
 
     movem.l  (%sp)+,%d3-%d5/%a2-%a4
+0:
     rts

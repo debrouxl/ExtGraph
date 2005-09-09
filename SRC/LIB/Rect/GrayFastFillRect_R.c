@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 
 // Draw an filled rectangle.
 // I did not write a full-blown routine to save design time for other

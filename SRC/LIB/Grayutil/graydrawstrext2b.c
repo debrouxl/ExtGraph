@@ -1,4 +1,4 @@
-#include "..\internal.h"
+#include "../internal.h"
 
 /*===========================================================================*/
 /* utility function to draw a string to both planes                          */
