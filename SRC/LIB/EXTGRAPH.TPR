@@ -54,7 +54,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Scaling\scalesprite16or.c
+Open File=E:\SVN\ExtGraph\trunk\SRC\LIB\Sprites\Normal\32\Sprite32_RPLC_R.s
 
 [Included Files]
 C File 1=Misc\unpack.c

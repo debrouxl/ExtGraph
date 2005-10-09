@@ -29,6 +29,7 @@ echo demo24
 ./buildsep demo24 ../../lib/gray.o
 ./buildsep demo25 ../../lib/gray.o
 tigcc demo26.asm ../../lib/extgraph.a ../../lib/tilemap.a ../../lib/gray.o
-mv demo26.89z ../../bin89
-mv demo26.9xz demo26.v2z ../../bin92pv200
+mv demo26.89z ../../BIN89
+mv demo26.9xz ../../BIN92PV200
+mv demo26.v2z ../../BIN92PV200
 ./buildcmp demo27

@@ -59,8 +59,8 @@ ClipSprite32_AND_R:
     lea.l    26(%a0),%a0
     dbf      %d2,1b
 
-0:
     move.w   (%sp)+,%d4
+0:
     move.l   (%sp)+,%d3
     rts
 8:

@@ -53,5 +53,5 @@ Sprite32_RPLC_R:
     move.l  (%sp)+,%d5
     move.w  (%sp)+,%d4
     move.l  (%sp)+,%d3
-1:
+0:
     rts
