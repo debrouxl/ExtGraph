@@ -1,7 +1,7 @@
 | C prototype: void FastGraySprite32_OR_R(short x,short y,short h,long* sprite,void* dest);
 | Environ 57% plus rapide que GraySprite16_OR de extgraph 1.02
 
-.data
+.text
 .globl FastGraySprite32_OR_R
 
 FastGraySprite32_OR_R:
@@ -12,19 +12,19 @@ __suite__:
     move.l   %d3,-(%a7)
     move.w   %d4,-(%a7)
 
-    |y*15 
+    |y*15
     move.w    %d1,%d3
     lsl.w     #4,%d1
     sub.w     %d3,%d1
-    
+
     |x/16
     move.w    %d0,%d3
     lsr.w     #4,%d3
-    
+
     add.w     %d3,%d1
     add.w     %d1,%d1
     adda.w    %d1,%a0
-    
+
     addq.l    #4,%a0
 
     andi.w   #15,%d0          | d0=rightshift

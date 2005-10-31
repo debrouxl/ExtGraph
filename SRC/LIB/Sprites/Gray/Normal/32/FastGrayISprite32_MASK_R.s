@@ -1,7 +1,7 @@
 | C prototype: void FastGraySprite16_MASK_R(short x,short y,short h,long* sprite,long *mask,void* dest);
 | Environ 65% plus rapide que GraySprite16_MASK d'extgraph 1.02
 
-.data
+.text
 .globl FastGraySprite32_MASK_R
 
 FastGraySprite32_MASK_R:
@@ -13,33 +13,33 @@ __suite__:
     move.l   %d5,-(%a7)
     move.w   %d4,-(%a7)
     move.w   %d6,-(%a7)
-    
+
     |addq.l   #4,%a0
-    
-    |y*15 
+
+    |y*15
     move.w    %d1,%d3
     lsl.w     #4,%d1
     sub.w     %d3,%d1
-    
+
     |x/16
     move.w    %d0,%d3
     lsr.w     #4,%d3
-    
+
     add.w     %d3,%d1
     add.w     %d1,%d1
     adda.w    %d1,%a0
-    
+
     addq.l    #4,%a0
-    	
+
     andi.w   #15,%d0          | d0=rightshift
     moveq.l  #16,%d1
     sub.w    %d0,%d1          | d1=lefshift
-    
+
     |Mask1
     moveq.l  #-1,%d5
     lsr.l    %d0,%d5
     not.l    %d5
-    
+
     |Mask2
     move.w   #-1,%d6
     lsl.w    %d1,%d6
@@ -108,9 +108,9 @@ Milieu:
     lea.l    26+30(%a0),%a0
 
     dbf    %d2,Bouboucle32
-    
+
     move.w   (%a7)+,%d6
     move.w   (%a7)+,%d4
     move.l   (%a7)+,%d5
-    move.l   (%a7)+,%d3   
+    move.l   (%a7)+,%d3
     rts

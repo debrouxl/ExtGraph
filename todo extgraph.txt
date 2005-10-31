@@ -7,10 +7,10 @@ Roadmap after Beta 4 (more or less sorted):
 /* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites) in ExtGraph,
 Graphlib, Genlib.
 
-0* Make all ScaleSprite functions in ASM using bit operations, add X8 version.
+0* Make all ScaleSprite functions in ASM using bit operations, add X8 version. "epsilon" also needs functions that draw
+to a sprite, not to a screen.
 
 0* Do all circle functions do their job properly ?
-
 
 -- Beta 5 --
 
@@ -47,13 +47,13 @@ becomes ugly).
 
 /* Lines, triangles, circles, etc:
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
-    Note: an algorithm for circles, triangles and lines could be: use the stack (max 2*128 bytes) to store endpoints, call
-DrawMultiHLines.
+    Note: an algorithm for circles, triangles and lines could be: use the stack (max 2*128 bytes) to store endpoints,
+    call DrawMultiHLines.
     0* "Extremely Fast Line Algorithm" (EFLA) by Po-Han Lin: what does "Freely useable in non-commercial applications as
 long as credits to Po-Han Lin and link to http://www.edepot.com is provided in source code AND CAN BE SEEN IN COMPILED
-EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel is
-faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM version of
-Bresenham.
+EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel
+is faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM
+version of Bresenham.
 
 0* Preshifted 8x8.
 

@@ -1,7 +1,7 @@
 | C prototype : void FastGraySprite8_OR_R(x,y,h,sprt,dest);
 | Environ 39% plus rapide que GraySprite8_OR de extgraph 1.02
 
-.data
+.text
 .globl FastGraySprite8_OR_R
 .even
 FastGraySprite8_OR_R:

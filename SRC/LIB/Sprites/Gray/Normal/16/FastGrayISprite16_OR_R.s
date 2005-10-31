@@ -1,7 +1,7 @@
 | C prototype: void FastGraySprite16_OR_R(short x,short y,short h,short* sprite,void* dest);
 | Environ 34% plus rapide que GraySprite16_OR de extgraph 1.02
 
-.data
+.text
 .globl FastGraySprite16_OR_R
 .even
 FastGraySprite16_OR_R:

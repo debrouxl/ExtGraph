@@ -1,29 +1,29 @@
 | C prototype: void SpriteX8Get(short x,short y,short h,void* src,unsigned char* dest,short w) __attribute__((__stkparm__));
 
-.data
+.text
 .globl SpriteX8Get
-.even 
+.even
 
 SpriteX8Get:
 	movem.l	%d3-%d6,-(%sp)
 
 	subq.w	#1,%d2
 	blt.s   9f
-	
+
 	add.w	%d1,%d1
 	move.w	%d1,%d4
 	lsl.w	#4,%d4
 	sub.w	%d1,%d4
-	
+
 	move.w	%d0,%d1
 	lsr.w	#3,%d1
 	add.w	%d1,%d4
-	
+
 	adda.w	%d4,%a1
 
 	moveq	#30,%d6
 	sub.w	%d3,%d6			| constant offset from the end of a line to the beginning of the next one
-	
+
 	and.w	#7,%d0			| shifting coeff
 	moveq   #8,%d5			| 8-shift
 	sub.w	%d0,%d5
@@ -37,14 +37,14 @@ SpriteX8Get:
 	move.b	(%a1)+,%d4		| first byte of the line
 	lsl.b	%d0,%d4
 	move.b	%d4,(%a0)
-	
+
 	move.w	%d3,%d1
 
 1:
 	move.b	(%a1),%d4		| middle bytes
 	lsr.b	%d5,%d4
 	or.b	%d4,(%a0)+
-	
+
 	move.b	(%a1)+,%d4
 	lsl.b	%d0,%d4
 	move.b	%d4,(%a0)
@@ -54,7 +54,7 @@ SpriteX8Get:
 	move.b	(%a1),%d4		| last byte of the line
 	lsr.b	%d5,%d4
 	or.b	%d4,(%a0)+
-	
+
 	adda.w	%d6,%a1
 	dbf	%d2,0b
 
@@ -66,10 +66,10 @@ SpriteX8Get:
 2:				| loop if shift == 0
 	subq.w	#1,%d3
 	blt.s   7f
-	
+
 3:
 	move.w	%d3,%d1
-	
+
 4:
 	move.b	(%a1)+,(%a0)+
 	dbf	%d1,4b
@@ -92,7 +92,7 @@ SpriteX8Get:
 	lsr.b	%d5,%d3
 	or.b	%d4,%d3
 	move.b  %d3,(%a0)+
-	
+
 	adda.w	%d6,%a1
 	dbf	%d2,6b
 

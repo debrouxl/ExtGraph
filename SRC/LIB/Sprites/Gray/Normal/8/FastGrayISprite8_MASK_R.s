@@ -1,7 +1,7 @@
 | C prototype ! void FastGraySprite8_MASK(x,y,h,sprt,mask,dest);
 | Environ 82% plus rapide que GraySprite8_MASK de extgraph 1.02
 
-.data
+.text
 .globl FastGraySprite8_MASK_R
 .even
 FastGraySprite8_MASK_R:
