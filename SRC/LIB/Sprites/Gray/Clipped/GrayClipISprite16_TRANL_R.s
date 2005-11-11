@@ -8,23 +8,21 @@
     moveq    #16,%d1
     sub.w    %d0,%d1
 2:
-    moveq.l  #-1,%d0
+    moveq.l  #0,%d0
     move.w   (%a2)+,%d0
     rol.l    %d1,%d0
 
-    moveq.l  #0,%d3
+    moveq.l  #-1,%d3
     move.w   (%a2)+,%d3
     rol.l    %d1,%d3
 
     move.l   %d3,%d4
-    not.l    %d4
-    or.l     (%a1),%d4
-    and.l    %d0,%d4
+    and.l    (%a0),%d4
+    or.l     %d0,%d4
     move.l   %d4,(%a0)
 
-    not.l    %d0
+    or.l     (%a1),%d0
     and.l    %d3,%d0
-    or.l     (%a0),%d0
     move.l   %d0,(%a1)
 
     lea      30(%a0),%a0
@@ -38,7 +36,7 @@ GrayClipISprite16_TRANL_R:
     movem.l  %d3-%d4/%a2,-(%sp)
 
     move.l   4+12(%sp),%a2
-    
+
     subq.w   #1,%d2		| %d2 = h - 1
     move.w   %d1,%d3		| %d3 = y
     bpl.s    9f	| h > 0 ?
@@ -79,28 +77,26 @@ GrayClipISprite16_TRANL_R:
 
     andi.w   #15,%d0
     cmpi.w   #8,%d0
-    bge.w    3b
+    jbge     3b
 
 1:
-    moveq.l  #-1,%d1
+    moveq.l  #0,%d1
     move.w   (%a2)+,%d1
     swap     %d1
     ror.l    %d0,%d1
 
-    moveq.l  #0,%d3
+    moveq.l  #-1,%d3
     move.w   (%a2)+,%d3
     swap     %d3
     ror.l    %d0,%d3
 
     move.l   %d3,%d4
-    not.l    %d4
-    or.l     (%a1),%d4
-    and.l    %d1,%d4
+    and.l    (%a0),%d4
+    or.l     %d1,%d4
     move.l   %d4,(%a0)
 
-    not.l    %d1
+    or.l     (%a1),%d1
     and.l    %d3,%d1
-    or.l     (%a0),%d1
     move.l   %d1,(%a1)
 
     lea      30(%a0),%a0
@@ -123,23 +119,21 @@ GrayClipISprite16_TRANL_R:
     adda.w   %d1,%a1
 
 4:
-    moveq.l  #-1,%d1
+    moveq.l  #0,%d1
     move.w   (%a2)+,%d1
     rol.l    %d0,%d1
 
-    moveq.l  #0,%d3
+    moveq.l  #-1,%d3
     move.w   (%a2)+,%d3
     rol.l    %d0,%d3
 
     move.w   %d3,%d4
-    not.w    %d4
-    or.w     (%a1),%d4
-    and.w    %d1,%d4
+    and.w    (%a0),%d4
+    or.w     %d1,%d4
     move.w   %d4,(%a0)
 
-    not.w    %d1
+    or.w     (%a1),%d1
     and.w    %d3,%d1
-    or.w     (%a0),%d1
     move.w   %d1,(%a1)
 
     lea      30(%a0),%a0
@@ -162,23 +156,21 @@ GrayClipISprite16_TRANL_R:
     adda.w   %d1,%a1
 
 5:
-    moveq.l  #-1,%d1
+    moveq.l  #0,%d1
     move.w   (%a2)+,%d1
     ror.l    %d0,%d1
 
-    moveq.l  #0,%d3
+    moveq.l  #-1,%d3
     move.w   (%a2)+,%d3
     ror.l    %d0,%d3
 
     move.w   %d3,%d4
-    not.w    %d4
-    or.w     (%a1),%d4
-    and.w    %d1,%d4
+    and.w    (%a0),%d4
+    or.w     %d1,%d4
     move.w   %d4,(%a0)
 
-    not.w    %d1
+    or.w     (%a1),%d1
     and.w    %d3,%d1
-    or.w     (%a0),%d1
     move.w   %d1,(%a1)
 
     lea      30(%a0),%a0
