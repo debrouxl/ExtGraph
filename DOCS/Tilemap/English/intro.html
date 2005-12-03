@@ -1,4 +1,5 @@
-<html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
 <head><title>Documentation of TileMap Engine v0.4 (06/29/2004)</title></head>
 <body>
 <table width="100%" border="0">
@@ -73,31 +74,31 @@ The result on the real screen will look like:<br>
             16
     <---------------->
   ^ +----------------+----------------+----------------+---------------
-  | |             <font color='#DDDDDD'>|</font>  |           ^ <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-  | |             <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-  | |             <font color='#DDDDDD'>|</font>  |         11| <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-16| |      13     <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-  | |<-----------><font color='#DDDDDD'>|</font>  |           v <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |           ^ <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+  | |             <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+  | |             <font color='#DDDDDD'>|</font>  |         11| <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+16| |      13     <font color='#DDDDDD'>|</font>  |           | <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+  | |<-----------><font color='#DDDDDD'>|</font>  |           v <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
   | |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
-  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+  | |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
   v +----------------+----------------+----------------+---------------
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
     |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
     +----------------+----------------+----------------+---------------
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
     |<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+--</font>|<font color='#DDDDDD'>-------------+-</font>
-    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font> 
+    |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>  |             <font color='#DDDDDD'>|</font>
 </pre>The real screen and the big virtual screen are only shown as 16x16 tile boundaries. The real screen is drawn with black, and the big virtual screen is drawn with light gray.<br><br>
 </p>
 <hr>

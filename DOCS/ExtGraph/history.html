@@ -1,21 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <TITLE>Library ExtGraph Documentation</TITLE>
-<STYLE TYPE="TEXT/CSS">
-<!--
-BODY {FONT-FAMILY: Verdana,Arial,Helvetica,Sans-Serif; BACKGROUND-COLOR: #FFFFFF; FONT-SIZE: 10pt}
-TD {FONT-SIZE: 8pt}
-H1 {FONT-SIZE: 18pt; COLOR: #000000}
-.toptitle {FONT-SIZE: 23pt; COLOR: #0000A0}
-H2 {FONT-SIZE: 16pt; COLOR: #000000}
-H3 {FONT-SIZE: 10pt}
-.subtitle {FONT-SIZE: 13pt; COLOR: #8000A0}
-PRE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
-CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
--->
-</STYLE>
+<link rel="stylesheet" type="text/css" media="screen, projection" href="../style.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
@@ -62,21 +50,21 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         scripts, added a make distribution script and a more general
                                         and powerful cleanup script. They require a compatible shell
                                         and tools, that is Cygwin or MSYS (untested) on Win32 (builtin
-                                        on Linux, MacOS X, probably BSD). The Win32 batchfiles, when
+                                        on Linux, MacOS X, BSD). The Win32 batchfiles, when
                                         they exist, have been left. Changed path references to use
                                         forward slashes.<br>Note that the switch creates problems with
                                         the Win32 IDE, which handles files in different folders in a
                                         sloppy way. Now I understand why Godzil, PpHd ("Moi maudire
                                         l'IDE jusqu'à son arrière-petit fils" ;-) ), etc. don't like
                                         the IDE. I didn't see what the problem is, because I had never
-                                        stumbled across it, but now that I can see it, it sucks. Of
-                                        course, there's tprbuilder, but going from the IDE to the
-                                        shell to launch it and vice-versa is an annoyance.</td></tr>
+                                        stumbled across it, but now I know it sucks. Of course, there's
+                                        tprbuilder, but going from the IDE to the shell to launch it
+                                        and vice-versa is an annoyance.</td></tr>
 <tr><td>           </td><td>          </td><td>Added a <strong>fork of the TIGCCLIB grayscale routine</strong>, which
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
                                         for more information. I integrated the fix for the double
-                                        GrayOn(); crash. Kevin said multiple times on the TIGCC/TICT
+                                        GrayOn(); crash. Kevin said at least twice on the TIGCC/TICT
                                         board that it is unsupported software that WILL be
                                         sabotaged. If he does, well, <em>(the official)</em> TIGCC
                                         will become something that one can freely distribute and
@@ -90,12 +78,12 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         TRAND/L routines. The readme used to be wrong about making
                                         TRAND/L from TRANB/W, and making TRAND/L was not so easy after
                                         all.</td></tr>
-<tr><td>           </td><td>          </td><td>On 12/08/2005, created a <strong>SVN repository</strong> for ExtGraph at
+<tr><td>           </td><td>          </td><td>On 2005/08/12, created a <strong>SVN repository</strong> for ExtGraph at
                                         <a href="http://opensvn.csie.org/ExtGraph">http://opensvn.csie.org/ExtGraph</a>.
                                         Anonymous checkout allowed, but recommended only to check if
                                         particular bugs were fixed since the latest beta/release.
                                         Indeed, the trunk may contain broken things or break the API
-                                        without notice - and it did multiple times in the few weeks
+                                        without notice - and it did multiple times in the many weeks
                                         before this beta, especially when I was adding triangle/circle
                                         functions and their DrawSpan subroutines !</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed <strong>GrayClip(I)Sprite32_MASK_R</strong>. Thanks to Olivier
@@ -162,8 +150,8 @@ CODE {FONT-FAMILY: Courier New; FONT-SIZE: 9pt}
                                         labels: extgraph.a is more than 3 KB smaller now.</td></tr>
 <tr><td>           </td><td>          </td><td>Revamped the <strong>ScaleSprite</strong> routines with faster, smaller
                                         and legally-unencumbered code from Julien RF, translated into
-                                        ASM. My bad for not adding those routines for so long. Added
-                                        X8 version.</td></tr>
+                                        ASM. My bad for not adding those routines for so long, that
+                                        was pretty easy after all. Added X8 version.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed <strong>(I)SHADOW(2)</strong> routines: they are nearly
                                         useless thanks to <strong>Create(I)Sprite(I)Shadow</strong> and OR routines
                                         (which require a small additional amount of space) and
