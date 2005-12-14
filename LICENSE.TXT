@@ -1,5 +1,34 @@
+This library is dual-licensed, EXCEPT the Exepack decompression routine as of 2005/12/14 (it can be used only under the older license, we hope to be able to use it in free software). You can choose either license: the older license keeps all previous legal uses of the library, the newer one enables you using it in GPL'ed projects.
+
+
+The older TICT programs license:
+"
 The ExtGraph library in this release may be distributed by any other website for non-commercial use only.
 
 The author makes no representations or warranties about the suitability of the software, either express or implied. The author shall not be liable for any damages suffered as a result of using or distributing this software.
 
 If you use or re-use any part of this library, please give credits to us including a link to our website (http://tict.ticalc.org). This is not mandatory though.
+"
+
+The newer license:
+"
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU Lesser General Public
+License as published by the Free Software Foundation; either
+version 2.1 of the License, or (at your option) any later version.
+
+As a special exception, UNMODIFIED copies of this program may also be
+redistributed or sold without source code, for any purpose. The Lesser
+General Public License restrictions do apply in other respects; for
+example, they cover modification of the program. This exception notice
+must be removed on modified copies of this program.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this library; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+"

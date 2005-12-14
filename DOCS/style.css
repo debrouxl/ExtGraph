@@ -1,0 +1,12 @@
+body {font-family: Verdana,Arial,Helvetica,Sans-Serif; background-color: #FFFFFF; font-size: 10pt}
+td {font-size: 8pt}
+h1 {font-size: 18pt; color: #000000}
+.toptitle {font-size: 23pt; color: #0000A0; text-align: center; text-decoration: bold}
+h2 {font-size: 16pt; color: #000000}
+h3 {font-size: 10pt}
+.subtitle {font-size: 13pt; color: #8000A0; text-align: center; text-decoration: bold}
+pre {font-family: Courier New; font-size: 9pt}
+code {font-family: Courier New; font-size: 9pt}
+.strongcentered {text-align: center; text-decoration: bold}
+.startofblock {font-size: 18pt; color: #000000; text-decoration: bold}
+.under {text-decoration: underline}

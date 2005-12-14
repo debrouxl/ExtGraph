@@ -1189,6 +1189,13 @@ void RotateSprite32_R(unsigned long *srcSprite asm("%a0"),unsigned long *destSpr
 void RotateSpriteX8_R(unsigned char *srcSprite asm("%a0"),unsigned char *destSprite asm("%a1"),short width,short height,short originX asm("%d1"),short originY asm("%d2"),long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
 
 
+//-----------------------------------------------------------------------------
+// Sine table (0..90) used in arbitrary angle sprite rotating functions, values
+// multiplied by 8192 == 1<<13. Courtesy of Joey Adams. Exported at his request
+// to avoid duplication of sine tables in case a program would use another sine
+// table.
+//-----------------------------------------------------------------------------
+extern const short RS_sin8192tab[91];
 
 
 
