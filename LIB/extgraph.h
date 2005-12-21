@@ -160,9 +160,19 @@ short TestCollide16(short x0,short y0,short x1,short y1,short height,const unsig
 short TestCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height,const unsigned short* data0 asm("%a0"),const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 short TestCollide162h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height0,short height1,unsigned short* data0 asm("%a0"),unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
 
+// checks for collision between 2 sprites of width 32. This routine can handle two different
+// sprite heights.
+// Courtesy of Joey Adams, added in 2.00 Beta 5.
+short TestCollide322h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height0,short height1,const unsigned long *data0 asm("%a0"),const unsigned long *data1 asm("%a1")) __attribute__((__stkparm__));
+
+// checks for collision between 2 sprites whose width is a multiple of 8.
+// This routine can handle two different sprite heights AND widths.
+// Courtesy of Joey Adams, added in 2.00 Beta 5.
+short TestCollideX82w2h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1,short bytewidth0,short bytewidth1,short height0,short height1,const void *data0 asm("%a0"),const void *data1 asm("%a1")) __attribute__((__stkparm__));
+
 // checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
-// Added in 2.00 Beta 5. Courtesy of Samuel Stearley, Jesse Frey and someone else.
-// Modified and extended by Lionel Debroux.
+// Added in 2.00 Beta 5. Courtesy of Samuel Stearley, Jesse Frey and someone else I don't remember (Joey Adams ?).
+// Modified and extended by Lionel Debroux, fixed by Jesse Frey.
 char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));

@@ -506,4 +506,6 @@ GNU Assembler File 411=Misc\RotateSpriteX8_R.s
 GNU Assembler File 412=Misc\RotateSpriteSubSCO.s
 GNU Assembler File 413=Misc\RotateSpriteSubSC.s
 GNU Assembler File 414=Misc\RS_sin8192tab.s
+GNU Assembler File 415=Misc\TestCollide322h_R.s
+GNU Assembler File 416=Misc\TestCollideX82w2h_R.s
 Header File 1=internal.h
