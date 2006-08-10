@@ -16,7 +16,7 @@
 #define isprite_16 \
 ((unsigned short[2*16]){0x1,0x1,0x3,0x3,0x7,0x7,0xF,0xF,0x1F,0x1F,0x3F,0x3F,0x7F,0x7F,0xFF,0xFF,0x1FF,0x1FF,0x3FF,0x3FF,0x7FF,0x7FF,0xFFF,0xFFF,0x1FFF,0x1FFF,0x3FFF,0x3FFF,0x7FFF,0x7FFF,0xFFFF,0xFFFF})
 
-static const unsigned short sprite_16[16] = 
+static const unsigned short sprite_16[16] =
 {
 0b0000011111100000,
 0b0001111111111000,
@@ -55,7 +55,7 @@ void _main(void) {
 
     if(!GrayOn()) goto end;
     count = 0;
-    
+
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
 
@@ -75,7 +75,7 @@ void _main(void) {
     sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
-   
+
 
     if(!GrayOn()) goto end;
     count = 0;
@@ -104,7 +104,7 @@ void _main(void) {
     PreshiftSprite16x16(sprite_16,preshiftbuf);
 
     count = 0;
-    
+
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
 
@@ -123,7 +123,7 @@ void _main(void) {
     sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
-   
+
 
     count = 0;
 
@@ -145,7 +145,7 @@ void _main(void) {
     ST_helpMsg(tmpstr);
     ngetchx();
 
-    
+
     end:
     LCD_restore(screen);
     GKeyFlush();

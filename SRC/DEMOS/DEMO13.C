@@ -142,7 +142,7 @@ void _main(void)
   LCD_BUFFER backbuffer;
 
   LCD_save(backbuffer);
- 
+
   if(!bloc)
     return;
 

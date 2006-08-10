@@ -1,16 +1,13 @@
-| C prototype: void GrayClipISpriteX16_RPLC_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short w asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipISpriteX16_RPLC_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,unsigned short blitmask,short w asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 |
-| Based on Genlib's put_masked_big_sprite, made by Julien Richard-Foy.
-| Modified by Lionel Debroux:
-| * converted from A68k assembly to GNU as assembly.
-| * changed calling convention and label names.
+| Based on GrayClipISpriteX16_OR_R.
 
 | #defines ported from Genlib. Agreed, this is how ExtGraph should have been written: symbolic
 | constant definitions, macros... Julien started doing it for the new X8 routines.
 .set _EXT_SCREEN_X, 30 | Size in bytes of a line of the video screen
 .set _EXT_SCREEN_Y, 128 | Number of rows of the video screen.
 
-| The sprite format is a sequence of WORDS (not lines): mask, light plane, dark plane.
+| The sprite format is a sequence of WORDS (not lines): light plane, dark plane (different from that of MASK).
 
 .text
 .globl GrayClipISpriteX16_RPLC_R
@@ -30,7 +27,6 @@ GrayClipISpriteX16_RPLC_R:
     ble.w    0f     | si y + hauteur <= 0, le sprite n'est pas visible
 
     move.w   %d5,%d6     | pour ne pas perdre le contenu de %d5, réutilisé plus tard
-    add.w    %d2,%d6     | largeur*3
     add.w    %d6,%d6     | *2 pour les niveaux de gris
     muls.w   %d6,%d1     | %d1 = -y * largeur (en octets)
     suba.w   %d1,%a2     | mise à jour du pointeur sur le sprite
@@ -45,7 +41,7 @@ GrayClipISpriteX16_RPLC_R:
   | Le sprite doit être clippé sur la bordure basse de l'écran
     neg.w    %d4     | %d4 = _EXT_SCREEN_Y - hauteur - y
     add.w    %d4,%d3     | %d3 = _EXT_SCREEN_Y - y = nouvelle hauteur du sprite
-    ble.w    7f     | si y >= _EXT_SCREEN_Y, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
+    ble.w    0f     | si y >= _EXT_SCREEN_Y, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
 
 6:
     move.w   %d1,%d4
@@ -58,7 +54,7 @@ GrayClipISpriteX16_RPLC_R:
 | Test clipping gauche
     moveq.l  #_EXT_SCREEN_X,%d7
     sub.w    %d5,%d7     | %d7 = 30 - largeur (en octets) = incrément de la destination après avoir affiché une ligne
-    move.w   %d4,%a3
+    |move.w   %d4,%a3 ???
     lsl.w    #3,%d5     | %d5 = largeur * 2 * 8 (en pixels)
     move.w   %d0,%d4     | %d4 = x
     blt.w    7f     | si x < 0, le sprite doit être clippé sur la bordure gauche
@@ -88,10 +84,6 @@ GrayClipISpriteX16_RPLC_R:
     moveq.l  #16-7,%d1
     sub.w    %d0,%d1
 
-    moveq.l  #-1,%d4
-    clr.w    %d4
-    rol.l    %d1,%d4
-
 | Boucle d'affichage si le sprite n'est pas clippé
 1:
     move.w   %d2,%d6
@@ -100,17 +92,12 @@ GrayClipISpriteX16_RPLC_R:
     moveq.l  #0,%d0
     move.w   (%a2)+,%d0     | sprite1
     lsl.l    %d1,%d0
-    and.l    %d4,(%a0)
     or.l     %d0,(%a0)
 
     moveq.l  #0,%d0
     move.w   (%a2)+,%d0     | sprite2
     lsl.l    %d1,%d0
-    and.l    %d4,(%a1)
     or.l     %d0,(%a1)
-
-    addq.l   #2,%a0
-    addq.l   #2,%a1
 
     dbf.w    %d6,2b
 
@@ -129,8 +116,11 @@ GrayClipISpriteX16_RPLC_R:
     move.w   %d2,%d6
 
 2:
-    move.w   (%a2)+,(%a0)+  | sprite1
-    move.w   (%a2)+,(%a1)+  | sprite2
+    move.w   (%a2)+,%d0     | sprite1
+    or.w     %d0,(%a0)+
+
+    move.w   (%a2)+,%d0     | sprite2
+    or.w     %d0,(%a1)+
 
     dbf.w    %d6,2b
 
@@ -144,12 +134,6 @@ GrayClipISpriteX16_RPLC_R:
 | Boucle d'affichage avec shifting à droite
 3:
     addq.w   #7,%d0     | Fix the dec of the cmp
-
-    moveq.l  #-1,%d4
-    clr.w    %d4     | mask
-    swap.w   %d4
-    ror.l    %d0,%d4
-
 1:
     move.w   %d2,%d6
 
@@ -158,18 +142,13 @@ GrayClipISpriteX16_RPLC_R:
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
     lsr.l    %d0,%d1
-    and.l    %d4,(%a0)
     or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
     lsr.l    %d0,%d1
-    and.l    %d4,(%a1)
     or.l     %d1,(%a1)
-
-    addq.l   #2,%a0
-    addq.l   #2,%a1
 
     dbf.w    %d6,2b
 
@@ -191,7 +170,6 @@ GrayClipISpriteX16_RPLC_R:
     sub.w    %d4,%d2     | compteur de width_loop
     subq.w   #2,%d2     | -1 (pour le premier mot, clippé) + -1 (pour le dbf) = -2
 
-    move.w   %d4,%d5
     add.w    %d4,%d4     | *2 pour avoir des octets
     add.w    %d4,%d7     | incrément de la destination (30 - largeur + %d4)
     addq.w   #2,%d7
@@ -203,59 +181,33 @@ GrayClipISpriteX16_RPLC_R:
     neg.w    %d0
     andi.w   #15,%d0
 
-    add.w    %d5,%d4     | *3 pour le mask
     add.w    %d4,%d4     | *2 pour les niveaux de gris
-    move.l   %a4,-(%sp)     | un registre de plus...
-    movea.w  %d4,%a4     | offset à ajouter à l'adresse du sprite à chaque ligne
+    move.w   %d4,%d5     | offset à ajouter à l'adresse du sprite à chaque ligne
 
-| MODIFIER cette boucle, utiliser d5 au lieu de a4 !
 1:
-    adda.w   %a4,%a2     | on avance dans la source
-
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    lsl.l    %d0,%d4
-
-    move.w   %d4,%d5
-    and.w    (%a0),%d4
-    and.w    (%a1),%d5
+    adda.w   %d5,%a2     | on avance dans la source
 
     move.w   (%a2)+,%d1     | sprite1
     lsl.w    %d0,%d1
-    or.w     %d1,%d4
-    move.w   %d4,(%a0)
+    or.w     %d1,(%a0)
 
     move.w   (%a2)+,%d1     | sprite2
     lsl.w    %d0,%d1
-    or.w     %d1,%d5
-    move.w   %d5,(%a1)
+    or.w     %d1,(%a1)
 
     move.w   %d2,%d6
     bmi.s    4f
 
 2:
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    rol.l    %d0,%d4
-
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
-
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite1
     lsl.l    %d0,%d1
-    or.l     %d1,%d4
-    move.l   %d4,(%a0)
+    or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     lsl.l    %d0,%d1
-    or.l     %d1,%d5
-    move.l   %d5,(%a1)
-
-    addq.w   #2,%a0
-    addq.w   #2,%a1
+    or.l     %d1,(%a1)
 
     dbf      %d6,2b
 4:
@@ -265,7 +217,6 @@ GrayClipISpriteX16_RPLC_R:
 
     dbf      %d3,1b
 
-    movea.l  (%sp)+,%a4
 0:
     movem.l  (%sp)+,%d3-%d7/%a2
     rts
@@ -279,16 +230,11 @@ GrayClipISpriteX16_RPLC_R:
     sub.w    %d5,%d2
     subq.w   #2,%d2     | compteur width_loop
 
-    move.w   %d5,%d6
     add.w    %d5,%d5     | *2 pour avoir des octets
     add.w    %d5,%d7
 
-    add.w    %d6,%d5     | *3 pour le mask
     add.w    %d5,%d5     | *2 pour les niveaux de gris...
-    move.l   %a4,-(%sp)
-    movea.w  %d5,%a4    | offset à ajouter à l'adresse du sprite à chaque fin de ligne
 
-| MODIFIER cette boucle, utiliser d5 au lieu de a4 !
     andi.w   #15,%d0
 
 1:
@@ -296,60 +242,35 @@ GrayClipISpriteX16_RPLC_R:
     bmi.s    4f
 
 2:
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    swap.w   %d4
-    ror.l    %d0,%d4
-
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
-
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d4
-    move.l   %d4,(%a0)
+    or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d5
-    move.l   %d5,(%a1)
-
-    addq.w   #2,%a0
-    addq.w   #2,%a1
+    or.l     %d1,(%a1)
 
     dbf      %d6,2b
 
 4:
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    lsr.l    %d0,%d4
-
-    move.w   %d4,%d5
-    and.w    (%a0),%d4
-    and.w    (%a1),%d5
-
     move.w   (%a2)+,%d1     | sprite1
     lsr.w    %d0,%d1
-    or.w     %d1,%d4
-    move.w   %d4,(%a0)+
+    or.w     %d1,(%a0)+
 
     move.w   (%a2)+,%d1     | sprite2
     lsr.w    %d0,%d1
-    or.w     %d1,%d5
-    move.w   %d5,(%a1)+
+    or.w     %d1,(%a1)+
 
-    adda.w   %a4,%a2
+    adda.w   %d5,%a2
 
     adda.w   %d7,%a0
     adda.w   %d7,%a1
 
     dbf      %d3,1b
 
-    movea.l  (%sp)+,%a4
     movem.l  (%sp)+,%d3-%d7/%a2
     rts

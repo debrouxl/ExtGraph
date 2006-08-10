@@ -68,7 +68,7 @@ unsigned long long dest_64[64];
 void _main(void) {
     // Counters...
     register short i = 0, j = 0;
-    
+
     // Old font.
     short f = FontGetSys();
 
@@ -118,7 +118,7 @@ void _main(void) {
     ngetchx();
     GrayOff();
 */
-    
+
     // If you don't use grayscale...
 /*
     memcpy(LCD_MEM,&lcd[0],LCD_SIZE);

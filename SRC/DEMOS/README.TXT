@@ -10,7 +10,7 @@ demo3  - test program for fast sprite drawing functions
 demo4  - test program for sprite get functions
 demo5  - test program for scale sprite functions
 demo6  - test program for SpriteX8 functions: oversized sprites + several effects such as
-         mirror and simple (90°) rotate.
+         mirror and simple (90°) rotate
 demo7  - test program for grayscale support functions
 demo8  - test program for FloodFill function
 demo9  - test program for SpriteX8 mirror functions
@@ -41,7 +41,7 @@ demo24 - test program for high level tilemap engine functions: MASK mode, three
          (tilemap engine demo 5)
 demo25 - test program for low level tilemap engine functions: tile functions
          (tilemap engine demo 6)
-demo26 - kernel-based (!! AFAIK the only kernel-based program from TICT !!) bench
+demo26 - kernel-based (!! AFAIK the only kernel-based program from TICT ;-) !!) bench
          program old graphlib vs. ExtGraph. Everything was made so that Genlib can
-         easily be added.
-demo27 - test program for sprite arbitrary angle rotation functions.
+         easily be added
+demo27 - test program for sprite arbitrary angle rotation functions

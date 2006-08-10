@@ -7,8 +7,13 @@ Roadmap after Beta 4 (more or less sorted):
 /* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites) in ExtGraph,
 Graphlib, Genlib.
 
-0* Make all ScaleSprite functions in ASM using bit operations, add X8 version. "epsilon" also needs functions that draw
-to a sprite, not to a screen.
+0* add ScaleSpriteX8*. "epsilon" also needs functions that draw to a sprite instead of a screen.
+
+0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
+
+0* Check that PixCollide* are the latest version (further optimization by Jesse Frey).
+
+0* Check that the forked grayscale routine is that optimized by Jesse Frey.
 
 0* Do all circle functions do their job properly ?
 
@@ -16,11 +21,13 @@ to a sprite, not to a screen.
 
 /* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
 
+0* Make all ScaleSprite functions in ASM using bit operations,
+
 0* DrawPattern_R (Slimeball).
 
 0* optimize sprite routines:
     0* optimize Gray(Clip)(I)Sprite32_TRANB/TRANW_R the same way as 8 and 16.
-    0* Make fast non-clipped GrayISpriteX_Y_R.
+    0* Make fast non-clipped GrayISpriteX_Y_R ?
 
 0* Make more X8 routines, especially grayscale ones, including transparencies.
 0* Make (Gray)(Clip)ISpriteX16_AND/MASK/OR/RPLC/TRANB/TRANW/XOR_R. Make demo27 = demo6 with X16 routines ?

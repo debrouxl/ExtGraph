@@ -171,8 +171,8 @@ short TestCollide322h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d
 short TestCollideX82w2h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1,short bytewidth0,short bytewidth1,short height0,short height1,const void *data0 asm("%a0"),const void *data1 asm("%a1")) __attribute__((__stkparm__));
 
 // checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
-// Added in 2.00 Beta 5. Courtesy of Samuel Stearley, Jesse Frey and someone else I don't remember (Joey Adams ?).
-// Modified and extended by Lionel Debroux, fixed by Jesse Frey.
+// Added in 2.00 Beta 5. Original PixCollide8_R by Joey Adams, Samuel Stearley, Jesse
+// Frey worked on them. Modified and extended by Lionel Debroux, fixed by Jesse Frey.
 char PixCollide8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide16_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
 char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));
@@ -519,8 +519,15 @@ void GrayDrawSpan_INVERT_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs
 
 //-----------------------------------------------------------------------------
 // sprite scaling routines by Julien Richard-Foy (julien.rf@wanadoo.fr)
-// Legally unencumbered; faster, smaller than the routines by Jim Haskell used
+// "Legally" unencumbered; faster, smaller than the routines by Jim Haskell used
 // prior to 2.00 Beta 5.
+// The new routines could have been used for way longer if I (Lionel)
+// had not messed up the coding of AND and XOR from that of OR, which
+// made me put the routines aside as "algorithm good for OR but not for
+// AND and XOR". When I had a fresh look at the routines, more than one year
+// later, it took me several minutes to see and fix the mistake....
+// Sorry again Julien...
+//
 // X8 version added in 2.00 Beta 5.
 //
 // scales a square input sprite to any extent (WARNING: no clipping is done!)
@@ -528,7 +535,8 @@ void GrayDrawSpan_INVERT_R(short x1 asm("%d0"),short x2 asm("%d1"), void * addrs
 //
 // Two scaling routines optimized for fixed size and scale factor,
 // DoubleSpriteDimensions16x16_R is obviously designed for use in file explorers
-// to read the AMS native comments available in TIGCC 0.95+.
+// to read the AMS native comments available in TIGCC 0.95+ (well, hardly any
+// does, starting with TICT-Explorer).
 //-----------------------------------------------------------------------------
 void ScaleSprite8_OR(const unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
 void ScaleSprite16_OR(const unsigned short *sprite,void *dest,short x0,short y0,short sizex,short sizey) __attribute__((__stkparm__));
@@ -809,7 +817,8 @@ void GraySpriteX8_XOR(short x,short y,short h,const unsigned char* sprite1,const
 //-----------------------------------------------------------------------------
 // fast alternative functions for SpriteX() functions: AND, OR, XOR.
 // fast additional sprite functions: BLIT, RPLC (BLIT with hard-coded white
-// blitmask), MASK, TRANB/TRANW (transparencies).
+// blitmask), MASK, TRANB/TRANW (transparencies), SMASKBLIT.
+// SMASKBLIT was made for "lachprog"'s Super Mario 3 68k.
 //-----------------------------------------------------------------------------
 void GrayClipSprite8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,unsigned char maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -828,6 +837,7 @@ void GrayClipSprite16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("
 void GrayClipSprite16_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_SMASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,const unsigned short *mask,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite16_SMASKBLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask,unsigned short maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANB_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANW_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1189,6 +1199,8 @@ void FastSprite16_MIRROR_H_R(short h asm("%d2"),unsigned short *sprt asm("%a0"),
 void FastSprite32_MIRROR_H_R(short h asm("%d2"),unsigned long *sprt asm("%a0"),unsigned long *dest asm("%a1"));
 void FastSpriteX8_MIRROR_H_R(short h asm("%d2"),short bytewidth asm("%d1"),char *sprt asm("%a0"),unsigned char *dest asm("%a1"));
 
+
+
 //-----------------------------------------------------------------------------
 // Arbitrary angle sprite rotating functions. Courtesy of Joey Adams. Slightly
 // modified to fit the needs.
@@ -1340,7 +1352,7 @@ typedef struct {
 //#############################################################################
 //
 // Huge changes for v2.00 (rewrites, internal organization of library...).
-// No more using CVS, but using online SVN starting from 2.00 Beta 5.
+// No longer using CVS, but using online SVN starting from 2.00 Beta 5.
 // The changelog is in the documentation and will stay there.
 //
 // -- ExtGraph 2.xx --

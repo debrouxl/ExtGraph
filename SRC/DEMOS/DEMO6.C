@@ -173,7 +173,7 @@ void _main(void) {
     lea -12(%%a1),%%a1
     dbf %%d0,0b
     " : : : "d0","a0","a1");
-    
+
     // Using an assembly block is not more efficient speed-wise (if the
     // assembly block has exactly the same size as the call to memset, it is
     // a bit slower).

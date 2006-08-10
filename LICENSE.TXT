@@ -1,4 +1,4 @@
-This library is dual-licensed, EXCEPT the Exepack decompression routine as of 2005/12/14 (it can be used only under the older license, we hope to be able to use it in free software). You can choose either license: the older license keeps all previous legal uses of the library, the newer one enables you using it in GPL'ed projects.
+This library is dual-licensed. You can choose either license: the older license keeps all previous legal uses of the library, the newer one enables you using it in GPL'ed projects.
 
 
 The older TICT programs license:

@@ -45,7 +45,7 @@ GrayClipISpriteX16_MASK_R:
   | Le sprite doit être clippé sur la bordure basse de l'écran
     neg.w    %d4     | %d4 = _EXT_SCREEN_Y - hauteur - y
     add.w    %d4,%d3     | %d3 = _EXT_SCREEN_Y - y = nouvelle hauteur du sprite
-    ble.w    7f     | si y >= _EXT_SCREEN_Y, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
+    ble.w    0f     | si y >= _EXT_SCREEN_Y, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
 
 6:
     move.w   %d1,%d4
@@ -58,7 +58,7 @@ GrayClipISpriteX16_MASK_R:
 | Test clipping gauche
     moveq.l  #_EXT_SCREEN_X,%d7
     sub.w    %d5,%d7     | %d7 = 30 - largeur (en octets) = incrément de la destination après avoir affiché une ligne
-    move.w   %d4,%a3
+    |move.w   %d4,%a3 ???
     lsl.w    #3,%d5     | %d5 = largeur * 2 * 8 (en pixels)
     move.w   %d0,%d4     | %d4 = x
     blt.w    7f     | si x < 0, le sprite doit être clippé sur la bordure gauche

@@ -148,10 +148,10 @@ short RenderMap(Plane *plane,void *dest,short behaviour)
           if (y > 0) y--;
           else mov = 0;
         }
-       
+
         OSTimerRestart(USER_TIMER);
       }
-      
+
       DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
       FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
       FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
@@ -236,7 +236,7 @@ void _main(void)
   plane.sprites=sprts;
   plane.big_vscreen=bloc+LCD_SIZE*2;
   plane.force_update=1;
-  
+
   ai1=GetIntVec(AUTO_INT_1);
 
   SetIntVec(AUTO_INT_1,DUMMY_HANDLER);
@@ -251,13 +251,13 @@ void _main(void)
   }
 
   SetIntVec(AUTO_INT_1,ai1);
-  
+
   sprintf(s,"%d %d",frame1,frame2);
   ClrScr();
   ST_helpMsg(s);
   while (!(_rowread(0xF000)&0xFF));
   asm("move.l #0x17FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
-  
+
   free(bloc);
   GKeyFlush();
   LCD_restore(backbuffer);

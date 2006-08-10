@@ -58,7 +58,7 @@ void _main(void) {
 
     ST_helpMsg("Sprite32Get() Demo - Press Key");
     ngetchx();
-    
+
     for (j=0;j<64;j++) {
         for (i=0;i<5;i++) {
             Sprite32Get_R(j+(i<<5),0,100,backbuffer,buffer+100*i);

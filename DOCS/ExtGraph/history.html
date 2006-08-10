@@ -25,7 +25,7 @@
 <tr><td>           </td><td>          </td><td><strong>updated the documentation</strong>, made the HTML code cleaner
                                         using Firefox plugin HTML Validator. My schoolmate Yoann made
                                         me aware a while ago that the HTML code I used and made was
-                                        poor (but at least, it uses CSS !).</td></tr>
+                                        poor (but at least, it used CSS !).</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed side clipping of <strong>GrayClipISprite8_MASK_R</strong>,
                                         thanks to Jean-François Geyelin for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Added new <strong>TestCollide</strong> routines (request from TIGCC/TICT
@@ -59,7 +59,8 @@
                                         the IDE. I didn't see what the problem is, because I had never
                                         stumbled across it, but now I know it sucks. Of course, there's
                                         tprbuilder, but going from the IDE to the shell to launch it
-                                        and vice-versa is an annoyance.</td></tr>
+                                        and vice-versa is an annoyance.<br>
+                                        KTIGCC might do a better job, I don't know.</td></tr>
 <tr><td>           </td><td>          </td><td>Added a <strong>fork of the TIGCCLIB grayscale routine</strong>, which
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
@@ -70,8 +71,7 @@
                                         will become something that one can freely distribute and
                                         modify - but not use, won't it ?</td></tr>
 <tr><td>           </td><td>          </td><td>Added <strong>GrayClipISpriteX16_MASK_R</strong>, based on Genlib's
-                                        put_masked_big_sprite, made by Julien RF; made several other
-                                        X16 routines.</td></tr>
+                                        put_masked_big_sprite, made by Julien RF. Made _OR_ and _RPLC_.</td></tr>
 <tr><td>           </td><td>          </td><td>Added three <strong>ClipSpriteX8</strong> routines, based on code by
                                         Geoffrey Anneheim (geogeo), which I significantly optimized.</td></tr>
 <tr><td>           </td><td>          </td><td>Created <strong>GrayClipISprite16_TRAND/L_R</strong> as an example of
@@ -141,17 +141,18 @@
 <tr><td>           </td><td>          </td><td>Added <strong>generic sprite rotation routines (8, 16, 32, X8)</strong>,
                                         courtesy of Joey Adams. Added a demo.</td></tr>
 <tr><td>           </td><td>          </td><td>Optimized the transition effects and sprite routines
-                                        for size: stupid dbf+rts combination. Kevin reported about
+                                        for size: stupid dbf+rts combination. Kevin reported
                                         another rare pessimization, but I cannot find it looking at
                                         all non-clipped (Gray)Sprite* routines, and I know I fixed
                                         routines with such a pessimization a while ago. Fixed a severe
                                         bug that would occur only with unusual parameters in a number
                                         of transition effects, optimized their source to use local
                                         labels: extgraph.a is more than 3 KB smaller now.</td></tr>
-<tr><td>           </td><td>          </td><td>Revamped the <strong>ScaleSprite</strong> routines with faster, smaller
-                                        and legally-unencumbered code from Julien RF, translated into
-                                        ASM. My bad for not adding those routines for so long, that
-                                        was pretty easy after all. Added X8 version.</td></tr>
+<tr><td>           </td><td>          </td><td>Revamped the <strong>ScaleSprite</strong> routines with faster,
+                                        smaller and "legally"-unencumbered code from Julien RF. My bad for not
+                                        adding those routines for so long, that was pretty easy after all.
+                                        Added X8 version.</td></tr>
+<tr><td>           </td><td>          </td><td>Added <strong>GrayClipSprite16_SMASKBLIT_R</strong>.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed <strong>(I)SHADOW(2)</strong> routines: they are nearly
                                         useless thanks to <strong>Create(I)Sprite(I)Shadow</strong> and OR routines
                                         (which require a small additional amount of space) and
