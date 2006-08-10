@@ -55,7 +55,7 @@ Optimize ROM Calls=0
 Open File=
 
 [Included Files]
-C File 1=Misc\UNPACK.C
+C File 1=Misc\unpack.c
 C File 2=Scaling\scalesprite8and.c
 C File 3=Scaling\scalesprite8or.c
 C File 4=Scaling\scalesprite8xor.c

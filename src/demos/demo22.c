@@ -18,7 +18,7 @@
 
 #include <tigcclib.h>
 #include "../../lib/extgraph.h" // NOTE: this path is just for this demo !!
-#include "../../lib/TileMap.h"
+#include "../../lib/tilemap.h"
 
 
 #define NB_ETAPES 4

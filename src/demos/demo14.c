@@ -16,8 +16,8 @@
 #endif
 
 #include <tigcclib.h>
-#include "../../lib/ExtGraph.h"
-#include "../../lib/TileMap.h"
+#include "../../lib/extgraph.h"
+#include "../../lib/tilemap.h"
 
 #define NB_ETAPES 4
 #define NB_ANIMS 21
@@ -43,11 +43,49 @@ unsigned char map_base[16][MAP_WIDTH]={ // Contient les n° d'animation
 };
 
 // Contient les n° de sprites de chaque anim pour chaque étape
-short anim[NB_ETAPES][NB_ANIMS]={
-{0,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{1,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{2,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{3,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26}
+char anim[NB_ANIMS][NB_ETAPES]={
+// Anim 0 : Water
+{0,1,2,3},
+// Anim 1 : Flower
+{4,5,6,7},
+// Anim 2 : Grass
+{8,8,8,8},
+// Anim 3 : Plant
+{9,9,9,9},
+// Anim 4 : Tree1
+{10,10,10,10},
+// Anim 5 : Tree2
+{11,11,11,11},
+// Anim 6 : Tree3
+{12,12,12,12},
+// Anim 7 : Tree4
+{13,13,13,13},
+// Anim 8 : Road
+{14,14,14,14},
+// Anim 9 : Edge1
+{15,15,15,15},
+// Anim 10 : Edge2
+{16,16,16,16},
+// Anim 11 : Edge3
+{17,17,17,17},
+// Anim 12 : Edge4
+{18,18,18,18},
+// Anim 13 : Edge5
+{19,19,19,19},
+// Anim 14 : Edge6
+{20,20,20,20},
+// Anim 15 : Edge7
+{21,21,21,21},
+// Anim 16 : Edge8
+{22,22,22,22},
+// Anim 17 : Edge9
+{23,23,23,23},
+// Anim 18 : Edge17
+{24,24,24,24},
+// Anim 19 : Edge19
+{25,25,25,25},
+// Anim 20 : Edge20
+{26,26,26,26}
 };
 
 short sprts[][32]={ // Contient les sprites (pris de xtile de Scott Noveck)
@@ -98,14 +136,26 @@ short sprts[][32]={ // Contient les sprites (pris de xtile de Scott Noveck)
 #define HEIGHT C89_92V200(100,128)
 #define WIDTH  C89_92V200(160,240)
 
-static inline void RenderMap(AnimatedPlane *plane,void *dest)
+static inline void RenderMap(char (*matrix)[MAP_WIDTH],void *big_vscreen,void *dest)
 {
-  short x=0,y=0;
+  short x=0,y=0,old_x=0,old_y=0;
+  short n_etape=0,n_frame=0,update=1;
+  short i,j;
 
   do
   {
+    if(update)
+    {
+      // Animation des tiles
+      for(i=0 ; i<9+(y<8*32-HEIGHT) ; i++)
+        for(j=0 ; j<16+(x<(MAP_WIDTH/2)*32-WIDTH) ; j++)
+          matrix[(y>>5)*2+i][(x>>5)*2+j]=anim[map_base[(y>>5)*2+i][(x>>5)*2+j]][n_etape];
+      RefreshGrayBuffer16B(MAP_WIDTH,&matrix[(y>>5)*2][(x>>5)*2],big_vscreen,sprts);
+      update=0;
+    }
+
     // Affichage
-    DrawAnimatedPlane(x,y,plane,dest,TM_GRPLC,TM_GA16B);
+    DrawGrayBuffer_RPLC(big_vscreen,x&31,y&31,dest);
 
     FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
     FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
@@ -126,15 +176,29 @@ static inline void RenderMap(AnimatedPlane *plane,void *dest)
       x++;
     END_KEYTEST
 
+    // Gestion du pas d'animation courant
+    n_frame++;
+    if(n_frame>18) // Intervalle entre deux pas d'animation
+    {
+      n_etape++;
+      n_etape&=3;
+      n_frame=0;
+    }
+    if((x&31)^(old_x&31) || (y&31)^(old_y&31) || !n_frame)
+      update=1;
+
+    old_x=x;
+    old_y=y;
+
   } while(!_keytest(RR_ESC));
 }
 
 void _main(void)
 {
   INT_HANDLER ai1,ai5;
-  char *bloc=malloc(BIG_VSCREEN_SIZE*2+LCD_SIZE*2); // Un big_vscreen + un écran virtuel
-  void *vecran;
-  AnimatedPlane plane;
+  char *bloc=malloc(BIG_VSCREEN_SIZE*2+LCD_SIZE*2+16*32); // Un big_vscreen + un écran virtuel + une matrice
+  void *vecran,*big_vscreen;
+  char (*matrix)[MAP_WIDTH];
   LCD_BUFFER backbuffer;
 
   LCD_save(backbuffer);
@@ -143,20 +207,9 @@ void _main(void)
     return;
 
 // Initialisations
-  vecran=bloc;
-
-// Initialisation du plane
-  plane.p.matrix=map_base;
-  plane.p.width=32;
-  plane.p.sprites=sprts;
-  plane.p.big_vscreen=bloc+LCD_SIZE*2;
-  plane.p.force_update=1;
-  plane.tabanim=anim;
-  plane.nb_anim=NB_ANIMS;
-  plane.nb_step=NB_ETAPES;
-  plane.step=0;
-  plane.step_length=18;
-  plane.frame=0;
+  (void *)matrix=bloc;
+  vecran=bloc+16*32;
+  big_vscreen=bloc+16*32+LCD_SIZE*2;
 
   ai1=GetIntVec(AUTO_INT_1);
   ai5=GetIntVec(AUTO_INT_5);
@@ -166,7 +219,8 @@ void _main(void)
 
   if(GrayOn())
   {
-    RenderMap(&plane,vecran);
+    RenderMap(matrix,big_vscreen,vecran);
+
     GrayOff();
   }
 

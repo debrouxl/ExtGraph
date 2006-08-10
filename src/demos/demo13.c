@@ -16,10 +16,28 @@
 #endif
 
 #include <tigcclib.h>
-#include "../../lib/ExtGraph.h"
-#include "../../lib/TileMap.h"
+#include "../../lib/extgraph.h"
+#include "../../lib/tilemap.h"
 
-char map[12][20]={ // Arrière-plan
+char fg_map[16][25]={ // Premier plan
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8,19,19,19, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,19,19, 8, 8, 8},
+{ 8, 8,16,17,17,17,17,17,18, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,17,17,17,18, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8,16,18, 8, 8, 8, 8, 8, 8, 8, 8,16,17,18, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8,19,19, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8,16,17,17,17,17,17,18, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,17,18, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,17,17,18, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8,19, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8,16,17,17,17,18, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,19,19, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,16,17,17,17,18, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8},
+{ 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}
+};
+char bg_map[12][20]={ // Arrière-plan
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 6,11, 0, 0, 0},
 { 0, 0, 0, 1, 6, 6,11, 0, 0, 0, 0, 0, 1, 3, 8, 8,12,11, 0, 0},
@@ -67,51 +85,31 @@ short sprts[][32]={
 {0x0003,0x0000,0x0003,0x0000,0x0003,0x0000,0x0006,0x0001,0x0006,0x0001,0x001C,0x0003,0x01F8,0x0007,0x03E0,0x001F,0x0300,0x00FF,0x0300,0x00FF,0x0300,0x00FF,0x0600,0x01FF,0x0600,0x01FF,0x1C00,0x03FF,0xF800,0x07FF,0xE000,0x1FFF},
 // 15 : Nuage 16
 {0x0003,0x0000,0x0003,0x0000,0x0003,0x0000,0x0006,0x0001,0x0006,0x0001,0x0006,0x0001,0x000C,0x0003,0x000C,0x0003,0x0018,0x0007,0x0030,0x000F,0x0060,0x001F,0x00C0,0x003F,0x0380,0x007F,0x1F00,0x00FF,0xFC00,0x03FF,0xE000,0x1FFF},
+
+// 16 : Plate-Forme 1
+{0x3FFF,0x3FFF,0x7FFF,0x6000,0x7FFF,0x4000,0xFFFF,0xC000,0xFFFF,0x8000,0xFFEF,0x8010,0xFB7B,0x8484,0xEEAD,0x9152,0xFBDF,0x8420,0xF6F6,0x8909,0xFF7C,0x8083,0xFE5C,0x81A3,0xD038,0xAFC7,0xA800,0xD7FF,0x43C3,0x7FFF,0x3C3C,0x3C3C},
+// 17 : Plate-Forme 2
+{0xFFFF,0xFFFF,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xEFEF,0x1010,0x7B7B,0x8484,0xADAD,0x5252,0xBDFD,0x4202,0xD7D7,0x2828,0xFFFE,0x0001,0x5F5E,0xA0A1,0x7828,0x87D7,0x0000,0xFFFF,0xC3C3,0xFFFF,0x3C3C,0x3C3C},
+// 18 : Plate-Forme 3
+{0xFFF8,0xFFF8,0xFFE4,0x001C,0xFFF2,0x000E,0xFFF2,0x000E,0xFFF1,0x000F,0xEFF1,0x100F,0x7BD1,0x842F,0xAD71,0x528F,0xDFE1,0x201F,0xF671,0x098F,0x7C21,0x83DF,0x5C61,0xA39F,0x3851,0xC7AF,0x00A1,0xFFDF,0xC342,0xFF7E,0x3C3C,0x3C3C},
+
+// 19 : Barrière
+{0x03C0,0x03C0,0x0660,0x05E0,0xFE3F,0xF9FF,0xEE77,0x19F8,0xFE7F,0xF9FF,0xFF7F,0xF8FF,0x0F70,0x08F0,0x0F30,0x08F0,0x0F30,0x08F0,0x0E30,0x09F0,0xFE3F,0xF9FF,0xEE73,0x19FC,0xFE7F,0xF9FF,0xFF7F,0xF8FF,0x0F70,0x08F0,0x0FF0,0x0FF0},
 };
-
-char dh[128+16]={
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
-0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1};
-
-short dv[128+16]={
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
-0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0};
 
 #define HEIGHT C89_92V200(100,128)
 #define WIDTH  C89_92V200(160,240)
 
-static inline void RenderMaps(void *big_vscreen,void *dest)
+static inline void RenderMaps(Plane *bg_plane,Plane *fg_plane,void *dest)
 {
-  short x=0,y=0,old_x=0,old_y=0,update=1;
-  unsigned short i=0;
+  short x_fg=0,y_fg=0;
+  short x_bg=0,y_bg=0;
 
   do
   {
     // Affichage
-    if(update)
-    {
-      RefreshGrayBuffer16B(20,&map[y>>4][x>>4],big_vscreen,sprts);
-      update=0;
-    }
-#ifndef USE_TI89
-    DrawGrayBufferWithShifts_RPLC(big_vscreen,x&15,y&15,dest,dh+((i>>3)&15),dv+((i>>3)&15));
-#else
-    DrawGrayBufferWithShifts89_RPLC(big_vscreen,x&15,y&15,dest,dh+((i>>3)&15),dv+((i>>3)&15));
-#endif
+    DrawPlane(x_bg,y_bg,bg_plane,dest,TM_GRPLC,TM_G16B);
+    DrawPlane(x_fg,y_fg,fg_plane,dest,TM_GTRANW,TM_G16B);
 
     FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
     FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
@@ -120,32 +118,27 @@ static inline void RenderMaps(void *big_vscreen,void *dest)
     memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
-    // Déplacement
     BEGIN_KEYTEST
-    if(_keytest_optimized(RR_UP) && y>0)
-      y--;
-    if(_keytest_optimized(RR_DOWN) && y<12*16-HEIGHT-2)
-      y++;
-    if(_keytest_optimized(RR_LEFT) && x>0)
-      x--;
-    if(_keytest_optimized(RR_RIGHT) && x<19*16+11-WIDTH)
-      x++;
+    // Déplacement
+    if(_keytest_optimized(RR_UP) && y_bg>0)
+      y_bg--,y_fg-=2;
+    if(_keytest_optimized(RR_DOWN) && y_bg<12*16-128) // Note to self: 128 is on purpose !
+      y_bg++,y_fg+=2;
+    if(_keytest_optimized(RR_LEFT) && x_bg>0)
+      x_bg--,x_fg-=2;
+    if(_keytest_optimized(RR_RIGHT) && x_bg<20*16-WIDTH)
+      x_bg++,x_fg+=2;
     END_KEYTEST
 
-    i++;
-
-    update=(((x&16)^(old_x&16)) || ((y&16)^(old_y&16)));
-
-    old_x=x;old_y=y;
-
-  }while(!_keytest(RR_ESC));
+  } while(!_keytest(RR_ESC));
 }
 
 void _main(void)
 {
   INT_HANDLER ai1,ai5;
-  void *bloc=malloc(BIG_VSCREEN_SIZE*2+LCD_SIZE*2); // 1 big_vscreen et 1 écran virtuel
-  void *vecran,*big_vscreen;
+  void *bloc=malloc(BIG_VSCREEN_SIZE*2*2+LCD_SIZE*2); // 2 big_vscreen et 1 buffer par plane
+  void *vecran;
+  Plane fg_plane,bg_plane;
   LCD_BUFFER backbuffer;
 
   LCD_save(backbuffer);
@@ -156,7 +149,17 @@ void _main(void)
 // Initialisations
   vecran=bloc;
 
-  big_vscreen=bloc+LCD_SIZE*2;
+  bg_plane.matrix=bg_map;
+  bg_plane.width=20;
+  bg_plane.sprites=sprts;
+  bg_plane.big_vscreen=bloc+LCD_SIZE*2;
+  bg_plane.force_update=1;
+
+  fg_plane.matrix=fg_map;
+  fg_plane.width=25;
+  fg_plane.sprites=sprts;
+  fg_plane.big_vscreen=bloc+LCD_SIZE*2+BIG_VSCREEN_SIZE*2;
+  fg_plane.force_update=1;
 
   ai1=GetIntVec(AUTO_INT_1);
   ai5=GetIntVec(AUTO_INT_5);
@@ -165,7 +168,7 @@ void _main(void)
 
   if(GrayOn())
   {
-    RenderMaps(big_vscreen,vecran);
+    RenderMaps(&bg_plane,&fg_plane,vecran);
     GrayOff();
   }
 

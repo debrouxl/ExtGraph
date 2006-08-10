@@ -16,8 +16,8 @@
 #endif
 
 #include <tigcclib.h>
-#include "../../lib/ExtGraph.h"
-#include "../../lib/TileMap.h"
+#include "../../lib/extgraph.h"
+#include "../../lib/tilemap.h"
 
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 12

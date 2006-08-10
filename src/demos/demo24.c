@@ -16,8 +16,8 @@
 #endif
 
 #include <tigcclib.h>
-#include "../../lib/ExtGraph.h"
-#include "../../lib/TileMap.h"
+#include "../../lib/extgraph.h"
+#include "../../lib/tilemap.h"
 
 unsigned char map_bg[8+2*1][15+2*1]={ // Arrière-plan
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
