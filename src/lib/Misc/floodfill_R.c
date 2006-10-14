@@ -38,7 +38,7 @@ void __attribute__((__regparm__(5))) FloodFill_R (short x,
     if (x<0||x>xmax||y<0||y>ymax||(EXT_GETPIX(dest,x,y))) return;
 
     memcpy(tmpplane,dest,3840);
-    diff=((unsigned char*)tmpplane)-(unsigned char*)dest;
+    diff=((unsigned char*)dest)-(unsigned char*)tmpplane;
 
     for (i=3;i>=0;i--) {
         tmask=shade&15;
@@ -66,7 +66,7 @@ void __attribute__((__regparm__(5))) FloodFill_R (short x,
         mask=1<<(~x&7);
 
         while (x>=0&&!(*addr&mask)) {
-            *addr|=mask; *(addr-diff)|=mask&tmask; x--;
+            *addr|=mask; *(addr+diff)|=mask&tmask; x--;
 
             EXT_PIXLEFT_AM(addr,mask);
         }
@@ -83,7 +83,7 @@ void __attribute__((__regparm__(5))) FloodFill_R (short x,
             mask=1<<(~x&7);
             while (x<=xmax&&!(*addr&mask)) {
                 *addr|=mask;
-                *(addr-diff)|=mask&tmask;
+                *(addr+diff)|=mask&tmask;
                 x++;
                 EXT_PIXRIGHT_AM(addr,mask);
             }

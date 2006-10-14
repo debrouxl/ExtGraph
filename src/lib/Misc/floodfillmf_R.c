@@ -2,6 +2,7 @@
 // original code courtesy of Zeljko Juric
 //-----------------------------------------------------------------------------
 #include "../internal.h"  // for LCD_WIDTH and LCD_HEIGHT
+//#include "stdio.h"
 
 #define EXT_PIXOFFSET(x,y)  ((((y)+(y))<<4)-((y)+(y))+((x)>>3))
 #define EXT_PIXADDR(p,x,y)  (((unsigned char*)(p))+EXT_PIXOFFSET(x,y))
@@ -20,16 +21,17 @@
 
 #define PUSH(ENTRY) { unsigned long spvalue; \
   asm ("move.l %%sp,%0":"=g"(spvalue)); if(spvalue>STACKBORDER) { \
-  sp++; asm volatile("move.l %0,-(%%sp);"::"g"(*(long*)ENTRY));}}
+  sp++; /*if (sp > maxsp) {maxsp = sp;};*/ asm volatile("move.l %0,-(%%sp);"::"g"(*(long*)ENTRY));}}
 
 #define POP(ENTRY) {sp--; asm volatile("move.l (%%sp)+,(%0);"::"a"(&ENTRY));}
+
 
 void __attribute__((__regparm__(4))) FloodFillMF_R(short x,
                                                    short y,
                                                    unsigned short shade,
                                                    void* dest)
 {
-    short x1,x2,dy,l,i,sp=0;
+    short x1,x2,dy,l,i,sp=0/*,maxsp=0*/;
     short xmax=LCD_WIDTH-1,ymax=LCD_HEIGHT-1;
     unsigned char entry[4],texture[4],*ybase,*addr,mask,tmask;
     long diff;
@@ -40,7 +42,7 @@ void __attribute__((__regparm__(4))) FloodFillMF_R(short x,
     if (!(tmpplane = malloc(3840))) return;
 
     memcpy(tmpplane,dest,3840);
-    diff=((unsigned char*)tmpplane)-(unsigned char*)dest;
+    diff=((unsigned char*)dest)-(unsigned char*)tmpplane;
 
     for (i=3;i>=0;i--) {
         tmask=shade&15;
@@ -68,7 +70,7 @@ void __attribute__((__regparm__(4))) FloodFillMF_R(short x,
         mask=1<<(~x&7);
 
         while (x>=0&&!(*addr&mask)) {
-            *addr|=mask; *(addr-diff)|=mask&tmask; x--;
+            *addr|=mask; *(addr+diff)|=mask&tmask; x--;
             EXT_PIXLEFT_AM(addr,mask);
         }
         if (x>=x1) goto skip;
@@ -84,7 +86,7 @@ void __attribute__((__regparm__(4))) FloodFillMF_R(short x,
             mask=1<<(~x&7);
             while (x<=xmax&&!(*addr&mask)) {
                 *addr|=mask;
-                *(addr-diff)|=mask&tmask;
+                *(addr+diff)|=mask&tmask;
                 x++;
                 EXT_PIXRIGHT_AM(addr,mask);
             }
@@ -110,5 +112,6 @@ skip:       x++;
     }
 
     free(tmpplane);
+    //printf_xy(0,0,"%hd",maxsp);
 }
 

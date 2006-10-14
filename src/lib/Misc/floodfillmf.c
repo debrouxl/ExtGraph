@@ -40,7 +40,7 @@ void __attribute__((__stkparm__)) FloodFillMF(short x,
     if (!(tmpplane = malloc(3840))) return;
 
     memcpy(tmpplane,dest,3840);
-    diff=((unsigned char*)tmpplane)-(unsigned char*)dest;
+    diff=((unsigned char*)dest)-(unsigned char*)tmpplane;
 
     for (i=3;i>=0;i--) {
         tmask=shade&15;
@@ -68,7 +68,7 @@ void __attribute__((__stkparm__)) FloodFillMF(short x,
         mask=1<<(~x&7);
 
         while (x>=0&&!(*addr&mask)) {
-            *addr|=mask; *(addr-diff)|=mask&tmask; x--;
+            *addr|=mask; *(addr+diff)|=mask&tmask; x--;
             EXT_PIXLEFT_AM(addr,mask);
         }
         if (x>=x1) goto skip;
@@ -84,7 +84,7 @@ void __attribute__((__stkparm__)) FloodFillMF(short x,
             mask=1<<(~x&7);
             while (x<=xmax&&!(*addr&mask)) {
                 *addr|=mask;
-                *(addr-diff)|=mask&tmask;
+                *(addr+diff)|=mask&tmask;
                 x++;
                 EXT_PIXRIGHT_AM(addr,mask);
             }

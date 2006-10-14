@@ -409,7 +409,8 @@ __gray_check_hw_version:
 	bcc.s    __gray_hw1_detected	| if it is too far, it is HW1
 	cmp.w    #22,(%a1)              | check if the parameter block contains HW
 	bls.s    __gray_hw1_detected 	| if it is too small, it is HW1
-	cmp.l    #1,22(%a1)             | check the hardware version
+	moveq    #1,%d1
+	cmp.l    22(%a1),%d1            | check the hardware version
 	beq.s    __gray_hw1_detected	| if not 1, it is HW2 (or an unknown HW)
     |--------------------------------------------------------------------------
     | check for VTI (trick suggested by Julien Muchembled)
@@ -434,7 +435,7 @@ __gray_hw1_detected:
     |     of a JUMP address instruction at the end of the HW1 int handler)
     |--------------------------------------------------------------------------
 	move.l   0x64.w,(__gray_old_int1_hw1 - __gray_int1_handler_hw1,%a0)
-	bra __gray_init_proceed
+	bra.s    __gray_init_proceed
     |--------------------------------------------------------------------------
     | HW2 detected
     |--------------------------------------------------------------------------
@@ -448,9 +449,10 @@ __always_hw2_proceed:
 	move.l   0x64.w,(__gray_old_int1_hw2 - __gray_int1_handler_hw2,%a0)
 __gray_init_proceed:
 	lea      0x600001,%a1
-	bclr.b   #2,(%a1)
+	moveq    #2,%d0
+	bclr.b   %d0,(%a1)
 	move.l   %a0,0x64.w
-	bset.b   #2,(%a1)
+	bset.b   %d0,(%a1)
     |--------------------------------------------------------------------------
     | PortSet(__D_plane,239,127)
     |--------------------------------------------------------------------------
@@ -491,9 +493,10 @@ GrayOff:
 	move.w   #0x980,(0x600010-0x600001,%a0)	| restore used plane to 0x4c00
 	move.l   (__gray_old_int1_hw1,%pc),%a1	| load old INT1 handler
 __restore_old_int1:
-	bclr.b   #2,(%a0)
+	moveq    #2,%d0
+	bclr.b   %d0,(%a0)
 	move.l   %a1,0x64.w			| restore old INT1 handler
-	bset.b   #2,(%a0)
+	bset.b   %d0,(%a0)
     |--------------------------------------------------------------------------
     | coppy __D_plane contents to LCD_MEM
     | this should probably be done after AI1 has been restored
@@ -533,6 +536,13 @@ __gray_off_out:
 | #############################################################################
 |
 | $Log: gray.s,v $
+| Revision 3.16 2006/10/2 11:54:14  Lionel Debroux
+| Saved 6 more bytes:
+| * two 0x600001 accesses (vector table write unprotect/protect):
+|   bclr #2 + bset #2 -> moveq + bclr dn + bset dn
+| * immediate comparison against 1 in HW model test:
+|   cmp.l #1,22(a1) -> moveq #1 + cmp.l 22(a1),dn
+|
 | Revision 3.15 2005/10/2 11:54:14  Jesse Frey
 | Fixed so that __D_plane coppying always gets done
 | changed coments to reflect the fact that consecutive planes are always used
@@ -540,7 +550,6 @@ __gray_off_out:
 | other size optiomizations
 | saved 66? bytes
 |
-| $Log: gray.s,v $
 | Revision 3.15 2005/08/22 20:23:40  Kevin Kofler
 | Bumped version to 3.53.
 | Fixed calls to GrayOn with grayscale already enabled.
@@ -604,3 +613,4 @@ __gray_off_out:
 | grayscale support used for TIGCC up to version v0.93
 | [NOTE: CVS time and date doesn't fit to real implementation data]
 |
+

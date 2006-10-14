@@ -2,6 +2,7 @@
 // original code courtesy of Zeljko Juric
 //-----------------------------------------------------------------------------
 #include "../internal.h"  // for LCD_WIDTH and LCD_HEIGHT
+//#include "stdio.h"
 
 #define EXT_PIXOFFSET(x,y)  ((((y)+(y))<<4)-((y)+(y))+((x)>>3))
 #define EXT_PIXADDR(p,x,y)  (((unsigned char*)(p))+EXT_PIXOFFSET(x,y))
@@ -20,31 +21,27 @@
 
 #define PUSH(ENTRY) { unsigned long spvalue; \
   asm ("move.l %%sp,%0":"=g"(spvalue)); if(spvalue>STACKBORDER) { \
-  sp++; asm volatile("move.l %0,-(%%sp);"::"g"(*(long*)ENTRY));}}
+  sp++; /*if (sp > maxsp) {maxsp = sp;};*/ asm volatile("move.l %0,-(%%sp);"::"g"(*(long*)ENTRY));}}
 
 #define POP(ENTRY) {sp--; asm volatile("move.l (%%sp)+,(%0);"::"a"(&ENTRY));}
 
-void __attribute__((__stkparm__)) FloodFill(short x,
-               short y,
-               unsigned short shade,
-               void* tmpplane,
-               void* dest)
+
+void __attribute__((__regparm__(3))) FloodFillMF_noshade_R(short x,
+                                                   short y,
+                                                   void* dest)
 {
-    short x1,x2,dy,l,i,sp=0;
+    short x1,x2,dy,l,sp=0/*,maxsp=0*/;
     short xmax=LCD_WIDTH-1,ymax=LCD_HEIGHT-1;
-    unsigned char entry[4],texture[4],*ybase,*addr,mask,tmask;
+    unsigned char entry[4],*ybase,*addr,mask;
     long diff;
+    void* tmpplane;
 
     if (x<0||x>xmax||y<0||y>ymax||(EXT_GETPIX(dest,x,y))) return;
 
+    if (!(tmpplane = malloc(3840))) return;
+
     memcpy(tmpplane,dest,3840);
     diff=((unsigned char*)dest)-(unsigned char*)tmpplane;
-
-    for (i=3;i>=0;i--) {
-        tmask=shade&15;
-        shade>>=4;
-        texture[i]=tmask+(tmask<<4);
-    }
 
     entry[0]=y;
     entry[1]=entry[2]=x;
@@ -60,14 +57,12 @@ void __attribute__((__stkparm__)) FloodFill(short x,
         x=x1=entry[1];
         x2=entry[2];
         entry[0]=y;
-        tmask=texture[y&3];
         ybase=((unsigned char*)tmpplane)+((((y)+(y))<<4)-((y)+(y)));
         addr=ybase+(x>>3);
         mask=1<<(~x&7);
 
         while (x>=0&&!(*addr&mask)) {
-            *addr|=mask; *(addr+diff)|=mask&tmask; x--;
-
+            *addr|=mask; *(addr+diff)|=mask; x--;
             EXT_PIXLEFT_AM(addr,mask);
         }
         if (x>=x1) goto skip;
@@ -83,7 +78,7 @@ void __attribute__((__stkparm__)) FloodFill(short x,
             mask=1<<(~x&7);
             while (x<=xmax&&!(*addr&mask)) {
                 *addr|=mask;
-                *(addr+diff)|=mask&tmask;
+                *(addr+diff)|=mask;
                 x++;
                 EXT_PIXRIGHT_AM(addr,mask);
             }
@@ -107,4 +102,8 @@ skip:       x++;
         }
         while(x<=x2);
     }
+
+    free(tmpplane);
+    //printf_xy(0,0,"%hd",maxsp);
 }
+

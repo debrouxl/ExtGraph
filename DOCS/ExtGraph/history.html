@@ -53,14 +53,13 @@
                                         on Linux, MacOS X, BSD). The Win32 batchfiles, when
                                         they exist, have been left. Changed path references to use
                                         forward slashes.<br>Note that the switch creates problems with
-                                        the Win32 IDE, which handles files in different folders in a
+                                        the IDE, which handles files in different folders in a
                                         sloppy way. Now I understand why Godzil, PpHd ("Moi maudire
                                         l'IDE jusqu'à son arrière-petit fils" ;-) ), etc. don't like
                                         the IDE. I didn't see what the problem is, because I had never
                                         stumbled across it, but now I know it sucks. Of course, there's
                                         tprbuilder, but going from the IDE to the shell to launch it
-                                        and vice-versa is an annoyance.<br>
-                                        KTIGCC might do a better job, I don't know.</td></tr>
+                                        and vice-versa is an annoyance.<br></td></tr>
 <tr><td>           </td><td>          </td><td>Added a <strong>fork of the TIGCCLIB grayscale routine</strong>, which
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
@@ -153,6 +152,8 @@
                                         adding those routines for so long, that was pretty easy after all.
                                         Added X8 version.</td></tr>
 <tr><td>           </td><td>          </td><td>Added <strong>GrayClipSprite16_SMASKBLIT_R</strong>.</td></tr>
+<tr><td>           </td><td>          </td><td>Slightly optimized all <strong>FloodFill</strong> routines, added
+                                        <strong>"noshade" FloodFill</strong> routines.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed <strong>(I)SHADOW(2)</strong> routines: they are nearly
                                         useless thanks to <strong>Create(I)Sprite(I)Shadow</strong> and OR routines
                                         (which require a small additional amount of space) and
