@@ -95,4 +95,3 @@ void __attribute__((__stkparm__)) ScaleSprite16_OR(unsigned short *sprite,void *
 		dy+=16;
 	}
 }
-

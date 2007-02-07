@@ -12,7 +12,7 @@ UpsideDownGrayClipSprite16_MASK_R:
     movea.l  (%a5)+,%a3
     movea.l  (%a5)+,%a4
     movea.l  (%a5),%a5
-    
+
 | Modify pointers.
     move.w   %d2,%d3
     add.w    %d3,%d3
@@ -29,10 +29,10 @@ UpsideDownGrayClipSprite16_MASK_R:
     bmi.s    0f		| y + h < 0 ?
 
     add.w    %d1,%d1		| %d1 = 2y
-    suba.w   %d1,%a2		| sprt -= 2y
-    suba.w   %d1,%a3
-    suba.w   %d1,%a4
-    suba.w   %d1,%a5
+    adda.w   %d1,%a2		| sprt += 2y
+    adda.w   %d1,%a3
+    adda.w   %d1,%a4
+    adda.w   %d1,%a5
 
     moveq.l  #0,%d1		| offsety = 0
     bra.s    10f
@@ -180,3 +180,4 @@ UpsideDownGrayClipSprite16_MASK_R:
 
     movem.l  (%sp)+,%d3/%a2-%a5
     rts
+
