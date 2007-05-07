@@ -2,20 +2,29 @@ Roadmap after Beta 4 (more or less sorted):
 
 /* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
 
-0* Make double-buffered versions of the tilemap engine demos. Check Kevin's patch.
+0* Make double-buffered versions of the tilemap engine demos. Some material in Kevin's patch.
 
-/* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites) in ExtGraph,
-Graphlib, Genlib.
+0* demo22: check code logic of RenderMap. I wonder whether it won't do unneeded operations in case everything
+is always redrawn...
 
-0* add ScaleSpriteX8*. "epsilon" also needs functions that draw to a sprite instead of a screen.
+/* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites ?) in ExtGraph,
+Graphlib, Genlib. Make a fair demo, i.e. use the distinctive features of each library if any, instead of handicapping it.
+Some material in a demo of Genlib 0.99.22b (thanks Julien RF for finding it).
+
+/* rewrite ScaleSprite16/32/64: should use byte reads. Fix graphical glitches on ScaleSprite16, test corner cases !!
+0* add ScaleSpriteX8*.
 
 0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
 
-0* Check that PixCollide* are the latest version (further optimization by Jesse Frey).
+X* Check that PixCollide* are the latest version (further optimization by Jesse Frey).
+-> Seems so.
 
-0* Check that the forked grayscale routine is that optimized by Jesse Frey.
+X* Check that the forked grayscale routine is that optimized by Jesse Frey.
+-> Yes, and it has further optimizations.
 
 0* Do all circle functions do their job properly ?
+
+0* Make reasonably sure that no routine is left out from extgraph.h or extgraph.a.
 
 -- Beta 5 --
 
@@ -41,7 +50,7 @@ drawn with clipped routines, in TRANW mode, over a background that scrolls very 
 Redraw each frame if not using fastsrb functions, redraw only when needed otherwise. No waiting loop. Count the number of
 frames during 300 AI5 ticks.
 
-0* Add bench against Genlib to demo26.
+/* More things in demo26 ?
 
 0* __regparm__ grayscale utilities, while rewriting them all into GNU as ASM.
 
@@ -49,8 +58,7 @@ frames during 300 AI5 ticks.
 SetupCharSet).
 
 0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
-possible). Started by Julien (his C routines are twice faster, but it seems that there's something wrong, as demo5
-becomes ugly).
+possible).
 
 /* Lines, triangles, circles, etc:
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
@@ -63,6 +71,8 @@ is faster than the C version of Bresenham, it's not sure that the ASM version of
 version of Bresenham.
 
 0* Preshifted 8x8.
+
+?* ScaleSprite functions that draw to a sprite instead of a screen, needed by "epsilon".
 
 ?* "FastCopyRectangle" MiG53 asked for.
 

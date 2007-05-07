@@ -28,8 +28,8 @@
 * library maintained, improved and extended by:
 *                    Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)
 *                    Lionel Debroux     (lionel_debroux@yahoo.fr)
-*                    Julien Richard-Foy (julien.rf@wanadoo.fr)
-*                    various contributors (Geoffrey Anneheim, etc.).
+*                    Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume
+*                    many contributors (Geoffrey Anneheim a.k.a geogeo, etc.).
 *
 *
 *******************************************************************************
@@ -378,13 +378,13 @@ void ScrollDown240_R(unsigned short* buffer asm("%a0"),unsigned short lines asm(
 
 //-----------------------------------------------------------------------------
 // fast alternative functions for line drawing.
-// FastDrawLine(_R) rewritten by ExtendeD and optimized a bit by Lionel. Added
+// FastDrawLine(_R) rewritten by Olivier Armand (ExtendeD) and optimized a bit by Lionel. Added
 // GrayFastDrawLine(_R) in 2.00 Beta 5.
-// FastLine_... written by jackiechan.
+// FastLine_... written by Julien Richard-Foy
 // FastTestLine_... modified from FastLine_Invert_R: BE checks both ends at
 // the same time, LE starts from the left end, RE from the right end. Added in
 // 2.00 Beta 5.
-// ClipLine, (Gray)ClipDrawLine" (ClipLine + callback to a
+// ClipLine, "(Gray)ClipDrawLine" (ClipLine + callback to a
 // (Gray)Fast*_R-compatible line function) added in 2.00 Beta 5 too. Upon exit,
 // a0 = NULL if there's nothing to draw.
 //-----------------------------------------------------------------------------
@@ -459,7 +459,8 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"),short x1 asm("%d0"),short y1
 // documentation, paragraph about the tilemap engine, for more information)
 // so as not to use too many registers, which makes the used algorithm less
 // efficient.
-// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
+// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS (OK, these
+// are very infrequent in 2007, but still...).
 //--------------------------------** WARNING **--------------------------------
 // Most routines added in 2.00 Beta 5.
 //-----------------------------------------------------------------------------
@@ -486,7 +487,8 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"),short xcenter asm("%d0")
 // planes (see the root of the ExtGraph documentation, paragraph about the
 // tilemap engine, for more information) so as not to use too many registers,
 // which makes the used algorithm less efficient.
-// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS.
+// NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS (OK, these
+// are very infrequent in 2007, but still...).
 //--------------------------------** WARNING **--------------------------------
 // All DrawSpan are clipped.
 // The difference between FilledTriangle_R and ClipFilledTriangle_R, and their
@@ -817,8 +819,10 @@ void GraySpriteX8_XOR(short x,short y,short h,const unsigned char* sprite1,const
 //-----------------------------------------------------------------------------
 // fast alternative functions for SpriteX() functions: AND, OR, XOR.
 // fast additional sprite functions: BLIT, RPLC (BLIT with hard-coded white
-// blitmask), MASK, TRANB/TRANW (transparencies), SMASKBLIT.
-// SMASKBLIT was made for "lachprog"'s Super Mario 3 68k.
+// blitmask), MASK, TRANB/TRANW (transparencies), SMASK (same
+// mask applied to both planes), SMASKBLIT (combined SMASK and blit),
+// UpsideDown.
+// SMASKBLIT and UpsideDown were made for "lachprog"'s Super Mario 3 68k.
 //-----------------------------------------------------------------------------
 void GrayClipSprite8_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_BLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt0,const unsigned char *sprt1,unsigned char maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -840,6 +844,7 @@ void GrayClipSprite16_SMASK_R(short x asm("%d0"),short y asm("%d1"),short h asm(
 void GrayClipSprite16_SMASKBLIT_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask,unsigned short maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANB_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANW_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void UpsideDownGrayClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),unsigned short *sprt0,unsigned short *sprt1,unsigned short *mask0,unsigned short *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned short *sprt0,const unsigned short *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 
@@ -909,6 +914,8 @@ void GrayClipISprite32_XOR_R(short x asm("%d0"),short y asm("%d1"),short h asm("
 
 void GrayClipISpriteX16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISpriteX16_OR_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISpriteX16_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+
 
 
 //-----------------------------------------------------------------------------

@@ -13,7 +13,7 @@
 <blockquote>
 <table border=1>
 <tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
-<tr><td>2.00 Beta 5</td><td>xx/xx/2005</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
+<tr><td>2.00 Beta 5</td><td>xx/xx/2007</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>
 <tr><td>           </td><td>          </td><td>Restructured the entire documentation, so that it
@@ -29,7 +29,8 @@
 <tr><td>           </td><td>          </td><td>Fixed side clipping of <strong>GrayClipISprite8_MASK_R</strong>,
                                         thanks to Jean-François Geyelin for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Added new <strong>TestCollide</strong> routines (request from TIGCC/TICT
-                                        board user "lachprog"), optimized existing ones.</td></tr>
+                                        board user "lachprog"), optimized existing ones. Some contributed by
+                                        Joey Adams.</td></tr>
 <tr><td>           </td><td>          </td><td>Added <strong>plane scaling routines</strong>. As all such routines,
                                         they eat up a lot of CPU time, they are rather large due to
                                         unrolled loops and/or lookup tables, they require increasing
@@ -55,7 +56,7 @@
                                         forward slashes.<br>Note that the switch creates problems with
                                         the IDE, which handles files in different folders in a
                                         sloppy way. Now I understand why Godzil, PpHd ("Moi maudire
-                                        l'IDE jusqu'à son arrière-petit fils" ;-) ), etc. don't like
+                                        l'IDE jusqu'à son arrière-petit-fils" ;-) ), etc. don't like
                                         the IDE. I didn't see what the problem is, because I had never
                                         stumbled across it, but now I know it sucks. Of course, there's
                                         tprbuilder, but going from the IDE to the shell to launch it
@@ -64,13 +65,13 @@
                                         can run the tilemap engine, and a mention of Grib. See
                                         <a href="../extgraph.html">the root of this documentation</a>
                                         for more information. I integrated the fix for the double
-                                        GrayOn(); crash. Kevin said at least twice on the TIGCC/TICT
+                                        GrayOn(); crash. Kevin said at least three times on the TIGCC/TICT
                                         board that it is unsupported software that WILL be
                                         sabotaged. If he does, well, <em>(the official)</em> TIGCC
                                         will become something that one can freely distribute and
                                         modify - but not use, won't it ?</td></tr>
 <tr><td>           </td><td>          </td><td>Added <strong>GrayClipISpriteX16_MASK_R</strong>, based on Genlib's
-                                        put_masked_big_sprite, made by Julien RF. Made _OR_ and _RPLC_.</td></tr>
+                                        put_masked_big_sprite, made by Julien RF. Made OR and RPLC.</td></tr>
 <tr><td>           </td><td>          </td><td>Added three <strong>ClipSpriteX8</strong> routines, based on code by
                                         Geoffrey Anneheim (geogeo), which I significantly optimized.</td></tr>
 <tr><td>           </td><td>          </td><td>Created <strong>GrayClipISprite16_TRAND/L_R</strong> as an example of
@@ -79,12 +80,12 @@
                                         all.</td></tr>
 <tr><td>           </td><td>          </td><td>On 2005/08/12, created a <strong>SVN repository</strong> for ExtGraph at
                                         <a href="http://opensvn.csie.org/ExtGraph">http://opensvn.csie.org/ExtGraph</a>.
-                                        Anonymous checkout allowed, but recommended only to check if
-                                        particular bugs were fixed since the latest beta/release.
-                                        Indeed, the trunk may contain broken things or break the API
-                                        without notice - and it did multiple times in the many weeks
-                                        before this beta, especially when I was adding triangle/circle
-                                        functions and their DrawSpan subroutines !</td></tr>
+                                        Anonymous checkout allowed, obviously, especially since the trunk was, for
+                                        more than a year and a half, the only way to have the numerous bugfixes of
+                                        this release.
+                                        As every SVN trunk, the trunk may contain broken or short-lived new functions.
+                                        It did several times in the long time before this beta, especially when I was
+                                        adding triangle/circle functions and their DrawSpan subroutines !</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed <strong>GrayClip(I)Sprite32_MASK_R</strong>. Thanks to Olivier
                                         Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed <strong>*SpriteX8Get(_R)</strong>, they used to crash the
@@ -93,8 +94,8 @@
 <tr><td>           </td><td>          </td><td>Fixed a long-hidden bug on <strong>FastFillRect(_R)</strong> in A_REVERSE
                                         mode. Thanks to Olivier Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Tested in unusual conditions (low bytewidths,
-                                        both dimensions odd) and eventually fixed
-                                        <strong>(Clip)SpriteX8(_R)</strong> routines.</td></tr>
+                                        both dimensions odd) and fixed
+                                        <strong>(Clip)SpriteX8(_R)</strong> routines if necessary.</td></tr>
 <tr><td>           </td><td>          </td><td>Changed several function names, only rarely-used ones, to
                                         make them more consistent with other names.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed a number of simple <strong>rectangle functions</strong>.</td></tr>
@@ -115,7 +116,7 @@
                                         Cohen-Sutherland line clipping algorithm. I know of another
                                         algorithm, which is said to be faster, and I have a 68000
                                         assembly implementation of it, but the code is so much larger
-                                        than it needs to be optimized for size or dropped.
+                                        than it would have to be optimized for size...
                                         The architecture (routine + callback) is close to that of
                                         Genlib, with good reason.</td></tr>
 <tr><td>           </td><td>          </td><td>Made the prototypes of most X8 functions more explicit,
@@ -151,9 +152,13 @@
                                         smaller and "legally"-unencumbered code from Julien RF. My bad for not
                                         adding those routines for so long, that was pretty easy after all.
                                         Added X8 version.</td></tr>
-<tr><td>           </td><td>          </td><td>Added <strong>GrayClipSprite16_SMASKBLIT_R</strong>.</td></tr>
+<tr><td>           </td><td>          </td><td>Added <strong>GrayClipSprite16_SMASKBLIT_R</strong> and
+                                        <strong>UpsideDownGrayClipSprite16_MASK_R</strong>, both made for
+                                        lachprog's Super Mario 3 TI-68k.</td></tr>
 <tr><td>           </td><td>          </td><td>Slightly optimized all <strong>FloodFill</strong> routines, added
                                         <strong>"noshade" FloodFill</strong> routines.</td></tr>
+<tr><td>           </td><td>          </td><td>I'm almost sure I forgot at least an item :'( . Complain if I've missed
+                                        an important contribution.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed <strong>(I)SHADOW(2)</strong> routines: they are nearly
                                         useless thanks to <strong>Create(I)Sprite(I)Shadow</strong> and OR routines
                                         (which require a small additional amount of space) and
@@ -167,7 +172,7 @@
                                         for Get + RPLC, i.e. another way to do without redrawing
                                         everything all the time. This one can outperform all other
                                         approaches under some conditions.<br>
-                                        Thanks to the input of Julien, they are better.</td></tr>
+                                        Thanks to the input of Julien, they are better than my first shot.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed once more <strong>pixel macros</strong>, thanks to Kevin.</td></tr>
 <tr><td>           </td><td>          </td><td>Added missing "const" keyword to most prototypes:
                                         at last, no more warnings about discarded qualifiers.</td></tr>
@@ -247,7 +252,7 @@
                                         errors while building projects.</td></tr>
 <tr><td>           </td><td>          </td><td>Improved macro EXT_XCHG: since the asm
                                         <code>exg</code> instruction can exchange address
-					registers, address registers are now allowed too.</td></tr>
+                                        registers, address registers are now allowed too.</td></tr>
 <tr><td>           </td><td>          </td><td>Semi-preshifted sprite functions / macros are now
                                         available (8x8 are lacking).</td></tr>
 <tr><td>           </td><td>          </td><td>Rewritten many BLIT_R routines to take blitmask in d3,

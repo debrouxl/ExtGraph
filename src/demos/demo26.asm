@@ -2,6 +2,12 @@
 ; Branches to the ExtGraph routines are therefore
 ; relocated jsr.l, like branches to graphlib routines.
 
+; Eternal shame on soooooo stupid Flanker: he dared losing
+; the source of the only kernel-based program from TICT
+; (OK, just kidding) :P
+; Fortunately, I found months later a copy of the source,
+; at a place I had not initially thought of.
+
 ;	INCLUDE "os.h"
 ; The header in PreOS, recommended for kernel-based programming by PpHd ("os.h is outdated").
 ; I don't care whether it is supported by Kevin or not.
@@ -87,7 +93,7 @@ _test_1F:
     tst.b    -(a0)
     beq      _bench_ExtGraph ; Bench ExtGraph if passed integer 0
     bra      _bench_Genlib   ; Bench Genlib if a strictly positive integer is passed.
-        
+
 _bench_ExtGraph:
     jsr.l    GrayOn
     tst.w    d0
@@ -111,7 +117,7 @@ _loop_GFDL2B_R_:
     move.l   __L_plane,a0
     move.l   __D_plane,a1
     jsr.l    GrayFastDrawLine2B_R
-    
+
     dbf      d5,_loop_GFDL2B_R_
 
     bsr      TimerCurVal
@@ -128,9 +134,9 @@ _loop_GFDHL2B_R_:
     movea.l  __L_plane,a0
     movea.l  __D_plane,a1
     jsr.l    GrayFastDrawHLine2B_R
-    
+
     dbf      d5,_loop_GFDHL2B_R_
-    
+
     bsr      TimerCurVal
     bsr      TimerRestart
 
@@ -146,9 +152,9 @@ _loop_GFFR_R_:
     movea.l  __L_plane,a0
     movea.l  __D_plane,a1
     jsr.l    GrayFastFillRect_R
-    
+
     dbf      d5,_loop_GFFR_R_
-    
+
     bsr      TimerCurVal
     bsr      TimerRestart
 
@@ -164,9 +170,9 @@ _loop_GFFR_R_:
 ;    movea.l  __L_plane,a0
 ;    movea.l  __D_plane,a1
 ;    jsr.l    GrayFastFillRect_R
-    
+
 ;    dbf      d5,_loop_GFFR_R_
-    
+
 ;    bsr      TimerCurVal
 
 
@@ -200,9 +206,9 @@ _loop_graphlib_line_:
     move.l   d1,d0
     movea.l  graphlib::plane1,a0
     jsr.l    graphlib::line
-    
+
     dbf      d5,_loop_graphlib_line_
-    
+
     bsr      TimerCurVal
     bsr      TimerRestart
 
@@ -223,13 +229,13 @@ _loop_graphlib_horiz_:
     move.l   d1,d0
     movea.l  graphlib::plane1,a1
     jsr.l    graphlib::horiz
-    
+
     dbf      d5,_loop_graphlib_horiz_
-    
+
     bsr      TimerCurVal
     bsr      TimerRestart
 
-    
+
 ; Rectangle filling function.
     move.w   #NR_FILLED_RECT,d5
 _loop_graphlib_fill_:
@@ -248,9 +254,9 @@ _loop_graphlib_fill_:
     move.l   d1,d0
     movea.l  graphlib::plane1,a1
     jsr.l    graphlib::fill
-    
+
     dbf      d5,_loop_graphlib_fill_
-    
+
     bsr      TimerCurVal
 
 ; No triangle filling function in graphlib.
@@ -303,10 +309,10 @@ _push_values_:
     move.l   -(a2),(sp)
     jsr      (a3)
     dbf      d3,_push_values_
-    
+
     move.l   $264*4(a5),a0 ; push_LIST_TAG
     jsr      (a0)
-    
+
 ; Non-standard way to return expressions on the EStack...
     move.l   $109*4(a5),a0 ; top_estack
     move.l   (a0),_RAM_CALL_F
@@ -317,8 +323,8 @@ _bench_end:
 _end:
     movem.l  (sp)+,d3-d7/a2-a6
     rts
-    
-    
+
+
 
 	xdef _storage
 _storage: ds.b NR_RESULTS*4
@@ -337,7 +343,7 @@ _comment dc.b "ExtGraph/Graphlib/GenLib bench",0
 ;    jsr.l    FastDrawVLine_R
 ;
 ;    dbf      d4,_loop_FastDrawVLine_
-;    
+;
 ;    jbsr     TimerCurVal
 ;
 ;    jbsr     TimerRestart
@@ -350,9 +356,9 @@ _comment dc.b "ExtGraph/Graphlib/GenLib bench",0
 ;    moveq    #0,d0
 ;    lea      LCD_MEM,a0
 ;    jsr.l    graphlib::vert
-;    
+;
 ;    dbf      d5,_loop_graphlib_vert_
-;    
+;
 ;    jbsr     TimerCurVal
 ;
 ;    jbsr     TimerRestart

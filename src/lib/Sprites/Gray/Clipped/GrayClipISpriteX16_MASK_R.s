@@ -1,4 +1,4 @@
-| C prototype: void GrayClipISpriteX16_MASK_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short w asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipISpriteX16_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 |
 | Based on Genlib's put_masked_big_sprite, made by Julien Richard-Foy.
 | Modified by Lionel Debroux:

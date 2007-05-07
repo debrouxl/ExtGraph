@@ -5,7 +5,9 @@
 | Modified by Lionel Debroux:
 | * changed the calling convention and registers.
 |Bugfix by Jesse Frey
-| *changed to a PixColideX8 whith a hardcoded bytewidth
+| * changed to a PixColideX8 whith a hardcoded bytewidth
+|Modified by Jesse Frey
+| * now works more like PixColide8 by moving sprite data to a register
 
 .text
 .globl PixCollide32_R
@@ -13,30 +15,25 @@
 
 
 PixCollide32_R:
-    sub.w    %d2,%d0		|%d0=x0-x1
-    blt.s    0f			|if(x0<x1) return 0
+    sub.w    %d2,%d0
+    blt.s    0f
 
-    cmp.w    #32,%d0		|if(%d0>32)
-    bge      0f			|return 0
+    moveq    #31,%d2
+    sub.w    %d0,%d2
+    blt.s    0f
 
-    sub.w    %d3,%d1		|%d1=y0-y1
-    blt.s    0f			|if(%d1<0) return 0
+    sub.w    %d3,%d1
+    blt.s    0f
 
-    cmp.w    %a1,%d1		|if(%d1>height)
-    bge.s    0f			|return 0
+    cmp.w    %a1,%d1
+    bge.s    0f
 
-				|calculate offset
-    move.w   %d0,%d2		|save %d0
-    lsr.w    #3,%d0		|%d0/=8 (%d0 is now x offset in bytes)
-    lsl.w    #2,%d1		|%d1*=4(bytewidth)
-    add.w    %d0,%d1		|%d1+=x offset
-
-    not.w    %d2		|%d2=bit num
-
-    btst.b   %d2,0(%a0,%d1.w)	|test the calculated bit in the sprite
-    sne.b    %d0		|return (is bit set)?0xFF:0
+    lsl.w    #2,%d1		| y-offset to byte offset (y*4)
+    move.l   0(%a0,%d1.w),%d0	| we must use a register because that is all btst.l can deal with
+    btst.l   %d2,%d0
+    sne.b    %d0
     rts
 
 0:
-    clr.w    %d0	|return 0
+    clr.b    %d0		|return 0
     rts

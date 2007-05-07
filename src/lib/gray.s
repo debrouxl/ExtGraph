@@ -536,14 +536,15 @@ __gray_off_out:
 | #############################################################################
 |
 | $Log: gray.s,v $
-| Revision 3.16 2006/10/2 11:54:14  Lionel Debroux
-| Saved 6 more bytes:
+| Revision 3.17 2006/10/2 11:54:14  Lionel Debroux
+| Saved 8 more bytes:
 | * two 0x600001 accesses (vector table write unprotect/protect):
 |   bclr #2 + bset #2 -> moveq + bclr dn + bset dn
 | * immediate comparison against 1 in HW model test:
 |   cmp.l #1,22(a1) -> moveq #1 + cmp.l 22(a1),dn
+| * one branch turned to short form.
 |
-| Revision 3.15 2005/10/2 11:54:14  Jesse Frey
+| Revision 3.16 2005/10/2 11:54:14  Jesse Frey
 | Fixed so that __D_plane coppying always gets done
 | changed coments to reflect the fact that consecutive planes are always used
 | reorderd stuff due to the fact that it always uses consecutive planes

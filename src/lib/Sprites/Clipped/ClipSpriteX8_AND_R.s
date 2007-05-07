@@ -15,7 +15,7 @@
 
 ClipSpriteX8_AND_R:
     movem.l  %d3-%d7,-(%sp)
-    
+
 |Zone de non affichage
     move.w   %d2,%d5				|%d5 = Bytewidth
     beq.s    0f 				|(d5 == 0)?exit:keep going.
@@ -80,9 +80,6 @@ ClipSpriteX8_AND_R:
     add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
     subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
     jbge     8f
-
-    moveq    #30,%d5
-    sub.w    %d2,%d5
 
     subq.w   #2,%d2
     subq.w   #1,%d3
