@@ -34,7 +34,7 @@ GrayOn:
 	lea      (__switch_cnt,%pc),%a0		| reset plane switch counter to 0
 	clr.l    (%a0)
 |==============================================================================
-| INTERNAL: allocates memory (this was not inlined in prevous vertions of gray.s)
+| INTERNAL: allocates memory (this was not inlined in previous versions of gray.s)
 |
 | modifies: __gray_handle
 |           __gray_used_mem
@@ -83,7 +83,7 @@ __gray_init_mem:
     |--------------------------------------------------------------------------
     | initialization:
     | copy content of 0x4c00 to darkplane and clear light plane
-    | this is done her because we alread have __D_plane
+    | this is done her because we already have __D_plane
     |--------------------------------------------------------------------------
 	lea      0x4C00.w,%a0
 	move.w   #0x3BF,%d0
@@ -126,14 +126,15 @@ __gray_int1_handler_hw1:
 	moveq    #0x8,%d0                | reset phase counter to 8
 __gray_store:
 	move.w   %d0,(%a0)               | store new phase counter value
-	cmp.b    #8,%d0
+#	cmp.b    #8,%d0
+	subq.w   #8,%d0                  | cmpi -> subq (-2 bytes).
 	beq.s    __gray_proceed_old      | for value 8 we do nothing (dark plane
 	                                 | stays active)
 	lea      (__D_plane,%pc),%a0
     |--------------------------------------------------------------------------
     | doublebuffer extension ... add content of __gray_dbl_offset to %d0
     |--------------------------------------------------------------------------
-	add.w    (__gray_dbl_offset-__D_plane,%a0),%d0
+	add.w    (__gray_dbl_offset-__D_plane+8,%a0),%d0 | +8 required by cmpi -> subq above.
 	suba.w   %d0,%a0
 	move.l   (%a0),%d0               | load the address of this plane
 	lsr.l    #3,%d0                  | reduce to address / 8
@@ -614,4 +615,5 @@ __gray_off_out:
 | grayscale support used for TIGCC up to version v0.93
 | [NOTE: CVS time and date doesn't fit to real implementation data]
 |
+
 

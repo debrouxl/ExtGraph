@@ -88,7 +88,7 @@ GrayClipSprite32_SMASK_R:
     moveq.l  #16,%d1
     andi.w   #15,%d0		| %d0 = righshift
     sub.w    %d0,%d1		| %d1 = 16 - (x & 15)
-    move.w   %d4,-(%sp)
+    move.l   %d4,-(%sp)
     move.w   %d5,-(%sp)
 
     moveq.l  #-1,%d3
@@ -126,7 +126,7 @@ GrayClipSprite32_SMASK_R:
     lea.l    30(%a1),%a1
     dbf      %d2,1b
     move.w   (%sp)+,%d5
-    move.w   (%sp)+,%d4
+    move.l   (%sp)+,%d4
 
 0:
     movem.l  (%sp)+,%d3/%a2-%a4
