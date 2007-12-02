@@ -589,8 +589,8 @@ void Scale1Plane160to240_R(void *src asm("%a0"),void *dest asm("%a1"));
 //-----------------------------------------------------------------------------
 void FastCopyScreen(void* src,void* dest) __attribute__((__stkparm__));
 void FastCopyScreen_R(void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
-void FastCopyScreen160to240_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
-void FastCopyScreen160to240NC_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastCopyScreen160to240_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(3)));
+void FastCopyScreen160to240NC_R(short height asm("%d0"),void* src asm("%a0"),void* dest asm("%a1")) __attribute__((__regparm__(3)));
 
 
 

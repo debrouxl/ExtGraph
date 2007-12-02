@@ -3,7 +3,7 @@
 // to relicense his routines under the LGPL, and I cannot reach Jim
 // Haskell to ask him for the same thing.
 
-void __attribute__((__stkparm__)) ScaleSprite8_OR(unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey)
+void __attribute__((__stkparm__)) ScaleSprite8_XOR(unsigned char *sprite,void *dest,short x0,short y0,short sizex,short sizey)
 {
 	short dx,dy;
 	unsigned char maskorig,mask;

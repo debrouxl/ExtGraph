@@ -1,6 +1,8 @@
 // Tilemap Engine v0.4 (02/05/2004)
 // Julien Richard-Foy
 
+#ifndef __EXT_TILEMAP_H
+#define __EXT_TILEMAP_H
 
 // Quelques constantes
 #define BIG_VSCREEN_SIZE 5440
@@ -221,3 +223,5 @@ void DrawGrayAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane
 #define TM_GMASK89 DrawGrayBuffer89_MASK
 #define TM_GTRANW89 DrawGrayBuffer89_TRANW
 #define TM_GTRANB89 DrawGrayBuffer89_TRANB
+
+#endif
