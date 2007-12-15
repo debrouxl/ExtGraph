@@ -1,13 +1,13 @@
-| C prototype: char PixCollide32_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),short height asm("%a1"),void *plane asm("%a0")) __attribute__((__regparm__(6)));
+| C prototype: char PixCollide32_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), short height asm("%a1"), const unsigned long * sprite asm("%a0")) __attribute__((__regparm__(6)));
 |
 | Based on a routine programmed on the TIGCC/TICT message board by several users
 | (Jesse Frey - jessef, Samuel Stearley).
 | Modified by Lionel Debroux:
 | * changed the calling convention and registers.
-|Bugfix by Jesse Frey
-| * changed to a PixColideX8 whith a hardcoded bytewidth
-|Modified by Jesse Frey
-| * now works more like PixColide8 by moving sprite data to a register
+| Bugfix by Jesse Frey
+| * changed to a PixCollideX8 with a hardcoded bytewidth
+| Modified by Jesse Frey
+| * now works more like PixCollide8 by moving sprite data to a register
 
 .text
 .globl PixCollide32_R

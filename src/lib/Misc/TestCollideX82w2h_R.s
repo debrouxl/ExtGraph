@@ -1,4 +1,4 @@
-| C prototype: short TestCollideX82w2h_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1,short bytewidth0,short bytewidth1,short height0,short height1,const void *data0 asm("%a0"),const void *data1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: short TestCollideX82w2h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1, short bytewidth0, short bytewidth1, short height0, short height1, const void *data0 asm("%a0"), const void *data1 asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl TestCollideX82w2h_R

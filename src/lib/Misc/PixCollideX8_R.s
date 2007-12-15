@@ -1,4 +1,4 @@
-| C prototype: char PixCollideX8_R(short x0 asm("%d0"),short y0 asm("%d1"),short x1 asm("%d2"),short y1 asm("%d3"),register short bytewidth asm("%d4"),short height asm("%a1"),unsigned char *sprite asm("%a0")) __attribute__((__regparm__(7)));
+| C prototype: char PixCollideX8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), short bytewidth asm("%d4"), short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
 |
 | Based on a routine programmed on the TIGCC/TICT message board by several users
 | (Jesse Frey - jessef, Samuel Stearley).
@@ -6,7 +6,7 @@
 | * changed calling convention and registers.
 | Modified by Jesse Frey:
 | * made it take X8 sprites instead of 8
-|Bug fix by Jesse Frey after it failed testing
+| Bug fix by Jesse Frey after it failed testing
 
 |	x0 = x coordinate of point to test
 |	y0 = y coordinate of point to test

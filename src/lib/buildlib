@@ -1,3 +1,4 @@
+#! /bin/sh
 echo ======= building extgraph library =======
 # 2.00 Beta 5: fixing (temporarily ?) a regression of GCC 4.0 using directory changes.
 cd Misc

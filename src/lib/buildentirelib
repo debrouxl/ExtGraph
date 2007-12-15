@@ -1,3 +1,4 @@
+#! /bin/sh
 tprbuilder extgraph.tpr
 ./buildlib
-cp extgraph.a ../../LIB
+cp extgraph.a ../../lib/

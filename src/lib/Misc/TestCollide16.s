@@ -1,4 +1,4 @@
-| C prototype: short TestCollide16(short x0,short y0,short x1,short y1,short height,unsigned short* data0, unsigned short* data1) __attribute__((__stkparm__));
+| C prototype: short TestCollide16(short x0, short y0, short x1, short y1, short height, const unsigned short* data0, const unsigned short* data1) __attribute__((__stkparm__));
 
 .text
 .globl TestCollide16

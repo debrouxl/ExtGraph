@@ -83,7 +83,7 @@ __gray_init_mem:
     |--------------------------------------------------------------------------
     | initialization:
     | copy content of 0x4c00 to darkplane and clear light plane
-    | this is done her because we already have __D_plane
+    | this is done here because we already have __D_plane
     |--------------------------------------------------------------------------
 	lea      0x4C00.w,%a0
 	move.w   #0x3BF,%d0
