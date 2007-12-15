@@ -1,20 +1,8 @@
-Roadmap after Beta 4 (more or less sorted):
+Roadmap after Beta 4 (mostly sorted):
 
-/* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
-
-0* Make double-buffered versions of the tilemap engine demos. Some material in Kevin's patch.
-
-0* demo22: check code logic of RenderMap. I wonder whether it won't do unneeded operations in case everything
+X* demo22: check code logic of RenderMap. I wonder whether it won't do unneeded operations in case everything
 is always redrawn...
-
-/* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites ?) in ExtGraph,
-Graphlib, Genlib. Make a fair demo, i.e. use the distinctive features of each library if any, instead of handicapping it.
-Some material in a demo of Genlib 0.99.22b (thanks Julien RF for finding it).
-
-/* rewrite ScaleSprite16/32/64: should use byte reads. Fix graphical glitches on ScaleSprite16, test corner cases !!
-0* add ScaleSpriteX8*.
-
-0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
+-> The code logic was convoluted. Rewritten.
 
 X* Check that PixCollide* are the latest version (further optimization by Jesse Frey).
 -> Seems so.
@@ -22,14 +10,35 @@ X* Check that PixCollide* are the latest version (further optimization by Jesse 
 X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 -> Yes, and it has further optimizations.
 
-0* Do all circle functions do their job properly ?
 
+/* Fix bugs...
+0* Update documentation (update links, document new functions, etc.)
+/* Check prototypes in headers.
 0* Make reasonably sure that no routine is left out from extgraph.h or extgraph.a.
+
+/* All plane -> plane draw operations.
+
+0* Non-clipped RotateSpriteX8 routine.
+
+0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
+
+0* Do ALL circle functions do their job properly ?
 
 -- Beta 5 --
 
-/* Fix bugs, update documentation (update links, check prototypes, document new functions, etc.) and header...
+/* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites ?) in ExtGraph,
+Graphlib, Genlib. Make a fair demo, i.e. use the distinctive features of each library if any, instead of handicapping it.
+Some material in a demo of Genlib 0.99.22b (thanks Julien RF for finding it).
 
+0* Make double-buffered versions of the tilemap engine demos. Some material in Kevin's patch.
+
+/* Fix bugs...
+0* Update documentation (update links, document new functions, etc.)
+/* Check prototypes in headers.
+0* Make reasonably sure that no routine is left out from extgraph.h or extgraph.a.
+
+/* rewrite ScaleSprite16/32/64: should use byte reads. Fix graphical glitches on ScaleSprite16, test corner cases !!
+0* add ScaleSpriteX8*.
 0* Make all ScaleSprite functions in ASM using bit operations,
 
 0* DrawPattern_R (Slimeball).
@@ -39,10 +48,10 @@ X* Check that the forked grayscale routine is that optimized by Jesse Frey.
     0* Make fast non-clipped GrayISpriteX_Y_R ?
 
 0* Make more X8 routines, especially grayscale ones, including transparencies.
-0* Make (Gray)(Clip)ISpriteX16_AND/MASK/OR/RPLC/TRANB/TRANW/XOR_R. Make demo27 = demo6 with X16 routines ?
+0* Make (Gray)(Clip)ISpriteX16_AND/MASK/OR/RPLC/TRANB/TRANW/XOR_R. Make a copy of demo6 with X16 routines ?
 0* Make more Gray(Clip)SingleSprite routines.
 
-/* fastsrb:
+0* fastsrb:
     0* Macros for Put with callback, to make programmers' life a bit easier.
     0* Make clipped routines.
     0* demo23: grayscale fastsrb. Simplified Phoenix Platinum / Krypton / Venus. 10 16x16 ships (of which 2 overlap)
@@ -50,7 +59,7 @@ drawn with clipped routines, in TRANW mode, over a background that scrolls very 
 Redraw each frame if not using fastsrb functions, redraw only when needed otherwise. No waiting loop. Count the number of
 frames during 300 AI5 ticks.
 
-/* More things in demo26 ?
+0* More things in demo26 ?
 
 0* __regparm__ grayscale utilities, while rewriting them all into GNU as ASM.
 
@@ -70,7 +79,7 @@ EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA w
 is faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM
 version of Bresenham.
 
-0* Preshifted 8x8.
+0* Preshifted 8x8 ?
 
 ?* ScaleSprite functions that draw to a sprite instead of a screen, needed by "epsilon".
 
@@ -109,4 +118,4 @@ Always check:
 * all parameters plane should be void *.
 * all constant parameters should be const...
 * using "extern" and "register" in prototypes is not usually necessary.
-* a parameter which can be negative shouldn't be declared unsigned.
+* a parameter which can be negative shouldn't be declared unsigned...

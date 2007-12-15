@@ -3,7 +3,7 @@ Archive=1
 Pack=0
 Packed Variable=
 Project Name=extgraph
-GCC Switches=-O3 -Wall -W -Wextra -Wwrite-strings -Wpointer-arith -fomit-frame-pointer -D_GENERIC_ARCHIVE -ffunction-sections -fdata-sections
+GCC Switches=-O3 -Wall -W -Wwrite-strings -Wpointer-arith -fomit-frame-pointer -D_GENERIC_ARCHIVE -ffunction-sections -fdata-sections
 Assembler Switches=-g -t
 GNU Assembler Switches=--all-relocs
 Debug Info=0
@@ -52,7 +52,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=
+Open File=/home/Lionel_Debroux/svn/ExtGraph/src/lib/Misc/FastXORScreen_R.s
 
 [Included Files]
 C File 1=Misc\unpack.c
@@ -507,5 +507,8 @@ GNU Assembler File 414=Misc\RS_sin8192tab.s
 GNU Assembler File 415=Misc\TestCollide322h_R.s
 GNU Assembler File 416=Misc\TestCollideX82w2h_R.s
 GNU Assembler File 417=Sprites\Gray\Clipped\GrayClipSprite16_SMASKBLIT_R.s
+GNU Assembler File 418=Misc\FastANDScreen_R.s
+GNU Assembler File 419=Misc\FastORScreen_R.s
+GNU Assembler File 420=Misc\FastXORScreen_R.s
 Header File 1=internal.h
 
