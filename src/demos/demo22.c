@@ -20,12 +20,22 @@
 #include "../../lib/extgraph.h" // NOTE: this path is just for this demo !!
 #include "../../lib/tilemap.h"
 
+// IMPORTANT NOTE:
+// To get maximum performance for both "always redraw everything" and
+// "redraw everything only if necessary" approaches,
+// this program writes DIRECTLY in the screen planes. It does NOT:
+// * use FastCopyScreen_R;
+// * use doublebuffering.
+// This works ONLY with a routine that allocates gray planes consecutively,
+// like the modified grayscale routine in ExtGraph (../lib/gray.{s,o}).
+
 
 #define NB_ETAPES 4
 #define NB_ANIMS 21
 #define MAP_WIDTH 16
 
-unsigned char map_base[10][MAP_WIDTH]={ // Contient les n° d'animation
+// Contains map of tiles.
+unsigned char map_base[10][MAP_WIDTH]={
 {02,03, 8, 8, 8,02,02,04,05,02,11,00,00,00,00,00},
 {02,02,02,02, 8,02,02,06,07,02,13,12,12,19,00,00},
 {02,02,02,01, 8,02,02,02,02,02,02,02,01,13,19,00},
@@ -38,36 +48,23 @@ unsigned char map_base[10][MAP_WIDTH]={ // Contient les n° d'animation
 {02, 8,02,02,01,02,02,01,02,02,03,01,02,11,00,00},
 };
 
-// Contient les n° de sprites de chaque anim pour chaque étape
-short anim[NB_ETAPES][NB_ANIMS]={
-{0,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{1,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{2,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
-{3,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26}
-};
-
-short sprts[][32]={ // Contient les sprites (pris de xtile de Scott Noveck)
+// Contains sprites for tile map. Taken from xtile by Scott Noveck.
+short sprts[][32] = {
 // 0 : Water
 {0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000,0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000},	//Water1
-
 // 4 : Flower
 {0x3800,0x0000,0x3810,0x0000,0xC654,0x0000,0xC628,0x0000,0xC600,0x0000,0x3800,0x0000,0x3800,0x0000,0x0000,0x0000,0x0000,0x0000,0x1038,0x0000,0x5438,0x0000,0x28C6,0x0000,0x00C6,0x0000,0x00C6,0x0000,0x0038,0x0000,0x0038,0x0000},	//Flower1
-
 // 8 : Grass
 {0x0000,0x0000,0x1000,0x0000,0x5400,0x0000,0x2800,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0010,0x0000,0x0054,0x0000,0x0028,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000},	//Grass2
-
 // 9 : Plant
 {0x0000,0x0000,0x0180,0x0180,0x63C6,0x6246,0x77EE,0x542A,0x7FFE,0x4DB2,0x6FF6,0x566A,0x77EE,0x4A52,0x3BDC,0x2664,0x1E78,0x1FF8,0x3BDC,0x27E4,0x774E,0x4AF2,0x7F7E,0x44A2,0x7FFE,0x7C3E,0x07E0,0x0420,0x03C0,0x03C0,0x0000,0x0000},	//Plant1
-
 // 10 : Tree
 {0x01FF,0x00FF,0x077F,0x0380,0x0DF8,0x0E00,0x17B0,0x1840,0x2F30,0x30C0,0x6E38,0x31C0,0x5C3F,0x63C0,0xDC1F,0x63E0,0x9C07,0xE3F8,0x9E00,0xE1FF,0x9F00,0xE0FF,0x9FC0,0xE03F,0x8FF0,0xF00F,0x8FF8,0xF007,0x83FF,0xFC00,0x80FF,0xFF00},	//Tree1
 {0xFF80,0xFF00,0xE0E0,0x1FC0,0xF330,0x0CF0,0x79C8,0x0638,0x78E4,0x071C,0xF866,0x079C,0xF872,0x078E,0xF073,0x0F8E,0xE071,0x1F8F,0x00F1,0xFF0F,0x01F1,0xFE0F,0x07F1,0xF80F,0x0FF1,0xF00F,0x1FE1,0xE01F,0xFFC1,0x003F,0xFF01,0x00FF},	//Tree2
 {0x803F,0xFFC0,0xC01F,0x7FE0,0xC007,0x7FF8,0xE000,0xBFFF,0xF000,0x9FFF,0xBC00,0xCFFF,0xE3E0,0x7FFF,0xFFD0,0x1C3F,0x79F8,0x080F,0x71FF,0x1007,0x33B8,0x2060,0x3778,0x20F0,0x3D94,0x23F8,0x3E0F,0x1FF8,0x0787,0x007C,0x003F,0x0003},	//Tree3
 {0xFC01,0x03FF,0xF803,0x07FE,0xF003,0x0FFE,0x0007,0xFFFD,0x000F,0xFFF9,0x003D,0xFFF3,0x07C7,0xFFFE,0x0BFF,0xFC38,0x1F3E,0xF010,0xFF1E,0xE008,0xFD8C,0x0604,0xFECC,0x0F04,0xE9BC,0x1FC4,0xF07C,0x1FF8,0xE1C0,0x3E00,0xFC00,0xC000},	//Tree4
-
 // 14 : Road
 {0x7E7E,0x0000,0xFFFF,0x0000,0xF7F7,0x0000,0xFFFF,0x0000,0xBFBF,0x0000,0xFBFB,0x0000,0xFFFF,0x0000,0x7E7E,0x0000,0x7E7E,0x0000,0xFFFF,0x0000,0xF7F7,0x0000,0xFFFF,0x0000,0xBFBF,0x0000,0xFBFB,0x0000,0xFFFF,0x0000,0x7E7E,0x0000},	//Road1
-
 // 15 : Edge
 {0x0BFF,0x07FF,0x2C00,0x1FFF,0x57FF,0x3800,0x3804,0x6000,0xD040,0x6000,0x71FF,0xC000,0xA200,0xC1FF,0xA5FF,0xC3FF,0xA57F,0xC380,0xA5FF,0xC300,0xB5F8,0xC31F,0xA5CC,0xC33F,0xA5C6,0xC33F,0xA5C7,0xC33F,0xADC3,0xC33F,0xA5C3,0xC33F},	//Edge1
 {0xFFFF,0xFFFF,0x0000,0xFFFF,0xFFFF,0x0000,0x0404,0x0000,0x4040,0x0000,0xFFFF,0x0000,0x0000,0xFFFF,0xFFFF,0xFFFF,0x1FF8,0xE007,0xF81F,0x07E0,0xE047,0x1FF8,0x0040,0xFFBF,0x2000,0xFFFF,0x0000,0xFFFF,0x07E0,0xFFFF,0xFFFF,0xFFFF},	//Edge2
@@ -110,131 +107,141 @@ short sprite[32] =
 #define WIDTH  240
 
 // #define NR_SPRITES 16
-#define NR_SPRITES 8
+#define NR_SPRITES 12
 
-short RenderMap(Plane *plane,void *dest,short behaviour)
-{
-  short i=0,x=0,y=0,seq=0,sx=16,sy=16,mov=0,flag=0,frame=0;
-  unsigned short savebackground[NR_SPRITES*(8*16+6)/2];
+static void DrawSprites(register const unsigned short sx asm("%d3"), register const unsigned short sy asm("%d4")) {
+  short i;
+  for (i = 0; i < 4; i++) {
+    GrayClipISprite16_TRANW_R(sx,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    GrayClipISprite16_TRANW_R(sx+60,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    GrayClipISprite16_TRANW_R(sx+120,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+  }
+}
 
-  OSFreeTimer(USER_TIMER);
-  OSRegisterTimer(USER_TIMER,6);
-  OSFreeTimer(1);
-  OSRegisterTimer(1,660);
+static void RestoreBackground(register unsigned short * const savebackground asm("%a2")) {
+  short i;
+  for (i = 0; i < 4; i++) {
+    GrayFastPutBkgrnd16_R(&savebackground[i*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    GrayFastPutBkgrnd16_R(&savebackground[(i+4)*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    GrayFastPutBkgrnd16_R(&savebackground[(i+8)*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+  }
+}
+
+static void SaveBackground(register const unsigned short sx asm("%d3"), register const unsigned short sy asm("%d4"), register unsigned short * const savebackground asm("%a2")) {
+  short i = 0;
+  // Save background.
+  for (i = 0; i < 4; i++) {
+    GrayFastGetBkgrnd16_R(sx,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*((8*16+6)/2)]);
+    GrayFastGetBkgrnd16_R(sx+60,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+4)*((8*16+6)/2)]);
+    GrayFastGetBkgrnd16_R(sx+120,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+8)*((8*16+6)/2)]);
+  }
+}
+
+// If behaviour == 0, always redraw everything.
+// If behaviour != 0, redraw everything only if necessary.
+static short RenderMap(Plane *plane, void *dest, short behaviour) {
+  unsigned short x=0,y=0,seq=0;
+  register unsigned short sx asm("%d3") = 16;
+  register unsigned short sy asm("%d4") = 8;
+  unsigned short mov=0,flag=0;
+  unsigned short savebackground[NR_SPRITES*((8*16+6)/2)];
+  register unsigned short *pSavebackground asm("%a2") = savebackground;
 
   DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
-  FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-  FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+  SaveBackground(sx,sy,pSavebackground);
+
+  OSFreeTimer(USER_TIMER);
+  OSRegisterTimer(USER_TIMER,2); // ~100 ms with default settings.
+  OSFreeTimer(1);
+  OSRegisterTimer(1,300); // ~15 s with default settings.
 
   do {
-    // Affichage
-    if (!(behaviour)) {
-      if (OSTimerExpired(USER_TIMER)) {
-        moveplane: // Label must be here due to OSTimerExpired resetting the "expired" flag...
-        flag = 0;
-        if (mov == 0) {
-          if (x < 16*16-WIDTH) x++;
-          else mov++;
-        }
-        else if (mov == 1) {
-          if (y < 16*10-HEIGHT) y++;
-          else mov++;
-        }
-        else if (mov == 2) {
-          if (x > 0) x--;
-          else mov++;
-        }
-        else if (mov == 3) {
-          if (y > 0) y--;
-          else mov = 0;
-        }
-
-        OSTimerRestart(USER_TIMER);
+    if (OSTimerExpired(USER_TIMER)) {
+      // Timer has expired, so we have to move the background.
+      if (mov == 0) {
+        if (x < 16*16-WIDTH) x++;
+        else mov++;
+      }
+      else if (mov == 1) {
+        if (y < 16*10-HEIGHT) y++;
+        else mov++;
+      }
+      else if (mov == 2) {
+        if (x > 0) x--;
+        else mov++;
+      }
+      else if (mov == 3) {
+        if (y > 0) y--;
+        else mov = 0;
       }
 
+      OSTimerRestart(USER_TIMER);
+      // Don't forget to reinitialize the buffers !
+      flag = 1;
       DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
-      FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-      FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
-      goto movesprites;
+      SaveBackground(sx,sy,pSavebackground);
     }
-    else {
-      if (!(OSTimerExpired(USER_TIMER))) {
-        movesprites:
-        if (flag) {
-          // Restore background.
-          for (i = 0; i < NR_SPRITES; i++) {
-            GrayFastPutBkgrnd16_R(&savebackground[i*(8*16+6)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-          }
-        }
-        // Move sprites.
-        switch (seq&7) {
-          case 0: sx++;       break;
-          case 1: sx++; sy++; break;
-          case 2: sy++;       break;
-          case 3: sx--; sy++; break;
-          case 4: sx--;       break;
-          case 5: sx--; sy--; break;
-          case 6: sy--;       break;
-          case 7: sx++; sy--; break;
-        }
-        seq++;
+    
+    if (!behaviour && !flag) { // Don't redraw plane twice...
+      DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
+    }
+    if (behaviour && !flag) { // Don't restore if just moved.
+      RestoreBackground(pSavebackground);
+    }
 
-        // Save background.
-        for (i = 0; i < NR_SPRITES/2; i++) {
-          GrayFastGetBkgrnd16_R(sx,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*(8*16+6)/2]);
-        }
-        for (i = 0; i < NR_SPRITES/2; i++) {
-          GrayFastGetBkgrnd16_R(sx+60,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+NR_SPRITES/2)*(8*16+6)/2]);
-        }
-/*        for (i = 0; i < NR_SPRITES/4; i++) {
-          GrayFastGetBkgrnd16_R(sx+120,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+2*NR_SPRITES/4)*(8*16+6)/2]);
-        }
-        for (i = 0; i < NR_SPRITES/4; i++) {
-          GrayFastGetBkgrnd16_R(sx+180,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+3*NR_SPRITES/4)*(8*16+6)/2]);
-        }
-*/
-        // Draw sprites.
-        for (i = 0; i < 4; i++) {
-          GrayClipISprite16_TRANW_R(sx,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-          GrayClipISprite16_TRANW_R(sx+60,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-          //GrayClipISprite16_TRANW_R(sx+120,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-          //GrayClipISprite16_TRANW_R(sx+180,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-        }
-        flag = 1;
-        frame++;
-      }
-      else goto moveplane;
+    // Move sprites.
+    /*switch (seq&3) {
+      case 0: sx++;       break;
+      case 1: sy++;       break;
+      case 2: sx--;       break;
+      case 3: sy--; break;
+    }*/
+    switch (seq%9) {
+      case 0: sx++;       break;
+      case 1: sy++;       break;
+      case 2: sx--;       break;
+      case 3: sx--;       break;
+      case 4: sy--;       break;
+      case 5: sy--;       break;
+      case 6: sx++;       break;
+      case 7: sx++;       break;
+      case 8: sy++, sx--; break;
     }
+
+    if (behaviour && !flag) { // Don't save if just moved
+      SaveBackground(sx,sy,pSavebackground);
+    }
+
+    DrawSprites(sx,sy);
+
+    seq++;
+
+    flag = 0;
   } while (!(OSTimerExpired(1)));
   OSFreeTimer(USER_TIMER);
   OSFreeTimer(1);
-  return frame;
+  return seq;
 }
 
 
-void _main(void)
-{
+void _main(void) {
   INT_HANDLER ai1;
-  char *bloc=malloc(BIG_VSCREEN_SIZE*2+LCD_SIZE*2); // Un big_vscreen + un écran virtuel
-  void *vecran;
+  char *block=malloc(BIG_VSCREEN_SIZE*2); // Two big_vscreens.
   short frame1=0, frame2=0;
-  char s[10];
+  char s[50];
   Plane plane;
   LCD_BUFFER backbuffer;
 
   LCD_save(backbuffer);
 
-  if(!bloc)
+  if(!block)
     return;
-
-// Initialisations
-  vecran=bloc;
 
 // Initialisation du plane
   plane.matrix=map_base;
   plane.width=16;
   plane.sprites=sprts;
-  plane.big_vscreen=bloc+LCD_SIZE*2;
+  plane.big_vscreen=block;
   plane.force_update=1;
 
   ai1=GetIntVec(AUTO_INT_1);
@@ -243,22 +250,29 @@ void _main(void)
 
   if(GrayOn())
   {
-    frame1 = RenderMap(&plane,vecran,0);
-    asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
-    while (!(_rowread(0xF000)&0xFF));
-    frame2 = RenderMap(&plane,vecran,1);
+    frame1 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),0);
+    /*asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+    while (!(_rowread(0xF000)&0xFF));*/
+    GrayOff();
+  }
+
+  if(GrayOn())
+  {
+    frame2 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),1);
+    /*asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+    while (!(_rowread(0xF000)&0xFF));*/
     GrayOff();
   }
 
   SetIntVec(AUTO_INT_1,ai1);
 
-  sprintf(s,"%d %d",frame1,frame2);
+  sprintf(s,"redraw:%d save&restore:%d (higher=faster)",frame1,frame2);
   ClrScr();
   ST_helpMsg(s);
   while (!(_rowread(0xF000)&0xFF));
   asm("move.l #0x17FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
 
-  free(bloc);
+  free(block);
   GKeyFlush();
   LCD_restore(backbuffer);
   GKeyFlush();

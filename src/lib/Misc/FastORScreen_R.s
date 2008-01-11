@@ -4,16 +4,5 @@
 .globl FastORScreen_R
 .even
 FastORScreen_R:
-    move.w   #((3840/16)-1),%d0
-
-0:  move.l   (%a0)+,%d1
-    or.l     %d1,(%a1)+
-    move.l   (%a0)+,%d1
-    or.l     %d1,(%a1)+
-    move.l   (%a0)+,%d1
-    or.l     %d1,(%a1)+
-    move.l   (%a0)+,%d1
-    or.l     %d1,(%a1)+
-    dbf      %d0,0b
-
-    rts
+    .include "Misc/FastScreenMacros.s"
+    FastScreenMacro or

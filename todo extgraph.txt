@@ -2,7 +2,7 @@ Roadmap after Beta 4 (mostly sorted):
 
 X* demo22: check code logic of RenderMap. I wonder whether it won't do unneeded operations in case everything
 is always redrawn...
--> The code logic was convoluted. Rewritten.
+-> The code logic was convoluted, I couldn't convince myself it was right. Rewritten.
 
 X* Check that PixCollide* are the latest version (further optimization by Jesse Frey).
 -> Seems so.
@@ -10,21 +10,36 @@ X* Check that PixCollide* are the latest version (further optimization by Jesse 
 X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 -> Yes, and it has further optimizations.
 
+/* Plane -> plane draw operations.
+-> TODO: TRANB/D/L/W (huh, that's a LOT of planes).
+
+0* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
+
+0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
+(Time to make a testcase/demo ?)
+
+0* Do ALL circle functions do their job properly ?
+(Time to make a testcase/demo ?)
+
+-- Beta 5 --
+
+0* Set of functions that modify X8 sprite data:
+    * AND/OR/XOR all rows with same mask;
+    * AND/OR/XOR sprite data with sprite data of same size;
+These are useful functions in their own right.
+
+0* ScaleSprite functions that draw to a sprite instead of a screen, needed by "epsilon".
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)
 /* Check prototypes in headers.
 0* Make reasonably sure that no routine is left out from extgraph.h or extgraph.a.
 
-/* All plane -> plane draw operations.
-
 0* Non-clipped RotateSpriteX8 routine.
+-> Ouch, rather hard.
 
-0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
-
-0* Do ALL circle functions do their job properly ?
-
--- Beta 5 --
+0* Rectangular area operations: Get/AND/OR/XOR/Copy.
+Can be emulated with functions that modify X8 sprite data + SpriteX8Get/AND/OR/XOR.
 
 /* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites ?) in ExtGraph,
 Graphlib, Genlib. Make a fair demo, i.e. use the distinctive features of each library if any, instead of handicapping it.
@@ -80,10 +95,6 @@ is faster than the C version of Bresenham, it's not sure that the ASM version of
 version of Bresenham.
 
 0* Preshifted 8x8 ?
-
-?* ScaleSprite functions that draw to a sprite instead of a screen, needed by "epsilon".
-
-?* "FastCopyRectangle" MiG53 asked for.
 
 
 /* Transition effects: waiting loops in most of them, one routine makes one effect + demo18. Unless otherwise noted,
