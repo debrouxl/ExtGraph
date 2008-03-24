@@ -12,7 +12,7 @@ X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 
 0* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
 
-0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
+/* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
 (Time to make a testcase/demo ?)
 
 0* Do ALL circle functions do their job properly ?

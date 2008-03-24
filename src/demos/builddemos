@@ -33,3 +33,4 @@ mv demo26.89z ../../BIN89
 mv demo26.9xz ../../BIN92PV200
 mv demo26.v2z ../../BIN92PV200
 ./buildcmp demo27
+./buildsep demo28

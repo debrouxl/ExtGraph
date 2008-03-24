@@ -3,9 +3,9 @@
 * project name:    ExtGraph
 * initial date:    16/05/2001
 * author:          thomas.nussbaumer@gmx.net
-* description:     test program for SpriteX8 routines
+* description:     test program for ClipSpriteX8 routines
 *
-* $Id: demo6.c,v 1.6 2002/02/22 16:35:39 tnussb Exp $
+* $Id: demo22.c,v 1.6 2002/02/22 16:35:39 tnussb Exp $
 *
 *******************************************************************************/
 
@@ -99,47 +99,87 @@ unsigned char *sprite2;
 #define HEIGHT           C89_92V200(100,128)
 #define WIDTH            C89_92V200(160,240)
 
-static short mode=1;
 static unsigned char *sprite=(unsigned char *)s64x64;
 
 
 void __attribute__((__always_inline__)) draw(short x, short y) {
     // fetch background from LCD memory
-    SpriteX8Get_R(x,y,64,LCD_MEM,buffer,64/8);
-    if (mode==1) {
-        // draw normal sprite
-        SpriteX8_OR_R(x,y,64,sprite,64/8,LCD_MEM);
+
+    // There's currently no ClipSpriteX8Get_R, so we have to be careful not to
+    // fetch data beyond the bounds of the screen.
+    short h, bytewidth;
+    short xsaturated, ysaturated;
+
+    // Clip height.
+    if (y < 0) {
+        h = 64 + y;
+        ysaturated = 0;
     }
-    else if (mode==2) {
-        // draw h_mirrored sprite
-        SpriteX8_MIRROR_H_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
-    }
-    else if (mode==3) {
-        // draw v_mirrored sprite
-        SpriteX8_MIRROR_V_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
-    }
-    else if (mode==4) {
-        SpriteX8X8_ROTATE_LEFT_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
-    }
-    else if (mode==5) {
-        SpriteX8X8_ROTATE_RIGHT_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+    else if (y > HEIGHT - 64) {
+        h = HEIGHT - y;
+        ysaturated = y;
     }
     else {
-        // draw sprite, h_mirrored and v_mirrored
-        // Wastes a bit of space since we already have H and V,
-        // but the goal is testing the "HV" routine.
-        SpriteX8_MIRROR_HV_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        h = 64;
+        ysaturated = y;
     }
+
+    // Compute bytewidth.
+    if (x < 0) {
+        bytewidth = (64 + x) / 8 + 1;
+        xsaturated = 0;
+    }
+    else if (x > WIDTH - 64) {
+        bytewidth = (WIDTH - x) / 8 + 1;
+        xsaturated = x & ~0x7;
+    }
+    else {
+        bytewidth = 64/8;
+        xsaturated = x;
+    }
+
+
+    SpriteX8Get_R(xsaturated,ysaturated,h,LCD_MEM,buffer,bytewidth);
+
+    // draw normal sprite
+    ClipSpriteX8_OR_R(x,y,64,64/8,sprite,LCD_MEM);
 }
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    SpriteX8_MASK_R(x,y,64,buffer,buffer,64/8,LCD_MEM);
+
+    short h, bytewidth;
+    short xsaturated, ysaturated;
+
+    // Clip height.
+    if (y < 0) {
+        h = 64 + y;
+        ysaturated = 0;
+    }
+    else if (y > HEIGHT - 64) {
+        h = HEIGHT - y;
+        ysaturated = y;
+    }
+    else {
+        h = 64;
+        ysaturated = y;
+    }
+
+    // Compute bytewidth.
+    if (x < 0) {
+        bytewidth = (64 + x) / 8 + 1;
+        xsaturated = 0;
+    }
+    else if (x > WIDTH - 64) {
+        bytewidth = (WIDTH - x) / 8 + 1;
+        xsaturated = x & ~0x7;
+    }
+    else {
+        bytewidth = 64/8;
+        xsaturated = x;
+    }
+
+    ClipSpriteX8_MASK_R(xsaturated,ysaturated,h,bytewidth,buffer,buffer,LCD_MEM);
 }
 
 
@@ -181,7 +221,7 @@ void _main(void) {
     LCD_save(lcd);
 
     ST_busy(ST_CLEAR);
-    ST_helpMsg("ESC/UP/DOWN/LEFT/RIGHT/0/1/2/MODE");
+    ST_helpMsg("ESC/UP/DOWN/LEFT/RIGHT/0/1/2");
     OSSetSR(0x0200);
     int5 = GetIntVec(AUTO_INT_5);
     SetIntVec(AUTO_INT_5,DUMMY_HANDLER);
@@ -193,40 +233,32 @@ void _main(void) {
         // worth the trouble of doing it...
         if (_keytest(RR_ESC)) break;
         key=_rowread(ARROWS_ROW);
-        if ((key&LEFT_KEY)&&(x>0)) {
+        if ((key&LEFT_KEY)&&(x>-63)) {
             restore(x,y);
             x--;
-            if ((key&UP_KEY)&&(y>0))             y--;
-            else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) y++;
+            if ((key&UP_KEY)&&(y>-63))             y--;
+            else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) y++;
             draw(x,y);
         }
-        else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) {
+        else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) {
             restore(x,y);
             x++;
-            if ((key&UP_KEY)&&(y>0))             y--;
-            else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) y++;
+            if ((key&UP_KEY)&&(y>-63))             y--;
+            else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) y++;
             draw(x,y);
         }
-        else if ((key&UP_KEY)&&(y>0)) {
+        else if ((key&UP_KEY)&&(y>-63)) {
             restore(x,y);
             y--;
-            if ((key&LEFT_KEY)&&(x>0))            x--;
-            else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) x++;
+            if ((key&LEFT_KEY)&&(x>-63))            x--;
+            else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) x++;
             draw(x,y);
         }
-        else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) {
+        else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) {
             restore(x,y);
             y++;
-            if ((key&LEFT_KEY)&&(x>0))            x--;
-            else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) x++;
-            draw(x,y);
-        }
-        else if (_rowread(MODE_ROW)&MODE_KEY) {     // MODE
-            (++mode==7)?mode=1:mode;
-            // Waiting loop so as to cut rebounds on key. It replaces a
-            // bigger block of code that uses AMS timer functions.
-            asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
-            restore(x,y);
+            if ((key&LEFT_KEY)&&(x>-63))            x--;
+            else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) x++;
             draw(x,y);
         }
         else if (_rowread(ZERO_ROW)&ZERO_KEY && sprite!=(unsigned char *)s64x64) {      // 0

@@ -41,7 +41,9 @@ demo24 - test program for high level tilemap engine functions: MASK mode, three
          (tilemap engine demo 5)
 demo25 - test program for low level tilemap engine functions: tile functions
          (tilemap engine demo 6)
-demo26 - kernel-based (!! AFAIK the only kernel-based program from TICT ;-) !!) bench
-         program old graphlib vs. ExtGraph. Everything was made so that Genlib can
-         easily be added
+demo26 - kernel-based (!! AFAIK the only kernel-based program from TICT since AMS native
+         became a usable option ;-) !!) bench program old graphlib vs. ExtGraph.
+         Everything was made so that Genlib can easily be added (graphlib is known
+         not to be fast compared to ExtGraph)
 demo27 - test program for sprite arbitrary angle rotation functions
+demo28 - clipped sprite version of demo6

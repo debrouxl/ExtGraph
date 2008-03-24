@@ -510,5 +510,6 @@ GNU Assembler File 417=Sprites\Gray\Clipped\GrayClipSprite16_SMASKBLIT_R.s
 GNU Assembler File 418=Misc\FastANDScreen_R.s
 GNU Assembler File 419=Misc\FastORScreen_R.s
 GNU Assembler File 420=Misc\FastXORScreen_R.s
+GNU Assembler File 421=Sprites\Clipped\ClipSpriteX8_MASK_R.s
 Header File 1=internal.h
 
