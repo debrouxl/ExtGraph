@@ -10,9 +10,6 @@ X* Check that PixCollide* are the latest version (further optimization by Jesse 
 X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 -> Yes, and it has further optimizations.
 
-/* Plane -> plane draw operations.
--> TODO: TRANB/D/L/W (huh, that's a LOT of planes).
-
 0* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
 
 0* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
@@ -28,7 +25,10 @@ X* Check that the forked grayscale routine is that optimized by Jesse Frey.
     * AND/OR/XOR sprite data with sprite data of same size;
 These are useful functions in their own right.
 
-0* ScaleSprite functions that draw to a sprite instead of a screen, needed by "epsilon".
+0* ScaleSprite functions that draw to a sprite instead of a screen. Suggestion of "epsilon".
+
+/* Plane -> plane draw operations.
+-> TODO: TRANB/D/L/W (huh, that's a LOT of planes).
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)
@@ -54,7 +54,7 @@ Some material in a demo of Genlib 0.99.22b (thanks Julien RF for finding it).
 
 /* rewrite ScaleSprite16/32/64: should use byte reads. Fix graphical glitches on ScaleSprite16, test corner cases !!
 0* add ScaleSpriteX8*.
-0* Make all ScaleSprite functions in ASM using bit operations,
+0* Make all ScaleSprite functions in ASM using bit operations, and maybe keep data in a register as long as it's possible.
 
 0* DrawPattern_R (Slimeball).
 
@@ -80,9 +80,6 @@ frames during 300 AI5 ticks.
 
 /* Generic font routines, OS or custom. Two sets of pointers, one should always contain the OS fonts (i.e., mandatory
 SetupCharSet).
-
-0* Optimize ScaleSpriteX (rewrite in assembly with a more efficient algorithm, keep data in a register as long as it's
-possible).
 
 /* Lines, triangles, circles, etc:
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
