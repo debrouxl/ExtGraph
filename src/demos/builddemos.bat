@@ -34,5 +34,7 @@
 @move demo26.9xz ..\..\bin92pv200
 @move demo26.v2z ..\..\bin92pv200
 @call buildcmp.bat demo27
+@call buildsep.bat demo28
+@call buildsep.bat demo29
 @pause
 @echo on

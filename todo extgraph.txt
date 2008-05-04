@@ -10,7 +10,10 @@ X* Check that PixCollide* are the latest version (further optimization by Jesse 
 X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 -> Yes, and it has further optimizations.
 
-0* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
+/* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
+-> FastDrawLargeBufferToScreen_R. Does not currently do anything if less than 240x128 pixels have to be drawn.
+
+0* ClipSpriteX8_R.
 
 /* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
 (Time to make a testcase/demo ?)

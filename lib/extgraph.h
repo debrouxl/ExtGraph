@@ -603,6 +603,12 @@ void FastTRANWScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute_
 void FastXORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 
 
+//-----------------------------------------------------------------------------
+// Replace the contents of 240x128 dest buffer with data from the rectangular area
+// (offsetx, offsety, offsetx+LCD_WIDTH-1, offsety+LCD_HEIGHT-1)
+// of the (wordwidth*16) x height source buffer.
+//-----------------------------------------------------------------------------
+void FastDrawLargeBufferToScreen_R(const void * big_screen asm("%a0"), void * dest asm("%a1"), unsigned short offsetx asm("%d0"), unsigned short offsety asm("%d1"), unsigned short wordwidth asm("%d2"), unsigned short height asm("%d3")) __attribute__((__regparm__(6)));
 
 
 //-----------------------------------------------------------------------------
