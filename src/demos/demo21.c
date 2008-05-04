@@ -14,7 +14,7 @@
 #include "../../lib/preshift.h"
 
 #define isprite_16 \
-((unsigned short[2*16]){0x1,0x1,0x3,0x3,0x7,0x7,0xF,0xF,0x1F,0x1F,0x3F,0x3F,0x7F,0x7F,0xFF,0xFF,0x1FF,0x1FF,0x3FF,0x3FF,0x7FF,0x7FF,0xFFF,0xFFF,0x1FFF,0x1FFF,0x3FFF,0x3FFF,0x7FFF,0x7FFF,0xFFFF,0xFFFF})
+((unsigned short[2*16]){0x1,0xFFFF,0x3,0xFFFE,0x7,0xFFFC,0xF,0xFFF8,0x1F,0xFFF0,0x3F,0xFFE0,0x7F,0xFFC0,0xFF,0xFF80,0x1FF,0xFF00,0x3FF,0xFE00,0x7FF,0xFC00,0xFFF,0xF800,0x1FFF,0xF000,0x3FFF,0xE000,0x7FFF,0xC000,0xFFFF,0x8000})
 
 static const unsigned short sprite_16[16] =
 {
@@ -72,7 +72,7 @@ void _main(void) {
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -95,9 +95,9 @@ void _main(void) {
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ClipSprite: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
-    ngetchx();
+    if (ngetchx() == KEY_ESC) goto end;
 
 
     // B/W.
@@ -120,7 +120,7 @@ void _main(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -141,7 +141,7 @@ void _main(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Sprite: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     ngetchx();
 

@@ -45,7 +45,6 @@ static inline short Test8(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-8;x++) {
@@ -57,7 +56,7 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"orig8=%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -70,7 +69,6 @@ static inline short Test8(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-8;x++) {
@@ -82,7 +80,7 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -95,7 +93,6 @@ static inline short Test8(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-8;x++) {
@@ -106,7 +103,7 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -129,7 +126,6 @@ static inline short Test16(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-16;x++) {
@@ -141,7 +137,7 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"orig16=%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB: %lu tics for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -154,7 +150,6 @@ static inline short Test16(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-16;x++) {
@@ -166,7 +161,7 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -179,7 +174,6 @@ static inline short Test16(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-16;x++) {
@@ -190,7 +184,7 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -213,7 +207,6 @@ static inline short Test32(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-32;x++) {
@@ -225,7 +218,7 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"orig32=%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -238,7 +231,6 @@ static inline short Test32(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-32;x++) {
@@ -250,7 +242,7 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -263,7 +255,6 @@ static inline short Test32(void) {
 
     OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,1000);
-    OSTimerRestart(USER_TIMER);
 
     for (y=0;y<100-16;y++) {
         for (x=0;x<160-32;x++) {
@@ -274,7 +265,7 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"%lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }

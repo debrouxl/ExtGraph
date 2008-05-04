@@ -49,6 +49,10 @@ void _main(void) {
 
     OSSetSR(0x0200);
 
+    // Waiting loop so as to cut rebounds on key. It replaces a
+    // bigger block of code that uses AMS timer functions.
+    asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+
     do {
         old_random = new_random;
         do {

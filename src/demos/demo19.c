@@ -26,7 +26,6 @@ static inline short InitArrays(void) {
     x = y = NULL;
     if (!(x = (short*)malloc(RANDOM_TRIANGLES*3*sizeof(short)*2))) return 0;
     y = x+RANDOM_TRIANGLES*3;
-//    if (!(y = (short*)malloc(RANDOM_TRIANGLES*3*sizeof(short)))) return 0;
 
     srand(0x00000000UL); // always start on same seed
     px = &x[0];
@@ -43,8 +42,7 @@ static inline short InitArrays(void) {
 // free the allocate global points arrays
 //=============================================================================
 static inline void CleanupArrays(void) {
-    if (x) free(x);
-//    if (y) free(y);
+    free(x);
 }
 
 
@@ -61,7 +59,6 @@ void _main(void) {
     // FastFilledRect_Invert_R.
 /*
     ClrScr();
-    OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
@@ -73,12 +70,13 @@ void _main(void) {
         if (k < 0) break;
     }
 
-    sprintf(tmpstr,"orig: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"AMS: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     ClrScr();
-    OSTimerRestart(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
         for (j = k-0+1; (j--);) {
@@ -87,12 +85,13 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"opt1: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"ExtGraph1: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     ClrScr();
-    OSTimerRestart(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
         for (j = k-0+1; (j--);) {
@@ -101,10 +100,11 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"opt2: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"ExtGraph2: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
     ST_helpMsg(tmpstr);
     GKeyFlush();
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 */
 
 /*
@@ -112,7 +112,6 @@ void _main(void) {
     if(!GrayOn()) goto end;
 
     GrayClearScreen();
-    OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
@@ -123,12 +122,13 @@ void _main(void) {
         if (k < 0) break;
     }
 
-    sprintf(tmpstr,"orig: %lu AI5 ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"AMS: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     GrayClearScreen();
-    OSTimerRestart(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
         for (j = k-0+1; (j--);) {
@@ -137,15 +137,15 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"opt: %lu AI5 ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"ExtGraph1: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
 
 
     // Grayscale outlined rectangles.
     GrayClearScreen();
-    OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
@@ -156,12 +156,13 @@ void _main(void) {
         if (k < 0) break;
     }
 
-    sprintf(tmpstr,"orig: %lu AI5 ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"AMS: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     GrayClearScreen();
-    OSTimerRestart(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,100000*20UL);
     k = 92;
     for (i = 159-0+1; (i--);) {
         for (j = k-0+1; (j--);) {
@@ -170,9 +171,10 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"opt: %lu AI5 ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"ExtGraph: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     GrayOff();
 
@@ -184,22 +186,21 @@ void _main(void) {
         ST_helpMsg("error: out of mem");
         goto end;
     }
-    OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,100000*20UL);
     for (j=0;j<NR_LOOPS;j++) {
         for (i=0;i<RANDOM_TRIANGLES*3;i+=3) {
             FilledTriangle_R(x[0+i],y[0+i],x[1+i],y[1+i],x[2+i],y[2+i],LCD_MEM,DrawSpan_XOR_R);
         }
     }
-    sprintf(tmpstr,"opt: %lu AI5 ticks for 10000 triangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"ExtGraph: %lu ticks for 10000 triangles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     CleanupArrays();
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
 
     // B/W circles.
     ClrScr();
-    OSFreeTimer(USER_TIMER);
     OSRegisterTimer(USER_TIMER,100000*20UL);
     srand(0);
     for (j=0;j<NR_LOOPS;j++) {
@@ -208,12 +209,13 @@ void _main(void) {
             DrawClipEllipse(random(160),random(160),k,k,&(SCR_RECT){{0,0,239,127}},A_NORMAL);
         }
     }
-    sprintf(tmpstr,"orig: %lu AI5 ticks for 4000 circles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"AMS: %lu ticks for 4000 circles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
+    OSFreeTimer(USER_TIMER);
+    if (ngetchx() == KEY_ESC) goto end;
 
     ClrScr();
-    OSTimerRestart(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,100000*20UL);
     srand(0);
     for (j=0;j<NR_LOOPS;j++) {
         for (i=0;i<RANDOM_CIRCLES*3;i+=3) {
@@ -221,12 +223,10 @@ void _main(void) {
             ClipFastOutlinedCircle_DRAW_R(LCD_MEM,random(160),random(160),k);
         }
     }
-    sprintf(tmpstr,"opt: %lu AI5 ticks for 4000 circles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"ExtGraph: %lu ticks for 4000 circles",(100000*20UL-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    ngetchx();
-
-
     OSFreeTimer(USER_TIMER);
+    ngetchx();
 
     end:
     LCD_restore(screen);

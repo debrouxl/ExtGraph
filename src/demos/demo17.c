@@ -27,7 +27,11 @@
 #define GRAY
 #define FAST_AND_DIRTY
 
-unsigned char tabtiles[25][32]={
+
+#define NR_ROWS 25
+#define NR_COLS 32
+
+unsigned char tabtiles[NR_ROWS][NR_COLS]={
 {1,1,2,3,4,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,0,4,2,1,2,4,5,3,2,1,5},
 {1,0,4,2,2,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,3,4,2,1,2,4,5,3,2,1,3},
 {1,4,2,0,0,5,2,1,2,3,1,1,2,3,4,2,1,2,3,4,2,3,4,2,1,2,0,5,3,2,1,3},
@@ -321,11 +325,11 @@ rte");
 #endif
 
 #ifdef FAST_AND_DIRTY
-unsigned short fpssprite[10]={0,0,0,0,0,0,0,0,0,0};
+unsigned char fpssprite[20]={0};
 #endif
 
 #ifdef FAST_AND_DIRTY
-extern void Sprite16_BLIT_R_very_special(register unsigned short mask asm("%d1"), register unsigned short* src asm("%a1")) __attribute__((__regparm__));
+extern void Sprite16_BLIT_R_very_special(register unsigned short mask asm("%d1"), register unsigned char* src asm("%a1")) __attribute__((__regparm__));
 asm("
 .text
 .globl Sprite16_BLIT_R_very_special
@@ -333,7 +337,7 @@ asm("
 
 Sprite16_BLIT_R_very_special:
     moveq    #5-1,%d2
-    lea      0x4C00.w,%a0
+    movea.l  __D_plane(%pc),%a0
 
 _loop_Sprite16_BLIT_R:
     move.w   (%a0),%d0
@@ -463,6 +467,7 @@ void _main(void)
 				*((unsigned long *)fpssprite+1)=0;
 				*((unsigned long *)fpssprite+2)=0;
 				*((unsigned long *)fpssprite+3)=0;
+				*((unsigned long *)fpssprite+4)=0;
 				DrawStr(0,0,fps_str,A_NORMAL);
 #endif
 				count=fps=0;

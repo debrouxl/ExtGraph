@@ -25,7 +25,7 @@
 
 void _main(void) {
     LCD_BUFFER backbuffer;
-    unsigned long buffer[100*5];
+    unsigned char buffer[100*5*4];
     unsigned short i,j;
 
     LCD_save(backbuffer);
@@ -61,11 +61,11 @@ void _main(void) {
 
     for (j=0;j<64;j++) {
         for (i=0;i<5;i++) {
-            Sprite32Get_R(j+(i<<5),0,100,backbuffer,buffer+100*i);
+            Sprite32Get_R(j+(i<<5),0,100,backbuffer,((unsigned long*)buffer)+100*i);
         }
         ClrScr();
         for (i=0;i<5;i++) {
-            Sprite32_OR_R(i<<5,0,100,buffer+100*i,LCD_MEM);
+            Sprite32_OR_R(i<<5,0,100,((unsigned long*)buffer)+100*i,LCD_MEM);
         }
     }
 
