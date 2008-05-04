@@ -49,7 +49,7 @@ FadeOutToWhite_CWS1_R:
 
 
     subq.w   #1,%d7
-    bmi.s    0f
+    bmi.s    10f
     move.w   %d7,%d2
 1:
     lea      -30(%a2),%a2
