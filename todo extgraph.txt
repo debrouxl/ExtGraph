@@ -13,7 +13,9 @@ X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 /* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
 -> FastDrawLargeBufferToScreen_R. Does not currently do anything if less than 240x128 pixels have to be drawn.
 
-0* ClipSpriteX8_R.
+/* ClipSpriteX8*R.
+    Make Get.
+    Oliver Hoog says MASK doesn't work when bytewidth > 1, why is that ?
 
 /* Check that all ClipSpriteX8 and GrayClipISpriteX16 work.
 (Time to make a testcase/demo ?)

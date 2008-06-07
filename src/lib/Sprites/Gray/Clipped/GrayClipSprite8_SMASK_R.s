@@ -150,7 +150,7 @@ GrayClipSprite8_SMASK_R:
 5:
     moveq.l  #-1,%d3
     move.b   (%a4)+,%d3
-    asr.w    %d0,%d1
+    asr.w    %d0,%d3
 
     moveq    #0,%d1
     move.b   (%a2)+,%d1
