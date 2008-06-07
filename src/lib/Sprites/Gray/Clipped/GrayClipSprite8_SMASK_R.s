@@ -96,7 +96,6 @@ GrayClipSprite8_SMASK_R:
     move.b   (%a4)+,%d3
     rol.w    %d0,%d3
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
     lsl.b    %d0,%d1		| shifting
     and.b    %d3,(%a0)
@@ -152,7 +151,6 @@ GrayClipSprite8_SMASK_R:
     move.b   (%a4)+,%d3
     asr.w    %d0,%d3
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
     lsr.b    %d0,%d1
     and.b    %d3,(%a0)
