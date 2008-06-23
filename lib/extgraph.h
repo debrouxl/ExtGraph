@@ -407,8 +407,12 @@ char FastTestLine_BE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
 char FastTestLine_LE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
 char FastTestLine_RE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
 
+// WARNING: ClipLine_R performs no checking on the value of a1. If you pass a1 = 0, you'll get "Protected Memory Violation".
+// (but in C, you do want to use this parameter to get the clipped coordinates)
 void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1")) __attribute__((__regparm__));
-// In assembly, you can use _ClipLine_R, which returns the clipped coordinates in d0-d3 and the result (NULL if nothing to draw) in a0.
+// In assembly, you can use _ClipLine_R:
+// * arguments: x1 -> d0, y1 -> d1, x2 -> d2, y2 -> d3.
+// * return value: clipped coordinates in d0-d3, 0 in a0 if nothing to draw (nonzero otherwise).
 void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode)) __attribute__((__stkparm__));
 void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color)) __attribute__((__stkparm__));
 
@@ -479,8 +483,8 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
 
 
 //-----------------------------------------------------------------------------
-// Functions for filled triangle drawing and special line drawing functions
-// fit for them. No equivalent in AMS. Added in 2.00 Beta 5.
+// Functions for filled triangle drawing. No equivalent in AMS. Added in 2.00
+// Beta 5.
 // Can you figure the code of the outlined triangle drawing functions ? ;-)
 //--------------------------------** WARNING **--------------------------------
 // Gray(Clip)FilledTriangle_R and all GrayDrawSpan require consecutive grayscale
@@ -490,7 +494,6 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
 // NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS (OK, these
 // are very infrequent in 2007, but still...).
 //--------------------------------** WARNING **--------------------------------
-// All DrawSpan are clipped.
 // The difference between FilledTriangle_R and ClipFilledTriangle_R, and their
 // grayscale versions, is currently only a shift count. Higher shift counts
 // give better-looking triangles (smaller accumulated errors due to round-down
@@ -505,12 +508,23 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
 //-----------------------------------------------------------------------------
 void FilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 void ClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
+void GrayFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+void GrayClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+
+
+
+//-----------------------------------------------------------------------------
+// Special horizontal line drawing functions fit for filled triangle and
+// circle functions.
+// Unlike (Gray)FastDrawHLine(2B)_R, these ones are clipped.
+// The "addr"/"addrs" pointer is interpreted as the address of the beginning
+// of the screen row to which x1 and x2 relate. See ClipFilledTriangle_R
+// for an example of use.
+//-----------------------------------------------------------------------------
 void DrawSpan_OR_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0"));
 void DrawSpan_XOR_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0"));
 void DrawSpan_REVERSE_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0"));
 
-void GrayFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
-void GrayClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
 void GrayDrawSpan_WHITE_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0"));
 void GrayDrawSpan_LGRAY_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0"));
 void GrayDrawSpan_DGRAY_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0"));

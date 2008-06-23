@@ -23,6 +23,8 @@ ClipLine_R:
 
 _ClipLine_R:
     movem.l  %d4-%d7,-(%sp)
+    moveq    #1,%d4
+    movea.l  %d4,%a0
 
 | This is the Cohen-Sutherland line clipping algorithm. First, we try and trivially reject.
     bsr.s    3f

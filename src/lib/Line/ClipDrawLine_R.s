@@ -10,12 +10,13 @@ ClipDrawLine_R:
     jbsr     _ClipLine_R
     movem.w  %d0-%d3,(%a1)
     cmpa.w   #0,%a0
-    beq.s    0f | Nothing to draw.
-    move.l   (%sp)+,%a0
-    move.w   4+4+0(%sp),-(%sp)
-    move.l   4+4+2+2(%sp),%a1
+    beq.s    0f
+| Something to draw.
+    move.l   (%sp),%a0
+    move.w   4+4+4(%sp),(%sp)
+    move.l   4+4+6(%sp),%a1
     jsr      (%a1)
 0:
-    addq.l   #2,%sp
+    addq.l   #4,%sp
     move.l   (%sp)+,%d3
     rts
