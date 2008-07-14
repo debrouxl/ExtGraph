@@ -464,7 +464,7 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"), short x1 asm("%d0"), short 
 // so as not to use too many registers, which makes the used algorithm less
 // efficient.
 // NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS (OK, these
-// are very infrequent in 2007, but still...).
+// are very infrequent in 2008, but still...).
 //--------------------------------** WARNING **--------------------------------
 // Most routines added in 2.00 Beta 5.
 //-----------------------------------------------------------------------------
@@ -492,7 +492,7 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
 // tilemap engine, for more information) so as not to use too many registers,
 // which makes the used algorithm less efficient.
 // NOT PROVIDING THEM SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS (OK, these
-// are very infrequent in 2007, but still...).
+// are very infrequent in 2008, but still...).
 //--------------------------------** WARNING **--------------------------------
 // The difference between FilledTriangle_R and ClipFilledTriangle_R, and their
 // grayscale versions, is currently only a shift count. Higher shift counts

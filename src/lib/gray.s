@@ -1,3 +1,4 @@
+
 |******************************************************************************
 |
 | project name:    GrayScale-Support for TIGCC
@@ -19,7 +20,7 @@
 |.globl ALWAYS_HW2_TESTING
 
 
-	.xdef GrayOn,GrayOff,__D_plane,__L_plane,__gray_handle,__gray_hw_type|, __gray_used_mem
+	.xdef GrayOn,GrayOff,__D_plane,__L_plane,__gray_handle,__gray_hw_type, __gray_used_mem
 	.xdef __switch_cnt,__gray_old_int1_hw1,__gray_old_int1_hw2
 	.xdef __gray_sync_n_count,__gray_plane_index
 	.xdef __gray_dbl_offset,__L_plane2,__D_plane2
