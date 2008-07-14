@@ -3,8 +3,6 @@
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from
 | that of Exploder's routine.
-| Bench on a circle of radius 25 drawn at (30;30), real 89 HW2 AMS 2.05, 
-| PRG_getStart() = 0xCE: 45 ticks to draw 2000 circles, ~1100 circles / sec.
 
 .text
 .globl GrayClipFastOutlinedCircle_R

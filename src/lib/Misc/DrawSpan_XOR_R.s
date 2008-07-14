@@ -8,16 +8,6 @@
 .even
 .globl DrawSpan_XOR_R
 DrawSpan_XOR_R:
-/*
-cmpi.w #160,%d0
-bhi.s 0f
-cmpi.w #160,%d1
-bhi.s 0f
-bra.s 1f
-
-0: bra.s 0b
-1:
-*/
     cmp.w    %d0,%d1        | if (x1>x2) exchange(x1,x2)
     bge.s    10f
     exg      %d0,%d1

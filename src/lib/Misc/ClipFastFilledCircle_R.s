@@ -3,8 +3,6 @@
 | Routine based on Exploder's routine written in C, using FastDrawLine.
 | Rewritten in plain assembly by Lionel, now using DrawSpan as callbacks
 | instead of hard-coding 
-| Bench on a circle of radius 25 drawn at (30;30), real 89 HW2 AMS 2.05, 
-| PRG_getStart() = 0xCE: 45 ticks to draw 2000 circles, ~1100 circles / sec.
 
 | Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
 | Julien started doing it for the new X8 routines.
@@ -12,10 +10,11 @@
 .set _EXT_MAX_LCD_HEIGHT, 127 | Number of rows of the video screen.
 
 .text
-.globl ClipFastFilledCircle_R
+.globl ClipFastFilledCircle_R, GrayClipFastFilledCircle_R
 .even
-/*
+
 ClipFastFilledCircle_R:
+GrayClipFastFilledCircle_R:
     movem.l  %d3-%d7/%a3-%a5,-(%sp)
 
 | Simple check for "completely out of plane".
@@ -82,6 +81,9 @@ ClipFastFilledCircle_R:
 4:
     cmpi.w   #_EXT_MAX_LCD_HEIGHT,%d5
     bhi.s    5f
+| Don't draw middle line twice.
+    cmpa.l   %a3,%a4
+    beq.s    5f
 
     move.w   %a5,%d0
     sub.w    %d6,%d0 | xc - x
@@ -138,8 +140,8 @@ ClipFastFilledCircle_R:
 8:
     movem.l  (%sp)+,%d3-%d7/%a3-%a5
     rts
-*/
 
+/*
 | This version works, but it is ~20% slower.
 ClipFastFilledCircle_R:
     movem.l  %d3-%d7/%a3-%a5,-(%sp)
@@ -258,4 +260,4 @@ ClipFastFilledCircle_R:
 8:
     movem.l  (%sp)+,%d3-%d7/%a3-%a5
     rts
-
+*/

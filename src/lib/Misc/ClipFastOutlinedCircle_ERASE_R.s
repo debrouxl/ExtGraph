@@ -6,6 +6,11 @@
 | Bench on a circle of radius 25 drawn at (30;30), real 89 HW2 AMS 2.05, 
 | PRG_getStart() = 0xCE: 45 ticks to draw 2000 circles, ~1100 circles / sec.
 
+| Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
+| Julien started doing it for the new X8 routines.
+.set _EXT_MAX_LCD_WIDTH, 239 | Number of columns of the video screen
+.set _EXT_MAX_LCD_HEIGHT, 127 | Number of rows of the video screen.
+
 .text
 .globl ClipFastOutlinedCircle_ERASE_R
 .even
@@ -14,12 +19,12 @@ ClipFastOutlinedCircle_ERASE_R:
     movem.l  %d3-%d7/%a2-%a5,-(%sp)
 
 | Simple check for "completely out of plane".
-    moveq    #127,%d3
+    moveq    #_EXT_MAX_LCD_HEIGHT,%d3
     add.w    %d2,%d3
     cmp.w    %d3,%d1
     bge.w    8f
     
-    addi.w   #239-127,%d3
+    addi.w   #_EXT_MAX_LCD_WIDTH-_EXT_MAX_LCD_HEIGHT,%d3
     cmp.w    %d3,%d0
     bge.w    8f
 
