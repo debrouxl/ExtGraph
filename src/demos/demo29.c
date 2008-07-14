@@ -367,11 +367,6 @@ __attribute__((__regparm__)) void SpecialSprite16_RPLC_R(short x asm("%d0"), sho
     }
 }
 
-
-#define HEIGHT C89_92V200(100,128)
-#define WIDTH  C89_92V200(160,240)
-
-
 // Try (nearly) every trick to be as fast as possible.
 void _main(void)
 {
@@ -452,7 +447,9 @@ void _main(void)
 #endif
 
 			BEGIN_KEYTEST
-			if(_keytest_optimized(RR_RIGHT) && (xscroll < NR_COLS*16 - WIDTH))
+			// TODO: 240 -> LCD_WIDTH when FastDrawLargeBufferToScreen_R is fully implemented,
+			// or a 89 version is made.
+			if(_keytest_optimized(RR_RIGHT) && (xscroll < NR_COLS*16 - 240)) 
 			{
 				xscroll++;
 			}
@@ -460,7 +457,9 @@ void _main(void)
 			{
 				xscroll--;
 			}
-			if(_keytest_optimized(RR_DOWN) && (yscroll < NR_ROWS*16 - HEIGHT))
+			// TODO: 128 -> LCD_WIDTH when FastDrawLargeBufferToScreen_R is fully implemented,
+			// or a 89 version is made.
+			if(_keytest_optimized(RR_DOWN) && (yscroll < NR_ROWS*16 - 128))
 			{
 				yscroll++;
 			}

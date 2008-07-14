@@ -14,7 +14,6 @@ FastDrawLargeBufferToScreen_R:
 
     move.w   %d3,%d6
     sub.w    %d1,%d6
-    blt.s    0b
 | Will draw d6 lines.
 
     cmpi.w   #128,%d6
@@ -27,7 +26,6 @@ FastDrawLargeBufferToScreen_R:
     move.w   %d2,%d7
     lsl.w    #4,%d7
     sub.w    %d0,%d7
-    blt.s    0b
 | Will draw d7 pixels.
 
     cmpi.w   #240,%d7

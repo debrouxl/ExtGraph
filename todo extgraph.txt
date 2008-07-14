@@ -10,8 +10,8 @@ X* Check that PixCollide* are the latest version (further optimization by Jesse 
 X* Check that the forked grayscale routine is that optimized by Jesse Frey.
 -> Yes, and it has further optimizations.
 
-/* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
--> FastDrawLargeBufferToScreen_R. Does not currently do anything if less than 240x128 pixels have to be drawn.
+X* Draw(Gray)Buffer-like function with given bytewidth (and height). Another suggestion of Oliver Hoog.
+-> FastDrawLargeBufferToScreen_R.
 
 X* De-pessimize (dbf; rts) FastSprite*_MIRROR_H_R routines.
 
@@ -40,6 +40,8 @@ These are useful functions in their own right.
 
 /* Plane -> plane draw operations.
 -> TODO (?): TRANB/D/L/W (huh, that's a LOT of planes).
+
+0* FastDrawLargeBufferToScreen_R: make a 89 version and/or a version that can draw less than 240x128 pixels.
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)
