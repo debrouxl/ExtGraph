@@ -17,8 +17,8 @@ GrayClipDrawLine_R:
     move.l   (%a2)+,%a1
     move.l   (%a2)+,%a2
     jsr      (%a2)
-0:
     addq.l   #2,%sp
+0:
     move.l   (%sp)+,%a2
     move.l   (%sp)+,%d3
     rts

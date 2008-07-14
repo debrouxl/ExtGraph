@@ -17,8 +17,12 @@ X* Check that the forked grayscale routine is that optimized by Jesse Frey.
     Make Get, RPLC.
     Oliver Hoog says MASK doesn't work when bytewidth > 1, why is that ?
 
+X* Fix GrayClipDrawLine_R when both points are outside of screen. Reported by Oliver Hoog.
+
 /* Check that all ClipSpriteX8 and GrayClipISpriteX16 work (it doesn't seem so).
 Time to make testcase/demo...
+
+X* De-pessimize (dbf; rts) FastSprite*_MIRROR_H_R routines.
 
 0* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on *8 / *X8 routines.
 

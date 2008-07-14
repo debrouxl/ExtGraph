@@ -5,10 +5,9 @@
 .even
 
 FastSprite32_MIRROR_H_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    bmi.s    0f
 
-0:
     move.l   %a2,-(%sp)
     lea.l    FastSpriteX_MIRROR_H_table,%a2
     addq.l   #4,%a1
@@ -33,4 +32,5 @@ FastSprite32_MIRROR_H_R:
     dbf      %d2,1b
     
     move.l   (%sp)+,%a2
+0:
     rts

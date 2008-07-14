@@ -5,10 +5,9 @@
 .even
 
 FastSpriteX8_MIRROR_H_R:
-    dbf      %d2,0f
-    rts
+    subq.w   #1,%d2
+    bmi.s    0f
 
-0:
     adda.w   %d1,%a1
     dbf      %d1,1f
     rts
@@ -31,4 +30,5 @@ FastSpriteX8_MIRROR_H_R:
     
     move.w   (%sp)+,%d3
     move.l   (%sp)+,%a2
+0:
     rts
