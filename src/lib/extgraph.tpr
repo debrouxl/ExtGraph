@@ -52,7 +52,7 @@ Save Screen=0
 Optimize ROM Calls=0
 
 [File Editing]
-Open File=/home/Lionel_Debroux/svn/ExtGraph/src/lib/Misc/FastXORScreen_R.s
+Open File=
 
 [Included Files]
 C File 1=Misc\unpack.c
