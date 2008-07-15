@@ -36,5 +36,6 @@
 @call buildcmp.bat demo27
 @call buildsep.bat demo28
 @call buildsep.bat demo29
+@call buildcmp.bat demo30
 @pause
 @echo on

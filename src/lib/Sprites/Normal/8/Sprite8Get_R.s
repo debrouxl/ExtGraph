@@ -45,8 +45,7 @@ Sprite8Get_R:
 3:
     swap     %d2
 2:
-    move.l   (%a0),%d0
-    swap     %d0
+    move.w   (%a0),%d0
     lsr.w    %d1,%d0
     move.b   %d0,(%a1)+
     lea      30(%a0),%a0

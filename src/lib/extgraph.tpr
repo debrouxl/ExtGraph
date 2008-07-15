@@ -515,5 +515,8 @@ GNU Assembler File 424=Misc\GrayClipFastOutlinedCircle_LGRAY_R.s
 GNU Assembler File 425=Misc\GrayClipFastOutlinedCircle_DGRAY_R.s
 GNU Assembler File 426=Misc\GrayClipFastOutlinedCircle_WHITE_R.s
 GNU Assembler File 427=Misc\GrayClipFastOutlinedCircle_INVERT_R.s
+GNU Assembler File 428=Sprites\Clipped\ClipSprite8Get_R.s
+GNU Assembler File 429=Sprites\Clipped\ClipSprite16Get_R.s
+GNU Assembler File 430=Sprites\Clipped\ClipSprite32Get_R.s
 Header File 1=internal.h
 

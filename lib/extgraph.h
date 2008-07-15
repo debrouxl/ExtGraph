@@ -736,6 +736,7 @@ void ClipSprite8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h
 void ClipSprite8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
+void ClipSprite8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), void *dest asm("%a0"), unsigned char *sprt asm("%a1"));
 
 
 void ClipSprite16_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
@@ -744,6 +745,7 @@ void ClipSprite16_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short 
 void ClipSprite16_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
+void ClipSprite16Get_R(short x asm("%d0"),short y asm("%d1"),unsigned short h asm("%d2"), void *dest asm("%a0"), unsigned short *sprt asm("%a1"));
 
 
 void ClipSprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
@@ -752,12 +754,16 @@ void ClipSprite32_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short 
 void ClipSprite32_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite32_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite32_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
+void ClipSprite32Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), void *dest asm("%a0"), unsigned long *sprt asm("%a1"));
 
 
-void ClipSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), unsigned char *sprt asm("%a1"), unsigned char *mask asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char * maskval asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char *mask asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), void *dest asm("%a0"), unsigned char *sprt asm("%a1")) __attribute__((__regparm__));
 
 
 
