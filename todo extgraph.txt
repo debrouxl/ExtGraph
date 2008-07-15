@@ -23,9 +23,7 @@ Time to make testcase/demo...
 
 0* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on *8 / *X8 routines.
 
-0* Improve demo19, especially testing of circle functions...
-    GrayClipFastOutlinedCircle_R is not implemented...
-    Rewrite B/W outlined circle functions using a macro.
+X* Improve demo19, especially testing of circle functions...
 
 
 -- Beta 5 --
@@ -42,6 +40,8 @@ These are useful functions in their own right.
 -> TODO (?): TRANB/D/L/W (huh, that's a LOT of planes).
 
 0* FastDrawLargeBufferToScreen_R: make a 89 version and/or a version that can draw less than 240x128 pixels.
+
+0* (?) write generic (Gray)ClipFastOutlinedCircle using SMC ?
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)

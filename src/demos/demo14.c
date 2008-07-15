@@ -207,7 +207,7 @@ void _main(void)
     return;
 
 // Initialisations
-  (void *)matrix=bloc;
+  matrix=(char (*)[])bloc;
   vecran=bloc+16*32;
   big_vscreen=bloc+16*32+LCD_SIZE*2;
 

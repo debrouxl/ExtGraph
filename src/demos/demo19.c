@@ -264,7 +264,7 @@ void _main(void) {
     for (j=0;j<NR_LOOPS;j++) {
         for (i=0;i<RANDOM_CIRCLES*3;i+=3) {
             k = random(15)+20;
-            GrayClipFastOutlinedCircle_R(__gray_used_mem,random(240),random(128),k,GrayDrawSpan_INVERT_R);
+            GrayClipFastOutlinedCircle_INVERT_R(__gray_used_mem,random(240),random(128),k);
         }
     }
     GrayOff();

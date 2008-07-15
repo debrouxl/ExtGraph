@@ -62,8 +62,12 @@ FastOutlinedCircle_INVERT_R:
 0:
     bchg     %d5,(%a0)
     bchg     %d6,(%a1)
+| Don't draw middle line twice.
+    cmpa.l   %a0,%a2
+    beq.s    4f
     bchg     %d5,(%a2)
     bchg     %d6,(%a3)
+4:
 
 | if(d + y > 0) {
     move.w   %d2,%d3

@@ -477,7 +477,11 @@ void ClipFastOutlinedCircle_INVERT_R(void *plane asm("%a0"), short xcenter asm("
 
 void ClipFastFilledCircle_R(void *plane asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 
-void GrayClipFastOutlinedCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
+void GrayClipFastOutlinedCircle_BLACK_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
+void GrayClipFastOutlinedCircle_LGRAY_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
+void GrayClipFastOutlinedCircle_DGRAY_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
+void GrayClipFastOutlinedCircle_WHITE_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
+void GrayClipFastOutlinedCircle_INVERT_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
 void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
 
 

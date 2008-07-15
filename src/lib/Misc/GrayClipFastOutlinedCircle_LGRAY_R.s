@@ -1,4 +1,4 @@
-| C prototype: void ClipFastOutlinedCircle_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+| C prototype: void GrayClipFastOutlinedCircle_INVERT_R(void *planes asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from
@@ -12,10 +12,10 @@
 .set _EXT_MAX_LCD_HEIGHT, 127 | Number of rows of the video screen.
 
 .text
-.globl ClipFastOutlinedCircle_INVERT_R
+.globl GrayClipFastOutlinedCircle_LGRAY_R
 .even
 
-ClipFastOutlinedCircle_INVERT_R:
+GrayClipFastOutlinedCircle_LGRAY_R:
     movem.l  %d3-%d7/%a2-%a5,-(%sp)
 
 | Simple check for "completely out of plane".
@@ -121,34 +121,34 @@ ClipFastOutlinedCircle_INVERT_R:
     bhi.s    4f
     
     cmpi.w   #127,%d1 | if (!((unsigned short)y1 > 127)) {
-    bhi.s    4f
+    bhi.s    5f
 
-    bchg     %d6,(%a0) | x1, y1
+    bclr     %d6,(%a0) | x1, y1
+    bset     %d6,3840(%a0) | x1, y1
+
+5:
+    cmpi.w   #127,%d3 | if (!((unsigned short)y2 > 127)) {
+    bhi.s    4f
+    
+    bclr     %d6,(%a2) | x1, y2
+    bset     %d6,3840(%a2) | x1, y2
 
 4:
     cmpi.w   #239,%d2 | if (!((unsigned short)x2 > 239)) {
-    bhi.s    5f
+    bhi.s    7f
 
     cmpi.w   #127,%d1 | if (!((unsigned short)y1 > 127)) {
-    bhi.s    5f
-
-    bchg     %d7,(%a1) | x2, y1
-
-5:
-| Don't draw middle line twice.
-    cmpa.l   %a0,%a2
-    beq.s    7f
-
-    cmpi.w   #127,%d3 | if (!((unsigned short)y2 > 127)) {
     bhi.s    6f
-    
-    bchg     %d6,(%a2) | x1, y2
+
+    bclr     %d7,(%a1) | x2, y1
+    bset     %d7,3840(%a1) | x2, y1
 
 6:
     cmpi.w   #127,%d3 | if (!((unsigned short)y2 > 127)) {
     bhi.s    7f
     
-    bchg     %d7,(%a3) | x2, y2
+    bclr     %d7,(%a3) | x2, y2
+    bset     %d7,3840(%a3) | x2, y2
 
 7:
 | if(d + r > 0) {
@@ -203,7 +203,7 @@ ClipFastOutlinedCircle_INVERT_R:
 
 1:
     move.l   %a5,%d5
-    bge.s    0b
+    bge.w    0b
 
 8:
     movem.l  (%sp)+,%d3-%d7/%a2-%a5
