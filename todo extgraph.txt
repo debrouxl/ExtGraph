@@ -18,21 +18,30 @@ X* De-pessimize (dbf; rts) FastSprite*_MIRROR_H_R routines.
 X* Fix GrayClipDrawLine_R when both points are outside of screen. Reported by Oliver Hoog.
 
 /* Check that all ClipSpriteX8 and GrayClipISpriteX16 work (it doesn't seem so, e.g.
-Oliver Hoog says MASK doesn't work when bytewidth > 1) and make the missing ones (Get, RPLC).
+Oliver Hoog says MASK doesn't work when bytewidth > 1) and make the missing ones (BLIT, Get, RPLC).
 Time to make testcase/demo...
 
 0* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on *8 / *X8 routines.
 
 X* Improve demo19, especially testing of circle functions...
 
+X* Set of functions that modify X8 sprite data:
+    * AND/OR/XOR all rows with same mask;
+    * AND/OR/XOR sprite data with sprite data of same size;
+
 
 -- Beta 5 --
 
 
-0* Set of functions that modify X8 sprite data:
-    * AND/OR/XOR all rows with same mask;
-    * AND/OR/XOR sprite data with sprite data of same size;
-These are useful functions in their own right.
+0* The C function prototypes embedded in the .s files are outdated, and they're a pain to maintain.
+Make some script that replaces them by those in extgraph.h.
+
+?* Split extgraph.h, timemap.h into many small header files, move the functions' documentation into Doxygen comments ?
+
+0* Rewrite filled triangle functions in ASM, while changing the algorithm (probably).
+Due to rounding errors, the current algorithm doesn't work well. The shift count should be higher (but that will
+require long division).
+Another (naive ?) algorithm could use _ClipLine_R and DrawMultiHLines (see below) ?
 
 0* ScaleSprite functions that draw to a sprite instead of a screen. Suggestion of "epsilon".
 
@@ -52,7 +61,7 @@ These are useful functions in their own right.
 -> Ouch, rather hard.
 
 0* Rectangular area operations: Get/AND/OR/XOR/Copy.
-Can be emulated with functions that modify X8 sprite data + SpriteX8Get/AND/OR/XOR.
+(Might be emulated with functions that modify X8 sprite data + (Clip)SpriteX8Get/AND/OR/XOR, but that's somewhat cumbersome for the user).
 
 /* demo26: bench generic lines, horiz lines, rectangles, triangles (for now: what about circles, sprites ?) in ExtGraph,
 Graphlib, Genlib. Make a fair demo, i.e. use the distinctive features of each library if any, instead of handicapping it.
@@ -93,11 +102,6 @@ SetupCharSet).
     0* make DrawMultiHLines; reimplement DrawMultiLines, A_NORMAL, A_XOR and A_REVERSE modes.
     Note: an algorithm for circles, triangles and lines could be: use the stack (max 2*128 bytes) to store endpoints,
     call DrawMultiHLines.
-    0* "Extremely Fast Line Algorithm" (EFLA) by Po-Han Lin: what does "Freely useable in non-commercial applications as
-long as credits to Po-Han Lin and link to http://www.edepot.com is provided in source code AND CAN BE SEEN IN COMPILED
-EXECUTABLE [emphasis mine]" mean exactly ? Anyway, while the C version of EFLA which calls a subroutine to plot a pixel
-is faster than the C version of Bresenham, it's not sure that the ASM version of EFLA would be faster than the ASM
-version of Bresenham.
 
 0* Preshifted 8x8 ?
 
@@ -105,6 +109,7 @@ version of Bresenham.
 /* Transition effects: waiting loops in most of them, one routine makes one effect + demo18. Unless otherwise noted,
 modes are invert (B/W - gray), FOTB (B/W - gray), FOTW (B/W - gray), FI (B/W - gray). B/W routines: add "BW" in front of
 name.
+Rather fun, but not precisely useful, hence at the bottom of the todo list.
     /* the transition effect at the very beginning of TI-Chess: outer border -> center and vice-versa, FOTB/FOTW,
 160x100 and 240x128. Name: "ZapMinimize"/"ZapMaximize". Take code from TI-Hex.
     0* rectangles outlined concentriques, B/W et couleurs COLOR_WHITE/LIGHTGRAY/DARKGRAY/BLACK, extérieur vers intérieur

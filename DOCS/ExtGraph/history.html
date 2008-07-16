@@ -13,7 +13,7 @@
 <blockquote>
 <table border=1>
 <tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
-<tr><td>2.00 Beta 5</td><td>xx/xx/2007</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
+<tr><td>2.00 Beta 5</td><td>xx/xx/2008</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>
 <tr><td>           </td><td>          </td><td>Restructured the entire documentation, so that it
@@ -81,11 +81,10 @@
 <tr><td>           </td><td>          </td><td>On 2005/08/12, created a <strong>SVN repository</strong> for ExtGraph at
                                         <a href="http://opensvn.csie.org/ExtGraph">http://opensvn.csie.org/ExtGraph</a>.
                                         Anonymous checkout allowed, obviously, especially since the trunk was, for
-                                        more than a year and a half, the only way to have the numerous bugfixes of
-                                        this release.
-                                        As every SVN trunk, the trunk may contain broken or short-lived new functions.
-                                        It did several times in the long time before this beta, especially when I was
-                                        adding triangle/circle functions and their DrawSpan subroutines !</td></tr>
+                                        nearly three years, the only way to have the numerous bugfixes of this release.
+                                        As every SVN trunk, the trunk may sometimes contain broken or short-lived new
+                                        functions. It did several times in the long time before this beta, especially
+                                        when I was adding triangle/circle functions and their DrawSpan subroutines !</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed <strong>GrayClip(I)Sprite32_MASK_R</strong>. Thanks to Olivier
                                         Givaudan for the report.</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed <strong>*SpriteX8Get(_R)</strong>, they used to crash the
@@ -157,8 +156,24 @@
                                         lachprog's Super Mario 3 TI-68k.</td></tr>
 <tr><td>           </td><td>          </td><td>Slightly optimized all <strong>FloodFill</strong> routines, added
                                         <strong>"noshade" FloodFill</strong> routines.</td></tr>
-<tr><td>           </td><td>          </td><td>I'm almost sure I forgot at least an item :'( . Complain if I've missed
-                                        an important contribution.</td></tr>
+<tr><td>           </td><td>          </td><td>In December 2007, switched to a DSCM (Git) for managing the commits.
+                                        Kevin still says that first-generation centralized CVS works well...
+                                        Yeah, sure, it doesn't even work reliably when there's only one committer (non-atomic
+                                        commit, the kind of shortcomings that should be enough for any rational human being to
+                                        dismiss CVS outright...), I've experienced it myself.<br>
+                                        What's more, CVS is slow, it doesn't have native support for mirroring, its tagging and
+                                        branching are inefficient, and it doesn't know how to stack multiple commits locally
+                                        (and rewrite them if necessary, before committing them to the central repository).<br>
+                                        SVN is not much of an improvement over CVS in those areas. SVK improves the situation
+                                        but remains far from the efficiency of real DSCM (Git, Mercurial, etc.).</td></tr>
+<tr><td>           </td><td>          </td><td>Implemented ClipSprite*Get_R routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Implemented more ClipSpriteX8_*_R routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed multiple bugs reported by Oliver Hoog and Nick Banks.</td></tr>
+<tr><td>           </td><td>          </td><td>Implemented multiple routines requested by Oliver Hoog and Nick Banks.</td></tr>
+<tr><td>           </td><td>          </td><td>Added multiple demos, which also serve as testcases for the routines.</td></tr>
+<tr><td>           </td><td>          </td><td>Added "unsigned" to many parameters that are supposed to be unsigned.</td></tr>
+<tr><td>           </td><td>          </td><td>I'm almost sure I forgot multiple items :'( . Complain if I've missed
+                                        important contributions.</td></tr>
 <tr><td>2.00 Beta 4</td><td>25/12/2004</td><td>Removed <strong>(I)SHADOW(2)</strong> routines: they are nearly
                                         useless thanks to <strong>Create(I)Sprite(I)Shadow</strong> and OR routines
                                         (which require a small additional amount of space) and

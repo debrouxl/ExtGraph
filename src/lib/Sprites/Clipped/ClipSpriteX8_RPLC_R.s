@@ -1,0 +1,236 @@
+| C prototype: void ClipSpriteX8_RPLC_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d3"),short w asm("%d2"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
+|
+| Based on a routine from GFA-Basic, made by Geoffrey Anneheim, strongly modified by Lionel Debroux
+| to become ClipSpriteX8_OR_R:
+| * changed drawing mode: BLIT -> RPLC.
+
+| Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
+| Julien started doing it for the new X8 routines.
+.set _EXT_MAX_LCD_WIDTH, 239 | Number of columns of the video screen
+.set _EXT_MAX_LCD_HEIGHT, 127 | Number of rows of the video screen.
+
+.text
+.globl ClipSpriteX8_RPLC_R
+.even
+
+ClipSpriteX8_RPLC_R:
+    rts | Unimplemented
+    movem.l  %d3-%d7,-(%sp)
+
+|Zone de non affichage
+    move.w   %d2,%d5				|%d5 = Bytewidth
+    beq.s    0f 				|(d5 == 0)?exit:keep going.
+    neg.w    %d5				|%d5 = -Bytewidth
+    lsl.w    #3,%d5				|-Bytewidth*8
+    cmp.w    %d5,%d0				|x<=%d5
+    jble     0f
+    cmpi.w   #_EXT_MAX_LCD_WIDTH+1,%d0
+    jbge     0f
+    move.w   %d3,%d5				|%d5 = h
+    beq.s    0f 				|(d5 == 0)?exit:keep going.
+    neg.w    %d5				|%d5 = -h
+    cmp.w    %d5,%d1
+    jble     0f
+    cmpi.w   #_EXT_MAX_LCD_HEIGHT+1,%d1
+    jblt     10f
+0:
+    movem.l  (%sp)+,%d3-%d7
+    rts
+
+10:
+|y<0
+    tst.w    %d1
+    jbge     10f
+    add.w    %d1,%d3				|h += y
+    move.w   %d1,%d5				|%d5 = y
+    muls.w   %d2,%d5				|y*Bytewidth
+    suba.w   %d5,%a1				|sprite -= y*Bytewidth
+    suba.w   %d5,%a2				|mask -= y*Bytewidth
+    clr.w    %d1
+10:
+|y+1>=_EXT_MAX_LCD_HEIGHT
+    move.w   %d1,%d5				|%d5 = y
+    add.w    %d3,%d5				|%d5 = y+h
+    cmpi.w   #_EXT_MAX_LCD_HEIGHT+1,%d5
+    jblt     10f
+    move.w   #_EXT_MAX_LCD_HEIGHT+1,%d3		|h = _EXT_MAX_LCD_HEIGHT
+    sub.w    %d1,%d3				|h = _EXT_MAX_LCD_HEIGHT-y
+10:
+    move.w   %d1,%d5
+    lsl.w    #4,%d1
+    sub.w    %d5,%d1
+    add.w    %d1,%d1
+    move.w   %d0,%d5				|%d5 = x
+    asr.w    #3,%d5				|%d5 = x>>8 - arithmetical shift (important !)
+    add.w    %d5,%d1
+    adda.w   %d1,%a0				|offset
+
+    move.w   %d0,%d1				|%d1 = x
+    andi.w   #7,%d1				|%d1 = x&7
+
+    moveq.l  #8,%d4
+    sub.w    %d1,%d4				|8-%d1
+
+    moveq    #30,%d5
+    sub.w    %d2,%d5
+
+|x<0
+    tst.w    %d0
+    jblt     7f
+    move.w   %d2,%d6				|%d6 = Bytewidth
+    lsl.w    #3,%d6				|%d6 = Bytewidth<<3
+    add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
+    subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
+    jbge     8f
+
+    subq.w   #2,%d2
+    subq.w   #1,%d3
+1:
+    moveq    #-1,%d0
+    move.b   (%a2),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)
+    moveq    #0,%d0
+    move.b   (%a1),%d0
+    ror.w    %d1,%d0
+    or.b     %d0,(%a0)+
+
+    move.w   %d2,%d7
+    blt.s    9f
+2:
+    moveq    #-1,%d6
+    move.b   (%a2)+,%d6
+    rol.w    %d4,%d6
+    and.b    %d6,(%a0)
+    move.b   (%a1)+,%d6
+    lsl.w    %d4,%d6
+    or.b     %d6,(%a0)
+    moveq    #-1,%d6
+    move.b   (%a2),%d6
+    ror.w    %d1,%d6
+    and.b    %d6,(%a0)+
+    move.b   (%a1),%d6
+    lsr.w    %d1,%d6
+    or.b     %d6,(%a0)
+    dbf      %d7,2b
+
+9:
+    moveq    #-1,%d0
+    move.b   (%a2)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    move.b   (%a1)+,%d0
+    lsl.w    %d4,%d0
+    or.b     %d0,(%a0)
+    adda.w   %d5,%a0
+    dbf      %d3,1b
+0:
+    movem.l  (%sp)+,%d3-%d7
+    rts
+
+7:
+    neg.w    %d0					|x = -x
+    move.w   %d0,%d6
+    lsr.w    #3,%d6
+
+    subq.w   #1,%d3
+
+    move.w   %d6,%d7
+    lsl.w    #3,%d7
+    cmp.w    %d7,%d0
+    jbeq     10f
+    addq.w   #1,%d6
+10:
+    add.w    %d6,%d5
+
+    move.w   %d2,%d7
+    sub.w    %d6,%d7
+
+    subq.w   #1,%d7
+    move.w   %d7,%d2
+
+    adda.w   %d6,%a0
+4:
+    lea.l    -1(%d6.w,%a1),%a1
+    lea.l    -1(%d6.w,%a2),%a2
+
+    move.w   %d2,%d7
+    blt.s    9f
+6:
+    moveq    #-1,%d0
+    move.b   (%a2)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    move.b   (%a1)+,%d0
+    lsl.w    %d4,%d0
+    or.b     %d0,(%a0)
+    moveq    #-1,%d0
+    move.b   (%a2),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+    move.b   (%a1),%d0
+    lsr.b    %d1,%d0
+    or.b     %d0,(%a0)
+    dbf      %d7,6b
+9:
+    moveq    #-1,%d0
+    move.b   (%a2)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    move.b   (%a1)+,%d0
+    lsl.w    %d4,%d0
+    or.b     %d0,(%a0)
+    adda.w   %d5,%a0
+    dbf      %d3,4b
+0:
+    movem.l  (%sp)+,%d3-%d7
+    rts
+
+8:
+    lsr.w    #3,%d6
+
+    add.w    %d6,%d5
+
+    move.w   %d2,%d7
+    sub.w    %d6,%d7
+    subq.w   #2,%d7
+
+    move.w   %d7,%d2
+
+    subq.w   #1,%d3
+
+5:
+    moveq    #-1,%d0
+    move.b   (%a2),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)
+    move.b   (%a1),%d0
+    lsr.w    %d1,%d0
+    or.b     %d0,(%a0)+
+
+    move.w   %d2,%d7
+    blt.s    9f
+7:
+    moveq    #-1,%d0
+    move.b   (%a2)+,%d0
+    rol.w    %d4,%d0
+    and.b    %d0,(%a0)
+    move.b   (%a1)+,%d0
+    lsl.w    %d4,%d0
+    or.b     %d0,(%a0)
+    moveq    #-1,%d0
+    move.b   (%a2),%d0
+    ror.w    %d1,%d0
+    and.b    %d0,(%a0)+
+    move.b   (%a1),%d0
+    lsr.w    %d1,%d0
+    or.b     %d0,(%a0)
+    dbf      %d7,7b
+9:
+    lea.l    1(%d6.w,%a1),%a1
+    lea.l    1(%d6.w,%a2),%a2
+    adda.w   %d5,%a0
+    dbf      %d3,5b
+
+    movem.l  (%sp)+,%d3-%d7
+    rts

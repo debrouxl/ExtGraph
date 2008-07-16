@@ -518,5 +518,14 @@ GNU Assembler File 427=Misc\GrayClipFastOutlinedCircle_INVERT_R.s
 GNU Assembler File 428=Sprites\Clipped\ClipSprite8Get_R.s
 GNU Assembler File 429=Sprites\Clipped\ClipSprite16Get_R.s
 GNU Assembler File 430=Sprites\Clipped\ClipSprite32Get_R.s
+GNU Assembler File 431=Sprites\Clipped\ClipSpriteX8_BLIT_R.s
+GNU Assembler File 432=Sprites\Clipped\ClipSpriteX8_RPLC_R.s
+GNU Assembler File 433=Sprites\Clipped\ClipSpriteX8Get_R.s
+GNU Assembler File 434=Sprites\SpriteX8Data_withmask_AND_R.s
+GNU Assembler File 435=Sprites\SpriteX8Data_withmask_OR_R.s
+GNU Assembler File 436=Sprites\SpriteX8Data_withmask_XOR_R.s
+GNU Assembler File 437=Sprites\SpriteX8Data_withsprite_AND_R.s
+GNU Assembler File 438=Sprites\SpriteX8Data_withsprite_OR_R.s
+GNU Assembler File 439=Sprites\SpriteX8Data_withsprite_XOR_R.s
 Header File 1=internal.h
 

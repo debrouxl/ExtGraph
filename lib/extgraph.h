@@ -758,7 +758,7 @@ void ClipSprite32Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h 
 
 
 void ClipSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char * maskval asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char *maskval asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char *mask asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
@@ -1248,6 +1248,25 @@ void FastSprite8_MIRROR_H_R(unsigned short h asm("%d2"), unsigned char *sprt asm
 void FastSprite16_MIRROR_H_R(unsigned short h asm("%d2"), unsigned short *sprt asm("%a0"), unsigned short *dest asm("%a1"));
 void FastSprite32_MIRROR_H_R(unsigned short h asm("%d2"), unsigned long *sprt asm("%a0"), unsigned long *dest asm("%a1"));
 void FastSpriteX8_MIRROR_H_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), char *sprt asm("%a0"), unsigned char *dest asm("%a1"));
+
+
+
+//-----------------------------------------------------------------------------
+// Miscellanous SpriteX8 functions: modify sprite data.
+// The "withmask" functions perform a AND/OR/XOR operation of each line of the
+// X8 sprite pointed to by src, with the line pointed to by maskval, storing
+// the result to the area pointed to by dest.
+//
+// The "withsprite" functions perform a AND/OR/XOR operation of the whole
+// X8 sprite pointed to by src, with the sprite of same size pointed to by
+// maskval, storing the result to the area pointed to by dest.
+//-----------------------------------------------------------------------------
+void SpriteX8Data_withmask_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withmask_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withmask_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
 
 
 
