@@ -102,6 +102,35 @@ unsigned char *sprite2;
 static unsigned char *sprite=(unsigned char *)s64x64;
 
 
+/* Clip height, bytewidth, x and y */ \
+ #define SATURATE \
+    if (y < 0) { \
+        h = 64 + y; \
+        ysaturated = 0; \
+    } \
+    else if (y > HEIGHT - 64) { \
+        h = HEIGHT - y; \
+        ysaturated = y; \
+    } \
+    else { \
+        h = 64; \
+        ysaturated = y; \
+    } \
+ \
+    if (x < 0) { \
+        bytewidth = ((64 + x) >> 3) + 1; \
+        xsaturated = 0; \
+    } \
+    else if (x > WIDTH - 64) { \
+        bytewidth = ((WIDTH - 1 - x) >> 3) + 1; \
+        xsaturated = x & ~0x7; \
+    } \
+    else { \
+        bytewidth = 64/8; \
+        xsaturated = x; \
+    } \
+
+
 void __attribute__((__always_inline__)) draw(short x, short y) {
     // fetch background from LCD memory
 
@@ -110,34 +139,7 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
     short h, bytewidth;
     short xsaturated, ysaturated;
 
-    // Clip height.
-    if (y < 0) {
-        h = 64 + y;
-        ysaturated = 0;
-    }
-    else if (y > HEIGHT - 64) {
-        h = HEIGHT - y;
-        ysaturated = y;
-    }
-    else {
-        h = 64;
-        ysaturated = y;
-    }
-
-    // Compute bytewidth.
-    if (x < 0) {
-        bytewidth = ((64 + x) >> 3) + 1;
-        xsaturated = 0;
-    }
-    else if (x > WIDTH - 64) {
-        bytewidth = ((WIDTH - 1 - x) >> 3) + 1;
-        xsaturated = x & ~0x7;
-    }
-    else {
-        bytewidth = 64/8;
-        xsaturated = x;
-    }
-
+    SATURATE
 
     SpriteX8Get_R(xsaturated,ysaturated,h,LCD_MEM,buffer,bytewidth);
 
@@ -151,34 +153,8 @@ void __attribute__((__always_inline__)) restore(short x, short y) {
     short h, bytewidth;
     short xsaturated, ysaturated;
 
-    // Clip height.
-    if (y < 0) {
-        h = 64 + y;
-        ysaturated = 0;
-    }
-    else if (y > HEIGHT - 64) {
-        h = HEIGHT - y;
-        ysaturated = y;
-    }
-    else {
-        h = 64;
-        ysaturated = y;
-    }
-
-    // Compute bytewidth.
-    if (x < 0) {
-        bytewidth = ((64 + x) >> 3) + 1;
-        xsaturated = 0;
-    }
-    else if (x > WIDTH - 64) {
-        bytewidth = ((WIDTH - 1 - x) >> 3) + 1;
-        xsaturated = x & ~0x7;
-    }
-    else {
-        bytewidth = 64/8;
-        xsaturated = x;
-    }
-
+    SATURATE
+    
     ClipSpriteX8_MASK_R(xsaturated,ysaturated,h,bytewidth,buffer,buffer,LCD_MEM);
 }
 

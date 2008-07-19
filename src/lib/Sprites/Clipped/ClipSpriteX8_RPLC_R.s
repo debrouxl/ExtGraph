@@ -2,7 +2,7 @@
 |
 | Based on a routine from GFA-Basic, made by Geoffrey Anneheim, strongly modified by Lionel Debroux
 | to become ClipSpriteX8_OR_R:
-| * changed drawing mode: BLIT -> RPLC.
+| * changed drawing mode: MASK -> RPLC.
 
 | Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
 | Julien started doing it for the new X8 routines.
@@ -14,7 +14,6 @@
 .even
 
 ClipSpriteX8_RPLC_R:
-    rts | Unimplemented
     movem.l  %d3-%d7,-(%sp)
 
 |Zone de non affichage
@@ -45,7 +44,6 @@ ClipSpriteX8_RPLC_R:
     move.w   %d1,%d5				|%d5 = y
     muls.w   %d2,%d5				|y*Bytewidth
     suba.w   %d5,%a1				|sprite -= y*Bytewidth
-    suba.w   %d5,%a2				|mask -= y*Bytewidth
     clr.w    %d1
 10:
 |y+1>=_EXT_MAX_LCD_HEIGHT
@@ -87,36 +85,35 @@ ClipSpriteX8_RPLC_R:
     subq.w   #1,%d3
 1:
     moveq    #-1,%d0
-    move.b   (%a2),%d0
+    clr.b    %d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1),%d0
-    ror.w    %d1,%d0
+    lsr.b    %d1,%d0
     or.b     %d0,(%a0)+
 
     move.w   %d2,%d7
     blt.s    9f
 2:
     moveq    #-1,%d6
-    move.b   (%a2)+,%d6
+    clr.b    %d6
     rol.w    %d4,%d6
     and.b    %d6,(%a0)
     move.b   (%a1)+,%d6
     lsl.w    %d4,%d6
     or.b     %d6,(%a0)
     moveq    #-1,%d6
-    move.b   (%a2),%d6
+    clr.b    %d6
     ror.w    %d1,%d6
-    and.b    %d6,(%a0)+
+    and.b    %d6,(%a0)
     move.b   (%a1),%d6
-    lsr.w    %d1,%d6
-    or.b     %d6,(%a0)
+    lsr.b    %d1,%d6
+    or.b     %d6,(%a0)+
     dbf      %d7,2b
 
 9:
     moveq    #-1,%d0
-    move.b   (%a2)+,%d0
+    clr.b    %d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
     move.b   (%a1)+,%d0
@@ -152,20 +149,19 @@ ClipSpriteX8_RPLC_R:
     adda.w   %d6,%a0
 4:
     lea.l    -1(%d6.w,%a1),%a1
-    lea.l    -1(%d6.w,%a2),%a2
 
     move.w   %d2,%d7
     blt.s    9f
 6:
     moveq    #-1,%d0
-    move.b   (%a2)+,%d0
+    clr.b    %d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
     move.b   (%a1)+,%d0
     lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     moveq    #-1,%d0
-    move.b   (%a2),%d0
+    clr.b    %d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)+
     move.b   (%a1),%d0
@@ -174,7 +170,7 @@ ClipSpriteX8_RPLC_R:
     dbf      %d7,6b
 9:
     moveq    #-1,%d0
-    move.b   (%a2)+,%d0
+    clr.b    %d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
     move.b   (%a1)+,%d0
@@ -201,34 +197,33 @@ ClipSpriteX8_RPLC_R:
 
 5:
     moveq    #-1,%d0
-    move.b   (%a2),%d0
+    clr.b    %d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)
     move.b   (%a1),%d0
-    lsr.w    %d1,%d0
+    lsr.b    %d1,%d0
     or.b     %d0,(%a0)+
 
     move.w   %d2,%d7
     blt.s    9f
 7:
     moveq    #-1,%d0
-    move.b   (%a2)+,%d0
+    clr.b    %d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
     move.b   (%a1)+,%d0
     lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     moveq    #-1,%d0
-    move.b   (%a2),%d0
+    clr.b    %d0
     ror.w    %d1,%d0
-    and.b    %d0,(%a0)+
+    and.b    %d0,(%a0)
     move.b   (%a1),%d0
     lsr.w    %d1,%d0
-    or.b     %d0,(%a0)
+    or.b     %d0,(%a0)+
     dbf      %d7,7b
 9:
     lea.l    1(%d6.w,%a1),%a1
-    lea.l    1(%d6.w,%a2),%a2
     adda.w   %d5,%a0
     dbf      %d3,5b
 

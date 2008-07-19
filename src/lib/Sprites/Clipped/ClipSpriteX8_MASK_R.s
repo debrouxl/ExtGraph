@@ -89,9 +89,8 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2),%d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1),%d0
-    ror.w    %d1,%d0
+    lsr.b    %d1,%d0
     or.b     %d0,(%a0)+
 
     move.w   %d2,%d7
@@ -101,18 +100,16 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2)+,%d6
     rol.w    %d4,%d6
     and.b    %d6,(%a0)
-    moveq    #0,%d6
     move.b   (%a1)+,%d6
-    rol.w    %d4,%d6
+    lsl.w    %d4,%d6
     or.b     %d6,(%a0)
     moveq    #-1,%d6
     move.b   (%a2),%d6
     ror.w    %d1,%d6
-    and.b    %d6,(%a0)+
-    moveq    #0,%d6
+    and.b    %d6,(%a0)
     move.b   (%a1),%d6
-    rol.w    %d4,%d6
-    or.b     %d6,(%a0)
+    lsr.b    %d1,%d6
+    or.b     %d6,(%a0)+
     dbf      %d7,2b
 
 9:
@@ -120,9 +117,8 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2)+,%d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1)+,%d0
-    rol.w    %d4,%d0
+    lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     adda.w   %d5,%a0
     dbf      %d3,1b
@@ -163,27 +159,24 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2)+,%d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1)+,%d0
-    rol.w    %d4,%d0
+    lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     moveq    #-1,%d0
     move.b   (%a2),%d0
     ror.w    %d1,%d0
-    and.b    %d0,(%a0)+
-    moveq    #0,%d0
+    and.b    %d0,(%a0)
     move.b   (%a1),%d0
-    ror.w    %d1,%d0
-    or.b     %d0,(%a0)
+    lsr.b    %d1,%d0
+    or.b     %d0,(%a0)+
     dbf      %d7,6b
 9:
     moveq    #-1,%d0
     move.b   (%a2)+,%d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1)+,%d0
-    rol.w    %d4,%d0
+    lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     adda.w   %d5,%a0
     dbf      %d3,4b
@@ -209,9 +202,8 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2),%d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1),%d0
-    ror.w    %d1,%d0
+    lsr.b    %d1,%d0
     or.b     %d0,(%a0)+
 
     move.w   %d2,%d7
@@ -221,18 +213,16 @@ ClipSpriteX8_MASK_R:
     move.b   (%a2)+,%d0
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
-    moveq    #0,%d0
     move.b   (%a1)+,%d0
-    rol.w    %d4,%d0
+    lsl.w    %d4,%d0
     or.b     %d0,(%a0)
     moveq    #-1,%d0
     move.b   (%a2),%d0
     ror.w    %d1,%d0
-    and.b    %d0,(%a0)+
-    moveq    #0,%d0
+    and.b    %d0,(%a0)
     move.b   (%a1),%d0
-    ror.w    %d1,%d0
-    or.b     %d0,(%a0)
+    lsr.w    %d1,%d0
+    or.b     %d0,(%a0)+
     dbf      %d7,7b
 9:
     lea.l    1(%d6.w,%a1),%a1
