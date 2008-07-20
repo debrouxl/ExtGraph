@@ -80,7 +80,7 @@ ClipSpriteX8_MASK_R:
     lsl.w    #3,%d6				|%d6 = Bytewidth<<3
     add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
     subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
-    jbge     8f
+    jbgt     8f
 
     subq.w   #2,%d2
     subq.w   #1,%d3
@@ -200,7 +200,7 @@ ClipSpriteX8_MASK_R:
 5:
     moveq    #-1,%d0
     move.b   (%a2),%d0
-    ror.w    %d1,%d0
+    rol.w    %d1,%d0
     and.b    %d0,(%a0)
     move.b   (%a1),%d0
     lsr.b    %d1,%d0
@@ -214,14 +214,14 @@ ClipSpriteX8_MASK_R:
     rol.w    %d4,%d0
     and.b    %d0,(%a0)
     move.b   (%a1)+,%d0
-    lsl.w    %d4,%d0
+    lsl.b    %d4,%d0
     or.b     %d0,(%a0)
     moveq    #-1,%d0
     move.b   (%a2),%d0
     ror.w    %d1,%d0
     and.b    %d0,(%a0)
     move.b   (%a1),%d0
-    lsr.w    %d1,%d0
+    lsr.b    %d1,%d0
     or.b     %d0,(%a0)+
     dbf      %d7,7b
 9:

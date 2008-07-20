@@ -102,46 +102,10 @@ unsigned char *sprite2;
 static unsigned char *sprite=(unsigned char *)s64x64;
 
 
-/* Clip height, bytewidth, x and y */ \
- #define SATURATE \
-    if (y < 0) { \
-        h = 64 + y; \
-        ysaturated = 0; \
-    } \
-    else if (y > HEIGHT - 64) { \
-        h = HEIGHT - y; \
-        ysaturated = y; \
-    } \
-    else { \
-        h = 64; \
-        ysaturated = y; \
-    } \
- \
-    if (x < 0) { \
-        bytewidth = ((64 + x) >> 3) + 1; \
-        xsaturated = 0; \
-    } \
-    else if (x > WIDTH - 64) { \
-        bytewidth = ((WIDTH - 1 - x) >> 3) + 1; \
-        xsaturated = x & ~0x7; \
-    } \
-    else { \
-        bytewidth = 64/8; \
-        xsaturated = x; \
-    } \
-
-
 void __attribute__((__always_inline__)) draw(short x, short y) {
     // fetch background from LCD memory
-
-    // There's currently no ClipSpriteX8Get_R, so try to be careful not to
-    // fetch data beyond the bounds of the screen (but we currently do).
-    short h, bytewidth;
-    short xsaturated, ysaturated;
-
-    SATURATE
-
-    SpriteX8Get_R(xsaturated,ysaturated,h,LCD_MEM,buffer,bytewidth);
+    memset(buffer,0x00,8*64);
+    ClipSpriteX8Get_R(x,y,64,64/8,LCD_MEM,buffer);
 
     // draw normal sprite
     ClipSpriteX8_OR_R(x,y,64,64/8,sprite,LCD_MEM);
@@ -149,13 +113,7 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-
-    short h, bytewidth;
-    short xsaturated, ysaturated;
-
-    SATURATE
-    
-    ClipSpriteX8_MASK_R(xsaturated,ysaturated,h,bytewidth,buffer,buffer,LCD_MEM);
+    ClipSpriteX8_MASK_R(x,y,64,64/8,buffer,buffer,LCD_MEM);
 }
 
 

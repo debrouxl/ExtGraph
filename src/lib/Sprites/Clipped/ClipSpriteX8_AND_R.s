@@ -79,7 +79,7 @@ ClipSpriteX8_AND_R:
     lsl.w    #3,%d6				|%d6 = Bytewidth<<3
     add.w    %d0,%d6				|%d6 = (Bytewidth<<3)+x
     subi.w   #_EXT_MAX_LCD_WIDTH+1,%d6
-    jbge     8f
+    jbgt     8f
 
     subq.w   #2,%d2
     subq.w   #1,%d3

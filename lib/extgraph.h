@@ -764,6 +764,7 @@ void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short 
 void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
+// Clear the destination buffer (sprt) before using ClipSpriteX8Get_R.
 void ClipSpriteX8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), void *dest asm("%a0"), unsigned char *sprt asm("%a1")) __attribute__((__regparm__));
 
 
