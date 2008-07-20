@@ -527,5 +527,6 @@ GNU Assembler File 436=Sprites\SpriteX8Data_withmask_XOR_R.s
 GNU Assembler File 437=Sprites\SpriteX8Data_withsprite_AND_R.s
 GNU Assembler File 438=Sprites\SpriteX8Data_withsprite_OR_R.s
 GNU Assembler File 439=Sprites\SpriteX8Data_withsprite_XOR_R.s
+GNU Assembler File 440=Sprites\Normal\X8\SpriteX8_RPLC_R.s
 Header File 1=internal.h
 
