@@ -3,8 +3,6 @@
 | Based on a routine from GFA-Basic, made by Geoffrey Anneheim.
 | Modified by Lionel Debroux:
 | * changed calling convention and label names.
-| * made it work properly with bytewidth == 0, bytewidth == 1,
-|   like most other ExtGraph routines.
 | * rewritten most of the code of all drawing loops to significantly
 |   optimize for both speed and size.
 

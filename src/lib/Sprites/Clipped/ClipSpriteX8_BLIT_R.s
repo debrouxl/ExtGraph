@@ -234,14 +234,13 @@ ClipSpriteX8_BLIT_R:
     lsr.w    %d1,%d0
     or.b     %d0,(%a0)+
     dbf      %d7,7b
-9:
-    lea.l    1(%d6.w,%a1),%a1
-
-| CHECK THIS ROUTINE
 
 | Get back to beginning of maskval.
     suba.w   %d2,%a2
     subq.l   #1,%a2
+
+9:
+    lea.l    1(%d6.w,%a1),%a1
 
     adda.w   %d5,%a0
     dbf      %d3,5b
