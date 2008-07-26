@@ -200,7 +200,7 @@ ClipSpriteX8_MASK_R:
 5:
     moveq    #-1,%d0
     move.b   (%a2),%d0
-    rol.w    %d1,%d0
+    ror.w    %d1,%d0
     and.b    %d0,(%a0)
     move.b   (%a1),%d0
     lsr.b    %d1,%d0

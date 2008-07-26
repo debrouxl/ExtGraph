@@ -109,8 +109,18 @@ ClipSpriteX8Get_R:
     movem.l  (%sp)+,%d3-%d7
     rts
 
-| DOESN'T WORK
-7: rts | bra.s 7b
+
+7:
+| TODO: get rid of a3 usage ?
+| (using it makes it easier to write correct code...)
+    pea.l    (%a3)
+    move.l   %a1,%d5
+    swap     %d2
+    clr.w    %d2
+    swap     %d2
+    add.l    %d2,%d5
+    lea      0(%a0,%d2.w),%a3
+    
     neg.w    %d0					|x = -x
     move.w   %d0,%d6
     lsr.w    #3,%d6
@@ -123,28 +133,17 @@ ClipSpriteX8Get_R:
     jbeq     10f
     addq.w   #1,%d6
 10:
-    add.w    %d6,%d5
-    add.w    %d2,%d5
-    add.w    %d2,%d5
-
-    suba.w   %d2,%a1
 
     move.w   %d2,%d7
     sub.w    %d6,%d7
-    add.w    %d2,%d6
 
-    lea.l    -1(%d6.w,%a0),%a0
-
-    add.w    %d2,%d6
     subq.w   #1,%d7
-    move.w   %d7,%d2
+    move.w   %d7,%d6
 
 4:
-|    lea.l    -1(%d6.w,%a1),%a1
-|    lea.l    2(%d2.w,%a1),%a1
-    lea.l    1(%d6.w,%a1),%a1
-
-    move.w   %d2,%d7
+    move.l   %d5,%a1
+    move.l   %a3,%a0
+    move.w   %d6,%d7
     blt.s    9f
 6:
     move.b   (%a0),%d0
@@ -158,9 +157,11 @@ ClipSpriteX8Get_R:
     move.b   (%a0),%d0
     lsr.b    %d4,%d0
     move.b   %d0,-(%a1)
-    adda.w   %d5,%a0
+    lea      30(%a3),%a3
+    add.l    %d2,%d5
     dbf      %d3,4b
 0:
+    move.l   (%sp)+,%a3
     movem.l  (%sp)+,%d3-%d7
     rts
 

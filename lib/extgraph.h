@@ -654,8 +654,8 @@ void FloodFillMF_R(short x, short y, unsigned short shade, void* dest) __attribu
 //-----------------------------------------------------------------------------
 void Sprite8_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, void *dest) __attribute__((__stkparm__));
 void Sprite8_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, unsigned char maskval, void *dest) __attribute__((__stkparm__));
-void Sprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char maskval asm("%d3"), void *dest asm("%a0"));
+void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, const unsigned char maskval, void *dest) __attribute__((__stkparm__));
+void Sprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char maskval asm("%d3"), void *dest asm("%a0"));
 void Sprite8Get(unsigned short x, unsigned short y, unsigned short h, void* src, unsigned char* dest) __attribute__((__stkparm__));
 void Sprite8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned char* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite8_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, const unsigned char *mask, void *dest) __attribute__((__stkparm__));
@@ -669,8 +669,8 @@ void Sprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), uns
 
 void Sprite16_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, void *dest) __attribute__((__stkparm__));
 void Sprite16_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, unsigned short maskval, void *dest) __attribute__((__stkparm__));
-void Sprite16_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), unsigned short maskval asm("%d3"), void *dest asm("%a0"));
+void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, const unsigned short maskval, void *dest) __attribute__((__stkparm__));
+void Sprite16_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), const unsigned short maskval asm("%d3"), void *dest asm("%a0"));
 void Sprite16Get(unsigned short x, unsigned short y, unsigned short h, void* src, unsigned short* dest) __attribute__((__stkparm__));
 void Sprite16Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite16_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, const unsigned short *mask, void *dest) __attribute__((__stkparm__));
@@ -684,8 +684,8 @@ void Sprite16_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), un
 
 void Sprite32_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, void *dest) __attribute__((__stkparm__));
 void Sprite32_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void Sprite32_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, unsigned long maskval, void *dest) __attribute__((__stkparm__));
-void Sprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), unsigned long maskval asm("%d3"), void *dest asm("%a0"));
+void Sprite32_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, const unsigned long maskval, void *dest) __attribute__((__stkparm__));
+void Sprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long maskval asm("%d3"), void *dest asm("%a0"));
 void Sprite32Get(unsigned short x, unsigned short y, unsigned short h, void* src, unsigned long* dest) __attribute__((__stkparm__));
 void Sprite32Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite32_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, const unsigned long *mask, void *dest) __attribute__((__stkparm__));
@@ -732,7 +732,7 @@ void SlowerSpriteX8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1
 // blitmask) MASK.
 //-----------------------------------------------------------------------------
 void ClipSprite8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
-void ClipSprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char maskval asm("%d3"), void *dest asm("%a0"));
+void ClipSprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char maskval asm("%d3"), void *dest asm("%a0"));
 void ClipSprite8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void ClipSprite8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
@@ -741,7 +741,7 @@ void ClipSprite8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h a
 
 
 void ClipSprite16_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
-void ClipSprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), unsigned short maskval asm("%d3"), void *dest asm("%a0"));
+void ClipSprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), const unsigned short maskval asm("%d3"), void *dest asm("%a0"));
 void ClipSprite16_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), const unsigned short *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void ClipSprite16_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
@@ -750,7 +750,7 @@ void ClipSprite16Get_R(short x asm("%d0"),short y asm("%d1"),unsigned short h as
 
 
 void ClipSprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
-void ClipSprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), unsigned long maskval asm("%d3"), void *dest asm("%a0"));
+void ClipSprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long maskval asm("%d3"), void *dest asm("%a0"));
 void ClipSprite32_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void ClipSprite32_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
 void ClipSprite32_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
@@ -759,8 +759,8 @@ void ClipSprite32Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h 
 
 
 void ClipSpriteX8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char *maskval asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
-void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned char *mask asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *maskval asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
+void ClipSpriteX8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *mask asm("%a2"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void ClipSpriteX8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), unsigned short bytewidth asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
@@ -780,8 +780,8 @@ void ClipSpriteX8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h 
 //-----------------------------------------------------------------------------
 void GraySprite8_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite8_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GraySprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, unsigned char maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
-void GraySprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GraySprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, const unsigned char maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
+void GraySprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite8_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, const unsigned char* mask1, const unsigned char* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite8_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char *mask0, const unsigned char *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite8_OR(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
@@ -796,8 +796,8 @@ void GraySprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"),
 
 void GraySprite16_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite16_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GraySprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, unsigned short maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
-void GraySprite16_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GraySprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, const unsigned short maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
+void GraySprite16_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite16_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, const unsigned short* mask1, const unsigned short* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite16_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short *mask0, const unsigned short *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite16_OR(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
@@ -812,8 +812,8 @@ void GraySprite16_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1")
 
 void GraySprite32_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite32_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GraySprite32_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, unsigned long maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
-void GraySprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GraySprite32_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, const unsigned long maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
+void GraySprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite32_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, const unsigned long* mask1, const unsigned long* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
 void GraySprite32_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long *mask0, const unsigned long *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySprite32_OR(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
@@ -849,7 +849,7 @@ void GraySpriteX8_XOR(unsigned short x, unsigned short y, unsigned short h, cons
 // SMASKBLIT and UpsideDown were made for "lachprog"'s Super Mario 3 68k.
 //-----------------------------------------------------------------------------
 void GrayClipSprite8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipSprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char *mask0, const unsigned char *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -860,12 +860,12 @@ void GrayClipSprite8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned shor
 
 
 void GrayClipSprite16_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipSprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short *mask0, const unsigned short *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_SMASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short *mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipSprite16_SMASKBLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), unsigned short *sprt0, unsigned short *sprt1, unsigned short *mask, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite16_SMASKBLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), unsigned short *sprt0, unsigned short *sprt1, unsigned short *mask, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANB_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANW_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void UpsideDownGrayClipSprite16_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register unsigned short h asm("%d2"), unsigned short *sprt0, unsigned short *sprt1, unsigned short *mask0, unsigned short *mask1,register void *dest0 asm("%a0"),register void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -873,7 +873,7 @@ void GrayClipSprite16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned sho
 
 
 void GrayClipSprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipSprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long *mask0, const unsigned long *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -905,7 +905,7 @@ void GrayClipSprite32_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned sho
 // (size of a M/L/D chunk) being 3*2 bytes.
 //-----------------------------------------------------------------------------
 void GrayClipISprite8_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipISprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -915,7 +915,7 @@ void GrayClipISprite8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned sho
 
 
 void GrayClipISprite16_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipISprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite16_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite16_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -927,7 +927,7 @@ void GrayClipISprite16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned sh
 
 
 void GrayClipISprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayClipISprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipISprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, const unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite32_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite32_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipISprite32_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -961,21 +961,21 @@ void GraySingleSprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("
 // (nothing to do with the tilemap engine).
 //-----------------------------------------------------------------------------
 void Tile8x8_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
-void Tile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), unsigned char maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
+void Tile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), const unsigned char maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile8x8_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), const unsigned char* mask, void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile8x8_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile8x8_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile8x8_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 
 void Tile16x16_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
-void Tile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), unsigned short maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
+void Tile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), const unsigned short maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile16x16_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), const unsigned short* mask, void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile16x16_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile16x16_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 
 void Tile32x32_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
-void Tile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), unsigned long maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
+void Tile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), const unsigned long maskval asm("%d3"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), const unsigned long* mask, void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile32x32_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
 void Tile32x32_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
@@ -988,7 +988,7 @@ void Tile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"),
 // (nothing to do with the tilemap engine).
 //-----------------------------------------------------------------------------
 void GrayTile8x8_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayTile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayTile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile8x8_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char* mask1, const unsigned char* mask2, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile8x8_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile8x8_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -998,7 +998,7 @@ void GrayTile8x8_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm("%d
 void GrayTile8x8_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 void GrayTile16x16_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayTile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayTile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short* mask1, const unsigned short* mask2, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1008,7 +1008,7 @@ void GrayTile16x16_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm("
 void GrayTile16x16_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 void GrayTile32x32_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayTile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayTile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long* mask1, const unsigned long* mask2, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1031,7 +1031,7 @@ void GrayTile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d
 //   otherwise), mask is applied to both planes.
 //-----------------------------------------------------------------------------
 void GrayITile8x8_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayITile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayITile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile8x8_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile8x8_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile8x8_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1040,7 +1040,7 @@ void GrayITile8x8_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm("%
 void GrayITile8x8_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 void GrayITile16x16_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayITile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayITile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile16x16_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile16x16_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1049,7 +1049,7 @@ void GrayITile16x16_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm(
 void GrayITile16x16_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 void GrayITile32x32_AND_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayITile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayITile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, const unsigned long maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile32x32_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayITile32x32_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1242,12 +1242,12 @@ void FastSpriteX8_MIRROR_H_R(unsigned short h asm("%d2"), unsigned short bytewid
 // X8 sprite pointed to by src, with the sprite of same size pointed to by
 // maskval, storing the result to the area pointed to by dest.
 //-----------------------------------------------------------------------------
-void SpriteX8Data_withmask_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
-void SpriteX8Data_withmask_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
-void SpriteX8Data_withmask_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src asm("%a0"), unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
-void SpriteX8Data_withsprite_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
-void SpriteX8Data_withsprite_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
-void SpriteX8Data_withsprite_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), unsigned char *src1 asm("%a0"), unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withmask_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src asm("%a0"), const unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withmask_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src asm("%a0"), const unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withmask_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src asm("%a0"), const unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_AND_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src1 asm("%a0"), const unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_OR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src1 asm("%a0"), const unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
+void SpriteX8Data_withsprite_XOR_R(unsigned short h asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src1 asm("%a0"), const unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
 
 
 

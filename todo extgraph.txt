@@ -17,9 +17,11 @@ X* De-pessimize (dbf; rts) FastSprite*_MIRROR_H_R routines.
 
 X* Fix GrayClipDrawLine_R when both points are outside of screen. Reported by Oliver Hoog.
 
-/* Check that all ClipSpriteX8 and GrayClipISpriteX16 work (it doesn't seem so, e.g.
-Oliver Hoog says MASK doesn't work when bytewidth > 1) and make the missing ones (BLIT, Get, RPLC).
-Time to make testcase/demo...
+X* Check that all ClipSpriteX8 routines work, make the missing ones (BLIT, Get, RPLC).
+Oliver Hoog reported that at least MASK didn't work under some conditions.
+Time to make testcase/demo -> demo28.
+
+0* Check and GrayClipISpriteX16 work.
 
 0* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on *8 / *X8 routines.
 
@@ -29,12 +31,13 @@ X* Set of functions that modify X8 sprite data:
     * AND/OR/XOR all rows with same mask;
     * AND/OR/XOR sprite data with sprite data of same size;
 
+X* Install "kernel" headers so that demo26 can be recompiled...
 
 -- Beta 5 --
 
 
 0* The C function prototypes embedded in the .s files are outdated, and they're a pain to maintain.
-Make some script that replaces them by those in extgraph.h.
+Make some script that replaces them by those in extgraph.h (the correct ones, by definition).
 
 ?* Split extgraph.h, timemap.h into many small header files, move the functions' documentation into Doxygen comments ?
 
@@ -51,6 +54,8 @@ Another (naive ?) algorithm could use _ClipLine_R and DrawMultiHLines (see below
 0* FastDrawLargeBufferToScreen_R: make a 89 version and/or a version that can draw less than 240x128 pixels.
 
 0* (?) write generic (Gray)ClipFastOutlinedCircle using SMC ?
+
+/* 32x32 tilemap engine. Use and extend what was started by Michael Hergenrader.
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)
@@ -134,9 +139,10 @@ T -> B, R -> L, L -> R. Celui de TICT est trop gros... squale92 ?
 
 
 Always check:
-* __regparm__ should use only d0-d3/a0-a1, except in the tilemap engine.
+* __regparm__ should use only d0-d3/a0-a1, except in the tilemap engine and several other (uncommon) routines.
 * all parameters sprite, mask, maskval should be unsigned.
 * all parameters plane should be void *.
 * all constant parameters should be const...
 * using "extern" and "register" in prototypes is not usually necessary.
 * a parameter which can be negative shouldn't be declared unsigned...
+* a parameter which shouldn't be negative should be declared unsigned...
