@@ -21,9 +21,9 @@ X* Check that all ClipSpriteX8 routines work, make the missing ones (BLIT, Get, 
 Oliver Hoog reported that at least MASK didn't work under some conditions.
 Time to make testcase/demo -> demo28.
 
-0* Check and GrayClipISpriteX16 work.
+X* Check that GrayClipISpriteX16 routines work.
 
-0* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on *8 / *X8 routines.
+X* Optimize away some useless moveq #0,dn1; lsl/lsr/ror/rol.b dn2,dn1 on right and left-side clipping of *8 / *X8 routines.
 
 X* Improve demo19, especially testing of circle functions...
 

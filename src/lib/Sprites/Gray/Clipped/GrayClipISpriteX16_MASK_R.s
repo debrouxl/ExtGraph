@@ -58,7 +58,6 @@ GrayClipISpriteX16_MASK_R:
 | Test clipping gauche
     moveq.l  #_EXT_SCREEN_X,%d7
     sub.w    %d5,%d7     | %d7 = 30 - largeur (en octets) = incrément de la destination après avoir affiché une ligne
-    |move.w   %d4,%a3 ???
     lsl.w    #3,%d5     | %d5 = largeur * 2 * 8 (en pixels)
     move.w   %d0,%d4     | %d4 = x
     blt.w    7f     | si x < 0, le sprite doit être clippé sur la bordure gauche
@@ -93,25 +92,21 @@ GrayClipISpriteX16_MASK_R:
     move.w   %d2,%d6
 
 2:
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    rol.l    %d1,%d4
-
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
+    moveq.l  #-1,%d5
+    move.w   (%a2)+,%d5     | mask
+    rol.l    %d1,%d5
 
     moveq.l  #0,%d0
     move.w   (%a2)+,%d0     | sprite1
     lsl.l    %d1,%d0
-    or.l     %d0,%d4
-    move.l   %d4,(%a0)
+    and.l    %d5,(%a0)
+    or.l     %d0,(%a0)
 
     moveq.l  #0,%d0
     move.w   (%a2)+,%d0     | sprite2
     lsl.l    %d1,%d0
-    or.l     %d0,%d5
-    move.l   %d5,(%a1)
+    and.l    %d5,(%a1)
+    or.l     %d0,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
@@ -135,17 +130,13 @@ GrayClipISpriteX16_MASK_R:
 2:
     move.w   (%a2)+,%d4     | mask
 
-    move.w   %d4,%d5
-    and.w    (%a0),%d4
-    and.w    (%a1),%d5
-
     move.w   (%a2)+,%d0     | sprite1
-    or.w     %d0,%d4
-    move.w   %d4,(%a0)+
+    and.w    %d4,(%a0)
+    or.w     %d0,(%a0)+
 
     move.w   (%a2)+,%d0     | sprite2
-    or.w     %d0,%d5
-    move.w   %d5,(%a1)+
+    and.w    %d4,(%a1)
+    or.w     %d0,(%a1)+
 
     dbf.w    %d6,2b
 
@@ -168,23 +159,19 @@ GrayClipISpriteX16_MASK_R:
     swap.w   %d4
     ror.l    %d0,%d4
 
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
-
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d4
-    move.l   %d4,(%a0)
+    and.l    %d4,(%a0)
+    or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d5
-    move.l   %d5,(%a1)
+    and.l    %d4,(%a1)
+    or.l     %d1,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
@@ -223,53 +210,43 @@ GrayClipISpriteX16_MASK_R:
 
     add.w    %d5,%d4     | *3 pour le mask
     add.w    %d4,%d4     | *2 pour les niveaux de gris
-    move.l   %a4,-(%sp)     | un registre de plus...
-    movea.w  %d4,%a4     | offset à ajouter à l'adresse du sprite à chaque ligne
 
 1:
-    adda.w   %a4,%a2     | on avance dans la source
+    adda.w   %d4,%a2     | on avance dans la source
 
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    lsl.l    %d0,%d4
-
-    move.w   %d4,%d5
-    and.w    (%a0),%d4
-    and.w    (%a1),%d5
+    moveq    #-1,%d5
+    move.w   (%a2)+,%d5     | mask
+    rol.l    %d0,%d5
 
     move.w   (%a2)+,%d1     | sprite1
     lsl.w    %d0,%d1
-    or.w     %d1,%d4
-    move.w   %d4,(%a0)
+    and.w    %d5,(%a0)
+    or.w     %d1,(%a0)
 
     move.w   (%a2)+,%d1     | sprite2
     lsl.w    %d0,%d1
-    or.w     %d1,%d5
-    move.w   %d5,(%a1)
+    and.w    %d5,(%a1)
+    or.w     %d1,(%a1)
 
     move.w   %d2,%d6
     bmi.s    4f
 
 2:
-    moveq.l  #-1,%d4
-    move.w   (%a2)+,%d4     | mask
-    rol.l    %d0,%d4
-
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
+    moveq.l  #-1,%d5
+    move.w   (%a2)+,%d5     | mask
+    rol.l    %d0,%d5
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite1
     lsl.l    %d0,%d1
-    or.l     %d1,%d4
-    move.l   %d4,(%a0)
+    and.l    %d5,(%a0)
+    or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     lsl.l    %d0,%d1
-    or.l     %d1,%d5
-    move.l   %d5,(%a1)
+    and.l    %d5,(%a1)
+    or.l     %d1,(%a1)
 
     addq.w   #2,%a0
     addq.w   #2,%a1
@@ -282,7 +259,6 @@ GrayClipISpriteX16_MASK_R:
 
     dbf      %d3,1b
 
-    movea.l  (%sp)+,%a4
 0:
     movem.l  (%sp)+,%d3-%d7/%a2
     rts
@@ -302,8 +278,6 @@ GrayClipISpriteX16_MASK_R:
 
     add.w    %d6,%d5     | *3 pour le mask
     add.w    %d5,%d5     | *2 pour les niveaux de gris...
-    move.l   %a4,-(%sp)
-    movea.w  %d5,%a4    | offset à ajouter à l'adresse du sprite à chaque fin de ligne
 
     andi.w   #15,%d0
 
@@ -317,23 +291,19 @@ GrayClipISpriteX16_MASK_R:
     swap.w   %d4
     ror.l    %d0,%d4
 
-    move.l   %d4,%d5
-    and.l    (%a0),%d4
-    and.l    (%a1),%d5
-
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d4
-    move.l   %d4,(%a0)
+    and.l    %d4,(%a0)
+    or.l     %d1,(%a0)
 
     moveq.l  #0,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,%d5
-    move.l   %d5,(%a1)
+    and.l    %d4,(%a1)
+    or.l     %d1,(%a1)
 
     addq.w   #2,%a0
     addq.w   #2,%a1
@@ -345,27 +315,22 @@ GrayClipISpriteX16_MASK_R:
     move.w   (%a2)+,%d4     | mask
     lsr.l    %d0,%d4
 
-    move.w   %d4,%d5
-    and.w    (%a0),%d4
-    and.w    (%a1),%d5
-
     move.w   (%a2)+,%d1     | sprite1
     lsr.w    %d0,%d1
-    or.w     %d1,%d4
-    move.w   %d4,(%a0)+
+    and.w    %d4,(%a0)
+    or.w     %d1,(%a0)+
 
     move.w   (%a2)+,%d1     | sprite2
     lsr.w    %d0,%d1
-    or.w     %d1,%d5
-    move.w   %d5,(%a1)+
+    and.w    %d4,(%a1)
+    or.w     %d1,(%a1)+
 
-    adda.w   %a4,%a2
+    adda.w   %d5,%a2
 
     adda.w   %d7,%a0
     adda.w   %d7,%a1
 
     dbf      %d3,1b
 
-    movea.l  (%sp)+,%a4
     movem.l  (%sp)+,%d3-%d7/%a2
     rts

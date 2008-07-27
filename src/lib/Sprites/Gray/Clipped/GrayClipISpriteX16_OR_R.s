@@ -99,6 +99,8 @@ GrayClipISpriteX16_OR_R:
     lsl.l    %d1,%d0
     or.l     %d0,(%a1)
 
+    addq.l   #2,%a0
+    addq.l   #2,%a1
     dbf.w    %d6,2b
 
     adda.w   %d7,%a0
@@ -150,6 +152,8 @@ GrayClipISpriteX16_OR_R:
     lsr.l    %d0,%d1
     or.l     %d1,(%a1)
 
+    addq.l   #2,%a0
+    addq.l   #2,%a1
     dbf.w    %d6,2b
 
     adda.w   %d7,%a0		| Next row of screen 1
@@ -182,10 +186,10 @@ GrayClipISpriteX16_OR_R:
     andi.w   #15,%d0
 
     add.w    %d4,%d4     | *2 pour les niveaux de gris
-    move.w   %d4,%d5     | offset à ajouter à l'adresse du sprite à chaque ligne
+                         | offset à ajouter à l'adresse du sprite à chaque ligne
 
 1:
-    adda.w   %d5,%a2     | on avance dans la source
+    adda.w   %d4,%a2     | on avance dans la source
 
     move.w   (%a2)+,%d1     | sprite1
     lsl.w    %d0,%d1
@@ -209,6 +213,8 @@ GrayClipISpriteX16_OR_R:
     lsl.l    %d0,%d1
     or.l     %d1,(%a1)
 
+    addq.l   #2,%a0
+    addq.l   #2,%a1
     dbf      %d6,2b
 4:
 
@@ -254,6 +260,8 @@ GrayClipISpriteX16_OR_R:
     lsr.l    %d0,%d1
     or.l     %d1,(%a1)
 
+    addq.l   #2,%a0
+    addq.l   #2,%a1
     dbf      %d6,2b
 
 4:

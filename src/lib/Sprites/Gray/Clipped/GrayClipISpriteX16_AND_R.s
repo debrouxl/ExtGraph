@@ -1,4 +1,4 @@
-| C prototype: void GrayClipISpriteX16_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipISpriteX16_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
 |
 | Based on GrayClipISpriteX16_OR_R.
 
@@ -10,10 +10,10 @@
 | The sprite format is a sequence of WORDS (not lines): light plane, dark plane (different from that of MASK).
 
 .text
-.globl GrayClipISpriteX16_RPLC_R
+.globl GrayClipISpriteX16_AND_R
 .even
 
-GrayClipISpriteX16_RPLC_R:
+GrayClipISpriteX16_AND_R:
     movem.l  %d3-%d7/%a2,-(%sp)
     move.l   4+24(%sp),%a2
 
@@ -84,26 +84,20 @@ GrayClipISpriteX16_RPLC_R:
     moveq.l  #16-7,%d1
     sub.w    %d0,%d1
 
-    moveq.l  #-1,%d4
-    clr.w    %d4
-    rol.l    %d1,%d4
 | Boucle d'affichage si le sprite n'est pas clippé
 1:
     move.w   %d2,%d6
 
 2:
-    
-    moveq.l  #0,%d0
+    moveq.l  #-1,%d0
     move.w   (%a2)+,%d0     | sprite1
-    lsl.l    %d1,%d0
-    and.l    %d4,(%a0)
-    or.l     %d0,(%a0)
+    rol.l    %d1,%d0
+    and.l    %d0,(%a0)
 
-    moveq.l  #0,%d0
+    moveq.l  #-1,%d0
     move.w   (%a2)+,%d0     | sprite2
-    lsl.l    %d1,%d0
-    and.l    %d4,(%a1)
-    or.l     %d0,(%a1)
+    rol.l    %d1,%d0
+    and.l    %d0,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
@@ -124,9 +118,11 @@ GrayClipISpriteX16_RPLC_R:
     move.w   %d2,%d6
 
 2:
-    move.w   (%a2)+,(%a0)+     | sprite1
+    move.w   (%a2)+,%d0     | sprite1
+    and.w    %d0,(%a0)+
 
-    move.w   (%a2)+,(%a1)+     | sprite2
+    move.w   (%a2)+,%d0     | sprite2
+    and.w    %d0,(%a1)+
 
     dbf.w    %d6,2b
 
@@ -140,28 +136,21 @@ GrayClipISpriteX16_RPLC_R:
 | Boucle d'affichage avec shifting à droite
 3:
     addq.w   #7,%d0     | Fix the dec of the cmp
-
-    moveq.l  #-1,%d4
-    clr.w    %d4
-    swap     %d4
-    ror.l    %d0,%d4
 1:
     move.w   %d2,%d6
 
 2:
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
-    lsr.l    %d0,%d1
-    and.l    %d4,(%a0)
-    or.l     %d1,(%a0)
+    ror.l    %d0,%d1
+    and.l    %d1,(%a0)
 
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
-    lsr.l    %d0,%d1
-    and.l    %d4,(%a1)
-    or.l     %d1,(%a1)
+    ror.l    %d0,%d1
+    and.l    %d1,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
@@ -199,38 +188,32 @@ GrayClipISpriteX16_RPLC_R:
     add.w    %d4,%d4     | *2 pour les niveaux de gris
                          | offset à ajouter à l'adresse du sprite à chaque ligne
 
-    moveq    #-1,%d5
-    clr.w    %d5
-    rol.l    %d0,%d5
 1:
     adda.w   %d4,%a2     | on avance dans la source
 
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite1
-    lsl.w    %d0,%d1
-    and.w    %d5,(%a0)
-    or.w     %d1,(%a0)
+    rol.l    %d0,%d1
+    and.w    %d1,(%a0)
 
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite2
-    lsl.w    %d0,%d1
-    and.w    %d5,(%a1)
-    or.w     %d1,(%a1)
+    rol.w    %d0,%d1
+    and.w    %d1,(%a1)
 
     move.w   %d2,%d6
     bmi.s    4f
 
 2:
-
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite1
-    lsl.l    %d0,%d1
-    and.l    %d5,(%a0)
-    or.l     %d1,(%a0)
+    rol.l    %d0,%d1
+    and.l    %d1,(%a0)
 
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite2
-    lsl.l    %d0,%d1
-    and.l    %d5,(%a1)
-    or.l     %d1,(%a1)
+    rol.l    %d0,%d1
+    and.l    %d1,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
@@ -262,45 +245,37 @@ GrayClipISpriteX16_RPLC_R:
 
     andi.w   #15,%d0
 
-    moveq    #-1,%d4
-    clr.w    %d4
-    swap     %d4
-    ror.l    %d0,%d4
 1:
     move.w   %d2,%d6
     bmi.s    4f
 
 2:
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite1
     swap.w   %d1
-    lsr.l    %d0,%d1
-    and.l    %d4,(%a0)
-    or.l     %d1,(%a0)
+    ror.l    %d0,%d1
+    and.l    %d1,(%a0)
 
-    moveq.l  #0,%d1
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite2
     swap.w   %d1
-    lsr.l    %d0,%d1
-    and.l    %d4,(%a1)
-    or.l     %d1,(%a1)
+    ror.l    %d0,%d1
+    and.l    %d1,(%a1)
 
     addq.l   #2,%a0
     addq.l   #2,%a1
     dbf      %d6,2b
 
 4:
-    swap.w   %d4
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite1
-    lsr.w    %d0,%d1
-    and.w    %d4,(%a0)
-    or.w     %d1,(%a0)+
+    ror.l    %d0,%d1
+    and.w    %d1,(%a0)+
 
+    moveq.l  #-1,%d1
     move.w   (%a2)+,%d1     | sprite2
-    lsr.w    %d0,%d1
-    and.w    %d4,(%a1)
-    or.w     %d1,(%a1)+
-    swap.w   %d4
+    ror.l    %d0,%d1
+    and.w    %d1,(%a1)+
 
     adda.w   %d5,%a2
 

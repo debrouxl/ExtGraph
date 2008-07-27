@@ -124,15 +124,13 @@ GrayClipISprite8_MASK_R:
     move.b   (%a2)+,%d3
     rol.w    %d0,%d3
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
-    rol.w    %d0,%d1
+    lsl.w    %d0,%d1
     and.b    %d3,(%a0)
     or.b     %d1,(%a0)
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
-    rol.w    %d0,%d1
+    lsl.w    %d0,%d1
     and.b    %d3,(%a1)
     or.b     %d1,(%a1)
 
@@ -159,15 +157,13 @@ GrayClipISprite8_MASK_R:
     move.b   (%a2)+,%d3
     ror.w    %d0,%d3
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
-    ror.w    %d0,%d1
+    lsr.w    %d0,%d1
     and.b    %d3,(%a0)
     or.b     %d1,(%a0)
 
-    moveq    #0,%d1
     move.b   (%a2)+,%d1
-    ror.w    %d0,%d1
+    lsr.w    %d0,%d1
     and.b    %d3,(%a1)
     or.b     %d1,(%a1)
 
