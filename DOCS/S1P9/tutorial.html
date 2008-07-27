@@ -1,0 +1,864 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>TICT Tutorial S1P9 - Code optimization</title>
+  <link rel="stylesheet" type="text/css" media="screen, projection" href="style.css" />
+</head>
+
+<body>
+<!-- ====================================================================== -->
+<!-- HEADER OF TUTORIAL -->
+<!-- ====================================================================== -->
+
+<h1 class="toptitle">TICT TUTORIAL SERIES 1 - Part IX</h1>
+
+<h2 class="subtitle2">&copy; TI-Chess Team 2004-2008</h2>
+
+<h2 class="subtitle2">Optimizing code</h2>
+<hr>
+<!-- ====================================================================== -->
+<!-- FOCUS OF TUTORIAL -->
+<!-- ====================================================================== -->
+
+<h2>Focus of this tutorial, several important notes</h2>
+<blockquote>
+  <p>I've read the source of dozens of programs, starting with the TICT ones,
+  to look for optimizations and at report them to their authors, sometimes
+  with modified code. That's somehow the way I became member of TICT, when
+  Tom was too busy to implement my suggestions (no code from me at that time,
+  I was a beginner) and I had more time than he had. I found that a number of
+  same optimizations can be applied to many programs, so I thought I could
+  pack them into a tutorial, whose content can be applied <em>while</em>
+  programming or <em>after</em> programming.<br>
+  <br>
+  First of all, I should mention that me mentioning programs where I applied
+  optimizations is not done so as to point that the coder was bad. After all,
+  I once did not know all those things about optimization, and it took me
+  years to learn what I know.<br>
+  This is done so as to give actual examples of already optimized code
+  if my explanations are unclear. I know you may find them to be unclear,
+  since multiple persons asked me to "decrypt" somewhat what I wrote them.<br>
+  <br>
+  I should also mention that optimization can collide with readability,
+  portability and maintainability, and that this tutorial does therefore not
+  deal with "modern" coding practices: it deals with optimized code on
+  platforms where optimization matters a lot, more than on other platforms.<br>
+  This tutorial is made mainly for the CISC 68000 processor in TI-68k
+  calculators. Although a number of optimizations apply to all simple enough
+  processors (not super-scalar or long-pipelined, without branch prediction
+  unit to a lesser extent), many are 68000-specific. I have checked with
+  HP-GCC that a number of optimizations also work very well on the not-so-RISC
+  ARM9 used in the HP-49G+, but for example, the comment about shifts and
+  rotates being slow does obviously not apply to ARM processors at all, as
+  instant shifts &amp; rotates are a strength of ARM processors.<br>
+  <br>
+  The compiler version also comes into play, but it's been a while since
+  only GCC 4.0+ is usable with TIGCCLIB. GCC 4.0+ versions are usually
+  stronger than GCC 3.3.x for optimizing, with the caveat that -O2, -O3 and
+  of course -O4 are now hardly usable if you want to recompile a program
+  designed for previous versions without facing an important size increase...
+  That said, it's often pessimizing a number of hand-tuned C code
+  constructions: all TIGCC-GCC 4.0.x versions so far (up to 4.0.2) grossly
+  miscompile cast-as-lvalues (deprecated extension, removed from the FSF GCC
+  but enabled again by Kevin to keep backwards compatibility, he was right
+  doing it because that extension is powerful). On another project, both
+  versions perform terrible interprocedural register allocation, despite
+  thoughtful explicit register passing convention... Maybe the IPO in GCC
+  4.1 and later can improve that.<br>
+  <br>
+  <br>
+  When I started programming on TI-68k calculators, I found the TICT
+  tutorials helpful, but I had never made one entirely by myself (I worked on
+  extending and optimizing S1P6). Here is "my own".<br>
+  I started writing about four years ago, when I thought I'd have no
+  more time to program on TI-68k calculators during the school year (which
+  happened one year later). And it was becoming clear than I should spend
+  some time on other concepts (starting with OO), languages (Java, Perl,
+  PHP, etc.) and platforms.<br>
+  The TI-68k calculators platform is great for learning a number of concepts
+  and practices dealing with programming on embedded platforms (which is the
+  specialty of my last year of studies), but not much more than that -
+  although it has simple cooperative multitasking, for instance.<br>
+  I learnt a lot about programming, and about human relationship as well. I
+  could never have imagined several kinds of behaviour I saw. Forums and
+  e-mails taught me to poke deeper into the real state of things.
+  There's no unreplaceable single person in the community.</p>
+</blockquote>
+<br>
+
+<hr>
+<!-- ====================================================================== -->
+<!-- HAND-MADE CODE OPTIMIZATION TRICKS -->
+<!-- ====================================================================== -->
+
+<h2>Hand-made code optimization tricks</h2>
+<strong>Coding style:</strong>
+<blockquote>
+  <ul>
+    <li><span class="under">if/else if or switch optimization</span>: try to
+      make the items as symmetric as possible. If all items have common
+      instructions, put them last if possible: this helps the compiler, at
+      least on -Os level. For example, take this piece of code in
+      TICT-Explorer 1.40, extension.c:
+      <pre>case SDT_LIST: // 1<br>    strcpy(comment,MSGDIRECT_COMMENT_LIST);<br>    break;<br>case SDT_MAT: // 2<br>    strcpy(comment,MSGDIRECT_COMMENT_MAT);<br>    break;<br>case SDT_FUNC: // 3<br>    *buftypeaddr = TYPE_BASIC;<br>    strcpy(comment,MSGDIRECT_COMMENT_FUNC);<br>    break;<br>case SDT_PRGM: // 4<br>    *buftypeaddr = TYPE_BASIC;<br>    strcpy(comment,MSGDIRECT_COMMENT_PRGM);<br>    break;<br>case SDT_PIC: // 5<br>    *buftypeaddr = TYPE_PIC;<br>    strcpy(comment,MSGDIRECT_COMMENT_PIC);<br>    break;<br>case SDT_STR: // 6<br>    strcpy(comment,MSGDIRECT_COMMENT_STRING);<br>    break;<br>case SDT_TEXT: // 7<br>    *buftypeaddr = TYPE_TEXT;<br>    strcpy(comment,MSGDIRECT_COMMENT_TEXT);<br>    break;<br>case SDT_GDB: // 8<br>    strcpy(comment,MSGDIRECT_COMMENT_GDB);<br>    break;<br>case SDT_DATA: // 9<br>    strcpy(comment,MSGDIRECT_COMMENT_DATA);<br>    break;<br>case SDT_FIG: // 10<br>    strcpy(comment,MSGDIRECT_COMMENT_FIG);<br>    break;<br>case SDT_MAC: // 11<br>    strcpy(comment,MSGDIRECT_COMMENT_MACR);<br>    break;</pre>
+      If you invert a <code>*buftypeaddr = ...;</code> and a
+      <code>strcpy(...);</code> and recompile, you'll notice a significant
+      size increase (at least with GCC 3.3-).</li>
+    <li><span class="under">inlining</span>: declare <code>inline</code>
+      (preferably preceded with <code>static</code>if the function is used
+      only in the file it is written in, although the unit-at-a-time mode in
+      GCC 4.0+ should figure that out on its own) functions used at only one
+      or two places in the program, all the more they're small and/or often
+      executed. Anyway, the compiler won't usually inline pieces of code if
+      it can figure out that it will give worse code.<br>The GCC 4.0+ inliner
+      is more porwerful than that of GCC 3.3-, it's responsible for a part of
+      the size increase with -O2 and more. Most likely, the greatest part,
+      since the size increase is noticeable even on code with no "special"
+      things such as numerous multiplications or tight loops with small
+      numbers of iterations)<br>
+      Inlining can yield speed and size optimizations that would not have
+      been possible otherwise. The speed-optimized version of the new pure
+      ASM ttunpack routine by Samuel Stearley uses inlining, saving hundreds
+      thousands of clocks (previously at &lt; 30 KB/sec, now at &gt; 80
+      KB/sec); on the contrary, the size-optimized version (more than twice
+      smaller, but &lt; 30 KB/sec) spends much more time branching all over
+      the place due to no inlining.<br>
+      Starting from TIGCC 0.96, the small version is the default one in the
+      specific launchers TIGCC generates, which should hardly ever be used
+      anyway: as soon as there's more than <strong>one</strong> such launcher
+      at a time on a calculator, it's smarter to use a generic launcher (ttstart,
+      SuperStart). That's a space savings and a single point of update in case
+      there's a HW update that breaks the existing launchers (like HW3 did).</li>
+    <li><span class="under">optimizing structured programming</span>: if you
+      split your programs into many functions (like you're certainly learning
+      at school if you study computer science), try to reduce the drawbacks
+      of this practice, which always slows down programs on our platforms
+      (the processor doesn't feature a branch prediction unit) and can
+      increase size, all the more the compiler is not given
+      -fomit-frame-pointer (unlikely with GCC 4.0, unless you compile without
+      optimization - ! - or explicitely use -fno-fomit-frame-pointer, see
+      below). Very short functions like:
+      <pre>returntype foo(type1 param1, type2 param2, type3 param3, type4 param4) {<br>    return bar(param1, param2, param3, param4, TRUE);<br>}<br><br>globaltype returnglobal1(void) {<br>    return global1;<br>}</pre>
+      *should* be declared <code>inline</code>, or be turned into macros
+      (provided that visibility is not hurt): this saves both space and run
+      time !<br>
+      Functions that are called thousands of time (like interrupt handler
+      subroutines) *should* be logically inlined (<code>static inline</code>
+      / macros), all the more there are many of them. 34 clocks (the minimum
+      call/return penalty, not taking anything else, like parameter
+      passing/retrieving, into account) * 256 Hz (AI1 rate on HW2, higher on
+      HW1) * 20 subroutines is 174080, ~1.5% of total HW2 processor speed.
+      This is neglectable, but interrupt handlers should always execute as
+      fast as possible.<br>
+      All that said, while excessive split into subroutines slows down, can
+      increase size and lower readability, the opposite excess reduces
+      extensibility and maintainability (<em>in either way, do comment your
+      sourcecode</em>), and it's fairly hard to make maintainable code out of
+      a messy one.</li>
+    <li><span class="under">non-structured programming</span>: <em>provided
+      you handle error conditions correctly</em>, for efficiency, you can use
+      use goto, break, continue, returns in the middle of functions. My
+      teachers would kill me if I dared turn homework coded the way the
+      modified tthdex is coded...</li>
+    <li><span class="under">global register variables</span>: probably the
+      best way to have optimized references to globals (see below).</li>
+    <li><span class="under">optimized string arrays</span> (all program
+      sizes) and/or <span class="under">optimized function pointer
+      arrays</span> (may be impossible with programs larger than 32 KB).
+      Travis Fischer (Fisch2) made a tool for strings and released it on
+      ticalc.org, you can find the link at the end of this file. Switching to
+      optimized function pointer arrays saved ~1400 bytes in GFA-TEM
+      (GFA-Basic).</li>
+    <li><span class="under">loop / array subscripts optimization 1</span>:
+      don't use C multi-dimensional arrays (use single-dimensional arrays
+      with an accessor macro); use auxiliary pointers with postincremented
+      / predecremented mode instead of array subscripts whenever possible.
+      The compiler cannot usually do such optimizations because they don't
+      preserve the exact meaning of the program. That is to say, replace
+      code such as
+      <pre>for (i = 0; i &lt; N; i++) {<br>    T[i] = i;<br>}</pre>
+      by
+      <pre>ptr = &amp;T[0];<br>for (i = 0; i &lt; N; i++) {<br>    *ptr++ = i;<br>}</pre>
+      or (excerpt from TICT-Explorer 1.30):
+      <pre>if (search_for_file) {<br>    for (i=0;i&lt;file_count;i++) {<br>        if (!strcmp(search_for_file,file_list[i].name)) {<br>            active_file = i;<br>            if (active_file &gt; C89_92(9,12)) {<br>            file_winpos = C89_92(9,12);<br>            }<br>            else {<br>                file_winpos = active_file;<br>            }<br>        }<br>    }<br>}</pre>
+      by
+      <pre>if (search_for_file) {<br>    file_t *f = &amp;file_list[0];<br>    for (i=0;i&lt;file_count;i++) {<br>        if (!strcmp(search_for_file,f-&gt;name)) {<br>            active_file = i;<br>            if (active_file &gt; C89_92(9,12)) {<br>                file_winpos = C89_92(9,12);<br>            }<br>            else {<br>                file_winpos = active_file;<br>            }<br>        }<br>        f++;<br>    }<br>}</pre>
+      or (excerpt from TI-Chess 4.14-):
+      <pre>for (j=0;j&lt;2;j++) {<br>    if (!j) magic = MAGIC_BOOK_WHITE;<br>    else magic = MAGIC_BOOK_BLACK;<br><br>    nr_books[j] = FindAndOpenTICFiles(bookfiles[j],MAX_BOOKS_USED,magic);<br><br>    for (i=0;i&lt;nr_books[j];i++) {<br>        src = bookfiles[j][i].start+6;<br>        books[j][i].nr_pos = *(unsigned short*)src;<br>        src += 2;<br>        books[j][i].nr_moves = *(unsigned short*)src;<br>        src += 2;<br>        books[j][i].first_hashcode = *(hash_t*)src;<br>        src += (books[j][i].nr_pos-1)*10;<br>        books[j][i].last_hashcode = *(hash_t*)src;<br>    }<br>}</pre>
+      by
+      <pre>for (j=0;j&lt;2;j++) {<br>    ptrbooks = &amp;books[j][0];<br>    ptrbookfiles = &amp;bookfiles[j][0];<br><br>    if (!j) magic = MAGIC_BOOK_WHITE;<br>    else magic = MAGIC_BOOK_BLACK;<br><br>    nr_books[j] = FindAndOpenTICFiles(bookfiles[j],MAX_BOOKS_USED,magic);<br><br>    for (i=0;i&lt;nr_books[j];i++) {<br>        src = ptrbookfiles-&gt;start+6;<br>        ptrbooks-&gt;nr_pos = *(((unsigned short*)src)++);<br>        ptrbooks-&gt;nr_moves = *(((unsigned short*)src)++);<br>        ptrbooks-&gt;first_hashcode = *(hash_t*)src;<br>        src += (ptrbooks-&gt;nr_pos-1)*10;<br>        ptrbooks-&gt;last_hashcode = *(hash_t*)src;<br><br>        ptrbooks++;<br>        ptrbookfiles++;<br>    }<br>}</pre>
+      <br>
+      It may be hard to force GCC 4.0+ to generate postincremented mode.
+      Adding the construct Kevin suggested me for TI-Chess 4.12
+      <pre>asm volatile (""::"a"(ptr));</pre>
+      right after a postincremented mode use <em>might</em> improve
+      things.<br>
+      If the code within the loop allows it, you can replace
+      <pre>for (i = 0; i &lt; 2000; i++) {<br>    ...<br>}</pre>
+      by
+      <pre>for (i=2000; (i--);) {<br>    ...<br>}</pre>
+      which makes GCC generate the dbf processor instruction, often leading
+      to smaller code overall (although GCC could sometimes be smarter when
+      generating dbf instructions).</li>
+    <li><span class="under">loop / array subscript optimization 2</span>:
+      DEREFSMALL is an useful macro defined as
+      <pre> #define DEREFSMALL(__p,__i) \<br> (*(typeof(&amp;*(__p)))((unsigned char*)(__p)+(long)(short)((short)(__i)*sizeof(*(__p)))))</pre>
+      <em>(yes, the <code>&amp;*</code> is necessary)</em><br>
+      For "small" arrays (well, smaller than 32768 bytes !),
+      <code>DEREFSMALL(p,i)</code> is just the same as <code>p[i]</code>, but
+      more optimized (faster and smaller). GCC cannot know whether an array
+      is small enough to use this construct by itself, so it will use the
+      general way that never fails. Such a macro was probably used in AMS
+      1.xx in the HeapDeref function and macro (various functions using
+      ROM_CALL_441 "HeapTable" in some way), but AMS 2.xx (and obviously, AMS
+      3.xx, which is even worse in terms of optimization) probably use the
+      general way.</li>
+    <li><span class="under">local variables</span>: do not use large local
+      variables, especially if they are initialized and never change. Indeed,
+      they a) load the stack, which may lead to stack overflows when launched
+      from file explorers, as most of them do not leave the entire stack
+      empty and b) turn into slower and bigger programs (code is required to
+      copy data from the executable onto the stack). The code itself does not
+      always allow this optimization, though. It was possible on Venus
+      (movements.c), it is possible on TI-Pinball.</li>
+    <li><span class="under">loop strength</span>: beware of tight loops, plain
+      68000 doesn't have a branch prediction unit. Unrolling several loops a
+      bit costs several bytes (up to several percents of the total size) but
+      can greatly increase speed. This happened in the ExtGraph tilemap engine
+      (Refresh* - 20%), and we could have pushed further in that direction.</li>
+    <li><span class="under">multiplications</span>: beware that -Os (default
+      TIGCC setting) will generate multiplies instead of the equivalent
+      bigger but faster add/shift/subtract sequence, when multiplying by a
+      non-power of 2. This might be an issue speed-wise. I use -O2 or -O3
+      when I need speed (C routines of ExtGraph or the TI-Chess engine for
+      example), I use -Os when I need size optimization and speed doesn't
+      matter (most TICT games, interface of TI-Chess, TICT-Explorer for
+      example). Using command-line compilation (batches, makefiles), you can
+      mix files compiled with different options: interface should usually be
+      -Os, algorithms should usually be -O2/-O3.<br>You should avoid TIGCC
+      Projects, at least in their current form. I switched a number of TICT
+      programs to them *before* I knew of their exact drawbacks (several
+      folks over at yAronet said they sucked, but I had never stumbled across
+      the problems), and now, it doesn't make much sense to modify back the
+      sources to revert to batches.</li>
+    <li><span class="under">fast string drawing</span>: if your program is a
+      bit slow (nearer from 10 FPS than from 20 FPS - more than 20 FPS is
+      pointless due to a rather bad screen) and you're drawing strings,
+      consider using fast methods such as that used in ebook 2.06+,
+      TICT-Explorer 1.40+, TI-Chess 4.10+, S1P6, Ice Hockey 68k (other
+      programmers use similar methods); use <em>fastitoa.h</em> (browse down
+      the news page of the TICT website). Doing this boosted FL's Game of
+      Life, Ice Hockey 68k, etc. for minimal size cost, if even positive,
+      given that their __regparm__ calling convention is more efficient
+      size-wise than that of DrawStr / sprintf.<br>
+      Like the kernel RAM_CALLs, this method gives direct access to the font
+      data. Unlike the kernel RAM_CALLs, pointers never point to garbage (due
+      to an unfortunate method to retrieve addresses, kernel RAM_CALLs can -
+      you can see that with an old Solar Striker version on a Titanium), it
+      is very fast to set up, and it takes the AMS 2.xx and later font
+      redefinition possibility into account.<br>
+      If you need a special drawing mode, tell me or tell someone on the
+      boards, so that you can be pointed to an existing program, or someone
+      that might make it for you. A complete set and support of such routines
+      has been in the todo list of ExtGraph 2.00 Betas for a long time, but
+      it's still not done.</li>
+    <li><span class="under">shifts and rotates</span> are rather slow. For
+      example, I made FastSprite32_MIRROR_H_R from ExtGraph twice faster than
+      the original one by removing shifts. See also the assembly trick
+      below.</li>
+    <li><span class="under">bit instructions</span> can be very useful
+      size-wise and speed-wise. This is why the EXT_...PIX_AN macros in
+      ExtGraph 2.xx use them. We'll deprecate those macros (which proved to
+      be buggy so many times until 2.00 Beta 5...) when GCC always generates
+      bit instructions on the old EXT_...PIX version using EXT_...PIX_AM.
+      Compression/decompression routines also benefit from them.</li>
+    <li>AMS <span class="under">floating-point numbers</span> are slow. Peter
+      J. Rowe (Mig53) has worked on usable fast (binary) floating point
+      (MC68343-style) routines for TI-68k calculators, I don't know what is
+      the current state of that project. They boost the very few programs
+      that really need them, at the expense of size of course. Note that
+      fixed-point math may be enough (there's also a FIP library by Mig53,
+      and another one by I don't remember whom), and it's faster. ClosedGL
+      badly needs FFP routines, I talked about that with its author.</li>
+    <li><span class="under">instruction scheduling</span>: carefully analyse
+      your algorithms to schedule tests and branches, remove bottlenecks
+      (there may be another way to do the same thing faster: this often
+      happens with bit manipulations). In the core of the Dissolve effect,
+      there used to be a test *after* a shift: putting it *before* saves a
+      number of clocks several thousands of times...<br>
+      If at the end, it turns out that GCC could be generating smarter code,
+      you can always switch to inline ASM with C operands, but it's not
+      always easy to use (ahem, the ExtGraph pixel macros...).</li>
+    <li><span class="under">calling conventions</span>: when passing
+      parameters through registers, try to keep most parameters in
+      d0-d2/a0-a1 (the TIGCC documentation suggests using <em>up to</em> six
+      registers to pass parameters). I used d3 or a2 in several functions of
+      ExtGraph, and a2-a3 in the tilemap engine because I just don't have
+      time to modify nearly all functions to have them take their parameters
+      outside of d0-d3/a0-a1 on the stack. If you use registers d3-d7/a2-a6
+      to pass parameters, you'll leave the compiler less registers it can use
+      permanently (the standard calling convention being "d0-d2/a0-a1 can be
+      destroyed"). This may <em>in fine</em> turn into less optimized code -
+      all the more this can prevent using -freg-relative-an / global register
+      variables (the ExtGraph tilemap engine patch made by Kevin so that the
+      TIGCCLIB doublebuffering is usable with the tilemap engine does, that's
+      why I don't support it; read on).</li>
+    <li><span class="under">file handling</span>: use vat.h functions instead
+      of stdio.h functions (faster, smaller, easy to use). This is basically
+      what you're doing on *nix platforms within a mmap ... munmap pair: all
+      files are memory-mapped on our platform.
+      When using vat.h functions, you can sometimes use SYM_STRs computed at
+      compile-time instead of ordinary C strings (which have to be converted
+      to SYM_STRs by SYMSTR at run-time). This has saved hundreds of bytes in
+      Ice Hockey 68k and TI-Chess.</li>
+  </ul>
+</blockquote>
+<strong>Memory allocation/management</strong>:
+<blockquote>
+  <ul>
+    <li>rather than worrying about every possible case where an allocation
+      could fail, design your program in such a way that you can easily find
+      and free all the stuff you've already allocated.<br>
+      The best way to do this is usually to pack separate memory allocations
+      into a single allocation. This will save HANDLEs (the number of memory
+      blocks on our calculators is limited to 2000), and most of all code
+      space (since there's only one check for successful allocation and only
+      one free). Have a look at Ice Hockey 68k and TI-Chess for complete code
+      examples (optimizing memory allocation saved several hundreds of
+      bytes).<br>It is more sensitive to memory fragmentation, but I never
+      stumbled across the problem on my calculator, despite huge uptimes
+      (measured through FiftyMsecTick). If a program cannot allocate a single
+      block of 20 or 30 KB, well, the calculator cannot run large programs
+      either, so it should be reset !<br>
+      Never allocate small blocks (smaller than, say, 32 bytes): use a
+      pooling allocator instead, all the more the AMS functions are rather
+      slow.<br>
+      In addition to that, you can use ...throw functions and an error
+      handler (TRY/ONERR/ENDTRY or TRY/FINALLY/ENDTRY) that always frees
+      everything you allocated.</li>
+    <li>if speed matters, avoid memcpy/memset/memmove when the amount of data
+      is smaller than several hundreds of bytes, as these functions are
+      rather well optimized for "large" blocks (even if they cannot rival the
+      brute-force movem trick used in grayscale supports and plane copy
+      routines), but there's an overhead due to them being generic functions.
+      The GCC versions in TIGCC are currently unfortunately unable to generate
+      small inline copy loops (GCC 4.3+ is supposed to know how to do that).
+      For once, GCC will often generate code worse speed-wise than that the
+      [insert swear words here] compiler in TIFS spits out. Writing such
+      loops is easy, in both C and ASM.</li>
+  </ul>
+</blockquote>
+<strong>Structures, unions:</strong>
+<blockquote>
+  <ul>
+    <li>Pad structs and unions out to a size that is a power of two (GCC will
+      generate multiplies on -Os level otherwise, which may be an issue
+      speed-wise). Arrange structs to minimize the amount of wasted space:
+      pack chars together. Beware of words and longs at odd addresses (GCC
+      should warn you), they trigger the dreaded "Address Errors".</li>
+    <li>Put the most-frequently-accessed member of a struct first so that a
+      more efficient addressing mode can be used under some conditions. If
+      you use internal structures that you partly include in your savefiles,
+      all saved members should be consecutive so that you can use memcpy /
+      memset with VAT functions (you don't use stdio.h functions, do you ?).
+      This was done in Venus.</li>
+    <li>When using a switch, use tightly packed values for the cases if
+      possible, the jump tables will be smaller that way. If speed matters,
+      do not use if-else if-... chains when you can use a switch (it usually
+      increases size, but not always), except for small chains.</li>
+    <li>Don't mix types in such a way as to force many unnecessary sign
+      extensions. signed char subscripts do (and GCC usually warns about
+      them), as the 68000 doesn't have the d(an,dn/an.b) addressing mode.</li>
+    <li>Do sanity-check the compiler's output from time to time, using
+      -save-temps, especially on your inner loops; it might reveal an issue
+      with your code or most often, bad code generated by GCC.</li>
+  </ul>
+</blockquote>
+<strong>Assembly tricks:</strong>
+<blockquote>
+  <ul>
+    <li><span class="under">Pack writes to memory</span>. That is to say,
+      frequent<br>
+      <pre>move.w #word2,-(sp)<br>move.w #word1,-(sp)</pre>
+      can be replaced by
+      <pre>move.l #((word1)*65536+word2),-(sp)</pre>
+      <pre>clr.w d(sp)<br>clr.w (d+2)(sp)</pre>
+      and other combinations of arithmetic operations and addressing modes,
+      can be replaced by
+      <pre>clr.l d(sp)</pre>
+      <strong>unless at least one of the variables is
+      <em>volatile</em></strong>, which is infrequent.<br>
+      The former optimization is now in the TIGCC peephole optimizer, I
+      bugged Kevin many times to add it ;-). Adding the latter in TIGCC could
+      save at least 100 more bytes in TICT-Explorer and similar programs
+      (many zero-initialized local variables on the stack). GTC can perform at
+      least the latter.</li>
+    <li>There's an interesting way to <span class="under">combine two bytes
+      into one word</span>, storing the result in a register. The first idea
+      that comes to mind is obviously
+      <pre>move.b &lt;ea1&gt;,dn<br>lsl.w #8,dn<br>move.b &lt;ea2&gt;,dn</pre>
+      However
+      <pre>move.b &lt;ea1&gt;,-(sp)<br>move.w (sp)+,dn<br>move.b &lt;ea2&gt;,dn</pre>
+      is faster and not necessarily bigger.<br>
+      This trick is used in at least the speed-optimized version of the
+      latest TTPack/PPG decompression routine I'm talking about above.</li>
+    <li>Think of <span class="under">using the CPU flags</span>, especially
+      the C, N flags and combinations of them. Conditionally doing something
+      when an unsigned char value is above 0x80, an unsigned short is above
+      0x8000, an unsigned long is above 0x80000000, can be achieved without
+      any comparison, just (signed) pl and mi branches. Checking multiple
+      bits one at a time can be achieved by shifting and checking C.<br>
+      This kind of tricks is frequently used in ExtGraph between others, and
+      GCC can perform at least some of them on its own: for example, it can
+      generate a single unsigned comparison for the following code:
+      <pre>if ((foo &lt; 0) || (foo &gt; bar)) { ... }</pre>
+      This kind of trick enabled me to save 2 bytes in ttstart, and most of
+      all 12 bytes out of 32 (!) on the VTI detection method by JM.
+    </li>
+    <li><span class="under">immediate comparisons</span>: If the value of the
+      "comparand" can be destroyed, you can replace
+      <pre>cmpi.w #[-8..-1/1..8],&lt;ea&gt;</pre>
+      by
+      <pre>subq.w #[-8..-1/1..8],&lt;ea&gt;</pre>;
+      <pre>cmpi.size #0,&lt;ea&gt;</pre>
+      is better under the form
+      <pre>tst.size &lt;ea&gt;</pre>
+      This is used in PolySnd, ExtGraph.</li>
+    <li>The trick used in kernel-based programs' headers (reproduced below in
+      a mix of assembly dialects) is the smallest way to push a pointer on
+      the stack. I like it because it's a very specific and infrequent, but
+      clever, use of bsr:
+      <pre>tst.w $30.w | Check the kernel magic.<br>beq.s there_below | Branch taken -&gt; none installed.<br>movea.l $34.w,a0 | kernel::exec<br>jmp (a0) | The execution never resumes at printstr.<br>printstr: | Print the string whose address is on the stack.<br>movea.l $C8,a0<br>movea.l $398(a0),a0 | ST_helpMsg<br>jsr (a0)<br>| 4 to remove string address, 4 to undo the first bsr (not reproduced here)<br>| right before the program header.<br>addq.w #8,sp<br>| Return to launcher (AMS, a pstarter, ttstart, SuperStart, some file explorer, etc.).<br>rts<br>there_below:<br>| Pushes the address of the string right after this instruction and branch above. Never returns.<br>bsr.s printstr<br>.ascii "Kernel required"</pre>
+    </li>
+  </ul>
+  A number of those optimizations was performed in the latest version (2.10)
+  of star (Starfield Effect by TICT), the latest version of TI-Miner, the
+  latest version of TICT-Explorer, TICT Tutorial S1P6, Ice Hockey 68k, Civ89, etc.
+</blockquote>
+
+<hr>
+<!-- ====================================================================== -->
+<!-- OPTIMIZED COMPILATION OPTIONS -->
+<!-- ====================================================================== -->
+
+<h2>Optimized compilation options</h2>
+<strong>Most of those optimizations cannot be enabled by default in the
+compiler, for backwards compatibility and/or lowest possible side effects on
+the code.</strong> It's up to you to use them.<br>
+<blockquote>
+  <ul>
+    <li><strong>separate builds</strong> (one for 89/89T, one for 92+/V200)
+      just as I do in TICT programs. <em>This is a multi-kilobyte
+      optimization on Ice Hockey 68k, Hawk, Backgammon, many others - and the
+      quickest one !</em><br>
+      This point of view is not shared by everyone in the community. Some
+      proeminent member fights against on-calc incompatibility, calling on-calc
+      compatibility "functionality". This is arguable, since some end users do
+      not like on-calc-incompatible programs... although on-calc compatibility
+      takes space that could be used to improve programs speed-wise and
+      <em>functionality</em>-wise...<br><br>
+      The fact is, calculators have been sold packaged with links for years.
+      In other words, most TI-68k users now have link cables, many more
+      than back in 2000 when I bought my 89. Internet connections are much more
+      common than in 2000 as well. This means that users can download the
+      binaries for their particular calculator model, and transfer them to their
+      calculators - or one of their friends in the same classroom can.
+      Moreover, TI-89(T) are a majority. On-calc compatibility basically makes
+      89 users bother with 92+/V200-only code which neither them nor most
+      calculators around them will ever use ! This code makes the programs
+      they use bigger (and very slightly slower, but the difference is definitely
+      not noticeable)...<br><br>
+      <em>On-calc incompatibility is actually not so much of a drawback in
+      terms of use</em>: if end-users *really* want a program (game, cheat,
+      "clack", etc.), then they do what they have to do to get it working
+      (upgrade the AMS, use PreOS, remove language localizations, use the
+      version adapted to their calculator model, etc.). TICT programs, which
+      I didn't create but happen to maintain, are rather widely used -
+      especially TI-Chess - while being and becoming on-calc incompatible,
+      aren't they ;-) ?<br><br>
+      I estimate TI-Chess would be more than 10 KB (!) larger (uncompressed)
+      if it were on-calc compatible, due to storing keyboard handling and GFX
+      for both models in the same executable. XtraKeys does exactly that, which
+      makes it much larger than it could be. And the first TICT-Explorer 1.30+
+      versions, way before the 1.40 ones, are also kilobytes larger when
+      changing the definitions of the C89_92 macros to use compat.h definitions
+      (just for testing purposes).<br>
+      <strong>The "Optimize Calc Consts" option</strong> makes on-calc-incompatible
+      programs with a single build, but the results are far from being as
+      good as those separate builds can yield, because the compiler must
+      generate code that reads a global variable instead of optimizing
+      constants away. More than 1 KB IIRC of extra code for the first
+      TICT-Explorer 1.30+ versions. Therefore, I advise against using
+      that option.<br><br>
+      Some persons have got a problem with compiling their program twice (or
+      three times if the program's design allows compiling an on-calc compatible
+      version <strong>in addition to</strong> the on-calc-incompatible ones -
+      TI-Chess' design does not, with good reason, as stated above), because it
+      takes more time. On computers running a real OS (i.e. not Win 9x or ME
+      - NT-derived Windows or even more *nix/BSD handle launching external
+      programs quickly), this looks like a non-argument.<br>Indeed, compiling
+      the program more than once is hardly necessary in development stage,
+      i.e. most of the time. For TI-Chess and TICT-Explorer, the longest
+      compilation takes less than 15 seconds total on my 4+-year-old computer,
+      with a significant part of that time spent reordering sections for
+      greater optimization. It's true that when making the distribution
+      packages, I compile TI-Chess <em>eight</em> times and TICT-Explorer
+      <em>twelve</em> times, due to language localizations. But the process
+      is neither very frequent nor extremely long, and <strong>very</strong>
+      few other programs have more than two language localizations...</li>
+    <li><strong>-fomit-frame-pointer</strong> (now default in TIGCC 0.96+
+      with GCC 4.0+ - for a long time, it was not default because it didn't
+      work with floating-point): the compiler will not use any frame pointers
+      (safe ways to access local variables and parameters on the stack) if
+      they're not necessary, which will turn into more optimized (faster,
+      smaller) code. This option is an important one on the 68000
+      architecture, especially if there are many small subroutines (which
+      could often be logically inlined, as mentioned above).</li>
+    <li><strong>-mno-bss</strong> or sometimes better, merging the BSS
+      section with the data section (<strong>-DMERGE_BSS</strong>), as BSS
+      are now used by default (unlike what TIGCC 0.94- did). Instead of
+      reserving space permanently in the binary for non-initialized globals,
+      the BSS support allocates a block of memory before _main is executed,
+      and destroys it after _main returns.<br>
+      This looks like a great idea (that's what most platforms do anyway,
+      but they usually have a MMU), but it turns out that on our platform
+      BSS are inefficient in practice:
+      <ul>
+        <li>Many programs that have globals large enough so that BSS might
+          make sense, actually do the allocation work by themselves (which
+          was necessary in TIGCC 0.94-).</li>
+        <li class="li2">Worse, due to their nature, just like kernel or
+          compressed relocations to RAM_CALLs and ROM_CALLs, they force using
+          the relocated 68000 xxx.l addressing mode, which is less efficient
+          speed-wise and size-wise than the non-relocated d(pc) / d(an)
+          addressing mode merging the BSS section with the data section often
+          enables to use...</li>
+      </ul>
+      As of TIGCC 0.96 Beta 4, -mno-bss / -DMERGE-BSS is compulsory in case
+      you want to use -freg-relative-an, as reg-relative references to BSS
+      are not yet supported.<br>
+      <em>This was a multi-kilobyte optimization on Ice Hockey 68k and a
+      number of other programs - and the code is very slightly faster</em> !</li>
+    <li><strong>-mpcrel</strong>, mutually exclusive with
+      <strong>-freg-relative-an</strong> as of TIGCC 0.96 Beta 5.</li>
+    <li><strong>-freg-relative-an</strong> (use only n=4 or 5, as a number of
+      routines use a2-a3; n=5 forces not to use OPTIMIZE_ROM_CALLS), mutually
+      exclusive with <strong>-mpcrel</strong> as of TIGCC 0.96 Beta 5.<br>
+      I added -freg-relative-a5 (and -mno-bss) in TI-Chess 4.12+.
+      Compared to without it, the overall impact on size was not significant,
+      as the benefit of more efficient references was compensated by the size
+      of some large globals, hidden for some time (since TIGCC 0.95 was used,
+      actually) by BSS. Nevertheless, the compression ratios jumped up. This
+      is also visible in Backgammon (800 bytes over ~9000 !).</li>
+    <li><strong>-Wa,--all-relocs</strong> for stronger linker-side
+      optimization. Default in a number of situations, but I always forget
+      which ones, and defining it more than once won't hurt anything.</li>
+    <li><strong>-Wa,-l</strong>. It does not always work with programs larger
+      than 32 KB (though it can work on significantly larger Venus, if
+      section reordering is disabled and files are manually reordered). Your
+      computer might turn unresponsive due to thousands of errors if used with
+      a 32+ KB program, and reordering is impossible...</li>
+    <li><strong>-mregparm(=n)</strong> (do not use beyond n=5 or 6, see
+      above). I don't remember seeing a program worsened by switching to
+      -mregparm, it usually saves big. For backwards compatibility, it cannot
+      be enabled by default in TIGCC, as TIGCC 0.93- do not feature
+      __regparm__ mode.<br>
+      <strong>CAUTION</strong>, -mregparm will turn into invalid code if you
+      use improperly-declared function pointers or libraries that are not
+      aware of -mregparm; be SURE to check whether calling conventions match,
+      since those bugs, which caught me more than once on TICT software, are
+      hard to track down, although the TIGCC debugger support (along with
+      TIEmu) now helps finding them.</li>
+    <li><strong>--optimize-code --cut-ranges --reorder-sections
+      --merge-constants -ffunction-sections -fdata-sections
+      -fmerge-all-constants</strong> (read the documentation for more
+      information), or their TIGCC project checkbox equivalents if you're
+      using a project. <strong>--reorder-sections</strong> might prevent you
+      from using -Wa,-l and -mpcrel in large programs, but usually improves
+      your program, at the expense of link time.</li>
+    <li><strong>F-Line instructions</strong> (ROM_CALLs, jumps) can reduce
+      size. Though, they turn into slightly slower code and require an
+      internal emulator to work on old AMS versions (very few programs cannot
+      work on AMS 2.03-, and those are mostly CAS additions, so you should
+      always use one instead of setting a high MIN_AMS). Although I fought
+      against them for quite some time, I've been using them in multiple TICT
+      programs for a while. After all, hardly any TICT program requires extreme
+      speed, and the difference is not too significant, unless the ROM_CALL
+      is small. Anyway, ROM_CALLs are written in a sloppy - and ever-worsening - way.</li>
+    <li><strong>-ftracer</strong> turns in faster but larger code (more
+      duplications). The GCC 4.0+ new speed optimization options are even
+      stronger with it (but watch out the size - this is why this option is
+      hardly usable on this platform !!).</li>
+    <li><strong>-fno-if-conversion</strong> may or may not decrease size, it
+      depends on the program.</li>
+    <li>new optimization options in GCC 4.0 sometimes seem to have a bad
+      effect size-wise or speed-wise, like <strong>-ftree-dominator-opts
+      </strong> (enabled by default when optimizing). <strong>However, this
+      may no longer be true in future TIGCC versions as the GCC 4.x
+      versions stabilize.</strong></li>
+    <li><strong>-fgcse-lm</strong>, <strong>-fgcse-sm</strong>,
+      <strong>-fgcse-las</strong> may help or not.</li>
+  </ul>
+</blockquote>
+<hr>
+<!-- ====================================================================== -->
+<!-- COMPARISON BETWEEN DIFFERENT APPROACHES -->
+<!-- ====================================================================== -->
+
+<blockquote>
+
+  <table summary="Pros and cons of design / compilation options" border="1">
+    <caption>Comparison between -mpcrel, -Wa,-l, BSS, -freg-relative-an,
+    global register variables</caption>
+    <thead>
+      <tr>
+        <td><strong>Type</strong></td>
+        <td><strong>Pros</strong></td>
+        <td><strong>Cons</strong></td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>-mpcrel</strong></td>
+        <td><ul>
+            <li class="li2">Position Independent Code</li>
+            <li class="li2">usually saves space</li>
+            <li class="li2">works best with -Wa,-l</li>
+          </ul>
+        </td>
+        <td><ul>
+            <li class="li2">takes up an address register in a semi-permanent
+              way, for writes most of the time</li>
+            <li class="li2">doesn't work with most programs larger than 32 KB
+              - may require disabling --reorder-sections</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>-Wa,-l</strong></td>
+        <td><ul>
+            <li class="li2">saves space</li>
+            <li class="li2">works best with -mpcrel</li>
+          </ul>
+        </td>
+        <td><ul>
+            <li class="li2">not very powerful</li>
+            <li class="li2">doesn't work with most programs larger than 32 KB
+              - may require disabling --reorder-sections</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>BSS</strong></td>
+        <td><ul>
+            <li class="li2">transparent for programmers</li>
+            <li class="li2">work with programs larger than 32 KB</li>
+          </ul>
+        </td>
+        <td><ul>
+            <li class="li2">references are relocated xxx.l: removing BSS from
+              Ice Hockey 68k using -mno-bss saved ~600 relocations and more
+              than 2 KB, compared to kernel-style BSS references !</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>-freg-relative-an</strong></td>
+        <td><ul>
+            <li class="li2">usually transparent for programmers</li>
+            <li class="li2">optimized (d(an) accesses)</li>
+            <li class="li2">works with most programs larger than 32 KB</li>
+          </ul>
+        </td>
+        <td><ul>
+            <li class="li2">takes up an address register permanently</li>
+            <li class="li2">dirty but simple hack needed to work in callbacks
+              and interrupt handlers (see TI-Chess 4.12+)</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>global register variables</strong></td>
+        <td><ul>
+            <li class="li2">optimized (d(an) accesses)</li>
+            <li class="li2">work with programs larger than 32 KB</li>
+          </ul>
+        </td>
+        <td><ul>
+            <li class="li2">takes up an address register permanently</li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+<hr>
+<!-- ====================================================================== -->
+<!-- GENERAL ADVICE -->
+<!-- ====================================================================== -->
+
+<h2>General advice that doesn't really fit elsewhere</h2>
+
+<blockquote>
+  <ul>
+    <li>Don't worry too much about returning all the way down to _main when
+      you want to quit; there's nothing wrong with a call stack of _main
+      -&gt; show_main_menu -&gt; pick_choice -&gt; main_menu_quit -&gt; exit.
+      An alternate way to do that is setjmp/longjmp or errors caught within a
+      TRY ... FINALLY ... ENDTRY block in _main, especially if your program
+      uses events in some form.</li>
+    <li>when making savefiles, you should use a custom type of file (OTH_TAG)
+      and both a magic number and a version number. Never use strings, as
+      some versions of TI-Connect choke on them if the number of 0x00 in them
+      is too high. We usually use magic+version numbers for TICT programs, as
+      it increases stability (checking for known files and formats prevents
+      crashes), and it works very well.</li>
+  </ul>
+</blockquote>
+
+<!-- ====================================================================== -->
+<!-- USEFUL TOOLS, DOCS, WEBSITES, FOOD FOR THOUGHT I'D LIKE TO MENTION -->
+<!-- ====================================================================== -->
+
+<h2>Useful tools, docs, (semi-off-topic) food for thought</h2>
+
+<blockquote>
+  <ul>
+    <li><a
+      href="http://www.ticalc.org/archives/files/fileinfo/350/35077.html">Travis
+      Fischer (Fisch2)'s tool</a> for optimized string arrays.</li>
+    <li><a href="http://www.jimrandomh.org/sgt/">Jim Babcock (JimRandomH)'s
+      tool</a> (beta) for easier and more powerful language
+    localizations.</li>
+  </ul>
+  <ul>
+    <li><a href="http://tiwiki.etherdream.org/Accueil">TI-Wiki</a>, another
+      TI-68k calculators documentation, more general but way less thorough
+      than the TIGCC documentation, and currently written nearly entirely in
+      French. There hasn't been any activity on it for a while.</li>
+    <li><a href="http://tifreakware.ath.cx/">TI-Freakware</a> and
+      <a href="http://board.boolsoft.org/">boolsoft</a>, two TI-68k/TI-Z80
+      programming message boards.</li>
+  </ul>
+  <ul>
+    <li><a href="http://www.joelonsoftware.org">Joel on software</a>, a good
+      resource on programming style and insightful thoughts on the way the
+      computer industry goes.</li>
+    <li>Sites of the <a href="http://ostg.com/">Open Source Technology
+      Group</a>, especially <a href="http://slashdot.org">Slashdot</a>, <a
+      href="http://newsforge.com">Newsforge</a> and <a
+      href="http://sf.net/">Sourceforge</a>; <a
+      href="http://lwn.net">Linux Weekly News</a>: large news and
+      programming sites. Slashdot's users' comments have the reputation of
+      being somewhat bad, with some reason (quite many comments are rated
+      sub-normal), but there are always many thorough and technical comments
+      (+4, +5 "insightful"/"informative" in Slashdot ratings) and solutions
+      in them. Digg!'s unmoderated news queue (a number of damagingly wrong
+      news in a few months) and comments are worse... Looks like some
+      Slashdot ACs, trolls, kiddies have found a new haven there.</li>
+    <li><a href="http://distrowatch.com">Distrowatch</a>, the well-known
+      resource of information about the numerous Linux/BSD distributions.</li>
+    <li><a href="http://www.zegeniestudios.net/ldc/">Zegenie Linux Distribution
+      Chooser</a>, a tool to help finding a GNU/Linux distribution tailored
+      to your needs. It worked alright on the various scenarios several of
+      my schoolmates and I tested.</li>
+  </ul>
+  <br>
+
+
+  <p>While reading news and following the trends over several years, I got
+  the conviction that optimizing code in an old-fashioned way, on a
+  platform not so many persons care about, is rather pointless compared to
+  all the locking down and privacy invasions that happen on us, for the sake
+  of large companies, or foreign governments, to try to keep a disfunctional
+  system afloat...</p>
+</blockquote>
+<hr>
+<br>
+
+
+<h2>... And The Credits go to:</h2>
+<ul>
+  <li>First, obviously, the TIGCC team for the TIGCC development environment.</li>
+  <li>The many proofreaders of this tutorial, especially Jim Babcock
+    (JimRandomH) and Travis Fischer (Fisch2) for their comments of
+    additions.</li>
+  <li>My schoolmate Yoann for making me aware of the beauty and power of
+    CSS, although I don't currently know too much about it.</li>
+  <li>*HTML tools, all of them usable under <a
+    href="http://www.debian.org/">Debian</a>-based <a
+    href="http://www.mepis.com/">Mepis GNU/Linux</a> but not necessarily
+    under Windows XP:
+    <ul>
+      <li>the powerful free <a href="http://www.nvu.com">Nvu</a> and <a
+        href="http://bluefish.openoffice.nl/">Bluefish</a> graphical
+        editors, and "lightweight" (?) <a
+        href="http://www.scintilla.org">SciTE</a>. No, vi, emacs and
+        derivatives are not text editors, nor will ever be ;-P</li>
+      <li class="li2">the <a href="http://www.w3c.org">World Wide Web
+        consortium (W3C)</a> tools Tidy (used through Bluefish and
+        as a <a href="http://www.mozilla.org/products/firefox">Firefox</a>
+        plugin) and <a href="www.w3.org/Amaya">Amaya</a> to check the
+        validity and accessibility of this page (Firefox is more
+        standards-compliant when rendering pages than Amaya though).</li>
+    </ul>
+    MEPIS is a rather popular GNU/Linux distribution, thanks to its ease of use.
+    Yes, it contains several non-free programs, most of which have good
+    free equivalents, with the notable exception of the unmatched binary
+    drivers for graphic cards, which are fast and support recent models...<br>
+    My main PC has been running MEPIS >95% of the time for about two years
+    and a half. 
+  </li>
+  <li>... and <a href="mailto:lionel_debroux@yahoo.fr">Lionel Debroux
+    (me)</a> for writing this tutorial.</li>
+</ul>
+
+<h2>Contact TI-Chess Team Members</h2>
+<ul>
+  <li class="li2">You can reach Thomas Nussbaumer at <a
+    href="mailto:thomas.nussbaumer@gmx.net">thomas.nussbaumer@gmx.net</a></li>
+  <li class="li2">Marcos Lopez (retired) can be reached at <a
+    href="mailto:marcos.lopez@wol.es">marcos.lopez@wol.es</a></li>
+  <li class="li2">You can reach Lionel Debroux at <a
+    href="mailto:lionel_debroux@yahoo.fr">lionel_debroux@yahoo.fr</a></li>
+</ul>
+
+<blockquote>
+  <p>Check the TICT HQ Website at <a
+  href="http://tict.ticalc.org">http://tict.ticalc.org</a> for more tutorials
+  and software.</p>
+
+  <p>More useful tips, tricks and hints can be found at our messageboard at:
+  <a
+  href="http://p080.ezboard.com/btichessteamhq">http://p080.ezboard.com/btichessteamhq</a>.</p>
+
+  <p>Suggestions, bug reports and similar are welcome (use our messageboard
+  for this).</p>
+</blockquote>
+
+<h2>How to thank the author ?</h2>
+
+<blockquote>
+  <p>The usual: please give credit in your programs, and use the
+  messageboard.</p>
+</blockquote>
+
+<h2>Copyleft</h2>
+<blockquote>
+  <p>This documentation and the accompanying stylesheet may be distributed
+  by any other website.</p>
+
+  <p>The author makes no representations or warranties about the suitability
+  of the software and/or the data files, either express or implied. The
+  author shall not be liable for any damages suffered as a result of using or
+  distributing this.</p>
+
+  <p>You are free to re-use any part of the sourcecode, and we'd like it if
+  you gave credits including a reference to the TICT-HQ (<a
+  href="http://tict.ticalc.org/">http://tict.ticalc.org/</a>).</p>
+</blockquote>
+<hr>
+<em>Lionel Debroux, France, 2004-2008</em>
+</body>
+</html>

@@ -1,5 +1,5 @@
 ===============================================================================
-Library ExtGraph (TIGCC-AddOn)               (c) 2001-2005 TICT (TI-Chess Team)
+Library ExtGraph (TIGCC-AddOn)               (c) 2001-2008 TICT (TI-Chess Team)
 ===============================================================================
 
 Read file docs/extgraph.html to get details about the API of the ExtGraph-Lib.
@@ -20,7 +20,9 @@ from this file: not so few did not understand that ExtGraph was ready for use
 (this information was missing in this file...), therefore they wanted to
 recompile it and they were experiencing trouble.
 
+
 To use the ExtGraph Library
+---------------------------
 Copy files from the folder /lib into the directory where the rest of your
 sources are. To use extgraph functions now in your project add the following
 line:
@@ -34,6 +36,8 @@ If you are using the IDE add extgraph.h and extgraph.a to your project. That's
 all.
 
 
+ExtGraph history
+----------------
 One of the greatest improvements in ExtGraph 2.xx, compared to ExtGraph 1.xx,
 is the introduction of __attribute__((__regparm__)) routines. They are faster
 and smaller than equivalent __attribute__((__stkparm__)) routines, which were
@@ -41,9 +45,9 @@ rewritten too, and are left for backwards compatibility. Few __stkparm__
 routines do not have a __regparm__ version: please use __regparm__ versions
 whenever possible, as they are smaller and faster and lead to smaller and
 faster code. As a consequence, TIGCC 0.93 is not supported any more, but this
-version is no longer the official release and it is really outdated now.
+version is no longer the official release and it is REALLY outdated now.
 But ExtGraph 2.xx brings much more than that, read the beginning of the
-documentation docs/extgraph.html.
+documentation DOCS/extgraph.html.
 
 If you distribute ExtGraph within your projects' distributions, please include
 both extgraph.a and extgraph.h (and tilemap.a / tilemap.h if you use the tilemap
@@ -82,23 +86,26 @@ the clipping code and loops.
 Of course, if you customize a function, it's best to include it directly in
 your project, instead of recompiling ExtGraph: it lowers incompatibility and
 bug chances due to recompiling, and it avoids spreading modified versions which
-don't behave the same way as the original ones do. You can tell me about your
-modifications, like Dave Randall did for the single sprite -> two planes
-routines, for example.
+don't behave the same way as the original ones do. You can also contribute your
+modifications.
 
 
 If you think you've found a bug, send me information about the faulty functions,
-with a complete testcase if possible (like Kevin, I won't disclose your project
-if you send me an entire project): I have a small test suite, which suits well
-for sprite routines. I'll try to reply within several days, the delay depends
-on how busy I am. If I forget to reply after a while, remind me about you !
+with a complete testcase if possible (like Kevin Kofler, the maintainer of the
+official TIGCC, I won't disclose your project if you send me an entire project):
+I have a small test suite, which suits well for sprite routines. I'll try to
+reply within several days, the delay depends on how busy I am. If I forget to
+reply after a while, remind me about you !
 But first, please:
-* check out the ExtGraph library (at least the /LIB directory) from its SVN
+* check out the ExtGraph library (at least the /lib directory) from the SVN
 repository, created 2005/08/12, located at http://opensvn.csie.org/ExtGraph,
-and see if the bug is still there in the repository version.
+and see if the bug is still there in the repository version. Many bugs were
+fixed in SVN prior to the 2.00 Beta 5 release.
 * if the problem is Address Error, check whether forcing the pointer alignment
 to be even fixes the problem. As a general rule, all planes *must* start at an
-even address, but there may be more non-conforming code, for efficiency.
+even address, but some functions assume, for efficiency, that one of their
+arguments has non-default alignment (e.g. word alignment for the addess pointed
+to by an unsigned char * pointer).
 
 
 ===============================================================================

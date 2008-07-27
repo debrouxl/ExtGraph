@@ -3,8 +3,8 @@ cd src
 ./cleanup
 cd ..
 rm -f srcbin.tar extgraph.zip extgraph.tar extgraph.tar.bz2
-tar -cf srcbin.tar --owner=0 BIN SRC
-zip -r -q -9 extgraph.zip BIN89 BIN92P BINV200 DOCS LIB srcbin.tar LICENSE.txt README.txt todo\ extgraph.txt makedistro
+tar -cf srcbin.tar --owner=0 src bin --exclude=.svn
+zip -r -q -9 extgraph.zip BIN89 BIN92PV200 DOCS lib srcbin.tar LICENSE.txt README.txt LGPL.txt todo\ extgraph.txt makedist
 rm -f srcbin.tar
-tar -cf extgraph.tar --owner=0 BIN BIN89 BIN92P BINV200 DOCS LIB SRC LICENSE.txt README.txt todo\ extgraph.txt makedistro &>/dev/null
+tar -cf extgraph.tar --owner=0 bin BIN89 BIN92PV200 DOCS lib src LICENSE.txt README.txt LGPL.txt todo\ extgraph.txt makedist --exclude=.svn
 bzip2 --best extgraph.tar

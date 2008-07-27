@@ -1,0 +1,112 @@
+body {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: 11pt;
+color: #ffffff;
+background-color: #000000;
+text-align: justify;
+}
+td {
+font-family: verdana, arial, helvetica, sans-serif;
+color: #ffffff;
+background-color: #000000;
+text-align: center;
+}
+h1 {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: x-large;
+font-weight: normal;
+color: #eebb22;
+background-color: #000000;
+text-align: center;
+}
+h2, caption {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: large;
+font-weight: normal;
+text-decoration: underline;
+color: #ffcc33;
+background-color: #000000;
+}
+h3 {
+font-family: verdana, arial, helvetica, sans-serif;
+text-decoration: underline;
+color: #ffffff;
+background-color: #000000;
+}
+pre {
+color: #ffffff;
+background-color: #000000;
+margin-left: 15px;
+}
+code {
+color: #ffffff;
+background-color: #000000;
+}
+p {
+text-align: justify;
+color: #ffffff;
+background-color: #000000;
+}
+ul {
+text-align: justify;
+color: #ffffff;
+background-color: #000000;
+}
+li {
+color: #ffffff;
+background-color: #000000;
+margin-bottom: 20pt;
+}
+a {
+font-family: verdana, arial, helvetica, sans-serif;
+color: #bbbbff;
+background-color: #000000;
+}
+a:hover {
+color: #8888ff;
+background-color: #000000;
+}
+a:active {
+color: #bbbbff;
+background-color: #000000;
+}
+.hlight {
+color: #ffee88;
+background-color: #000000;
+}
+.toptitle {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: x-large;
+font-weight: normal;
+color: #ffffff;
+background-color: #000000;
+text-align: left;
+}
+.subtitle1 {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: large;
+font-weight: normal;
+text-decoration: none;
+color: #ffffff;
+background-color: #000000;
+text-align: right;
+}
+.subtitle2 {
+font-family: verdana, arial, helvetica, sans-serif;
+font-size: large;
+font-weight: normal;
+text-decoration: none;
+color: #ffffff;
+background-color: #000000;
+text-align: left;
+}
+.under {
+font-family: verdana, arial, helvetica, sans-serif;
+font-weight: bold;
+text-decoration: underline;
+color: #ffffff;
+background-color: #000000;
+}
+.li2 {
+margin-bottom: 10pt;
+}
