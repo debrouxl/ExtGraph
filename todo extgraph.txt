@@ -33,7 +33,7 @@ X* Set of functions that modify X8 sprite data:
 
 X* Install "kernel" headers so that demo26 can be recompiled...
 
--- Beta 5 --
+-- Beta 5 (SVN revision 55 - no SVN tag because SVN tagging sucks a dozen of megabytes per tag in working copies of the whole repository) --
 
 
 0* The C function prototypes embedded in the .s files are outdated, and they're a pain to maintain.
