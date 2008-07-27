@@ -15,36 +15,36 @@
 .macro STRETCH_LINE
 	| Procédure pour écrire trois octets de destination en partant de deux octets source
 	| Sera répétée 10 fois pour écrire une ligne
-	move.w (%a1)+,%d2 | Charge le premier mot dans d2
+	move.w (%a0)+,%d2 | Charge le premier mot dans d2
 	move.w %d2,%d3 | Copie vers d3
 	andi.w #0x3F,%d3 | Conserve uniquement les 6 derniers bits de d3
-	move.b (0,%d3.w,%a4),(%a0) | Ecrit le troisième octet
+	move.b (0,%d3.w,%a4),(%a1) | Ecrit le troisième octet
 	lsr.w #5,%d2 | Décale d2 de 5 bits vers la droite
 	move.w %d2,%d3 | Copie d2 vers d3
 	andi.w #0x3F,%d3
-	move.b (0,%d3.w,%a3),-(%a0) | Ecrit le deuxième octet
+	move.b (0,%d3.w,%a3),-(%a1) | Ecrit le deuxième octet
 	lsr.w #6,%d2 | Décale d2 de 6 bits vers la droite
-	move.b (0,%d2.w,%a2),-(%a0) | Ecrit le premier octet
-	addq.w #5,%a0 | Incrémente le pointeur de 5 pour le bloc suivant
+	move.b (0,%d2.w,%a2),-(%a1) | Ecrit le premier octet
+	addq.w #5,%a1 | Incrémente le pointeur de 5 pour le bloc suivant
 .endm
 
 .macro NEXT_LINE
-	subq.w #2,%a0 | Décrémente le pointeur destination de 2, passage à la ligne suivante
-	lea (10, %a1),%a1 | Incrémente le pointeur source de 10, passage à la ligne suivante
+	subq.w #2,%a1 | Décrémente le pointeur destination de 2, passage à la ligne suivante
+	lea (10, %a0),%a0 | Incrémente le pointeur source de 10, passage à la ligne suivante
 .endm
 
 .macro COPY_LINE
 	| On copie la ligne précedente ici
-	movem.l (-30,%a0),%d2-%d7/%a5
-	movem.l %d2-%d7/%a5,(%a0)
-	move.w -(%a0),%d2
-	lea (28+2,%a0),%a0
-	move.w %d2,(%a0)+
+	movem.l (-30,%a1),%d2-%d7/%a5
+	movem.l %d2-%d7/%a5,(%a1)
+	move.w -(%a1),%d2
+	lea (28+2,%a1),%a1
+	move.w %d2,(%a1)+
 .endm
 
 
 .macro MAKE_LINE
-	addq.w #2,%a0
+	addq.w #2,%a1
 
 	moveq #10-1,%d4
 0:
@@ -56,7 +56,7 @@
 .endm
 
 
-Scale1Plane240to160_R:
+Scale1Plane160to240_R:
 	movem.l %d3-%d7/%a2-%a5,-(%a7)
 	lea 7f(%pc),%a2
 	lea 8f(%pc),%a3

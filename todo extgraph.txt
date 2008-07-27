@@ -35,9 +35,15 @@ X* Install "kernel" headers so that demo26 can be recompiled...
 
 -- Beta 5 (SVN revision 55 - no SVN tag because SVN tagging sucks a dozen of megabytes per tag in working copies of the whole repository) --
 
+X* Fix Scale1Plane160to240_R, and make a demo for it.
+-> demo31
+
+0* Augment coverage of the demos, if necessary.
 
 0* The C function prototypes embedded in the .s files are outdated, and they're a pain to maintain.
 Make some script that replaces them by those in extgraph.h (the correct ones, by definition).
+
+-- Beta 5a
 
 ?* Split extgraph.h, timemap.h into many small header files, move the functions' documentation into Doxygen comments ?
 

@@ -47,5 +47,6 @@ demo26 - kernel-based (!! AFAIK the only kernel-based program from TICT since AM
          not to be fast compared to ExtGraph)
 demo27 - test program for sprite arbitrary angle rotation functions
 demo28 - clipped sprite version of demo6
-demo29 - test program for FastDrawLargeBufferToScreen_R, based on demo12.
-demo30 - test program for clipped sprite get functions, based on demo4.
+demo29 - test program for FastDrawLargeBufferToScreen_R, based on demo12
+demo30 - test program for clipped sprite get functions, based on demo4
+demo31 - test program for plane scaling routines
