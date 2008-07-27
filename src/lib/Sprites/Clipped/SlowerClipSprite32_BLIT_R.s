@@ -1,10 +1,10 @@
-| C prototype: void ClipSprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long maskval,register void *dest asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void SlowerClipSprite32_BLIT_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long maskval,register void *dest asm("%a0")) __attribute__((__stkparm__));
 
 .text
-.globl ClipSprite32_BLIT_R
+.globl SlowerClipSprite32_BLIT_R
 .even
 
-ClipSprite32_BLIT_R:
+SlowerClipSprite32_BLIT_R:
     move.l   %d3,-(%sp)
 
     subq.w   #1,%d2		| %d2 = h - 1

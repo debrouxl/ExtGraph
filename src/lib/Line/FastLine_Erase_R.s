@@ -1,7 +1,7 @@
+| C prototype: void FastLine_Erase_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"));
+|
 | FastLine_Erase_R by Julien Richard-Foy (jackiechan).
 | Converted to GNU as ASM by Lionel Debroux.
-|
-| C prototype: void FastLine_Erase_R(void *plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"));
 
 .text
 .globl FastLine_Erase_R

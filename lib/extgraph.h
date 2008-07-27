@@ -90,95 +90,6 @@ extern const short __egvsub__;
 extern const short __egvrev__;
 
 
-// macro which dereferences a pointer: DEREFSMALL(p,i) does the same as p[i], but in a faster and
-// smaller way (doing the same thing using inline assembly saved ~100 bytes on internal - and buggy -
-// version of tthdex). Credits go to Kevin Kofler for its generic definition and the &* trick.
-// 2.00 Beta 5: added #define so as to minimize incompatibility chances with the (same) definition
-// that should be added to TIGCC some day.
-#ifndef __HAVE_DEREFSMALL
-#define __HAVE_DEREFSMALL
-#define DEREFSMALL(__p, __i) (*((typeof(&*(__p)))((unsigned char*)(__p)+(long)(short)((short)(__i)*sizeof(*(__p))))))
-#endif
-
-// macro which returns the absolute value of a given short.
-#define EXT_SHORTABS(a)  ({register short __ta=(a); (__ta>=0) ? __ta : -__ta;})
-
-// macro which returns the absolute value of a given long.
-#define EXT_LONGABS(a)  ({register long __ta=(a); (__ta>=0) ? __ta : -__ta;})
-
-// macro which exchanges the content of two variables using the ASM exg instruction
-// 2.00 adds "a" to the constraints, since exg applies also to address registers.
-// Before I rewrote TestCollide8/16 routines in ASM, this saved a number of bytes on them.
-#define EXT_XCHG(a, b)    asm volatile ("exg %0,%1" : "=da" (a), "=da" (b) : "0" (a), "1" (b) : "cc")
-
-// macro which returns the word swapped value (upper and lower word swapped) of the given long.
-#define EXT_LONGSWAP(val) ({register unsigned long __tmp = val;asm volatile ("swap %0" : "=d" (__tmp) : "0" (__tmp));__tmp;})
-
-// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
-// collision. w is the width in pixels and h the height of the two bounding rectangles.
-#define BOUNDS_COLLIDE(x0, y0, x1, y1, w, h) \
-   (((EXT_SHORTABS((x1)-(x0)))<(w))&&((EXT_SHORTABS((y1)-(y0)))<(h)))
-
-// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
-// collision. w is the width in pixels and h0 and h1 the heights of the two bounding rectangles.
-#define BOUNDS_COLLIDE2H(x0, y0, x1, y1, w, h0, h1) \
-   (((EXT_SHORTABS((x1)-(x0)))<(w)) && ((EXT_SHORTABS((y1)-(y0)))<(min((h0),(h1)))))
-
-// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
-// collision. w is the width in pixels and h0 and h1 the heights of the two bounding rectangles.
-#define BOUNDS_COLLIDE2W(x0, y0, x1, y1, w0, w1, h) \
-   (((EXT_SHORTABS((x1)-(x0)))<(min((w0),(w1)))) && ((EXT_SHORTABS((y1)-(y0)))<(h)))
-
-// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
-// collision. w0 and w1 are the width in pixels and h0 and h1 the heights of the two bounding
-// rectangles.
-#define BOUNDS_COLLIDE2HW(x0, y0, x1, y1, w0, w1, h0, h1) \
-   (((EXT_SHORTABS((x1)-(x0)))<(min((w0),(w1)))) && ((EXT_SHORTABS((y1)-(y0)))<(min((h0),(h1)))))
-
-// handy aliases for standard tile sizes (8x8 / 16x16 / 32x32).
-#define BOUNDS_COLLIDE8(x0, y0, x1, y1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, 8)
-#define BOUNDS_COLLIDE16(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, 16)
-#define BOUNDS_COLLIDE32(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, 32)
-
-// aliases for standard tile widths (8xh / 16xh / 32xh).
-#define BOUNDS_COLLIDE82H(x0, y0, x1, y1, h0, h1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, h0, h1)
-#define BOUNDS_COLLIDE162H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, h0, h1)
-#define BOUNDS_COLLIDE322H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, h0, h1)
-
-
-// checks for collision between 2 sprites of width 8.
-// 2.00 Beta 5: added ...2h_R routine needed by TIGCC/TICT board user lachprog. This routine can
-// handle two different sprite heights.
-short TestCollide8(short x0, short y0, short x1, short y1, unsigned short height, const unsigned char* data0, const unsigned char* data1) __attribute__((__stkparm__));
-short TestCollide8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height, const unsigned char* data0 asm("%a0"), const unsigned char* data1 asm("%a1")) __attribute__((__stkparm__));
-short TestCollide82h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned char* data0 asm("%a0"), const unsigned char* data1 asm("%a1")) __attribute__((__stkparm__));
-
-// checks for collision between 2 sprites of width 16.
-// 2.00 Beta 5: added ...2h_R routine needed by TIGCC/TICT board user lachprog. This routine can
-// handle two different sprite heights.
-short TestCollide16(short x0, short y0, short x1, short y1, unsigned short height, const unsigned short* data0, const unsigned short* data1) __attribute__((__stkparm__));
-short TestCollide16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height, const unsigned short* data0 asm("%a0"), const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
-short TestCollide162h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned short* data0 asm("%a0"), const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
-
-// checks for collision between 2 sprites of width 32. This routine can handle two different
-// sprite heights.
-// Courtesy of Joey Adams, added in 2.00 Beta 5.
-short TestCollide322h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned long *data0 asm("%a0"), const unsigned long *data1 asm("%a1")) __attribute__((__stkparm__));
-
-// checks for collision between 2 sprites whose width is a multiple of 8.
-// This routine can handle two different sprite heights AND widths.
-// Courtesy of Joey Adams, added in 2.00 Beta 5.
-short TestCollideX82w2h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1, unsigned short bytewidth0, unsigned short bytewidth1, unsigned short height0, unsigned short height1, const void *data0 asm("%a0"), const void *data1 asm("%a1")) __attribute__((__stkparm__));
-
-// checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
-// Added in 2.00 Beta 5. Original PixCollide8_R by Joey Adams, Samuel Stearley, Jesse
-// Frey worked on them. Modified and extended by Lionel Debroux, fixed by Jesse Frey.
-char PixCollide8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollide16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollide32_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));
-char PixCollideX8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short bytewidth asm("%d4"), short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
-char PixCollideX16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short wordwidth asm("%d4"), short height asm("%a1"), const unsigned short *sprite asm("%a0")) __attribute__((__regparm__));
-
 //-----------------------------------------------------------------------------
 // enums used by some extgraph functions
 // 2.00 changes the values in enum GrayColors for more optimized routines.
@@ -289,6 +200,98 @@ enum ExtAttrs   {A_CENTERED=0x40, A_SHADOWED=0x80};
 #define EXT_XORPIX(p, x, y) EXT_XORPIX_AN(p, EXT_PIXOFFSET(x,y), ~(x))
 #define EXT_GETPIX(p, x, y) EXT_GETPIX_AN(p, EXT_PIXOFFSET(x,y), ~(x))
 
+
+
+// macro which dereferences a pointer: DEREFSMALL(p,i) does the same as p[i], but in a faster and
+// smaller way (doing the same thing using inline assembly saved ~100 bytes on internal - and buggy -
+// version of tthdex). Credits go to Kevin Kofler for its generic definition and the &* trick.
+// 2.00 Beta 5: added #define so as to minimize incompatibility chances with the (same) definition
+// that should be added to TIGCC some day.
+#ifndef __HAVE_DEREFSMALL
+#define __HAVE_DEREFSMALL
+#define DEREFSMALL(__p, __i) (*((typeof(&*(__p)))((unsigned char*)(__p)+(long)(short)((short)(__i)*sizeof(*(__p))))))
+#endif
+
+// macro which returns the absolute value of a given short.
+#define EXT_SHORTABS(a)  ({register short __ta=(a); (__ta>=0) ? __ta : -__ta;})
+
+// macro which returns the absolute value of a given long.
+#define EXT_LONGABS(a)  ({register long __ta=(a); (__ta>=0) ? __ta : -__ta;})
+
+// macro which exchanges the content of two variables using the ASM exg instruction
+// 2.00 adds "a" to the constraints, since exg applies also to address registers.
+// Before I rewrote TestCollide8/16 routines in ASM, this saved a number of bytes on them.
+#define EXT_XCHG(a, b)    asm volatile ("exg %0,%1" : "=da" (a), "=da" (b) : "0" (a), "1" (b) : "cc")
+
+// macro which returns the word swapped value (upper and lower word swapped) of the given long.
+#define EXT_LONGSWAP(val) ({register unsigned long __tmp = val;asm volatile ("swap %0" : "=d" (__tmp) : "0" (__tmp));__tmp;})
+
+// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
+// collision. w is the width in pixels and h the height of the two bounding rectangles.
+#define BOUNDS_COLLIDE(x0, y0, x1, y1, w, h) \
+   (((EXT_SHORTABS((x1)-(x0)))<(w))&&((EXT_SHORTABS((y1)-(y0)))<(h)))
+
+// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
+// collision. w is the width in pixels and h0 and h1 the heights of the two bounding rectangles.
+#define BOUNDS_COLLIDE2H(x0, y0, x1, y1, w, h0, h1) \
+   (((EXT_SHORTABS((x1)-(x0)))<(w)) && ((EXT_SHORTABS((y1)-(y0)))<(min((h0),(h1)))))
+
+// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
+// collision. w is the width in pixels and h0 and h1 the heights of the two bounding rectangles.
+#define BOUNDS_COLLIDE2W(x0, y0, x1, y1, w0, w1, h) \
+   (((EXT_SHORTABS((x1)-(x0)))<(min((w0),(w1)))) && ((EXT_SHORTABS((y1)-(y0)))<(h)))
+
+// macro which checks two bounding rectangles starting at (x0/y0) and (x1/y1) for
+// collision. w0 and w1 are the width in pixels and h0 and h1 the heights of the two bounding
+// rectangles.
+#define BOUNDS_COLLIDE2HW(x0, y0, x1, y1, w0, w1, h0, h1) \
+   (((EXT_SHORTABS((x1)-(x0)))<(min((w0),(w1)))) && ((EXT_SHORTABS((y1)-(y0)))<(min((h0),(h1)))))
+
+// handy aliases for standard tile sizes (8x8 / 16x16 / 32x32).
+#define BOUNDS_COLLIDE8(x0, y0, x1, y1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, 8)
+#define BOUNDS_COLLIDE16(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, 16)
+#define BOUNDS_COLLIDE32(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, 32)
+
+// aliases for standard tile widths (8xh / 16xh / 32xh).
+#define BOUNDS_COLLIDE82H(x0, y0, x1, y1, h0, h1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, h0, h1)
+#define BOUNDS_COLLIDE162H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, h0, h1)
+#define BOUNDS_COLLIDE322H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, h0, h1)
+
+
+//--BEGIN_FUNCTION_PROTOTYPES--//
+
+// checks for collision between 2 sprites of width 8.
+// 2.00 Beta 5: added ...2h_R routine needed by TIGCC/TICT board user lachprog. This routine can
+// handle two different sprite heights.
+short TestCollide8(short x0, short y0, short x1, short y1, unsigned short height, const unsigned char* data0, const unsigned char* data1) __attribute__((__stkparm__));
+short TestCollide8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height, const unsigned char* data0 asm("%a0"), const unsigned char* data1 asm("%a1")) __attribute__((__stkparm__));
+short TestCollide82h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned char* data0 asm("%a0"), const unsigned char* data1 asm("%a1")) __attribute__((__stkparm__));
+
+// checks for collision between 2 sprites of width 16.
+// 2.00 Beta 5: added ...2h_R routine needed by TIGCC/TICT board user lachprog. This routine can
+// handle two different sprite heights.
+short TestCollide16(short x0, short y0, short x1, short y1, unsigned short height, const unsigned short* data0, const unsigned short* data1) __attribute__((__stkparm__));
+short TestCollide16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height, const unsigned short* data0 asm("%a0"), const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
+short TestCollide162h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned short* data0 asm("%a0"), const unsigned short* data1 asm("%a1")) __attribute__((__stkparm__));
+
+// checks for collision between 2 sprites of width 32. This routine can handle two different
+// sprite heights.
+// Courtesy of Joey Adams, added in 2.00 Beta 5.
+short TestCollide322h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned long *data0 asm("%a0"), const unsigned long *data1 asm("%a1")) __attribute__((__stkparm__));
+
+// checks for collision between 2 sprites whose width is a multiple of 8.
+// This routine can handle two different sprite heights AND widths.
+// Courtesy of Joey Adams, added in 2.00 Beta 5.
+short TestCollideX82w2h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1, unsigned short bytewidth0, unsigned short bytewidth1, unsigned short height0, unsigned short height1, const void *data0 asm("%a0"), const void *data1 asm("%a1")) __attribute__((__stkparm__));
+
+// checks for collision between pixel at (x0, y0) and sprite of given height at (x1, y1).
+// Added in 2.00 Beta 5. Original PixCollide8_R by Joey Adams, Samuel Stearley, Jesse
+// Frey worked on them. Modified and extended by Lionel Debroux, fixed by Jesse Frey.
+char PixCollide8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned short *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollide32_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height asm("%a1"), const unsigned long *sprite asm("%a0")) __attribute__((__regparm__(6)));
+char PixCollideX8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short bytewidth asm("%d4"), short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
+char PixCollideX16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short wordwidth asm("%d4"), short height asm("%a1"), const unsigned short *sprite asm("%a0")) __attribute__((__regparm__));
 
 
 //-----------------------------------------------------------------------------
@@ -1261,6 +1264,10 @@ void RotateSprite8_R(unsigned char *srcSprite asm("%a0"), unsigned char *destSpr
 void RotateSprite16_R(unsigned short *srcSprite asm("%a0"), unsigned short *destSprite asm("%a1"), unsigned short height, short originX asm("%d1"), short originY asm("%d2"), long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
 void RotateSprite32_R(unsigned long *srcSprite asm("%a0"), unsigned long *destSprite asm("%a1"), unsigned short height, short originX asm("%d1"), short originY asm("%d2"), long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
 void RotateSpriteX8_R(unsigned char *srcSprite asm("%a0"), unsigned char *destSprite asm("%a1"), unsigned short width, short height, short originX asm("%d1"), short originY asm("%d2"), long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+
+
+
+//--END_FUNCTION_PROTOTYPES--//
 
 
 //-----------------------------------------------------------------------------

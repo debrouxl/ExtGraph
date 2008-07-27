@@ -1,4 +1,4 @@
-| C prototype: void ClipFastOutlinedCircle_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+| C prototype: void ClipFastOutlinedCircle_INVERT_R(void *plane asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from

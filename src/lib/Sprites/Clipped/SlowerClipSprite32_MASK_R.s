@@ -1,10 +1,10 @@
-| C prototype: void ClipSprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void SlowerClipSprite32_MASK_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned long *sprt asm("%a1"),unsigned long *mask,register void *dest asm("%a0")) __attribute__((__stkparm__));
 
 .text
-.globl ClipSprite32_MASK_R
+.globl SlowerClipSprite32_MASK_R
 .even
 
-ClipSprite32_MASK_R:
+SlowerClipSprite32_MASK_R:
     move.l   %d3,-(%sp)
     move.l   %a2,-(%sp)
     

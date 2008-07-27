@@ -1,4 +1,4 @@
-| C prototype: void FastGraySprite16_MASK_R(short x,short y,short h,long* sprite,long *mask,void* dest);
+| C prototype: void FastGrayISprite32_MASK_R(short x,short y,short h,long* sprite,long *mask,void* dest);
 | Environ 65% plus rapide que GraySprite16_MASK d'extgraph 1.02
 
 .text

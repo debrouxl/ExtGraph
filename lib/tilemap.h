@@ -41,6 +41,7 @@ typedef void (*TM_Mode)(void* asm("%a0"),short asm("%d0"),short asm("%d1"),void*
 
 // Prototypes des fonctions de la librairie
 // RefreshBuffer
+//--BEGIN_FUNCTION_PROTOTYPES--//
 void RefreshBuffer8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
 void RefreshBuffer8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
 void RefreshBuffer16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
@@ -159,6 +160,7 @@ void DrawGrayAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane
 
 #define DrawAnimatedPlane(x,y,plane,dest,mode,type) type((x),(y),(plane),(dest),(mode))
 
+//--END_FUNCTION_PROTOTYPES--//
 
 // Macros
 #define TM_8B DrawPlane8B

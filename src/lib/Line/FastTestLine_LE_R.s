@@ -1,7 +1,7 @@
+| C prototype: char FastTestLine_LE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
+|
 | FastTestLine_R by Lionel Debroux.
 | Based on FastLine_*_R by Julien Richard-Foy / Lionel Debroux.
-|
-| C prototype: char FastTestLine_LE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
 
 .text
 .globl FastTestLine_LE_R

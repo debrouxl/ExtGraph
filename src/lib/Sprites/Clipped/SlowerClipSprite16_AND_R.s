@@ -1,10 +1,10 @@
-| C prototype: void ClipSprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));
+| C prototype: void SlowerClipSprite16_AND_R(register short x asm("%d0"),register short y asm("%d1"),register short h asm("%d2"),register unsigned short *sprt asm("%a1"),register void *dest asm("%a0"));
 
 .text
-.globl ClipSprite16_AND_R
+.globl SlowerClipSprite16_AND_R
 .even
 
-ClipSprite16_AND_R:
+SlowerClipSprite16_AND_R:
     move.w   %d3,-(%sp)
     subq.w   #1,%d2		| %d2 = h - 1
     move.w   %d1,%d3		| %d3 = y
