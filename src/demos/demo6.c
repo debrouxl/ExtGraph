@@ -98,6 +98,7 @@ unsigned char *sprite2;
 
 #define HEIGHT           C89_92V200(100,128)
 #define WIDTH            C89_92V200(160,240)
+#define SPRWIDTH         64
 
 static short mode=1;
 static unsigned char *sprite=(unsigned char *)s64x64;
@@ -105,41 +106,41 @@ static unsigned char *sprite=(unsigned char *)s64x64;
 
 void __attribute__((__always_inline__)) draw(short x, short y) {
     // fetch background from LCD memory
-    SpriteX8Get_R(x,y,64,LCD_MEM,buffer,64/8);
+    SpriteX8Get_R(x,y,SPRWIDTH,LCD_MEM,buffer,SPRWIDTH/8);
     if (mode==1) {
         // draw normal sprite
-        SpriteX8_OR_R(x,y,64,sprite,64/8,LCD_MEM);
+        SpriteX8_OR_R(x,y,SPRWIDTH,sprite,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==2) {
         // draw h_mirrored sprite
-        SpriteX8_MIRROR_H_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        SpriteX8_MIRROR_H_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
+        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==3) {
         // draw v_mirrored sprite
-        SpriteX8_MIRROR_V_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        SpriteX8_MIRROR_V_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
+        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==4) {
-        SpriteX8X8_ROTATE_LEFT_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        SpriteX8X8_ROTATE_LEFT_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
+        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==5) {
-        SpriteX8X8_ROTATE_RIGHT_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        SpriteX8X8_ROTATE_RIGHT_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
+        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else {
         // draw sprite, h_mirrored and v_mirrored
         // Wastes a bit of space since we already have H and V,
         // but the goal is testing the "HV" routine.
-        SpriteX8_MIRROR_HV_R(64,buffer,64/8,buffer2);
-        SpriteX8_MASK_R(x,y,64,buffer2,buffer2,64/8,LCD_MEM);
+        SpriteX8_MIRROR_HV_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
+        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
 }
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    SpriteX8_MASK_R(x,y,64,buffer,buffer,64/8,LCD_MEM);
+    SpriteX8_MASK_R(x,y,SPRWIDTH,buffer,buffer,SPRWIDTH/8,LCD_MEM);
 }
 
 
@@ -149,14 +150,14 @@ void _main(void) {
     LCD_BUFFER lcd;
     INT_HANDLER int5;
 
-    if (!(buffer=(unsigned char *)malloc(4*8*64))) {
+    if (!(buffer=(unsigned char *)malloc(4*8*SPRWIDTH))) {
         ST_helpMsg("Not enough memory.");
         return;
     }
 
-    buffer2=buffer+8*64;
-    sprite1=buffer2+8*64;
-    sprite2=sprite1+8*64;
+    buffer2=buffer+8*SPRWIDTH;
+    sprite1=buffer2+8*SPRWIDTH;
+    sprite2=sprite1+8*SPRWIDTH;
 
     // for (i=0;i<32;i++) memcpy(sprite1+(i<<4),(void *)sprt1p,2*8);
     asm("
@@ -176,7 +177,7 @@ void _main(void) {
     // Using an assembly block is not more efficient speed-wise (if the
     // assembly block has exactly the same size as the call to memset, it is
     // a bit slower).
-    memset(sprite2,0xFF,8*64);
+    memset(sprite2,0xFF,8*SPRWIDTH);
 
     LCD_save(lcd);
 
@@ -197,28 +198,28 @@ void _main(void) {
             restore(x,y);
             x--;
             if ((key&UP_KEY)&&(y>0))             y--;
-            else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) y++;
+            else if ((key&DOWN_KEY)&&(y<HEIGHT-SPRWIDTH)) y++;
             draw(x,y);
         }
-        else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) {
+        else if ((key&RIGHT_KEY)&&(x<WIDTH-SPRWIDTH)) {
             restore(x,y);
             x++;
             if ((key&UP_KEY)&&(y>0))             y--;
-            else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) y++;
+            else if ((key&DOWN_KEY)&&(y<HEIGHT-SPRWIDTH)) y++;
             draw(x,y);
         }
         else if ((key&UP_KEY)&&(y>0)) {
             restore(x,y);
             y--;
             if ((key&LEFT_KEY)&&(x>0))            x--;
-            else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) x++;
+            else if ((key&RIGHT_KEY)&&(x<WIDTH-SPRWIDTH)) x++;
             draw(x,y);
         }
-        else if ((key&DOWN_KEY)&&(y<HEIGHT-64)) {
+        else if ((key&DOWN_KEY)&&(y<HEIGHT-SPRWIDTH)) {
             restore(x,y);
             y++;
             if ((key&LEFT_KEY)&&(x>0))            x--;
-            else if ((key&RIGHT_KEY)&&(x<WIDTH-64)) x++;
+            else if ((key&RIGHT_KEY)&&(x<WIDTH-SPRWIDTH)) x++;
             draw(x,y);
         }
         else if (_rowread(MODE_ROW)&MODE_KEY) {     // MODE

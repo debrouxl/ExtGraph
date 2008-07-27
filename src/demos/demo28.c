@@ -98,22 +98,23 @@ unsigned char *sprite2;
 
 #define HEIGHT           C89_92V200(100,128)
 #define WIDTH            C89_92V200(160,240)
+#define SPRWIDTH         64
 
 static unsigned char *sprite=(unsigned char *)s64x64;
 
 
 void __attribute__((__always_inline__)) draw(short x, short y) {
     // fetch background from LCD memory
-    memset(buffer,0x00,8*64);
-    ClipSpriteX8Get_R(x,y,64,64/8,LCD_MEM,buffer);
+    memset(buffer,0x00,8*SPRWIDTH);
+    ClipSpriteX8Get_R(x,y,SPRWIDTH,SPRWIDTH/8,LCD_MEM,buffer);
 
     // draw normal sprite
-    ClipSpriteX8_OR_R(x,y,64,64/8,sprite,LCD_MEM);
+    ClipSpriteX8_OR_R(x,y,SPRWIDTH,SPRWIDTH/8,sprite,LCD_MEM);
 }
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    ClipSpriteX8_MASK_R(x,y,64,64/8,buffer,buffer,LCD_MEM);
+    ClipSpriteX8_MASK_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,buffer,LCD_MEM);
 }
 
 
@@ -123,14 +124,14 @@ void _main(void) {
     LCD_BUFFER lcd;
     INT_HANDLER int5;
 
-    if (!(buffer=(unsigned char *)malloc(4*8*64))) {
+    if (!(buffer=(unsigned char *)malloc(4*8*SPRWIDTH))) {
         ST_helpMsg("Not enough memory.");
         return;
     }
 
-    buffer2=buffer+8*64;
-    sprite1=buffer2+8*64;
-    sprite2=sprite1+8*64;
+    buffer2=buffer+8*SPRWIDTH;
+    sprite1=buffer2+8*SPRWIDTH;
+    sprite2=sprite1+8*SPRWIDTH;
 
     // for (i=0;i<32;i++) memcpy(sprite1+(i<<4),(void *)sprt1p,2*8);
     asm("
@@ -150,7 +151,7 @@ void _main(void) {
     // Using an assembly block is not more efficient speed-wise (if the
     // assembly block has exactly the same size as the call to memset, it is
     // a bit slower).
-    memset(sprite2,0xFF,8*64);
+    memset(sprite2,0xFF,8*SPRWIDTH);
 
     LCD_save(lcd);
 
@@ -167,31 +168,31 @@ void _main(void) {
         // worth the trouble of doing it...
         if (_keytest(RR_ESC)) break;
         key=_rowread(ARROWS_ROW);
-        if ((key&LEFT_KEY)&&(x>-63)) {
+        if ((key&LEFT_KEY)&&(x>-(SPRWIDTH-1))) {
             restore(x,y);
             x--;
-            if ((key&UP_KEY)&&(y>-63))             y--;
+            if ((key&UP_KEY)&&(y>-(SPRWIDTH-1)))             y--;
             else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) y++;
             draw(x,y);
         }
         else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) {
             restore(x,y);
             x++;
-            if ((key&UP_KEY)&&(y>-63))             y--;
+            if ((key&UP_KEY)&&(y>-(SPRWIDTH-1)))             y--;
             else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) y++;
             draw(x,y);
         }
-        else if ((key&UP_KEY)&&(y>-63)) {
+        else if ((key&UP_KEY)&&(y>-(SPRWIDTH-1))) {
             restore(x,y);
             y--;
-            if ((key&LEFT_KEY)&&(x>-63))            x--;
+            if ((key&LEFT_KEY)&&(x>-(SPRWIDTH-1)))            x--;
             else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) x++;
             draw(x,y);
         }
         else if ((key&DOWN_KEY)&&(y<HEIGHT-1)) {
             restore(x,y);
             y++;
-            if ((key&LEFT_KEY)&&(x>-63))            x--;
+            if ((key&LEFT_KEY)&&(x>-(SPRWIDTH-1)))            x--;
             else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) x++;
             draw(x,y);
         }
