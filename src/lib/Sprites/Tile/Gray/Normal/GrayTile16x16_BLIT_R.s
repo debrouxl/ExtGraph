@@ -1,4 +1,4 @@
-| C prototype: void GrayTile16x16_BLIT_R(short col asm("%d0"),short y asm("%d1"),unsigned short *sprt0,unsigned short *sprt1,unsigned short maskval asm("%d3"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayTile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl GrayTile16x16_BLIT_R

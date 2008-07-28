@@ -1,4 +1,4 @@
-| C prototype: void FastDrawVLine_R(void* plane asm("%a0"),short x asm("%d0"),short y1 asm("%d1"),short y2 asm("%d2"),short mode) __attribute__((__stkparm__));
+| C prototype: void FastDrawVLine_R(void* plane asm("%a0"), short x asm("%d0"), short y1 asm("%d1"), short y2 asm("%d2"), short mode) __attribute__((__stkparm__));
 | Valid values for mode are: A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR.
 
 |------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-| C prototype: void FastInvertRect240_R(void* plane asm("%a0"),short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+| C prototype: void FastInvertRect240_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
 .text
 .globl FastInvertRect240_R
 .even

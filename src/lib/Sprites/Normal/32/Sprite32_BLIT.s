@@ -1,4 +1,4 @@
-| C prototype: void Sprite32_BLIT(short x,short y,short h,unsigned long *sprt,unsigned long maskval,void *dest) __attribute__((__stkparm__));
+| C prototype: void Sprite32_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, const unsigned long maskval, void *dest) __attribute__((__stkparm__));
 
 .text
 .globl Sprite32_BLIT

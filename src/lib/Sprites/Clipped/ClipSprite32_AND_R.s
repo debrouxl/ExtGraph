@@ -1,4 +1,4 @@
-| C prototype: void ClipSprite32_AND_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned long *sprt asm("%a1"),void *dest asm("%a0"));
+| C prototype: void ClipSprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0"));
 
 .text
 .globl ClipSprite32_AND_R

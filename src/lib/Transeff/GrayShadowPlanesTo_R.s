@@ -1,4 +1,4 @@
-| C prototype: void GrayShadowPlanesTo_R(void *src0 asm("%a0"),void *src1 asm("%a1"),void *dest0,void *dest1) __attribute__((__stkparm__));
+| C prototype: void GrayShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 |
 | Derived from GrayShadowPlanesX16_R. Acts like a combination of 
 | GrayShadowPlanesX16_R and FastCopyScreen_R (240x128 planes only).

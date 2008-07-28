@@ -1,4 +1,4 @@
-| C prototype: void FastFillRect(void* plane,short x1,short y1,short x2,short y2,short mode) __attribute__((__stkparm__));
+| C prototype: void FastFillRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__));
 | Valid values for mode are: A_REVERSE, A_XOR, A_NORMAL, A_REPLACE. In fact, 
 | A_NORMAL (same effect as A_REPLACE) is assumed if the mode is neither
 | A_REVERSE nor A_XOR.

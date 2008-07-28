@@ -1,4 +1,4 @@
-| C prototype: void FastGetBkgrnd32_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),void* src asm("%a0"),unsigned short* dest asm("%a1"));
+| C prototype: void FastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
 |
 | This routine is a fast version of Sprite32Get_R, it must be used in conjunction
 | with FastPutBkgrnd32_R.

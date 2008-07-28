@@ -1,4 +1,4 @@
-| C prototype: void FastPutBkgrnd16_R(const unsigned short *sprt asm("%a1"),void *dest asm("%a0"));
+| C prototype: void FastPutBkgrnd16_R(const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 |
 | This routine is a fast version of Sprite16_RPLC_R, it must be used in conjunction
 | with FastGetBkgrnd16_R.

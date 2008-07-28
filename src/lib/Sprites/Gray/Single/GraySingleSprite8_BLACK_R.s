@@ -1,4 +1,4 @@
-| C prototype: void GraySingleSprite8_BLACK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned char *sprt,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GraySingleSprite8_BLACK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 | 
 | This is a modified version of GraySprite8_XOR_R, made by David Randall.
 | I (Lionel Debroux) switched to local label names and got rid of d3, like in several

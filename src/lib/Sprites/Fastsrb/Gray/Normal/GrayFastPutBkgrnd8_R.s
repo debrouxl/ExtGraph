@@ -1,4 +1,4 @@
-| C prototype: void GrayFastPutBkgrnd8_R(const unsigned short *sprt asm("%a2"),void *dest1 asm("%a0"),void *dest2 asm("%a1"));
+| C prototype: void GrayFastPutBkgrnd8_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 |
 | This routine is a fast version of GraySprite8_RPLC_R, it must be used in conjunction
 | with GrayFastGetBkgrnd8_R.

@@ -1,4 +1,4 @@
-| C prototype: void GrayClipSprite32_TRANW_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned long *sprt0,unsigned long *sprt1,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipSprite32_TRANW_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
 .text
 .globl GrayClipSprite32_TRANW_R

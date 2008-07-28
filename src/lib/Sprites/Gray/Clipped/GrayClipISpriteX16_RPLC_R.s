@@ -1,4 +1,4 @@
-| C prototype: void GrayClipISpriteX16_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d3"),unsigned short *sprt,short wordwidth asm("%d2"),void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayClipISpriteX16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d3"), const unsigned short *sprt, unsigned short wordwidth asm("%d2"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 |
 | Based on GrayClipISpriteX16_OR_R.
 

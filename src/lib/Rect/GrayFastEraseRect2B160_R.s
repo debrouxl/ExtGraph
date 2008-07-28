@@ -1,4 +1,4 @@
-| C prototype: void GrayFastEraseRect2B160_R(void* lightplane asm("%a0"),unsigned char* darkplane asm("%a1"),short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+| C prototype: void GrayFastEraseRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
 .text
 .globl GrayFastEraseRect2B160_R
 .even

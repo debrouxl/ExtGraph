@@ -1,4 +1,4 @@
-| C prototype: void FastDrawLine (void* plane,unsigned short x1,unsigned short y1,unsigned short x2,unsigned short y2,unsigned short mode) __attribute__ ((__stkparm__));
+| C prototype: void FastDrawLine(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__));
 |
 | FastDrawLine by Olivier Armand (ExtendeD) <ola.e-ml@wanadoo.fr>
 | Small modifications by Lionel Debroux (mainly size optimizations).

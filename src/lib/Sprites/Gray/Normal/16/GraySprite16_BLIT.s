@@ -1,4 +1,4 @@
-| C prototype: void GraySprite16_BLIT(short x,short y,short h,unsigned short *sprt0,unsigned short *sprt1,unsigned short maskval,void *dest0,void *dest1) __attribute__((__stkparm__));
+| C prototype: void GraySprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, const unsigned short maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite16_BLIT

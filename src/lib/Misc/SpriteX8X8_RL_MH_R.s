@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8X8_RL_MH_R(short h asm("%d0"),unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
+| C prototype: void SpriteX8X8_RL_MH_R(unsigned short h asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
 .text
 .globl SpriteX8X8_RL_MH_R

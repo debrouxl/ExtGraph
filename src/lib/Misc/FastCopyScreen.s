@@ -1,4 +1,4 @@
-| C prototype: void FastCopyScreen(void* src,void* dest) __attribute__((__stkparm__));
+| C prototype: void FastCopyScreen(void* src, void* dest) __attribute__((__stkparm__));
 
 .text
 .globl FastCopyScreen

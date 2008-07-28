@@ -1,4 +1,4 @@
-| C prototype: extern void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"),void *dest1 asm("%a0"),void *dest2 asm("%a1"));
+| C prototype: void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 |
 | This routine is a fast version of GraySprite32_RPLC_R, it must be used in conjunction
 | with GrayFastGetBkgrnd32_R.

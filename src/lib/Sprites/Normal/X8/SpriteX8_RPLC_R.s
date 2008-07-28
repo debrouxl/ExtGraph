@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_RPLC_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),const unsigned char *sprt asm("%a1"),short w asm("%d3"),void *dest asm("%a0")) __attribute__((__regparm__));
+| C prototype: void SpriteX8_RPLC_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
 | see SpriteX8_OR_R for comments
 
 .text

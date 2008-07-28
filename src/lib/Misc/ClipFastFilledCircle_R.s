@@ -1,4 +1,4 @@
-| C prototype: void ClipFastFilledCircle_R(void *plane asm("%a0"),short xcenter asm("%d0"),short ycenter asm("%d1"),short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
+| C prototype: void ClipFastFilledCircle_R(void *plane asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 |
 | Routine based on Exploder's routine written in C, using FastDrawLine.
 | Rewritten in plain assembly by Lionel, now using DrawSpan as callbacks

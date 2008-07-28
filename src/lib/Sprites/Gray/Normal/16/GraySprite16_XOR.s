@@ -1,4 +1,4 @@
-| C prototype: void GraySprite16_XOR(short x,short y,short h,unsigned short *sprt0,unsigned short *sprt1,void *dest0,void *dest1) __attribute__((__stkparm__));
+| C prototype: void GraySprite16_XOR(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite16_XOR

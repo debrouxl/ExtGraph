@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_XOR(short x,short y,short h,unsigned char *sprt,short w,void *dest) __attribute__((__stkparm__));
+| C prototype: void SpriteX8_XOR(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, unsigned short bytewidth, void *dest) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
 .text

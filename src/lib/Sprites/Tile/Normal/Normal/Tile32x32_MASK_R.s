@@ -1,4 +1,4 @@
-| C prototype: void Tile32x32_MASK_R(short col asm("%d0"),short y asm("%d1"),unsigned long *sprite asm("%a1"),unsigned long* mask,void *plane asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void Tile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite asm("%a1"), const unsigned long* mask, void *plane asm("%a0")) __attribute__((__stkparm__));
  
 .text
 .globl Tile32x32_MASK_R

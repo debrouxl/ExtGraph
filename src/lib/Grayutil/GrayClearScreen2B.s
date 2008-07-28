@@ -1,4 +1,4 @@
-| C prototype: void GrayClearScreen2B(void* lightplane,void* darkplane) __attribute__((__stkparm__));
+| C prototype: void GrayClearScreen2B(void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 .text
 .globl GrayClearScreen2B

@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_MIRROR_HV_R(short h asm("%d0"),unsigned char* src asm("%a0"),short bytewidth asm("%d1"),unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
+| C prototype: void SpriteX8_MIRROR_HV_R(unsigned short h asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
 | A slightly modified SpriteX8_MIRROR_H_R.
 

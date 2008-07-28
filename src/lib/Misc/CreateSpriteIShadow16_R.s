@@ -1,4 +1,4 @@
-| C prototype: void CreateSpriteIShadow16_R(short height asm("%d0"),unsigned short* src0 asm("%a0"),unsigned short* src1 asm("%a1"),unsigned short* mask, unsigned short* dest0, unsigned short* dest1) __attribute__((__stkparm__));
+| C prototype: void CreateSpriteIShadow16_R(unsigned short height asm("%d0"), const unsigned short* src0 asm("%a0"), const unsigned short* src1 asm("%a1"), const unsigned short* mask, unsigned short* dest0, unsigned short* dest1) __attribute__((__stkparm__));
 
 .text
 .globl CreateSpriteIShadow16_R

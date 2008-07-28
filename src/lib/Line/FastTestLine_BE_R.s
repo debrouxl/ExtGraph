@@ -1,4 +1,4 @@
-| C prototype: char FastTestLine_BE_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),void *plane asm("%a0"));
+| C prototype: char FastTestLine_BE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
 |
 | FastTestLine_R by Lionel Debroux.
 | Based on FastLine_*_R by Julien Richard-Foy / Lionel Debroux.

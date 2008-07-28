@@ -1,4 +1,4 @@
-| C prototype: extern void Sprite8Get(short x,short y,short h,void* src,unsigned char* dest)
+| C prototype: void Sprite8Get(unsigned short x, unsigned short y, unsigned short h, void* src, unsigned char* dest) __attribute__((__stkparm__));
 |
 | This routine is faster (about 20%) than the previous C routine, because the
 | algorithm was changed.

@@ -1,4 +1,4 @@
-| C prototype: void GraySprite8_AND(short x,short y,short h,unsigned char *sprt0,unsigned char *sprt1,void *dest0,void *dest1) __attribute__((__stkparm__));
+| C prototype: void GraySprite8_AND(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite8_AND

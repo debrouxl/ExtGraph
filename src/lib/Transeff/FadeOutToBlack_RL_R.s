@@ -1,4 +1,4 @@
-| C prototype: void FadeOutToBlack_RL_R(void *lightplane asm("%a0"),void *darkplane asm("%a1"),short height asm("%d0"),short bytewidth asm("%d1"),short wait asm("%d2"));
+| C prototype: void FadeOutToBlack_RL_R(void *lightplane asm("%a0"), void *darkplane asm("%a1"), unsigned short height asm("%d0"), unsigned short bytewidth asm("%d1"), short wait asm("%d2"));
 
 .text
 .globl FadeOutToBlack_RL_R

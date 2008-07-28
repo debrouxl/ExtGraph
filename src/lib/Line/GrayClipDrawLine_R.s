@@ -1,4 +1,4 @@
-| C prototype: void GrayClipDrawLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short *clippedcoord asm("%a1"),short color,void *plane0,void *plane,void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"),void *plane1 asm("%a1"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short color)) __attribute__((__stkparm__));
+| C prototype: void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color)) __attribute__((__stkparm__));
 
 .text
 .globl GrayClipDrawLine_R

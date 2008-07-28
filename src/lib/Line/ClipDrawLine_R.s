@@ -1,4 +1,4 @@
-| C prototype: void ClipDrawLine_R(short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short *clippedcoord asm("%a1"),short mode,void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"),short x1 asm("%d0"),short y1 asm("%d1"),short x2 asm("%d2"),short y2 asm("%d3"),short mode)) __attribute__((__stkparm__));
+| C prototype: void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode)) __attribute__((__stkparm__));
 
 .text
 .globl ClipDrawLine_R

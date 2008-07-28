@@ -1,4 +1,4 @@
-| C prototype: void GrayITile32x32_MASK_R(short col asm("%d0"),short y asm("%d1"),unsigned long *sprite,void *dest0 asm("%a0"),void *dest1 asm("%a1")) __attribute__((__stkparm__));
+| C prototype: void GrayITile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
  
 .text
 .globl GrayITile32x32_MASK_R

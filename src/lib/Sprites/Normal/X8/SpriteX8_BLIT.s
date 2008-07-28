@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_BLIT(short x,short y,short h,unsigned char *sprt,unsigned char *maskval,short bytewidth,void *dest) __attribute__((__stkparm__));
+| C prototype: void SpriteX8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, const unsigned char *maskval, unsigned short bytewidth, void *dest) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
 .text

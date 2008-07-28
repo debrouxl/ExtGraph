@@ -1,4 +1,4 @@
-| C prototype: void PreshiftSprite16x16(unsigned short *src asm("%a0"),unsigned long *dest asm("%a1"));
+| C prototype: extern void PreshiftSprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
 
 .text
 .globl PreshiftSprite16x16

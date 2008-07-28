@@ -1,4 +1,4 @@
-| C prototype: void GrayClipFastOutlinedCircle_BLACK_R(void *planes asm("%a0"),unsigned short xcenter asm("%d0"),unsigned short ycenter asm("%d1"),unsigned short radius asm("%d2"));
+| C prototype: void GrayClipFastOutlinedCircle_BLACK_R(void *planes asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"));
 |
 | Routine based on Exploder's routine written in C, using EXT_SETPIX.
 | Rewritten in plain assembly by Lionel, using an algorithm different from

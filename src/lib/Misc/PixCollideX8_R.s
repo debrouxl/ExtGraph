@@ -1,4 +1,4 @@
-| C prototype: char PixCollideX8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), short bytewidth asm("%d4"), short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
+| C prototype: char PixCollideX8_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short bytewidth asm("%d4"), short height asm("%a1"), const unsigned char *sprite asm("%a0")) __attribute__((__regparm__));
 |
 | Based on a routine programmed on the TIGCC/TICT message board by several users
 | (Jesse Frey - jessef, Samuel Stearley).
