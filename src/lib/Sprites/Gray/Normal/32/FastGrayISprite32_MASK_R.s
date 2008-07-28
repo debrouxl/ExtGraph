@@ -2,9 +2,9 @@
 | Environ 65% plus rapide que GraySprite16_MASK d'extgraph 1.02
 
 .text
-.globl FastGraySprite32_MASK_R
+.globl FastGrayISprite32_MASK_R
 
-FastGraySprite32_MASK_R:
+FastGrayISprite32_MASK_R:
     dbf      %d2,__suite__
     rts
 

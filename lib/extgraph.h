@@ -1,7 +1,7 @@
 /******************************************************************************
 *
 * E X T G R A P H    v 2 . 0 0    Beta  5
-* Copyright (c) 2001-2004 TICT (TI-Chess Team)
+* Copyright (c) 2001-2008 TICT (TI-Chess Team)
 *
 *******************************************************************************
 *
@@ -29,7 +29,7 @@
 *                    Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)
 *                    Lionel Debroux     (lionel_debroux@yahoo.fr)
 *                    Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume
-*                    many contributors (Geoffrey Anneheim a.k.a geogeo, etc.).
+*                    many contributors  (Geoffrey Anneheim a.k.a geogeo, etc.).
 *
 *
 *******************************************************************************
@@ -44,9 +44,12 @@
 #include <stdlib.h> // min(a,b) macro.
 
 //-----------------------------------------------------------------------------
-// Reject TIGCC 0.94 and less, since the official release is now 0.95, and the
-// previous ones are really outdated compared to it. TIGCC 0.93 won't handle
-// calling conventions correctly, TIGCC 0.94 would make only small fusses.
+// Reject TIGCC 0.95 and less. While the official release is still 0.95 as of
+// the release of 2.00 Beta 5/5a, it's outdated compared to 0.96 Beta 8.
+// TIGCC 0.93 wouldn't handle calling conventions correctly; TIGCC 0.94 would
+// make only small fusses, but the build process depends on some TIGCC 0.95+
+// compiler/linker switches.
+//
 // Warn about other compilers because ExtGraph was tested only under TIGCC
 // until further notice.
 //-----------------------------------------------------------------------------
@@ -1101,6 +1104,8 @@ void GrayIShadowPlanesX16_R(unsigned short height asm("%d0"), unsigned short wor
 void GrayShadowPlanesX16_R(unsigned short height asm("%d0"), unsigned short wordwidth asm("%d1"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__regparm__(4)));
 void GrayIShadowPlanes240_R(unsigned short height asm("%d0"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__regparm__(3)));
 void GrayShadowPlanes240_R(unsigned short height asm("%d0"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__regparm__(3)));
+void GrayIShadowPlanes160_R(unsigned short height asm("%d0"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__regparm__(3)));
+void GrayShadowPlanes160_R(unsigned short height asm("%d0"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__regparm__(3)));
 void GrayIShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 void GrayShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 

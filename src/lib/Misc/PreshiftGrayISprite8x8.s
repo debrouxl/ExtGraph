@@ -8,21 +8,21 @@ PreshiftGrayISprite8x8:
 
     moveq.l  #2*8-1,%d2
 
-_outer_loop_PGIS8x8_:
+0:
     moveq.l  #0,%d0
     move.w   (%a0)+,%d0
 
     moveq.l  #8-1,%d1
 
-_inner_loop_PGIS8x8_:
+1:
     lsl.l    #2,%d0
     move.l   %d0,(%a1)
     lea.l    -16*2*4(%a1),%a1
 
-    dbf      %d1,_inner_loop_PGIS8x8_
+    dbf      %d1,1b
 
     lea.l    16*8*2*4+4(%a1),%a1
 
-    dbf      %d2,_outer_loop_PGIS8x8_
+    dbf      %d2,0b
 
     rts

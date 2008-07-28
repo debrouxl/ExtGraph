@@ -8,21 +8,21 @@ PreshiftSprite8x8:
 
     moveq.l  #8-1,%d2
 
-_outer_loop_PS8x8_:
+0:
     moveq.l  #0,%d0
     move.w   (%a0)+,%d0
 
     moveq.l  #7-1,%d1
 
-_inner_loop_PS8x8_:
+1:
     move.l   %d0,(%a1)
     lsl.l    #2,%d0
     lea.l    -16*2(%a1),%a1
 
-    dbf      %d1,_inner_loop_PS8x8_
+    dbf      %d1,1b
 
     lea.l    7*16*4+4(%a1),%a1
 
-    dbf      %d2,_outer_loop_PS8x8_
+    dbf      %d2,0b
 
     rts
