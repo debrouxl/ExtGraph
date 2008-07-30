@@ -1,4 +1,4 @@
-| C prototype: void FastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
+| C prototype: void FastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
 |
 | This routine is a fast version of Sprite16Get_R, it must be used in conjunction
 | with FastPutBkgrnd16_R.

@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_MIRROR_V(unsigned short h, const unsigned char* src, unsigned short bytewidth, unsigned char* dest) __attribute__((__stkparm__));
+| C prototype: void SpriteX8_MIRROR_V(unsigned short height, const unsigned char* src, unsigned short bytewidth, unsigned char* dest) __attribute__((__stkparm__));
 |
 | This routine is about 30% faster than the previous C routine.
 

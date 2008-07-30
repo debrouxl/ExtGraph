@@ -1,4 +1,4 @@
-| C prototype: void GrayFastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
+| C prototype: void GrayFastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
 |
 | This routine is a fast grayscale version of Sprite32Get_R, it must be used in
 | conjunction with GrayFastPutBkgrnd32_R.
