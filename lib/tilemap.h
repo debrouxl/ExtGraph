@@ -1,8 +1,43 @@
-// Tilemap Engine v0.4 (02/05/2004)
-// Julien Richard-Foy
+//*****************************************************************************
+/** \file tilemap.h
+ * EXTGRAPH v2.00 Beta 6 - Tilemap Engine v0.4 <br>
+ * Copyright (c) 2002-2004 Julien Richard-Foy<br>
+ *<br>
+ * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
+ * functions</b> for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
+ * (collectively known as TI-68k calculators).
+ *
+ * This library is maintained, improved and extended by:
+ * <ul><li>Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)</li>
+ *     <li>Lionel Debroux     (lionel_debroux@yahoo.fr)</li>
+ *     <li>Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume</li>
+ *     <li>many contributors  (e.g. Geoffrey Anneheim a.k.a geogeo, many others)</li>
+ * </ul>
+ */
+//*****************************************************************************
+/* NOTES:
+ *     * using ExtGraph 2.xx requires TIGCC 0.96 and newer (I'm nearly always
+ *       using the latest version myself).
+ *
+ *     * ExtGraph (.h, .o and .a files in the lib/ folder of the distribution)
+ *       can be used as is; recompiling ExtGraph is neither necessary nor
+ *       recommended. Not to mention that it requires the GNU binutil
+ *       m68k-coff-ar, which was removed from TIGCC a long time ago.
+ *       The ExtGraph SVN repository contains PC/Win32 and i686-pc-linux-gnu
+ *       m68k-coff-ar binaries. I can add binaries for other OS, starting with
+ *       MacOS X, if someone provides me them.
+ *
+ *     * Please use as few __stkparm__ functions as possible in your programs:
+ *       most functions have __regparm__ versions (or a mix of __regparm__ and
+ *       __stkparm__: beyond about 6 parameters, some parameters are passed on
+ *       the stack), which are themselves smaller and faster, and lead to
+ *       smaller and faster code for passing arguments !
+ *
+ */
+// ****************************************************************************
 
-#ifndef __EXT_TILEMAP_H
-#define __EXT_TILEMAP_H
+#ifndef __EXT_TILEMAP_H__
+#define __EXT_TILEMAP_H__
 
 // Quelques constantes
 #define BIG_VSCREEN_SIZE 5440

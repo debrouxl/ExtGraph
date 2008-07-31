@@ -1,6 +1,6 @@
 //*****************************************************************************
 /** \file extgraph.h
- * EXTGRAPH v2.00 Beta 5<br>
+ * EXTGRAPH v2.00 Beta 6<br>
  * Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
  *<br>
  * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
@@ -36,7 +36,7 @@
  */
 // ****************************************************************************
 
-#if !defined(__EXTGRAPH__)
+#ifndef __EXTGRAPH__
 #define __EXTGRAPH__
 
 #include <gray.h>   // necessary for GrayGetPlane() macros in the grayscale

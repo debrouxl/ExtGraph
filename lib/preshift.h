@@ -1,63 +1,65 @@
-/******************************************************************************
-*
-* E X T G R A P H    v 2 . 0 0    Beta  5
-* Copyright © 2001-2004 TICT (TI-Chess Team)
-*
-*******************************************************************************
-*
-* ExtGraph is a compile-time library which contains speed-optimized graphics
-* routines for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
-* (TI-68k calculators).
-*
-* NOTE: using ExtGraph 2.xx requires TIGCC 0.95 and newer (I'm nearly always
-* using the latest version myself).
-* ExtGraph (extgraph.h + tilemap.h + preshift.h + extgraph.a + tilemap.a) can
-* be used as is; recompiling ExtGraph is therefore neither necessary nor
-* recommended. Not to mention that it requires the Windows shell, and the GNU
-* binutil m68k-coff-ar, which was removed from TIGCC a long time ago. The
-* ExtGraph SVN repository contains PC/Win32 and PC/Linux m68k-coff-ar binaries.
-* I can add binaries for other architectures, starting with MacOS X, if someone
-* provides me them.
-*
-* Please use as few __stkparm__ functions as possible in your programs: most
-* functions have __regparm__ versions (or a mix of __regparm__ and __stkparm__:
-* excess parameters are passed on the stack), which are themselves smaller and
-* faster, and lead to smaller and faster code !
-*
-*
-* library maintained, improved and extended by:
-*                    Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)
-*                    Lionel Debroux     (lionel_debroux@yahoo.fr)
-*                    Julien Richard-Foy (julien.rf@wanadoo.fr)
-*                    various contributors (Geoffrey Anneheim, etc.).
-*
-*
-*******************************************************************************
-* [internal version] $Id: extgraph.h,v 1.13 2002/05/22 09:19:20 tnussb Exp $
-*******************************************************************************/
+//*****************************************************************************
+/** \file preshift.h
+ * EXTGRAPH v2.00 Beta 6<br>
+ * Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
+ *<br>
+ * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
+ * functions</b> for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
+ * (collectively known as TI-68k calculators).
+ *
+ * This library is maintained, improved and extended by:
+ * <ul><li>Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)</li>
+ *     <li>Lionel Debroux     (lionel_debroux@yahoo.fr)</li>
+ *     <li>Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume</li>
+ *     <li>many contributors  (e.g. Geoffrey Anneheim a.k.a geogeo, many others)</li>
+ * </ul>
+ */
+//*****************************************************************************
+/* NOTES:
+ *     * using ExtGraph 2.xx requires TIGCC 0.96 and newer (I'm nearly always
+ *       using the latest version myself).
+ *
+ *     * ExtGraph (.h, .o and .a files in the lib/ folder of the distribution)
+ *       can be used as is; recompiling ExtGraph is neither necessary nor
+ *       recommended. Not to mention that it requires the GNU binutil
+ *       m68k-coff-ar, which was removed from TIGCC a long time ago.
+ *       The ExtGraph SVN repository contains PC/Win32 and i686-pc-linux-gnu
+ *       m68k-coff-ar binaries. I can add binaries for other OS, starting with
+ *       MacOS X, if someone provides me them.
+ *
+ *     * Please use as few __stkparm__ functions as possible in your programs:
+ *       most functions have __regparm__ versions (or a mix of __regparm__ and
+ *       __stkparm__: beyond about 6 parameters, some parameters are passed on
+ *       the stack), which are themselves smaller and faster, and lead to
+ *       smaller and faster code for passing arguments !
+ *
+ */
+// ****************************************************************************
 
-#if !defined(__PRESHIFT__)
-#define __PRESHIFT__
+#ifndef __EXT_PRESHIFT_H__
+#define __EXT_PRESHIFT_H__
 
 #include <gray.h>   // necessary for GrayGetPlane() macros in the grayscale
                     // support routines !!
 
-//-----------------------------------------------------------------------------
-// Reject TIGCC 0.94 and less (0.93 is not the official release anymore and
-// it doesn't support __attribute__((__regparm__)) and 
-// __attribute__((__stkparm__)); 0.94 won't compile some attributes used in
-// the demos; 0.95 has a new good linker and is better overall)...
+// -----------------------------------------------------------------------------
+// Reject TIGCC 0.95 and less. While the official release is still 0.95 as of
+// the release of 2.00 Beta 5/6, it's outdated compared to 0.96 Beta 8.
+// TIGCC 0.93 wouldn't handle calling conventions correctly; TIGCC 0.94 would
+// make only small fusses, but the build process depends on some TIGCC 0.95+
+// compiler/linker switches.
+//
 // Warn about other compilers because ExtGraph was tested only under TIGCC
 // until further notice.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #include <version.h>
 
 #ifndef __TIGCC__
-#warning This compiler is unknown to ExtGraph. Until further notice, ExtGraph was tested only under standards-compliant TIGCC. Other compilers may not support ExtGraph.
+#warning This compiler is unknown to ExtGraph. Until further notice, ExtGraph was tested only under TIGCC. Other compilers may not support ExtGraph.
 #endif
 
-#if (defined(__TIGCC__)&&(__TIGCC__<1)&&(defined(__TIGCC_MINOR__)&&(__TIGCC_MINOR__<95)))
-#error ExtGraph needs TIGCC 0.95 or later ! Update TIGCC.
+#if (defined(__TIGCC__)&&(__TIGCC__<1)&&(defined(__TIGCC_MINOR__)&&(__TIGCC_MINOR__<96)))
+#error ExtGraph requires TIGCC 0.96 or later ! Please update your TIGCC installation.
 #endif
 
 
@@ -124,8 +126,8 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     lsl.w    #5,%%d0;\
     adda.w   %%d0,%%a1;\
     andi.w   #0x1,%%d2;\
-    jbne     __loop2_PS16x16_OR_R_;\
-__loop1_PS16x16_OR_R_:\
+    bne.s    2f;\
+1:\
     movem.l  (%%a1)+,%%d0-%%d7;\
     or.l     %%d0,(%%a0);\
     or.l     %%d1,30(%%a0);\
@@ -144,8 +146,8 @@ __loop1_PS16x16_OR_R_:\
     or.l     %%d5,390(%%a0);\
     or.l     %%d6,420(%%a0);\
     or.l     %%d7,450(%%a0);\
-    jbra     __end_PS16x16_OR_R_;\
-__loop2_PS16x16_OR_R_:\
+    bra.s    0f;\
+2:\
     movem.l  (%%a1)+,%%d0-%%d7;\
     ror.l    #1,%%d0;\
     or.l     %%d0,(%%a0);\
@@ -180,7 +182,7 @@ __loop2_PS16x16_OR_R_:\
     or.l     %%d6,420(%%a0);\
     ror.l    #1,%%d7;\
     or.l     %%d7,450(%%a0);\
-__end_PS16x16_OR_R_:\
+0:\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest) : "d0","d1","d2","d3","d4","a0","a1","cc");
 
@@ -203,8 +205,8 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     lsl.w    #5,%%d0;\
     adda.w   %%d0,%%a1;\
     andi.w   #0x1,%%d2;\
-    jbne     __loop2_PS16x16_XOR_R_;\
-__loop1_PS16x16_XOR_R_:\
+    bne.s    2f;\
+1:\
     movem.l  (%%a1)+,%%d0-%%d7;\
     eor.l    %%d0,(%%a0);\
     eor.l    %%d1,30(%%a0);\
@@ -223,8 +225,8 @@ __loop1_PS16x16_XOR_R_:\
     eor.l    %%d5,390(%%a0);\
     eor.l    %%d6,420(%%a0);\
     eor.l    %%d7,450(%%a0);\
-    jbra     __end_PS16x16_XOR_R_;\
-__loop2_PS16x16_XOR_R_:\
+    bra.s    0f;\
+2:\
     movem.l  (%%a1)+,%%d0-%%d7;\
     ror.l    #1,%%d0;\
     eor.l    %%d0,(%%a0);\
@@ -259,7 +261,7 @@ __loop2_PS16x16_XOR_R_:\
     eor.l    %%d6,420(%%a0);\
     ror.l    #1,%%d7;\
     eor.l    %%d7,450(%%a0);\
-__end_PS16x16_XOR_R_:\
+0:\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest) : "d0","d1","d2","d3","d4","a0","a1","cc");
 
@@ -284,8 +286,8 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     lsl.w    #6,%%d0;\
     adda.w   %%d0,%%a2;\
     andi.w   #0x1,%%d2;\
-    jbne     __loop2_GPS16x16_OR_R_;\
-__loop1_GPS16x16_OR_R_:\
+    bne      2f;\
+1:\
     movem.l  (%%a2)+,%%d0-%%d7;\
     or.l     %%d0,(%%a0);\
     or.l     %%d1,(%%a1);\
@@ -322,8 +324,8 @@ __loop1_GPS16x16_OR_R_:\
     or.l     %%d5,420(%%a1);\
     or.l     %%d6,450(%%a0);\
     or.l     %%d7,450(%%a1);\
-    jbra     __end_GPS16x16_OR_R_;\
-__loop2_GPS16x16_OR_R_:\
+    bra      0f;\
+2:\
     movem.l  (%%a2)+,%%d0-%%d7;\
     ror.l    #1,%%d0;\
     or.l     %%d0,(%%a0);\
@@ -392,7 +394,7 @@ __loop2_GPS16x16_OR_R_:\
     or.l     %%d6,450(%%a0);\
     ror.l    #1,%%d7;\
     or.l     %%d7,450(%%a1);\
-__end_GPS16x16_OR_R_:\
+0:\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest0),"a"(dest1) : "d0","d1","d2","d3","d4","a0","a1","a2","cc");
 
@@ -417,8 +419,8 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     lsl.w    #6,%%d0;\
     adda.w   %%d0,%%a2;\
     andi.w   #0x1,%%d2;\
-    jbne     __loop2_GPS16x16_XOR_R_;\
-__loop1_GPS16x16_XOR_R_:\
+    bne      2f;\
+1:\
     movem.l  (%%a2)+,%%d0-%%d7;\
     eor.l    %%d0,(%%a0);\
     eor.l    %%d1,(%%a1);\
@@ -455,8 +457,8 @@ __loop1_GPS16x16_XOR_R_:\
     eor.l    %%d5,420(%%a1);\
     eor.l    %%d6,450(%%a0);\
     eor.l    %%d7,450(%%a1);\
-    jbra     __end_GPS16x16_XOR_R_;\
-__loop2_GPS16x16_XOR_R_:\
+    bra      0f;\
+2:\
     movem.l  (%%a2)+,%%d0-%%d7;\
     ror.l    #1,%%d0;\
     eor.l    %%d0,(%%a0);\
@@ -525,7 +527,7 @@ __loop2_GPS16x16_XOR_R_:\
     eor.l    %%d6,450(%%a0);\
     ror.l    #1,%%d7;\
     eor.l    %%d7,450(%%a1);\
-__end_GPS16x16_XOR_R_:\
+0:\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest0),"a"(dest1) : "d0","d1","d2","d3","d4","a0","a1","a2","cc");
 
