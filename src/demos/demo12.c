@@ -419,8 +419,8 @@ void _main(void)
 					GrayClipSprite16_OR_R(16*j+xscroll,16*i+yscroll,16,tabsprites0[tabtiles[ytile+i][xtile+j]],tabsprites1[tabtiles[ytile+i][xtile+j]],vscreen0,vscreen1);
 
 
-			FastCopyScreen_R(vscreen0,GetPlane(LIGHT_PLANE));
-			FastCopyScreen_R(vscreen1,GetPlane(DARK_PLANE));
+			FastCopyScreen_R(vscreen0,GrayGetPlane(LIGHT_PLANE));
+			FastCopyScreen_R(vscreen1,GrayGetPlane(DARK_PLANE));
 #endif
 #ifdef FAST_AND_DIRTY
 			Sprite16_BLIT_R_very_special(C89_92V200(0xF,0),fpssprite);

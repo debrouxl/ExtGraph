@@ -187,11 +187,11 @@ static inline void RenderMaps(Plane *bg,Plane *mg,Plane *fgm,Plane *fg,void *des
     DrawPlane(x_fg,y_fg,fgm,dest,TM_GMASK,TM_16B); // Masque du plan de devant
     DrawPlane(x_fg,y_fg,fg,dest,TM_GOR,TM_G16B); // Plan de devant
 
-    FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-    FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+    FastCopyScreen_R(dest,GrayGetPlane(LIGHT_PLANE));
+    FastCopyScreen_R(dest+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 /*
-    memcpy(GetPlane(LIGHT_PLANE),dest,LCD_SIZE);
-    memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
+    memcpy(GrayGetPlane(LIGHT_PLANE),dest,LCD_SIZE);
+    memcpy(GrayGetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
     // Déplacement

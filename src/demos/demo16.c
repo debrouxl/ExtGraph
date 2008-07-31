@@ -113,11 +113,11 @@ static inline void RenderMaps(void *big_vscreen,void *dest)
     DrawGrayBufferWithShifts89_RPLC(big_vscreen,x&15,y&15,dest,dh+((i>>3)&15),dv+((i>>3)&15));
 #endif
 
-    FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-    FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+    FastCopyScreen_R(dest,GrayGetPlane(LIGHT_PLANE));
+    FastCopyScreen_R(dest+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 /*
-    memcpy(GetPlane(LIGHT_PLANE),dest,LCD_SIZE);
-    memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
+    memcpy(GrayGetPlane(LIGHT_PLANE),dest,LCD_SIZE);
+    memcpy(GrayGetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
     // Déplacement

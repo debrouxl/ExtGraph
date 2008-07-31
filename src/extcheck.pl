@@ -13,7 +13,7 @@ package main;
     my $sourcecode;
     my %funcs;
 
-sub wanted {
+sub library {
     my $line;
     my @lines;
     my ($filename, $funcname);
@@ -87,6 +87,7 @@ sub wanted {
                 else {
                     warn "WARNING: file $name doesn't seem to contain symbol $filename !\n";
                 }
+                # TODO: update prototypes within C files ?
                 delete $funcs{$filename};
                 delete $funcs{lc($filename)};
             }
@@ -95,8 +96,47 @@ sub wanted {
 
 }
 
-sub parse ($) {
+sub demos {
+    my $regex;
+    my @path;
+    #my $foundsometests = 0;
+    
+    if ($name =~ m@(\C*?)\.(asm|c)$@i) { # Select .asm and .c files.
+        open(INFILE, '+<', $name) or die "Can't open $name: $!";
+        read(INFILE, $sourcecode, -s INFILE);
+        close INFILE;
+        
+        @path = split /\//, $name;
+        $name = $path[$#path];
+
+        for my $key (keys %funcs) {
+            $regex = qr@$key\s*\(@s; # funcname (
+            if ($sourcecode =~ $regex) {
+                #$foundsometests = 1;
+                print "Found test for function $key in $name\n";
+                delete $funcs{$key};
+                delete $funcs{lc($key)};
+                next;
+            }
+            $regex = qr@,\s*$key@s; # , funcname (as callback)
+            if ($sourcecode =~ $regex) {
+                print "Found test for function $key in $name\n";
+                delete $funcs{$key};
+                delete $funcs{lc($key)};
+                next;
+            }
+        }
+
+        # The order in which the directory is traversed can trigger spurious warnings, e.g. demo10.
+        #if ($foundsometests == 0) {
+            #print "WARNING: found no tests in $name, check the script !\n";
+        #}
+    }
+}
+
+sub parseheader ($; $) {
     my $filename = shift;
+    my $putlowercase = shift;
     my $spuriousindex;
     
     open(INFILE, $filename) or die "Can't open $filename: $!";
@@ -108,7 +148,9 @@ sub parse ($) {
 
     my @lines = split /\n/, $sourcecode;
     for my $line (@lines) {
-        
+
+        # TODO improve the script so that it can understand the Grayutils aliases.
+
         next if (   ($line =~ m@^\s?$@o) # Empty line
                  || ($line =~ m@^\#@o) # Line starting with #
                  || ($line =~ m@^//@o) # Line starting with //
@@ -131,20 +173,38 @@ sub parse ($) {
         }
         
         $funcs{$2} = $line;
-        $funcs{lc($2)} = $line;
+        if ($putlowercase != 0) {
+            $funcs{lc($2)} = $line;
+        }
     }
 }
 
-
-    # Read input files.
-    parse "../../lib/extgraph.h";
-    parse "../../lib/tilemap.h";
-    parse "../../lib/preshift.h";
+    die "Usage: 'extcheck.pl (--fixproto|--coverage)'.\n" if $#ARGV != 0;
     
-    # Traverse desired filesystem
-    File::Find::find({wanted => \&wanted, no_chdir => 1}, '.');
+    
+    if ($ARGV[0] eq '--fixproto') {
+        # Read header files.
+        parseheader "../lib/extgraph.h", 1;
+        parseheader "../lib/tilemap.h", 1;
+        parseheader "../lib/preshift.h", 1;
 
-    for my $key (sort keys %funcs) {
-        print "Found no implementation for function $key\n";
+        # Traverse desired filesystem
+        File::Find::find({wanted => \&library, no_chdir => 1}, './lib');
+
+        for my $key (sort keys %funcs) {
+            print "Found no implementation for function $key\n";
+        }
     }
+    elsif ($ARGV[0] eq '--coverage') {
+        # Read header files.
+        parseheader "../lib/extgraph.h", 0;
+        parseheader "../lib/tilemap.h", 0; # TODO: improve script so that slightly less false positives are triggered by this one...
+        parseheader "../lib/preshift.h", 0;
 
+        # Traverse desired filesystem
+        File::Find::find({wanted => \&demos, no_chdir => 1}, './demos');
+
+        for my $key (sort keys %funcs) {
+            print "Found no test for function $key\n";
+        }
+    }

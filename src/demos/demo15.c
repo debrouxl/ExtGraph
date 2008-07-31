@@ -107,11 +107,11 @@ static inline void RenderMap(AnimatedPlane *plane,void *dest)
     // Affichage
     DrawAnimatedPlane(x,y,plane,dest,TM_GRPLC,TM_GA16B);
 
-    FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-    FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+    FastCopyScreen_R(dest,GrayGetPlane(LIGHT_PLANE));
+    FastCopyScreen_R(dest+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 /*
-    memcpy(GetPlane(LIGHT_PLANE),dest,LCD_SIZE);
-    memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
+    memcpy(GrayGetPlane(LIGHT_PLANE),dest,LCD_SIZE);
+    memcpy(GrayGetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
     // Déplace la map

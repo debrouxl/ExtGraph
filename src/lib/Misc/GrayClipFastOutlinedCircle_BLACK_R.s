@@ -18,16 +18,6 @@
 GrayClipFastOutlinedCircle_BLACK_R:
     movem.l  %d3-%d7/%a2-%a5,-(%sp)
 
-| Simple check for "completely out of plane".
-    moveq    #_EXT_MAX_LCD_HEIGHT,%d3
-    add.w    %d2,%d3
-    cmp.w    %d3,%d1
-    bge.w    8f
-    
-    addi.w   #_EXT_MAX_LCD_WIDTH-_EXT_MAX_LCD_HEIGHT,%d3
-    cmp.w    %d3,%d0
-    bge.w    8f
-
     move.w   %d0,%d3
     move.w   %d3,%d4
     lsr.w    #3,%d3

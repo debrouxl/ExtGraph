@@ -422,14 +422,14 @@ void _main(void)
 			// Show the effect of plane (I)SHADOW functions (here, entire plane
                   // (I)SHADOW combined with plane copy).
 			if (!mode) {
-				FastCopyScreen_R(vscreen,GetPlane(LIGHT_PLANE));
-				FastCopyScreen_R(vscreen+LCD_SIZE,GetPlane(DARK_PLANE));
+				FastCopyScreen_R(vscreen,GrayGetPlane(LIGHT_PLANE));
+				FastCopyScreen_R(vscreen+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 			}
 			else if (mode == 1) {
-				GrayShadowPlanesTo_R(vscreen,vscreen+LCD_SIZE,GetPlane(LIGHT_PLANE),GetPlane(DARK_PLANE));
+				GrayShadowPlanesTo_R(vscreen,vscreen+LCD_SIZE,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
 			}
 			else {
-				GrayIShadowPlanesTo_R(vscreen,vscreen+LCD_SIZE,GetPlane(LIGHT_PLANE),GetPlane(DARK_PLANE));
+				GrayIShadowPlanesTo_R(vscreen,vscreen+LCD_SIZE,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
 			}
 
 #endif

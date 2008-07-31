@@ -72,6 +72,7 @@ unsigned long long s64x64[64] = {
 ~0xc001fc00ffffffffULL,~0xc0000000ffffffffULL,~0xffffffffffffffffULL,~0xffffffffffffffffULL};
 */
 unsigned long long sprt1p[2]={0x5555555555555555ULL,0xAAAAAAAAAAAAAAAAULL};
+unsigned long long blitmask[1]={0x0000000000000000ULL};
 
 unsigned char *buffer;
 unsigned char *buffer2;
@@ -100,6 +101,7 @@ unsigned char *sprite2;
 #define WIDTH            C89_92V200(160,240)
 #define SPRWIDTH         64
 
+static short mode=1;
 static unsigned char *sprite=(unsigned char *)s64x64;
 
 
@@ -114,7 +116,12 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    ClipSpriteX8_MASK_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,buffer,LCD_MEM);
+    if (mode == 1) {
+        ClipSpriteX8_MASK_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,buffer,LCD_MEM);
+    }
+    else {
+        ClipSpriteX8_BLIT_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,(unsigned char *)blitmask,LCD_MEM);
+    }
 }
 
 
@@ -194,6 +201,14 @@ void _main(void) {
             y++;
             if ((key&LEFT_KEY)&&(x>-(SPRWIDTH-1)))            x--;
             else if ((key&RIGHT_KEY)&&(x<WIDTH-1)) x++;
+            draw(x,y);
+        }
+        else if (_rowread(MODE_ROW)&MODE_KEY) {     // MODE
+            (++mode==7)?mode=1:mode;
+            // Waiting loop so as to cut rebounds on key. It replaces a
+            // bigger block of code that uses AMS timer functions.
+            asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+            restore(x,y);
             draw(x,y);
         }
         else if (_rowread(ZERO_ROW)&ZERO_KEY && sprite!=(unsigned char *)s64x64) {      // 0

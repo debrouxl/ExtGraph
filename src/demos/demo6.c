@@ -72,6 +72,7 @@ unsigned long long s64x64[64] = {
 ~0xc001fc00ffffffffULL,~0xc0000000ffffffffULL,~0xffffffffffffffffULL,~0xffffffffffffffffULL};
 */
 unsigned long long sprt1p[2]={0x5555555555555555ULL,0xAAAAAAAAAAAAAAAAULL};
+unsigned long long blitmask[1]={0x0000000000000000ULL};
 
 unsigned char *buffer;
 unsigned char *buffer2;
@@ -140,7 +141,7 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    SpriteX8_MASK_R(x,y,SPRWIDTH,buffer,buffer,SPRWIDTH/8,LCD_MEM);
+    SpriteX8_BLIT_R(x,y,SPRWIDTH,buffer,(unsigned char *)blitmask,SPRWIDTH/8,LCD_MEM);
 }
 
 

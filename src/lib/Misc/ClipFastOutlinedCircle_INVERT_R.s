@@ -18,16 +18,6 @@
 ClipFastOutlinedCircle_INVERT_R:
     movem.l  %d3-%d7/%a2-%a5,-(%sp)
 
-| Simple check for "completely out of plane".
-    moveq    #_EXT_MAX_LCD_HEIGHT,%d3
-    add.w    %d2,%d3
-    cmp.w    %d3,%d1
-    bge.w    8f
-    
-    addi.w   #_EXT_MAX_LCD_WIDTH-_EXT_MAX_LCD_HEIGHT,%d3
-    cmp.w    %d3,%d0
-    bge.w    8f
-
     move.w   %d0,%d3
     move.w   %d3,%d4
     lsr.w    #3,%d3
@@ -139,12 +129,18 @@ ClipFastOutlinedCircle_INVERT_R:
     cmpa.l   %a0,%a2
     beq.s    7f
 
+    cmpi.w   #239,%d0 | if (!((unsigned short)x1 > 239)) {
+    bhi.s    6f
+    
     cmpi.w   #127,%d3 | if (!((unsigned short)y2 > 127)) {
     bhi.s    6f
     
     bchg     %d6,(%a2) | x1, y2
 
 6:
+    cmpi.w   #239,%d2 | if (!((unsigned short)x2 > 239)) {
+    bhi.s    7f
+
     cmpi.w   #127,%d3 | if (!((unsigned short)y2 > 127)) {
     bhi.s    7f
     
@@ -203,7 +199,7 @@ ClipFastOutlinedCircle_INVERT_R:
 
 1:
     move.l   %a5,%d5
-    bge.s    0b
+    bge      0b
 
 8:
     movem.l  (%sp)+,%d3-%d7/%a2-%a5

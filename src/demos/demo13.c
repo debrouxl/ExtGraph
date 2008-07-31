@@ -111,11 +111,11 @@ static inline void RenderMaps(Plane *bg_plane,Plane *fg_plane,void *dest)
     DrawPlane(x_bg,y_bg,bg_plane,dest,TM_GRPLC,TM_G16B);
     DrawPlane(x_fg,y_fg,fg_plane,dest,TM_GTRANW,TM_G16B);
 
-    FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-    FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+    FastCopyScreen_R(dest,GrayGetPlane(LIGHT_PLANE));
+    FastCopyScreen_R(dest+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 /*
-    memcpy(GetPlane(LIGHT_PLANE),dest,LCD_SIZE);
-    memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
+    memcpy(GrayGetPlane(LIGHT_PLANE),dest,LCD_SIZE);
+    memcpy(GrayGetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
     BEGIN_KEYTEST

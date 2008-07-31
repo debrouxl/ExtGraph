@@ -64,7 +64,7 @@ void _main(void) {
 
     do {
         FastCopyScreen_R(blank,LCD_MEM);
-        FastCopyScreen_R(orig,LCD_MEM);
+        FastCopyScreen(orig,LCD_MEM);
     }
     while (!(_rowread(0xF000)&0xFF));
     OSSetSR(0);

@@ -58,9 +58,9 @@ GrayDrawSpan_LGRAY_R:
     move.w   (9f,%pc,%d0.w),%d0
     swap     %d0
     lsr.l    %d2,%d0
-    or.l     %d0,(%a0)
+    or.l     %d0,(%a1)
     not.l    %d0
-    and.l    %d0,(%a1)
+    and.l    %d0,(%a0)
 0:
     rts
 .even
@@ -74,9 +74,9 @@ GrayDrawSpan_LGRAY_R:
     move.w   %d2,%d0
     add.w    %d0,%d0
     move.w   (8f,%pc,%d0.w),%d0 | *p++ ^= table1[sx]
-    or.w     %d0,(%a0)+
+    or.w     %d0,(%a1)+
     not.w    %d0
-    and.w    %d0,(%a1)+
+    and.w    %d0,(%a0)+
     add.w    #-16,%d2
     add.w    %d2,%d1       | dx -= 16 - sx <=> dx += sx - 16;
 1:
@@ -85,8 +85,8 @@ GrayDrawSpan_LGRAY_R:
 4:
     cmp.w    #15,%d1       | while (dx >= 16) {*p++ ^= 0xffff;dx-=16;}
     ble.s    2f
-    move.w   %d0,(%a0)+
-    move.w   %d2,(%a1)+
+    move.w   %d0,(%a1)+
+    move.w   %d2,(%a0)+
     addi.w   #-16,%d1
     bra.s    4b
 2:
@@ -94,9 +94,9 @@ GrayDrawSpan_LGRAY_R:
     beq.s    3f
     add.w    %d1,%d1
     move.w   (9b,%pc,%d1.w),%d0
-    or.w     %d0,(%a0)
+    or.w     %d0,(%a1)
     not.w    %d0
-    and.w    %d0,(%a1)
+    and.w    %d0,(%a0)
 3:
     rts
 .even

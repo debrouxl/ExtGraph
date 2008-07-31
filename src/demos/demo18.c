@@ -84,6 +84,20 @@ void _main(void) {
         GrayShadowPlanesTo_R(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE), GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE));
 
         asm volatile("move.l #0x4FFFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+
+        FastFillScreen_R(GrayGetPlane(DARK_PLANE));
+        FastFillScreen_R(GrayGetPlane(LIGHT_PLANE));
+        asm volatile("move.l #0x4FFFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+
+        FastClearScreen_R(GrayGetPlane(DARK_PLANE));
+        asm volatile("move.l #0x4FFFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+
+        FastFillScreen_R(GrayGetPlane(DARK_PLANE));
+        FastClearScreen_R(GrayGetPlane(LIGHT_PLANE));
+        asm volatile("move.l #0x4FFFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
+
+        FastClearScreen_R(GrayGetPlane(LIGHT_PLANE));
+        asm volatile("move.l #0x4FFFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
     }
 
     GrayOff();

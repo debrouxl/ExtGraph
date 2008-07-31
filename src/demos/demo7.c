@@ -24,8 +24,6 @@
                                  //       #include <extgraph.h>
 
 
-#define PLANE1 GetPlane(LIGHT_PLANE)
-#define PLANE2 GetPlane(DARK_PLANE)
 
 /*===========================================================================*/
 /* main routine: where all the fun starts ...                                */

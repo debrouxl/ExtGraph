@@ -1,4 +1,5 @@
 #!/bin/sh
+doxygen Doxyfile
 cd src
 ./cleanup
 cd ..

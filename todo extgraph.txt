@@ -38,24 +38,29 @@ X* Install "kernel" headers so that demo26 can be recompiled...
 X* Fix Scale1Plane160to240_R, and make a demo for it.
 -> demo31
 
-0* Augment coverage of the demos, if necessary.
-Are Create(I)Sprite(I)Shadow functions tested ?
+/* Start augmenting test coverage of the demos, because it IS necessary...
+-> demo32 for Create(I)Sprite(I)Shadow functions.
+-> extcheck.pl --coverage helps finding untested functions.
 
-/* The C function prototypes embedded in the .s files are outdated, and they're a pain to maintain.
-Make some script that replaces them by those in extgraph.h (the correct ones, by definition).
+/* The C function prototypes embedded in the .s and .c files are outdated, and they're a pain to maintain. Make some script that replaces them by those in extgraph.h (the correct ones, by definition).
+-> extcheck.pl --fixproto can currently update the prototypes in .s files, but not the ones in .c files (which are <10% as many as than .s files)
 
 /* Move the functions' documentation into Doxygen comments.
+-> Done, what's left before removing the old pages is checking that no important or better-worded bits were left behind.
 
 ?* Split extgraph.h, timemap.h into many small header files ?
 
 -- Beta 6
+
+/* Keep augmenting test coverage of the demos, because it IS necessary...
+-> extcheck.pl --coverage helps finding untested functions.
 
 /* 32x32 tilemap engine. Use and extend what was started by Michael Hergenrader (or Lachipseudo Assasen, I don't remember).
 
 0* Rewrite filled triangle functions in ASM, while changing the algorithm (probably).
 Due to rounding errors, the current algorithm doesn't work well. The shift count should be higher (but that will
 require long division).
-Another (naive ?) algorithm could use _ClipLine_R and DrawMultiHLines (see below) ?
+Another (probably naive !) algorithm could use _ClipLine_R and DrawMultiHLines (see below).
 
 0* ScaleSprite functions that draw to a sprite instead of a screen. Suggestion of "epsilon".
 
@@ -64,7 +69,7 @@ Another (naive ?) algorithm could use _ClipLine_R and DrawMultiHLines (see below
 
 0* FastDrawLargeBufferToScreen_R: make a 89 version and/or a version that can draw less than 240x128 pixels.
 
-?* write generic (Gray)ClipFastOutlinedCircle using SMC ?
+?* write generic (Gray)ClipFastOutlinedCircle using SMC ? Is it worth the trouble ?
 
 /* Fix bugs...
 0* Update documentation (update links, document new functions, etc.)
@@ -94,7 +99,7 @@ Some material in a demo of Genlib 0.99.22b (thanks Julien RF for finding it).
     0* Make fast non-clipped GrayISpriteX_Y_R ?
 
 0* Make more X8 routines, especially grayscale ones, including transparencies.
-0* Make (Gray)(Clip)ISpriteX16_AND/MASK/OR/RPLC/TRANB/TRANW/XOR_R. Make a copy of demo6 with X16 routines ?
+0* Make GrayClipISpriteX16_(BLIT|TRANB|TRANW)_R. Make a sibling of demo6 & demo28 with X16 routines.
 0* Make more Gray(Clip)SingleSprite routines.
 
 0* fastsrb:

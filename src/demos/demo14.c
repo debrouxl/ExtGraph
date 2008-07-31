@@ -157,11 +157,11 @@ static inline void RenderMap(char (*matrix)[MAP_WIDTH],void *big_vscreen,void *d
     // Affichage
     DrawGrayBuffer_RPLC(big_vscreen,x&31,y&31,dest);
 
-    FastCopyScreen_R(dest,GetPlane(LIGHT_PLANE));
-    FastCopyScreen_R(dest+LCD_SIZE,GetPlane(DARK_PLANE));
+    FastCopyScreen_R(dest,GrayGetPlane(LIGHT_PLANE));
+    FastCopyScreen_R(dest+LCD_SIZE,GrayGetPlane(DARK_PLANE));
 /*
-    memcpy(GetPlane(LIGHT_PLANE),dest,LCD_SIZE);
-    memcpy(GetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
+    memcpy(GrayGetPlane(LIGHT_PLANE),dest,LCD_SIZE);
+    memcpy(GrayGetPlane(DARK_PLANE),dest+LCD_SIZE,LCD_SIZE);
 */
 
     // Déplace la map
