@@ -24,7 +24,7 @@ CreateSpriteShadow16_R:
     or.w     %d1,%d2
     
     move.w   (%a2)+,%d1
-    not.w    %d1
+    |not.w    %d1
     and.w    %d1,%d2
     and.w    %d1,%d3
     

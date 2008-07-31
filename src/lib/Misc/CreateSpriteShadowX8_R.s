@@ -17,23 +17,21 @@ CreateSpriteShadowX8_R:
     move.l   4+24+4(%sp),%a3
     move.l   4+24+8(%sp),%a4
 
-    move.w   %d1,%d5
-    
 0:
-    move.w   %d5,%d4
+    move.w   %d1,%d4
 1:
-    move.b   (%a0)+,%d1
+    move.b   (%a0)+,%d5
     move.b   (%a1)+,%d2
 
-    move.b   %d1,%d3
+    move.b   %d5,%d3
     not.b    %d3
     or.b     %d2,%d3
-    or.b     %d1,%d2
+    or.b     %d5,%d2
     
-    move.b   (%a2)+,%d1
-    not.b    %d1
-    and.b    %d1,%d2
-    and.b    %d1,%d3
+    move.b   (%a2)+,%d5
+    |not.b    %d5
+    and.b    %d5,%d2
+    and.b    %d5,%d3
     
     move.b   %d3,(%a3)+
     move.b   %d2,(%a4)+

@@ -8,32 +8,30 @@ CreateISpriteShadow32_R:
     subq.w   #1,%d0
     blt.s    1f
 
-    move.w   %d3,-(%sp)
+    move.l   %d3,-(%sp)
+    move.l   %d4,-(%sp)
 
 0:
-    move.l   4(%a0),%d1
-    move.l   8(%a0),%d2
+    move.l   (%a0)+,%d3
+    move.l   (%a0)+,%d1
+    move.l   (%a0)+,%d2
 
-    move.l   %d1,%d3
-    not.l    %d3
-    or.l     %d2,%d3
+    move.l   %d1,%d4
+    not.l    %d4
+    or.l     %d2,%d4
     or.l     %d1,%d2
     
-    move.l   (%a0),%d1
-    
-    move.l   %d1,(%a1)+
-
-    not.l    %d1
-    and.l    %d1,%d2
-    and.l    %d1,%d3
-    
     move.l   %d3,(%a1)+
+    |not.l    %d1
+    and.l    %d3,%d2
+    and.l    %d3,%d4
+    
+    move.l   %d4,(%a1)+
     move.l   %d2,(%a1)+
-
-    lea      12(%a0),%a0
 
     dbf      %d0,0b
 
+    move.l   (%sp)+,%d4
     move.l   (%sp)+,%d3
 
 1:

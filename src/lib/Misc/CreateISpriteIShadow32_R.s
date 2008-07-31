@@ -22,8 +22,7 @@ CreateISpriteIShadow32_R:
     and.l    %d1,%d2
     
     move.l   %d3,(%a1)+
-
-    not.l    %d3
+    |not.l    %d3
     and.l    %d3,%d2
     and.l    %d3,%d4
     

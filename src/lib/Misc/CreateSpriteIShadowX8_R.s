@@ -31,7 +31,7 @@ CreateSpriteIShadowX8_R:
     and.b    %d1,%d2
     
     move.b   (%a2)+,%d1
-    not.b    %d1
+    |not.b    %d1
     and.b    %d1,%d2
     and.b    %d1,%d3
     

@@ -24,7 +24,7 @@ CreateSpriteIShadow32_R:
     and.l    %d1,%d2
     
     move.l   (%a2)+,%d1
-    not.l    %d1
+    |not.l    %d1
     and.l    %d1,%d2
     and.l    %d1,%d3
     

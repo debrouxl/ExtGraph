@@ -11,7 +11,7 @@
 <a name="history"></a><h1>History</h1>
 <hr>
 <blockquote>
-<table border=1>
+<table border="1">
 <tr><td><strong>Version</strong></td><td><strong>Date</strong></td><td><strong>Changes</strong></td></tr>
 <tr><td>2.00 Beta 6</td><td>xx/0x/2008</td><td>Fixed Scale1Plane160to240_R so that it can be used... and add demo31 as
                                         a regression test.</td></tr>
@@ -22,6 +22,16 @@
 <tr><td>           </td><td>          </td><td>Switched the woefully outdated hand-edited documentation of library
                                         functions to Doxygen-generated documentation. I stumbled across the nice tool
                                         Doxygen after the last significant updates to the ExtGraph documentation.</td></tr>
+<tr><td>           </td><td>          </td><td>Fixed bugs that prevented preshifted sprite macros from being used twice in
+                                        the same scope. Nobody has ever reported the bug, I guess that shows how much
+                                        preshifted sprites are used...</td></tr>
+<tr><td>           </td><td>          </td><td>Promote tests for the Create(I)Sprite(I)Shadow routines from my local test
+                                        program to new demo32, while extending them.</td></tr>
+<tr><td>           </td><td>          </td><td>Change the behaviour of Create(I)Sprite(I)Shadow to follow the principle of
+                                        least surprise: other ExtGraph routines don't invert the mask prior to
+                                        using it. That breaks backwards compatibility, but...</td></tr>
+<tr><td>           </td><td>          </td><td>... CreateISpriteShadow32_R was broken anyway, and that was never reported
+                                        to me. The Create(I)Sprite(I)Shadow routines don't seem to be widely used.</td></tr>
 <tr><td>2.00 Beta 5</td><td>27/07/2008</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>
@@ -147,7 +157,7 @@
                                         but I don't know if I'll add that, because it bloats the header
                                         only to fix very infrequent problems.</td></tr>
 <tr><td>           </td><td>          </td><td>Added <strong>generic sprite rotation routines (8, 16, 32, X8)</strong>,
-                                        courtesy of Joey Adams. Added a demo.</td></tr>
+                                        courtesy of Joey Adams. Added demo27.</td></tr>
 <tr><td>           </td><td>          </td><td>Optimized the transition effects and sprite routines
                                         for size: stupid dbf+rts combination. Kevin reported
                                         another rare pessimization, but I cannot find it looking at

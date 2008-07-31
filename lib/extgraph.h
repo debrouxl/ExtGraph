@@ -1412,7 +1412,7 @@ void FillScreenWithGarbage_R(unsigned long seed asm("%d0"), unsigned short len a
  * 
  * Generate darker or lighter sprites from sprites of (8|16|32|<i>bytewidth</i>*8)x<i>height</i> pixels, while taking a <i>mask</i> into account.
  * 
- * The generated sprite shadows can be drawn with OR functions. This takes a slightly greater amount of memory,
+ * The generated sprite shadows can be drawn with OR or MASK/SMASK functions. This takes a slightly greater amount of memory,
  * but is significantly faster at run-time than using the (I)SHADOW functions introduced in 2.00 Beta 3 and removed in 2.00 Beta 4.
  *
  * The interlaced sprite format of CreateISprite* routines is the same as that of the masked format as described in \ref ctpisprite

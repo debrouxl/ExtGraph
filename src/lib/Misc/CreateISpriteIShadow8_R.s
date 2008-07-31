@@ -22,8 +22,7 @@ CreateISpriteIShadow8_R:
     and.b    %d1,%d2
     
     move.b   %d3,(%a1)+
-
-    not.b    %d3
+    |not.b    %d3
     and.b    %d3,%d2
     and.b    %d3,%d4
     
