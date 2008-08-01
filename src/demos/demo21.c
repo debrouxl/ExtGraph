@@ -72,7 +72,7 @@ void _main(void) {
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -95,7 +95,7 @@ void _main(void) {
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ClipSprite: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ClipSprite: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -120,7 +120,7 @@ void _main(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -141,7 +141,7 @@ void _main(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Sprite: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"Sprite: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     ngetchx();
 

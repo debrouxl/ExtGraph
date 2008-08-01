@@ -57,7 +57,7 @@ void _main(void) {
             for (i=99; i>=8; i--) DrawLine(80,50,0,i,   used_mode);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"OS Routine took %lu time units",(1000-measure_val)*50);
+        sprintf(tmpstr,"OS Routine took %lu ticks",1000-measure_val);
         memset(LCD_MEM,0,30*8);
         DrawStr(0,0,tmpstr,A_REPLACE);
 
@@ -75,7 +75,7 @@ void _main(void) {
             for (i=99; i>=8; i--) FastDrawLine_R(LCD_MEM,80,50,0,i,   used_mode);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"Own Routine took %lu time units",(1000-measure_val)*50);
+        sprintf(tmpstr,"Own Routine took %lu ticks",1000-measure_val);
         memset(LCD_MEM,0,30*8);
         DrawStr(0,0,tmpstr,A_REPLACE);
     }

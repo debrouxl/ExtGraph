@@ -23,9 +23,9 @@
                                  //
                                  //       #include <extgraph.h>
 
-unsigned char  spritedata8[8]  = {0xaa,0x55,0xaa,0x55,0xaa,0x55,0xaa,0x55};
-unsigned short spritedata16[8] = {0xaaaa,0x5555,0xaaaa,0x5555,0xaaaa,0x5555,0xaaaa,0x5555};
-unsigned long  spritedata32[8] = {0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555};
+static const unsigned char  spritedata8[8]  = {0xaa,0x55,0xaa,0x55,0xaa,0x55,0xaa,0x55};
+static const unsigned short spritedata16[8] = {0xaaaa,0x5555,0xaaaa,0x5555,0xaaaa,0x5555,0xaaaa,0x5555};
+static const unsigned long  spritedata32[8] = {0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555,0xaaaaaaaa,0x55555555};
 
 
 /*===========================================================================*/
@@ -56,7 +56,7 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -80,7 +80,7 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -103,9 +103,98 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-8;x++) {
+            count++;
+            Sprite8_BLIT_R(x,y,8,spritedata8,0x00,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-8;x++) {
+            count++;
+            Sprite8_RPLC_R(x,y,8,spritedata8,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // original sprite functions
+    //-------------------------------------------------------------------------
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-8;x++) {
+            count++;
+            Sprite8(x,y,8,spritedata8,LCD_MEM,SPRT_XOR);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // modified sprite functions
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-8;x++) {
+            count++;
+            Sprite8_XOR_R(x,y,8,spritedata8,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
+
 }
 
 
@@ -137,7 +226,7 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB: %lu tics for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu tics for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -161,7 +250,7 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -184,7 +273,94 @@ static inline short Test16(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-16;x++) {
+            count++;
+            Sprite16_BLIT_R(x,y,8,spritedata16,0x0000,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-16;x++) {
+            count++;
+            Sprite16_RPLC_R(x,y,8,spritedata16,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // original sprite functions
+    //-------------------------------------------------------------------------
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-16;x++) {
+            count++;
+            Sprite16(x,y,8,spritedata16,LCD_MEM,SPRT_XOR);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB XOR: %lu tics for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // modified sprite functions
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-16;x++) {
+            count++;
+            Sprite16_XOR_R(x,y,8,spritedata16,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -218,7 +394,7 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -242,7 +418,7 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -265,7 +441,94 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",(1000-measure_val)*50,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-32;x++) {
+            count++;
+            Sprite32_BLIT_R(x,y,8,spritedata32,0x00000000,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-32;x++) {
+            count++;
+            Sprite32_RPLC_R(x,y,8,spritedata32,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // original sprite functions
+    //-------------------------------------------------------------------------
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-32;x++) {
+            count++;
+            Sprite32(x,y,8,spritedata32,LCD_MEM,SPRT_XOR);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // modified sprite functions using just one call
+    //-------------------------------------------------------------------------
+
+    count = 0;
+    memset(LCD_MEM,0,LCD_SIZE);
+
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,1000);
+
+    for (y=0;y<100-16;y++) {
+        for (x=0;x<160-32;x++) {
+            count++;
+            Sprite32_XOR_R(x,y,8,spritedata32,LCD_MEM);
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    OSFreeTimer(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld sprites",1000-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }

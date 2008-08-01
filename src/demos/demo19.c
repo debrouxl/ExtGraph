@@ -72,7 +72,7 @@ void _main(void) {
         if (k < 0) break;
     }
 
-    sprintf(tmpstr,"AMS: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"AMS: %lu ticks for 4371 rectangles",100000*20UL-OSTimerCurVal(USER_TIMER));
     ST_helpMsg(tmpstr);
     OSFreeTimer(USER_TIMER);
     if (ngetchx() == KEY_ESC) goto end;
@@ -87,7 +87,7 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"ExtGraph1: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"ExtGraph1: %lu ticks for 4371 rectangles",100000*20UL-OSTimerCurVal(USER_TIMER));
     ST_helpMsg(tmpstr);
     OSFreeTimer(USER_TIMER);
     if (ngetchx() == KEY_ESC) goto end;
@@ -102,7 +102,7 @@ void _main(void) {
         k--;
         if (k < 0) break;
     }
-    sprintf(tmpstr,"ExtGraph2: %lu ticks for 4371 rectangles",(100000*20UL-OSTimerCurVal(USER_TIMER))*50);
+    sprintf(tmpstr,"ExtGraph2: %lu ticks for 4371 rectangles",100000*20UL-OSTimerCurVal(USER_TIMER));
     ST_helpMsg(tmpstr);
     GKeyFlush();
     OSFreeTimer(USER_TIMER);

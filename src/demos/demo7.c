@@ -58,7 +58,7 @@ void _main(void) {
             for (i=99; i>=8; i--) GrayDrawLine(80,50,0,i,   used_color);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"OS routine took %lu time units",(1000-measure_val)*50);
+        sprintf(tmpstr,"OS routine took %lu ticks",1000-measure_val);
 
         GrayDrawRect(0,0,239,7,COLOR_WHITE,RECT_FILLED);
         GrayDrawStrExt(0,0,tmpstr,A_REPLACE | A_CENTERED | A_SHADOWED,F_4x6);
@@ -77,7 +77,7 @@ void _main(void) {
             for (i=99; i>=8; i--) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,0,i,   used_color);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"Own routine took %lu time units",(1000-measure_val)*50);
+        sprintf(tmpstr,"Own routine took %lu ticks",1000-measure_val);
         GrayDrawRect(0,0,239,8,COLOR_WHITE,RECT_FILLED);
         GrayDrawStrExt(0,0,tmpstr,A_REPLACE | A_CENTERED | A_SHADOWED,F_4x6);
     }
