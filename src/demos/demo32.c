@@ -388,6 +388,7 @@ void _main(void) {
         GrayDrawStr(0,20,"Darkened",A_NORMAL);
         GrayDrawStr(0,40,"Lightened",A_NORMAL);
         GraySpriteX8_OR(10*6,0,16,(unsigned char*)sprite_16,(unsigned char*)sprite2_16,2,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+        GraySpriteX8_AND(10*6,0,16,mask,mask,2,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         CreateSpriteShadow16_R(16,sprite_16,sprite2_16,(unsigned short *)mask,dest_16,dest_16+16);
         GraySpriteX8_OR(10*6,20,16,(unsigned char*)dest_16,(unsigned char*)(dest_16+16),2,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         CreateSpriteIShadow16_R(16,sprite_16,sprite2_16,(unsigned short *)mask,dest_16,dest_16+16);
@@ -403,7 +404,7 @@ void _main(void) {
         CreateSpriteShadow32_R(32,sprite_32,sprite2_32,(unsigned long *)mask,dest_32,dest_32+32);
         GraySpriteX8_OR(10*6+40,20,32,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),4,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         CreateSpriteIShadow32_R(32,sprite_32,sprite2_32,(unsigned long *)mask,dest_32,dest_32+32);
-        GraySpriteX8_OR(10*6,40,32,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),4,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+        GraySpriteX8_BLIT(10*6,40,32,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),mask,4,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         ngetchx();
 
         // CreateSprite(I)ShadowX8
@@ -413,9 +414,9 @@ void _main(void) {
         GrayDrawStr(0,60,"Lightened",A_NORMAL);
         GraySpriteX8_OR(10*6,0,24,(unsigned char*)sprite_24,(unsigned char*)sprite2_24,3,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         CreateSpriteShadowX8_R(24,3,sprite_24,sprite2_24,mask,(unsigned char*)dest_32,(unsigned char*)(dest_32+32));
-        GraySpriteX8_OR(10*6,30,24,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),3,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+        GraySpriteX8_XOR(10*6,30,24,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),3,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         CreateSpriteIShadowX8_R(24,3,sprite_24,sprite2_24,mask,(unsigned char*)dest_32,(unsigned char*)(dest_32+32));
-        GraySpriteX8_OR(10*6,60,24,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),3,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+        GraySpriteX8_MASK(10*6,60,24,(unsigned char*)dest_32,(unsigned char*)(dest_32+32),(unsigned char*)dest_32,(unsigned char*)(dest_32+32),3,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
         ngetchx();
 
 

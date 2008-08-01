@@ -106,12 +106,17 @@ static unsigned char *sprite=(unsigned char *)s64x64;
 
 
 void __attribute__((__always_inline__)) draw(short x, short y) {
-    // fetch background from LCD memory
-    memset(buffer,0x00,8*SPRWIDTH);
-    ClipSpriteX8Get_R(x,y,SPRWIDTH,SPRWIDTH/8,LCD_MEM,buffer);
-
     // draw normal sprite
-    ClipSpriteX8_OR_R(x,y,SPRWIDTH,SPRWIDTH/8,sprite,LCD_MEM);
+    if (mode != 5) {
+        // fetch background from LCD memory
+        memset(buffer,0x00,8*SPRWIDTH);
+        ClipSpriteX8Get_R(x,y,SPRWIDTH,SPRWIDTH/8,LCD_MEM,buffer);
+
+        ClipSpriteX8_OR_R(x,y,SPRWIDTH,SPRWIDTH/8,sprite,LCD_MEM);
+    }
+    else {
+        ClipSpriteX8_XOR_R(x,y,SPRWIDTH,SPRWIDTH/8,sprite,LCD_MEM);
+    }
 }
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
@@ -119,8 +124,18 @@ void __attribute__((__always_inline__)) restore(short x, short y) {
     if (mode == 1) {
         ClipSpriteX8_MASK_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,buffer,LCD_MEM);
     }
-    else {
+    else if (mode == 2) {
         ClipSpriteX8_BLIT_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,(unsigned char *)blitmask,LCD_MEM);
+    }
+    else if (mode == 3) {
+        ClipSpriteX8_RPLC_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,LCD_MEM);
+    }
+    else if (mode == 4) {
+        ClipSpriteX8_AND_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,LCD_MEM);
+        ClipSpriteX8_OR_R(x,y,SPRWIDTH,SPRWIDTH/8,buffer,LCD_MEM);
+    }
+    else {
+        ClipSpriteX8_XOR_R(x,y,SPRWIDTH,SPRWIDTH/8,sprite,LCD_MEM);
     }
 }
 
@@ -168,6 +183,7 @@ void _main(void) {
     int5 = GetIntVec(AUTO_INT_5);
     SetIntVec(AUTO_INT_5,DUMMY_HANDLER);
 
+    mode = 1;
     draw(x,y);
 
     for(;;) {
@@ -204,11 +220,11 @@ void _main(void) {
             draw(x,y);
         }
         else if (_rowread(MODE_ROW)&MODE_KEY) {     // MODE
-            (++mode==7)?mode=1:mode;
             // Waiting loop so as to cut rebounds on key. It replaces a
             // bigger block of code that uses AMS timer functions.
             asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
             restore(x,y);
+            (++mode==6)?mode=1:mode;
             draw(x,y);
         }
         else if (_rowread(ZERO_ROW)&ZERO_KEY && sprite!=(unsigned char *)s64x64) {      // 0

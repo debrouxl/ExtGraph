@@ -608,9 +608,10 @@ void FastOutlineRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm
 void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__));
 //@}
 
-/** @defgroup fastrect Fast rectangle filling functions for special widths
+/** @defgroup fastrect Fast rectangle filling functions for screen-wide widths
  * @ingroup rectangle
- * \brief These routines fill <i>lines</i> lines of the (160|240|<i>bytewidth</i>*8)-pixel-wide rectangle whose top line is <i>starty</i> in one or two 240x128 video plane(s), with hard-coded drawing mode.
+ * \brief These routines fill <i>lines</i> lines of the (160|240)-pixel-wide rectangle whose topmost line is at <i>starty</i>, in one or two 240x128 video plane(s), with hard-coded drawing mode.<br>
+ *
  */
 //@{
 void FastEraseRect160_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
@@ -626,7 +627,13 @@ void GrayFastFillRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%
 void GrayFastFillRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
 void GrayFastInvertRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
 void GrayFastInvertRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+//@}
 
+/** @defgroup fastrectx8 Fast rectangle filling functions for widths multiple of 8
+ * @ingroup rectangle
+ * \brief These routines fill <i>lines</i> lines of the (<i>bytewidth</i>*8)-pixel-wide rectangle whose top-left corner is at (<i>startcol</i>*8, <i>starty</i>), in a 240-pixel-wide video plane pointed to by <i>plane</i>, with hard-coded drawing mode.<br>
+ */
+//@{
 void FastEraseRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
 void FastFillRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
 void FastInvertRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
@@ -1230,6 +1237,7 @@ void GraySingleSprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("
  * @ingroup tile
  * \brief Non-clipped single plane tile (aligned sprite) functions, non-interlaced sprite format
  *
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprite</i> at (8*<i>col</i>,y) in <i>plane</i>.<br>
  * These functions have nothing to do with the tilemap engine.
  */
 // -----------------------------------------------------------------------------
@@ -1262,6 +1270,8 @@ void Tile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"),
 /** @defgroup tptile Two-plane tile functions
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, non-interlaced sprite format
+ *
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprt0</i> and <i>sprt1</i> at (8*<i>col</i>,y) in planes <i>dest0</i> and <i>dest1</i>.<br>
  */
 // -----------------------------------------------------------------------------
 //@{
@@ -1303,6 +1313,7 @@ void GrayTile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, interlaced sprite format
  *
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprite</i> at (8*<i>col</i>,y) in planes <i>dest0</i> and <i>dest1</i>.<br>
  * The interlaced sprite format is the same as that of the \ref ctpisprite
  */
 // -----------------------------------------------------------------------------
@@ -1388,9 +1399,9 @@ void GrayShadowPlanes240_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsig
 void GrayIShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
 //! Make 160x<i>height</i> planes (bytewidth=20) starting at <i>dest0</i> and <i>dest1</i> darker.
 void GrayShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
-//! Combination of GrayIShadowPlanes240_R and FastCopyScreen_R: Make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> lighter and store the result in <i>dest0</i> and <i>dest1</i>.
+//! Combination of \ref GrayIShadowPlanes240_R and \ref FastCopyScreen_R : make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> lighter and store the result in <i>dest0</i> and <i>dest1</i>.
 void GrayIShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
-//! Combination of GrayShadowPlanes240_R and FastCopyScreen_R: Make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> darker and store the result in <i>dest0</i> and <i>dest1</i>.
+//! Combination of \ref GrayShadowPlanes240_R and \ref FastCopyScreen_R : make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> darker and store the result in <i>dest0</i> and <i>dest1</i>.
 void GrayShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 
 //! Fill 240x128 plane pointed to by <i>plane</i> with 1s.

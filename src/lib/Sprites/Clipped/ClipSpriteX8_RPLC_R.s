@@ -163,10 +163,10 @@ ClipSpriteX8_RPLC_R:
     moveq    #-1,%d0
     clr.b    %d0
     ror.w    %d1,%d0
-    and.b    %d0,(%a0)+
+    and.b    %d0,(%a0)
     move.b   (%a1),%d0
     lsr.b    %d1,%d0
-    or.b     %d0,(%a0)
+    or.b     %d0,(%a0)+
     dbf      %d7,6b
 9:
     moveq    #-1,%d0

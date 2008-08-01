@@ -44,7 +44,6 @@ ClipSpriteX8_BLIT_R:
     move.w   %d1,%d5				|%d5 = y
     muls.w   %d2,%d5				|y*Bytewidth
     suba.w   %d5,%a1				|sprite -= y*Bytewidth
-    suba.w   %d5,%a2				|mask -= y*Bytewidth
     clr.w    %d1
 10:
 |y+1>=_EXT_MAX_LCD_HEIGHT

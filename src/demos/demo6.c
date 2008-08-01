@@ -106,8 +106,15 @@ static unsigned char *sprite=(unsigned char *)s64x64;
 
 
 void __attribute__((__always_inline__)) draw(short x, short y) {
-    // fetch background from LCD memory
-    SpriteX8Get_R(x,y,SPRWIDTH,LCD_MEM,buffer,SPRWIDTH/8);
+    if (mode< 4) {
+        // fetch background from LCD memory
+        SpriteX8Get_R(x,y,SPRWIDTH,LCD_MEM,buffer,SPRWIDTH/8);
+    }
+    else if (mode < 7) {
+        // fetch background from LCD memory
+        SpriteX8Get(x,y,SPRWIDTH,LCD_MEM,buffer,SPRWIDTH/8);
+    }
+    
     if (mode==1) {
         // draw normal sprite
         SpriteX8_OR_R(x,y,SPRWIDTH,sprite,SPRWIDTH/8,LCD_MEM);
@@ -115,7 +122,8 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
     else if (mode==2) {
         // draw h_mirrored sprite
         SpriteX8_MIRROR_H_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
-        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
+        SpriteX8_AND_R(x,y,SPRWIDTH,buffer2,SPRWIDTH/8,LCD_MEM);
+        SpriteX8_OR(x,y,SPRWIDTH,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==3) {
         // draw v_mirrored sprite
@@ -124,24 +132,39 @@ void __attribute__((__always_inline__)) draw(short x, short y) {
     }
     else if (mode==4) {
         SpriteX8X8_ROTATE_LEFT_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
-        SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
+        SpriteX8_MASK(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
     else if (mode==5) {
         SpriteX8X8_ROTATE_RIGHT_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
         SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
-    else {
+    else if (mode==6) {
         // draw sprite, h_mirrored and v_mirrored
         // Wastes a bit of space since we already have H and V,
         // but the goal is testing the "HV" routine.
         SpriteX8_MIRROR_HV_R(SPRWIDTH,buffer,SPRWIDTH/8,buffer2);
         SpriteX8_MASK_R(x,y,SPRWIDTH,buffer2,buffer2,SPRWIDTH/8,LCD_MEM);
     }
+    else {
+        // XOR sprite
+        SpriteX8_XOR_R(x,y,SPRWIDTH,sprite,SPRWIDTH/8,LCD_MEM);
+    }
 }
 
 void __attribute__((__always_inline__)) restore(short x, short y) {
     // restore background
-    SpriteX8_BLIT_R(x,y,SPRWIDTH,buffer,(unsigned char *)blitmask,SPRWIDTH/8,LCD_MEM);
+    if (mode == 1) {
+        SpriteX8_BLIT_R(x,y,SPRWIDTH,buffer,(unsigned char *)blitmask,SPRWIDTH/8,LCD_MEM);
+    }
+    else if (mode == 2) {
+        SpriteX8_BLIT(x,y,SPRWIDTH,buffer,(unsigned char *)blitmask,SPRWIDTH/8,LCD_MEM);
+    }
+    else if (mode != 7) {
+        SpriteX8_RPLC_R(x,y,SPRWIDTH,buffer,SPRWIDTH/8,LCD_MEM);
+    }
+    else {
+        SpriteX8_XOR(x,y,SPRWIDTH,sprite,SPRWIDTH/8,LCD_MEM);
+    }
 }
 
 
@@ -188,6 +211,7 @@ void _main(void) {
     int5 = GetIntVec(AUTO_INT_5);
     SetIntVec(AUTO_INT_5,DUMMY_HANDLER);
 
+    mode = 1;
     draw(x,y);
 
     for(;;) {
@@ -224,11 +248,11 @@ void _main(void) {
             draw(x,y);
         }
         else if (_rowread(MODE_ROW)&MODE_KEY) {     // MODE
-            (++mode==7)?mode=1:mode;
             // Waiting loop so as to cut rebounds on key. It replaces a
             // bigger block of code that uses AMS timer functions.
             asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
             restore(x,y);
+            (++mode==8)?mode=1:mode;
             draw(x,y);
         }
         else if (_rowread(ZERO_ROW)&ZERO_KEY && sprite!=(unsigned char *)s64x64) {      // 0
