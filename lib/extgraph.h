@@ -844,6 +844,9 @@ void FastORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((
 //! XOR 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>.
 //! \since 2.00 Beta 5
 void FastXORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+//! Invert bits of 240x128 plane pointed to by <i>src</i>.
+//! \since 2.00 Beta 6
+void FastInvertScreen_R(void* src asm("%a0")) __attribute__((__regparm__(1)));
 //@}
 
 

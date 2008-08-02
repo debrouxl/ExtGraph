@@ -6,6 +6,14 @@
 
 SpriteX8Get:
 	movem.l	%d3-%d6,-(%sp)
+        
+	lea     16+4(%sp),%a0
+	move.w  (%a0)+,%d0
+	move.w  (%a0)+,%d1
+	move.w  (%a0)+,%d2
+	move.l  (%a0)+,%a1
+	move.w  4(%a0),%d3
+	move.l  (%a0),%a0
 
 	subq.w	#1,%d2
 	blt.s   9f

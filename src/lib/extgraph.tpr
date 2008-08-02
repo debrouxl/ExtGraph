@@ -530,5 +530,6 @@ GNU Assembler File 439=Sprites\SpriteX8Data_withsprite_XOR_R.s
 GNU Assembler File 440=Sprites\Normal\X8\SpriteX8_RPLC_R.s
 GNU Assembler File 441=Sprites\Gray\Clipped\GrayClipISpriteX16_XOR_R.s
 GNU Assembler File 442=Sprites\Gray\Clipped\GrayClipISpriteX16_AND_R.s
+GNU Assembler File 443=Misc\FastInvertScreen_R.s
 Header File 1=internal.h
 

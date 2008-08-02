@@ -44,15 +44,25 @@ void _main(void) {
 
     SpriteX8Get_R(0,0,LCD_HEIGHT,LCD_MEM,orig,LCD_WIDTH/8);
 
-    ST_helpMsg("[press key for vertical mirror]");
+    ST_helpMsg("[press key for 1st vertical mirror]");
     ngetchx();
     SpriteX8_MIRROR_V_R(LCD_HEIGHT,orig,LCD_WIDTH/8,dest);
     SpriteX8_BLIT_R(0,0,LCD_HEIGHT,dest,blitmask,LCD_WIDTH/8,LCD_MEM);
 
-    ST_helpMsg("[press key for horizontal mirror]");
+    ST_helpMsg("[press key for 2nd vertical mirror]");
+    ngetchx();
+    SpriteX8_MIRROR_V(LCD_HEIGHT,dest,LCD_WIDTH/8,orig);
+    SpriteX8_BLIT_R(0,0,LCD_HEIGHT,orig,blitmask,LCD_WIDTH/8,LCD_MEM);
+
+    ST_helpMsg("[press key for 1st horizontal mirror]");
     ngetchx();
     SpriteX8_MIRROR_H_R(LCD_HEIGHT,orig,LCD_WIDTH/8,dest);
     SpriteX8_BLIT_R(0,0,LCD_HEIGHT,dest,blitmask,LCD_WIDTH/8,LCD_MEM);
+
+    ST_helpMsg("[press key for 2nd horizontal mirror]");
+    ngetchx();
+    SpriteX8_MIRROR_H(LCD_HEIGHT,dest,LCD_WIDTH/8,orig);
+    SpriteX8_BLIT_R(0,0,LCD_HEIGHT,orig,blitmask,LCD_WIDTH/8,LCD_MEM);
     ST_helpMsg("[press key to exit]");
     ngetchx();
 
