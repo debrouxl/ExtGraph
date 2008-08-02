@@ -48,7 +48,7 @@
 #define DRAWSPRITE(x,y)          Sprite16_OR_R(x,y,SPRITE_HEIGHT,spritedata,doublebuffer)
 #define TESTCOLLIDE(x0,y0,x1,y1) TestCollide16_R(x0,y0,x1,y1,SPRITE_HEIGHT,spritedata,spritedata)
 
-unsigned short spritedata[16] = {
+static const unsigned short spritedata[16] = {
     0b0000011111100000,
     0b0001111111111000,
     0b0011111111111100,
@@ -73,7 +73,7 @@ unsigned short spritedata[16] = {
 #define DRAWSPRITE(x,y)          Sprite8_OR_R(x,y,SPRITE_HEIGHT,spritedata,doublebuffer)
 #define TESTCOLLIDE(x0,y0,x1,y1) TestCollide8_R(x0,y0,x1,y1,SPRITE_HEIGHT,spritedata,spritedata)
 
-unsigned char spritedata[8] = {
+static const unsigned char spritedata[8] = {
     0b00111100,
     0b01111110,
     0b11111111,

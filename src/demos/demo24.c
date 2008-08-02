@@ -19,7 +19,7 @@
 #include "../../lib/extgraph.h"
 #include "../../lib/tilemap.h"
 
-unsigned char map_bg[8+2*1][15+2*1]={ // Arrière-plan
+static const unsigned char map_bg[8+2*1][15+2*1]={ // Arrière-plan
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
@@ -31,7 +31,7 @@ unsigned char map_bg[8+2*1][15+2*1]={ // Arrière-plan
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3},
 {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3}};
 
-unsigned char map_m[8+2*2][15+2*2]={ // Plan du milieu
+static const unsigned char map_m[8+2*2][15+2*2]={ // Plan du milieu
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 {0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0},
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -45,7 +45,7 @@ unsigned char map_m[8+2*2][15+2*2]={ // Plan du milieu
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 {0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0}};
 
-unsigned char map_fg[8+2*3][15+2*3]={ // Plan de devant
+static const unsigned char map_fg[8+2*3][15+2*3]={ // Plan de devant
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 {0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1},
@@ -61,7 +61,7 @@ unsigned char map_fg[8+2*3][15+2*3]={ // Plan de devant
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 
-unsigned short sprts[][16*2]={ // sprites 16x16 en niveaux de gris
+static const unsigned short sprts[][16*2]={ // sprites 16x16 en niveaux de gris
 // Sprites utilisés par le plan de devant :
 { // 0
 0b0000000000000000,0b0000000000000000,
@@ -137,7 +137,7 @@ unsigned short sprts[][16*2]={ // sprites 16x16 en niveaux de gris
 0b0000000011111111,0b1111111111111111}};
 
 
-unsigned short sprtsm[][16]={ // sprites 16x16 noir et blanc (masques)
+static const unsigned short sprtsm[][16]={ // sprites 16x16 noir et blanc (masques)
 { // 0
 0b1111111111111111,
 0b1111111111111111,

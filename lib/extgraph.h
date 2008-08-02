@@ -79,10 +79,10 @@ extern const char __egvpwds__[];              ///< This string looks like "power
 
 #define EXTGRAPH_VERSION_MAIN    __egvmain__  ///< This short represents the main ExtGraph version number (currently 2)
 #define EXTGRAPH_VERSION_SUB     __egvsub__   ///< This short represents the ExtGraph sub-version number (currently 0)
-#define EXTGRAPH_VERSION_REV     __egvrev__   ///< This short represents the ExtGraph revision number (currently 5)
+#define EXTGRAPH_VERSION_REV     __egvrev__   ///< This short represents the ExtGraph revision number (currently 6)
 extern const short __egvmain__;               ///< This short represents the main ExtGraph version number (currently 2)
 extern const short __egvsub__;                ///< This short represents the ExtGraph sub-version number (currently 0)
-extern const short __egvrev__;                ///< This short represents the ExtGraph revision number (currently 5)
+extern const short __egvrev__;                ///< This short represents the ExtGraph revision number (currently 6)
 //@}
 
 
@@ -372,6 +372,11 @@ void GrayInvertRect2B(short x0, short y0, short x1, short y1, void* lightplane, 
 //! color is an element of enum \ref GrayColors.
 void GrayDrawLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
+//! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawClipLine routine.<br>
+//! color is an element of enum \ref GrayColors.
+//! \since 2.00 Beta 6
+void GrayDrawClipLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+
 //! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the ExtGraph FastDrawLine routine.<br>
 //! color is an element of enum \ref GrayColors.
 void GrayFastDrawLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
@@ -416,17 +421,20 @@ void GrayDrawStrExt2B(short x, short y, const char* s, short attr, short font, v
  */
 // -----------------------------------------------------------------------------
 //@{
-#define GrayClearScreen()                         GrayClearScreen2B(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayClearScreen_R()                       GrayClearScreen2B_R(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayFillScreen_R(l, d)                    GrayFillScreen2B_R(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE), l, d)
-#define GrayDrawRect(x0, y0, x1, y1, color, fill) GrayDrawRect2B(x0, y0, x1, y1, color, fill, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayInvertRect(x0, y0, x1, y1)            GrayInvertRect2B(x0, y0, x1, y1, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayDrawLine(x0, y0, x1, y1, color)       GrayDrawLine2B(x0, y0, x1, y1, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayFastDrawHLine(x0, x1, y, color)       GrayFastDrawHLine2B(x0, x1, y, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayFastDrawLine(x0, y0, x1, y1, color)   GrayFastDrawLine2B(x0, y0, x1, y1, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayDrawChar(x, y, c, attr)               GrayDrawChar2B(x, y, c, attr, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayDrawStr(x, y, s, attr)                GrayDrawStr2B(x, y, s, attr, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
-#define GrayDrawStrExt(x, y, s, attr, font)       GrayDrawStrExt2B(x, y, s, attr, font, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE))
+#define GrayClearScreen()                         GrayClearScreen2B(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayClearScreen2B--
+#define GrayClearScreen_R()                       GrayClearScreen2B_R(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayClearScreen2B_R--
+#define GrayFillScreen_R(l, d)                    GrayFillScreen2B_R(GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE), l, d) // --TESTS-GrayFillScreen2B_R--
+#define GrayDrawRect(x0, y0, x1, y1, color, fill) GrayDrawRect2B(x0, y0, x1, y1, color, fill, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawRect2B--
+#define GrayInvertRect(x0, y0, x1, y1)            GrayInvertRect2B(x0, y0, x1, y1, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayInvertRect2B--
+#define GrayDrawLine(x0, y0, x1, y1, color)       GrayDrawLine2B(x0, y0, x1, y1, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawLine2B--
+//! \since 2.00 Beta 6
+#define GrayDrawClipLine(x0, y0, x1, y1, color)   GrayDrawClipLine2B(x0, y0, x1, y1, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawClipLine2B--
+
+#define GrayFastDrawHLine(x0, x1, y, color)       GrayFastDrawHLine2B(x0, x1, y, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayFastDrawHLine2B--
+#define GrayFastDrawLine(x0, y0, x1, y1, color)   GrayFastDrawLine2B(x0, y0, x1, y1, color, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayFastDrawLine2B--
+#define GrayDrawChar(x, y, c, attr)               GrayDrawChar2B(x, y, c, attr, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawChar2B--
+#define GrayDrawStr(x, y, s, attr)                GrayDrawStr2B(x, y, s, attr, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawStr2B--
+#define GrayDrawStrExt(x, y, s, attr, font)       GrayDrawStrExt2B(x, y, s, attr, font, GrayGetPlane(LIGHT_PLANE), GrayGetPlane(DARK_PLANE)) // --TESTS-GrayDrawStrExt2B--
 //@}
 
 //! @defgroup grayutilmacrosdeprecated Shortcut macros for the grayscale utility functions, deprecated names
@@ -558,10 +566,10 @@ char FastTestLine_RE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
  * \since 2.00 Beta 5
  */
 //@{
-void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1")) __attribute__((__regparm__)); ///< \return a0 = NULL if there's nothing to draw.
+void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1")) __attribute__((__regparm__)); ///< \return a0 = NULL if there's nothing to draw.
 // 
-void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode)) __attribute__((__stkparm__));
-void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color)) __attribute__((__stkparm__));
+void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
+void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
 //@}
 
 
@@ -581,7 +589,7 @@ void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("
 //@{
 void FastFillRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void FastFillRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
-void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__));
+void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastFillRect_R--
 //@}
 
 /** @defgroup fillrectsingle Rectangle filling functions, hard-coded drawing mode
@@ -603,9 +611,10 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"), short x1 asm("%d0"), short 
  * <li>the elements of enum \ref GrayColors for GrayFastDrawLine2B_R</li></ul>
  */
 //@{
-void FastOutlineRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastOutlineRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
-void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__));
+//! \deprecated __stkparm__ function with equivalent __regparm__ function
+void FastOutlineRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine,FastDrawVLine--
+void FastOutlineRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
+void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
 //@}
 
 /** @defgroup fastrect Fast rectangle filling functions for screen-wide widths
@@ -815,8 +824,7 @@ void Scale1Plane160to240_R(void *src asm("%a0"), void *dest asm("%a1"));
 void FastCopyScreen(void* src, void* dest) __attribute__((__stkparm__));
 //! Copy 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>, register-parameter-passing version
 void FastCopyScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//! Copy 160x<i>height</i> screen (bytewidth = 20) pointed to by <i>src</i> <b>to</b> the center of 240x128 plane pointed to by <i>dest</i>.
-//! The upper left corner of 160x<i>height</i> data is at (40, 14+(100-<i>height</i>)/2).
+//! Copy 160x<i>height</i> screen (bytewidth = 20) pointed to by <i>src</i> <b>to</b> the upper-left corner of 240x128 plane pointed to by <i>dest</i>.
 //! \since 2.00 Beta 5
 void FastCopyScreen160to240_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
 //! Copy 160x<i>height</i> screen (bytewidth = 20) pointed to by <i>src</i> <b>near</b> the center of 240x128 plane pointed to by <i>dest</i>.

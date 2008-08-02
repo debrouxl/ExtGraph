@@ -17,7 +17,7 @@ FastCopyScreen160to240NC_R:
     move.w   %d1,%d2
     lsl.w    #4,%d2
     sub.w    %d1,%d2
-    lea      32/8(%a0,%d2.w),%a0
+    lea      32/8(%a1,%d2.w),%a1
 0:
     movem.l  (%a0)+,%d1-%d5
     movem.l  %d1-%d5,(%a1)

@@ -55,7 +55,7 @@ typedef struct
     long mask;  // Obsolete (keeped for compability)
     long reserved;  // Internal utilisation
     short force_update; // To refresh the big_vscreen
-}Plane;
+} Plane;
 
 typedef struct
 {
@@ -66,7 +66,7 @@ typedef struct
     short step; // Current step number
     short step_length; // Length of a step (in frames)
     short frame; // Current frame number of the current step
-}AnimatedPlane;
+} AnimatedPlane;
 
 //typedef void (*TM_Type)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"));
 //typedef void (*TM_AnimType)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"),void* asm("%a3"));
@@ -77,27 +77,27 @@ typedef void (*TM_Mode)(void* asm("%a0"),short asm("%d0"),short asm("%d1"),void*
 // Prototypes des fonctions de la librairie
 // RefreshBuffer
 //--BEGIN_FUNCTION_PROTOTYPES--//
-void RefreshBuffer8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshBuffer8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshBuffer16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshBuffer16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void RefreshBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void RefreshGrayBuffer8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshGrayBuffer8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshGrayBuffer16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void RefreshGrayBuffer16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void RefreshGrayBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
 
 // RefreshAnimatedBuffer
-void RefreshAnimatedBuffer16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
 
-void RefreshGrayAnimatedBuffer16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
 
 
 // DrawBuffer
@@ -145,25 +145,25 @@ void DrawGrayBufferWithShifts89_TRANB(void *src asm("%a0"),short x asm("%d0"),sh
 
 
 // DrawTiles
-void DrawTiles16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void DrawTiles16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawTiles16B89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles16W89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles8B89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawTiles8W89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void DrawTiles16B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawGrayTiles16B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles16W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles8B(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles8W(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void DrawGrayTiles16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawGrayTiles16B89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles16W89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles8B89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
-void DrawGrayTiles8W89(short larg asm("%d2"),void *tab asm("%a0"),void *dest asm("%a1"),void *tabsprt asm("%a2"));
+void DrawGrayTiles16B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
 #define DrawTiles(col,line,larg,tab,dest,tabsprt,type) type((larg),&((tab)[line][col]),(dest),(tabsprt))
 
@@ -195,70 +195,70 @@ void DrawGrayAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane
 
 #define DrawAnimatedPlane(x,y,plane,dest,mode,type) type((x),(y),(plane),(dest),(mode))
 
-//--END_FUNCTION_PROTOTYPES--//
-
 // Macros
-#define TM_8B DrawPlane8B
-#define TM_8W DrawPlane8W
-#define TM_16B DrawPlane16B
-#define TM_16W DrawPlane16W
+#define TM_8B DrawPlane8B // --TESTS-DrawPlane8B--
+#define TM_8W DrawPlane8W // --TESTS-DrawPlane8W--
+#define TM_16B DrawPlane16B // --TESTS-DrawPlane16B--
+#define TM_16W DrawPlane16W // --TESTS-DrawPlane16W--
 
-#define TM_G8B DrawGrayPlane8B
-#define TM_G8W DrawGrayPlane8W
-#define TM_G16B DrawGrayPlane16B
-#define TM_G16W DrawGrayPlane16W
-
-
-#define TM_A8B DrawAnimatedPlane8B
-#define TM_A8W DrawAnimatedPlane8W
-#define TM_A16B DrawAnimatedPlane16B
-#define TM_A16W DrawAnimatedPlane16W
-
-#define TM_GA8B DrawGrayAnimatedPlane8B
-#define TM_GA8W DrawGrayAnimatedPlane8W
-#define TM_GA16B DrawGrayAnimatedPlane16B
-#define TM_GA16W DrawGrayAnimatedPlane16W
+#define TM_G8B DrawGrayPlane8B // --TESTS-DrawGrayPlane8B--
+#define TM_G8W DrawGrayPlane8W // --TESTS-DrawGrayPlane8W--
+#define TM_G16B DrawGrayPlane16B // --TESTS-DrawGrayPlane16B--
+#define TM_G16W DrawGrayPlane16W // --TESTS-DrawGrayPlane16W--
 
 
-#define TM_T16B DrawTiles16B
-#define TM_T16W DrawTiles16W
-#define TM_T8B DrawTiles8B
-#define TM_T8W DrawTiles8W
+#define TM_A8B DrawAnimatedPlane8B // --TESTS-DrawAnimatedPlane8B--
+#define TM_A8W DrawAnimatedPlane8W // --TESTS-DrawAnimatedPlane8W--
+#define TM_A16B DrawAnimatedPlane16B // --TESTS-DrawAnimatedPlane16B--
+#define TM_A16W DrawAnimatedPlane16W // --TESTS-DrawAnimatedPlane16W--
 
-#define TM_T16B89 DrawTiles16B89
-#define TM_T16W89 DrawTiles16W89
-#define TM_T8B89 DrawTiles8B89
-#define TM_T8W89 DrawTiles8W89
-
-#define TM_GT16B DrawGrayTiles16B
-#define TM_GT16W DrawGrayTiles16W
-#define TM_GT8B DrawGrayTiles8B
-#define TM_GT8W DrawGrayTiles8W
-
-#define TM_GT16B89 DrawGrayTiles16B89
-#define TM_GT16W89 DrawGrayTiles16W89
-#define TM_GT8B89 DrawGrayTiles8B89
-#define TM_GT8W89 DrawGrayTiles8W89
+#define TM_GA8B DrawGrayAnimatedPlane8B // --TESTS-DrawGrayAnimatedPlane8B--
+#define TM_GA8W DrawGrayAnimatedPlane8W // --TESTS-DrawGrayAnimatedPlane8W--
+#define TM_GA16B DrawGrayAnimatedPlane16B // --TESTS-DrawGrayAnimatedPlane16B--
+#define TM_GA16W DrawGrayAnimatedPlane16W // --TESTS-DrawGrayAnimatedPlane16W--
 
 
-#define TM_RPLC DrawBuffer_RPLC
-#define TM_OR DrawBuffer_OR
-#define TM_MASK DrawBuffer_MASK
+#define TM_T16B DrawTiles16B // --TESTS-DrawTiles16B--
+#define TM_T16W DrawTiles16W // --TESTS-DrawTiles16W--
+#define TM_T8B DrawTiles8B // --TESTS-DrawTiles8B--
+#define TM_T8W DrawTiles8W // --TESTS-DrawTiles8W--
 
-#define TM_RPLC89 DrawBuffer89_RPLC
-#define TM_OR89 DrawBuffer89_OR
-#define TM_MASK89 DrawBuffer89_MASK
+#define TM_T16B89 DrawTiles16B89 // --TESTS-DrawTiles16B89--
+#define TM_T16W89 DrawTiles16W89 // --TESTS-DrawTiles16W89--
+#define TM_T8B89 DrawTiles8B89 // --TESTS-DrawTiles8B89--
+#define TM_T8W89 DrawTiles8W89 // --TESTS-DrawTiles8W89--
 
-#define TM_GRPLC DrawGrayBuffer_RPLC
-#define TM_GOR DrawGrayBuffer_OR
-#define TM_GMASK DrawGrayBuffer_MASK
-#define TM_GTRANW DrawGrayBuffer_TRANW
-#define TM_GTRANB DrawGrayBuffer_TRANB
+#define TM_GT16B DrawGrayTiles16B // --TESTS-DrawGrayTiles16B--
+#define TM_GT16W DrawGrayTiles16W // --TESTS-DrawGrayTiles16W--
+#define TM_GT8B DrawGrayTiles8B // --TESTS-DrawGrayTiles8B--
+#define TM_GT8W DrawGrayTiles8W // --TESTS-DrawGrayTiles8W--
 
-#define TM_GRPLC89 DrawGrayBuffer89_RPLC
-#define TM_GOR89 DrawGrayBuffer89_OR
-#define TM_GMASK89 DrawGrayBuffer89_MASK
-#define TM_GTRANW89 DrawGrayBuffer89_TRANW
-#define TM_GTRANB89 DrawGrayBuffer89_TRANB
+#define TM_GT16B89 DrawGrayTiles16B89 // --TESTS-DrawGrayTiles16B89--
+#define TM_GT16W89 DrawGrayTiles16W89 // --TESTS-DrawGrayTiles16W89--
+#define TM_GT8B89 DrawGrayTiles8B89 // --TESTS-DrawGrayTiles8B89--
+#define TM_GT8W89 DrawGrayTiles8W89 // --TESTS-DrawGrayTiles8W89--
+
+
+#define TM_RPLC DrawBuffer_RPLC // --TESTS-DrawBuffer_RPLC--
+#define TM_OR DrawBuffer_OR // --TESTS-DrawBuffer_OR--
+#define TM_MASK DrawBuffer_MASK // --TESTS-DrawBuffer_MASK--
+
+#define TM_RPLC89 DrawBuffer89_RPLC // --TESTS-DrawBuffer89_RPLC--
+#define TM_OR89 DrawBuffer89_OR // --TESTS-DrawBuffer89_OR--
+#define TM_MASK89 DrawBuffer89_MASK // --TESTS-DrawBuffer89_MASK--
+
+#define TM_GRPLC DrawGrayBuffer_RPLC // --TESTS-DrawGrayBuffer_RPLC--
+#define TM_GOR DrawGrayBuffer_OR // --TESTS-DrawGrayBuffer_OR--
+#define TM_GMASK DrawGrayBuffer_MASK // --TESTS-DrawGrayBuffer_MASK--
+#define TM_GTRANW DrawGrayBuffer_TRANW // --TESTS-DrawGrayBuffer_TRANW--
+#define TM_GTRANB DrawGrayBuffer_TRANB // --TESTS-DrawGrayBuffer_TRANB--
+
+#define TM_GRPLC89 DrawGrayBuffer89_RPLC // --TESTS-DrawGrayBuffer89_RPLC--
+#define TM_GOR89 DrawGrayBuffer89_OR // --TESTS-DrawGrayBuffer89_OR--
+#define TM_GMASK89 DrawGrayBuffer89_MASK // --TESTS-DrawGrayBuffer89_MASK--
+#define TM_GTRANW89 DrawGrayBuffer89_TRANW // --TESTS-DrawGrayBuffer89_TRANW--
+#define TM_GTRANB89 DrawGrayBuffer89_TRANB // --TESTS-DrawGrayBuffer89_TRANB--
+
+//--END_FUNCTION_PROTOTYPES--//
 
 #endif

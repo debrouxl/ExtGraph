@@ -23,7 +23,7 @@ void _main(void) {
 #define bsize (100*20+4) // Size of a bitmap for a 160x100 screen.
     int i;
     LCD_BUFFER lcd;
-    static SCR_RECT theScreen = {{0,0,159,99}};
+    static const SCR_RECT theScreen = {{0,0,159,99}};
     unsigned char sscreen[bsize];
     unsigned char sscreen2[bsize];
 

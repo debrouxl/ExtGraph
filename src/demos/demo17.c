@@ -31,7 +31,7 @@
 #define NR_ROWS 25
 #define NR_COLS 32
 
-unsigned char tabtiles[NR_ROWS][NR_COLS]={
+static const unsigned char tabtiles[NR_ROWS][NR_COLS]={
 {1,1,2,3,4,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,0,4,2,1,2,4,5,3,2,1,5},
 {1,0,4,2,2,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,3,4,2,1,2,4,5,3,2,1,3},
 {1,4,2,0,0,5,2,1,2,3,1,1,2,3,4,2,1,2,3,4,2,3,4,2,1,2,0,5,3,2,1,3},
@@ -61,7 +61,7 @@ unsigned char tabtiles[NR_ROWS][NR_COLS]={
 
 #ifndef GRAY
 
-short tabsprites[7][16]={
+static const short tabsprites[7][16]={
 {0b0000011111100000,
 0b0001100000011000,
 0b0010000000000100,
@@ -183,7 +183,7 @@ short tabsprites[7][16]={
 };
 
 #else
-short tabsprites[7][32]={
+static const short tabsprites[7][32]={
 {0b0000011111100000,0b1111100000011111,
 0b0001100000011000,0b1110000000000111,
 0b0010000000000100,0b1100000000000011,
@@ -368,7 +368,7 @@ void _main(void)
 	INT_HANDLER ai1,ai5;
 	short x,y,mode;
 	void *vscreen,*big_vscreen;
-      Plane plane;
+	Plane plane;
 	unsigned short fps;
 	unsigned char fps_str[5]={};
 

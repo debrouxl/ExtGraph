@@ -102,9 +102,9 @@
 #define SIZE_OF_PGSPRITE16x16 (2*(16*(8*4)))
 //--BEGIN_FUNCTION_PROTOTYPES--//
 //extern void PreshiftSprite8x8(register const unsigned char *src asm("%a0"),register unsigned long *dest asm("%a1"));
-extern void PreshiftSprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
+void PreshiftSprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
 //extern void PreshiftGrayISprite8x8(register unsigned char *src asm("%a0"),register unsigned long *dest asm("%a1"));
-extern void PreshiftGrayISprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
+void PreshiftGrayISprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
 //--END_FUNCTION_PROTOTYPES--//
 
 #define PSprite16x16_OR_R(x,y,sprt,dest)\

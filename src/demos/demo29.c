@@ -32,7 +32,7 @@
 #define SPRITE_SIZE (2*16)
 #define BKGRND_SIZE (NR_COLS*NR_ROWS*SPRITE_SIZE)
 
-unsigned char tabtiles[NR_ROWS][NR_COLS]={
+static const unsigned char tabtiles[NR_ROWS][NR_COLS]={
 {1,1,2,3,4,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,0,4,2,1,2,4,5,3,2,1,5},
 {1,0,4,2,2,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,2,3,4,2,1,2,4,5,3,2,1,3},
 {1,4,2,0,0,5,2,1,2,3,1,1,2,3,4,2,1,2,3,4,2,3,4,2,1,2,0,5,3,2,1,3},
@@ -60,7 +60,7 @@ unsigned char tabtiles[NR_ROWS][NR_COLS]={
 {0,1,2,3,4,5,6,1,2,3,1,5,2,3,4,2,1,2,3,4,6,3,4,2,1,2,4,5,3,2,4,3}
 };
 
-short tabsprites0[7][16]={
+static const short tabsprites0[7][16]={
 {0b0000011111100000,
 0b0001100000011000,
 0b0010000000000100,
@@ -182,7 +182,7 @@ short tabsprites0[7][16]={
 };
 
 #ifdef GRAY
-short tabsprites1[7][16]={
+static const short tabsprites1[7][16]={
 {0b1111100000011111,
 0b1110000000000111,
 0b1100000000000011,
@@ -356,7 +356,7 @@ _loop_Sprite16_BLIT_R:
 ");
 #endif
 
-__attribute__((__regparm__)) void SpecialSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short *sprt asm("%a1"), unsigned short * largescreen asm("%a0")) {
+__attribute__((__regparm__)) void SpecialSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), const unsigned short *sprt asm("%a1"), unsigned short * largescreen asm("%a0")) {
     unsigned short i;
     
     largescreen += (x + y * 16 * NR_COLS);

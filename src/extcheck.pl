@@ -12,6 +12,7 @@ use vars qw/*name *dir *prune/;
 package main;
     my $sourcecode;
     my %funcs;
+    my %indirecttests;
 
 sub library {
     my $line;
@@ -38,7 +39,7 @@ sub library {
                 # Does this file contains a mention of its C prototype ?
                 if ($lines[0] =~ m@\|\sC\sprototype:\s(\C*?)\s(\S+)\s?\((\C+)$@) {
                     $funcname = $2;
-                    if (lc($filename) eq lc($funcname)) {
+                    if ($filename eq $funcname) {
                         # OK, this file seems to be named after the function it contains.
                         if (!defined($funcs{$funcname})) {
                             warn "File $name has a prototype for $funcname, but that function name was not found in the headers.\n";
@@ -59,7 +60,6 @@ sub library {
                             close OUTFILE;
 
                             delete $funcs{$funcname};
-                            delete $funcs{lc($funcname)};
                         }
                     }
                     else {
@@ -67,17 +67,16 @@ sub library {
                     }
                 }
                 else {
-                    if (!defined($funcs{lc($filename)})) {
+                    if (!defined($funcs{$filename})) {
                         warn "File $name has no prototype for $filename, and that function name was not found in the headers.\n";
                     }
                     delete $funcs{$filename};
-                    delete $funcs{lc($filename)};
                 }
             }
             else { # C file.
                 $regex = qr@$filename@si;
                 if ($sourcecode =~ $regex) {
-                    if (!defined($funcs{lc($filename)})) {
+                    if (!defined($funcs{$filename})) {
                         warn "WARNING: file $name contains string $filename, but no corresponding prototype found in the headers.\n";
                     }
                     else {
@@ -89,7 +88,6 @@ sub library {
                 }
                 # TODO: update prototypes within C files ?
                 delete $funcs{$filename};
-                delete $funcs{lc($filename)};
             }
         }
     }
@@ -97,7 +95,6 @@ sub library {
 }
 
 sub demos {
-    my $regex;
     my @path;
     #my $foundsometests = 0;
     
@@ -110,19 +107,28 @@ sub demos {
         $name = $path[$#path];
 
         for my $key (keys %funcs) {
-            $regex = qr@$key\s*\(@s; # funcname (
-            if ($sourcecode =~ $regex) {
+            if (   ($sourcecode =~ m@$key\s*\(@s)
+                || ($sourcecode =~ m@,\s*$key@s)
+               ) {
                 #$foundsometests = 1;
-                print "Found test for function $key in $name\n";
+                print "Found test for function $key in $name";
+                if (defined($indirecttests{$key})) {
+                    my $message = '';
+                    my @indirecttests = $indirecttests{$key};
+                    my $indirects = $indirecttests[0];
+                    for my $indirect (@{$indirects}) {
+                        if (defined($funcs{$indirect})) {
+                            $message = $message . "$indirect ";
+                        }
+                        delete $funcs{$indirect};
+                    }
+                    if ($message ne '') {
+                        print ", thereby indirect tests for ";
+                    }
+                    print $message;
+                }
+                print "\n";
                 delete $funcs{$key};
-                delete $funcs{lc($key)};
-                next;
-            }
-            $regex = qr@,\s*$key@s; # , funcname (as callback)
-            if ($sourcecode =~ $regex) {
-                print "Found test for function $key in $name\n";
-                delete $funcs{$key};
-                delete $funcs{lc($key)};
                 next;
             }
         }
@@ -136,8 +142,10 @@ sub demos {
 
 sub parseheader ($; $) {
     my $filename = shift;
-    my $putlowercase = shift;
+    my $putindirecttests = shift;
     my $spuriousindex;
+    my $funcname;
+    my @indirecttests;
     
     open(INFILE, $filename) or die "Can't open $filename: $!";
     read(INFILE, $sourcecode, -s INFILE);
@@ -149,33 +157,50 @@ sub parseheader ($; $) {
     my @lines = split /\n/, $sourcecode;
     for my $line (@lines) {
 
-        # TODO improve the script so that it can understand the Grayutils aliases.
-
-        next if (   ($line =~ m@^\s?$@o) # Empty line
-                 || ($line =~ m@^\#@o) # Line starting with #
-                 || ($line =~ m@^//@o) # Line starting with //
-                 || ($line =~ m@^/\*@o) # Line starting with /*
-                 || ($line =~ m@^\ \*@o) # Line starting with ' *'
+        next if (   ($line =~ m@^\s?$@o)     # Empty line
+                 || (index($line,'//') == 0) # Line starting with //
+                 || (index($line,'/*') == 0) # Line starting with /*
+                 || (index($line,' *') == 0) # Line starting with ' *'
                 );
-        
-        ($line =~ m@^(\C*?)\s(\S+)\s?\((\C+)$@o) or die "Strange line \"$line\"\n";
-        # Function $2 has (almost) prototype $line.
-        
+                
+        if (index($line, '#') == 0) {
+            if ((index($line, 'define Gray') == 1) || (index($line, 'define TM_') == 1)) {
+                # This looks like a #define for a GrayUtil or a tilemap engine function.
+                ($line =~ m@^#define ([^(\ ]+)\C+$@o) or die "Strange line \"$line\"\n";
+                $funcname = $1;
+            }
+            else {
+                next;
+            }
+        }
+        else {
+            ($line =~ m@^(\C*?)\s(\S+)\s?\((\C+)$@o) or die "Strange line \"$line\"\n";
+            # Function $2 has (almost) prototype $line.
+            $funcname = $2;
+        }
+            
         # Strip trailing Doxygen comment if any.
         $spuriousindex = index($line, " ///< ");
         if ($spuriousindex != -1) {
             $line = substr ($line, 0, $spuriousindex);
         }
-        
+        # Strip leading 'extern '
         $spuriousindex = index($line, "extern ");
-        if ($spuriousindex != -1) {
+        if (($spuriousindex != -1) && ($spuriousindex == 0)) {
             $line = substr ($line, length("extern "));
         }
-        
-        $funcs{$2} = $line;
-        if ($putlowercase != 0) {
-            $funcs{lc($2)} = $line;
+
+        if ($line =~ m@^(\C*?)\ //\ --TESTS-(([^-]+,?)+)--$@o) {
+            # This function is said to indirectly test at least another one.
+            $line = $1;
+            if ($putindirecttests != 0) {
+                @indirecttests = split /\,/, $2;
+                #print @indirecttests; print "\n";
+                $indirecttests{$funcname} = [ @indirecttests ];
+            }
         }
+
+        $funcs{$funcname} = $line;
     }
 }
 
@@ -184,9 +209,9 @@ sub parseheader ($; $) {
     
     if ($ARGV[0] eq '--fixproto') {
         # Read header files.
-        parseheader "../lib/extgraph.h", 1;
-        parseheader "../lib/tilemap.h", 1;
-        parseheader "../lib/preshift.h", 1;
+        parseheader "../lib/extgraph.h", 0;
+        parseheader "../lib/tilemap.h", 0;
+        parseheader "../lib/preshift.h", 0;
 
         # Traverse desired filesystem
         File::Find::find({wanted => \&library, no_chdir => 1}, './lib');
@@ -197,14 +222,16 @@ sub parseheader ($; $) {
     }
     elsif ($ARGV[0] eq '--coverage') {
         # Read header files.
-        parseheader "../lib/extgraph.h", 0;
-        parseheader "../lib/tilemap.h", 0; # TODO: improve script so that slightly less false positives are triggered by this one...
-        parseheader "../lib/preshift.h", 0;
+        parseheader "../lib/extgraph.h", 1;
+        parseheader "../lib/tilemap.h", 1; # TODO: improve script so that less false negatives are triggered by this one...
+        parseheader "../lib/preshift.h", 1;
 
         # Traverse desired filesystem
         File::Find::find({wanted => \&demos, no_chdir => 1}, './demos');
 
         for my $key (sort keys %funcs) {
-            print "Found no test for function $key\n";
+            if (index($key, 'TM_') != 0) {
+                print "Found no test for function $key\n";
+            }
         }
     }

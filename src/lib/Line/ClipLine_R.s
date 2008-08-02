@@ -1,4 +1,4 @@
-| C prototype: void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short *clippedcoord asm("%a1")) __attribute__((__regparm__));
+| C prototype: void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1")) __attribute__((__regparm__));
 | In assembly, you can use _ClipLine_R, which returns the clipped coordinates in d0-d3.
 | Upon return, a0 = 0 if there is nothing to draw.
 |

@@ -22,7 +22,7 @@
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 12
 
-char map[MAP_HEIGHT][MAP_WIDTH]={
+static const char map[MAP_HEIGHT][MAP_WIDTH]={
 {0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0},
 {0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0},
 {2,2,2,4,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0},
@@ -36,7 +36,7 @@ char map[MAP_HEIGHT][MAP_WIDTH]={
 {0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0},
 {0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0}};
 
-short sprts[][16]={
+static const short sprts[][16]={
 // 0 : Prairie
 {0b0000000000000000,
 0b0000000000000000,

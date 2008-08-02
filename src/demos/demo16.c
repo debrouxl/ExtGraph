@@ -19,7 +19,7 @@
 #include "../../lib/extgraph.h"
 #include "../../lib/tilemap.h"
 
-char map[12][20]={ // Arrière-plan
+static const char map[12][20]={ // Arrière-plan
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 6, 6,11, 0, 0, 0},
 { 0, 0, 0, 1, 6, 6,11, 0, 0, 0, 0, 0, 1, 3, 8, 8,12,11, 0, 0},
@@ -34,7 +34,7 @@ char map[12][20]={ // Arrière-plan
 { 8, 8,13,14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
 
-short sprts[][32]={
+static const short sprts[][32]={
 // 0 : Nuage 1
 {0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF,0x0000,0xFFFF},
 // 1 : Nuage 2
@@ -69,7 +69,7 @@ short sprts[][32]={
 {0x0003,0x0000,0x0003,0x0000,0x0003,0x0000,0x0006,0x0001,0x0006,0x0001,0x0006,0x0001,0x000C,0x0003,0x000C,0x0003,0x0018,0x0007,0x0030,0x000F,0x0060,0x001F,0x00C0,0x003F,0x0380,0x007F,0x1F00,0x00FF,0xFC00,0x03FF,0xE000,0x1FFF},
 };
 
-char dh[128+16]={
+static char dh[128+16]={
 0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
 0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
 0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
@@ -80,7 +80,7 @@ char dh[128+16]={
 0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1,
 0,0,0,0,1,2,3,4,5,5,5,5,4,3,2,1};
 
-short dv[128+16]={
+static short dv[128+16]={
 0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
 0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,
 0,BIG_VSCREEN_WIDTH/8,0,BIG_VSCREEN_WIDTH/8,0,0,0,0,0,-BIG_VSCREEN_WIDTH/8,0,-BIG_VSCREEN_WIDTH/8,0,0,0,0,

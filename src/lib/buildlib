@@ -17,6 +17,7 @@ cd ../Grayutil
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayDrawRect2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayInvertRect2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayDrawLine2B.c
+tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayDrawClipLine2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFastDrawLine2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFastDrawHLine2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayDrawStr2B.c
@@ -29,7 +30,7 @@ tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all
 cd ..
 
 ../../bin/m68k-coff-ar -rv extgraph.a Misc/versiondef.o Misc/FloodFill.o Misc/FloodFillMF.o Misc/FloodFill_R.o Misc/FloodFillMF_R.o Misc/FloodFill_noshade_R.o Misc/FloodFillMF_noshade_R.o Misc/FilledTriangle_R.o Misc/ClipFilledTriangle_R.o Misc/GrayFilledTriangle_R.o Misc/GrayClipFilledTriangle_R.o
-../../bin/m68k-coff-ar -rv extgraph.a Grayutil/GrayDrawRect2B.o Grayutil/GrayInvertRect2B.o Grayutil/GrayDrawLine2B.o Grayutil/GrayFastDrawLine2B.o Grayutil/GrayFastDrawHLine2B.o Grayutil/GrayDrawStr2B.o Grayutil/GrayDrawStrExt2B.o
+../../bin/m68k-coff-ar -rv extgraph.a Grayutil/GrayDrawRect2B.o Grayutil/GrayInvertRect2B.o Grayutil/GrayDrawLine2B.o Grayutil/GrayDrawClipLine2B.o Grayutil/GrayFastDrawLine2B.o Grayutil/GrayFastDrawHLine2B.o Grayutil/GrayDrawStr2B.o Grayutil/GrayDrawStrExt2B.o
 ../../bin/m68k-coff-ar -rv extgraph.a Rect/FastOutlineRect.o Rect/FastOutlineRect_R.o Rect/GrayFastOutlineRect_R.o Rect/GrayFastFillRect_R.o
 
 cp extgraph.a ../../lib

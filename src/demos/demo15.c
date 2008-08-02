@@ -23,7 +23,7 @@
 #define NB_ANIMS 21
 #define MAP_WIDTH 32
 
-unsigned char map_base[16][MAP_WIDTH]={ // Contient les n° d'animation
+static const unsigned char map_base[16][MAP_WIDTH]={ // Contient les n° d'animation
 {00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00},
 {00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,18,12,12,12,12,12,12,12,19,00,00,00,00,00},
 {00,00,00,00,00,00,18,12,12,12,12,12,12,12,12,12,12,12,17,02,02,01,02,03,02,02,11,00,00,00,00,00},
@@ -43,14 +43,14 @@ unsigned char map_base[16][MAP_WIDTH]={ // Contient les n° d'animation
 };
 
 // Contient les n° de sprites de chaque anim pour chaque étape
-short anim[NB_ETAPES][NB_ANIMS]={
+static const short anim[NB_ETAPES][NB_ANIMS]={
 {0,4,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
 {1,5,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
 {2,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26},
 {3,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26}
 };
 
-short sprts[][32]={ // Contient les sprites (pris de xtile de Scott Noveck)
+static const short sprts[][32]={ // Contient les sprites (pris de xtile de Scott Noveck)
 // 0 : Water
 {0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000,0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000},	//Water1
 {0xFFFF,0x0000,0xF3F3,0x0000,0xE0E0,0x0000,0x0E0E,0x0000,0xFFFF,0x0000,0x7C7C,0x0000,0x3131,0x0000,0x8787,0x0000,0xFFFF,0x0000,0xF3F3,0x0000,0xE0E0,0x0000,0x0E0E,0x0000,0xFFFF,0x0000,0x7C7C,0x0000,0x3131,0x0000,0x8787,0x0000},	//Water2
