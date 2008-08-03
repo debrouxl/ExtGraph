@@ -1,16 +1,17 @@
 //*****************************************************************************
 /** \file extgraph.h
- * EXTGRAPH v2.00 Beta 6<br>
- * Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
- *<br>
- * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
+ * \brief This file contains definitions for the major part of the ExtGraph library (everything but the tilemap engine and preshifted sprites)
+ *
+ * ExtGraph is a compile-time library which contains <b>speed-optimized graphics
  * functions</b> for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
  * (collectively known as TI-68k calculators).
  *
+ * \version 2.00 Beta 6
+ * \copyright Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
  * This library is maintained, improved and extended by:
  * <ul><li>Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)</li>
  *     <li>Lionel Debroux     (lionel_debroux@yahoo.fr)</li>
- *     <li>Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume</li>
+ *     <li>Julien Richard-Foy a.k.a jachiechan / Sasume</li>
  *     <li>many contributors  (e.g. Geoffrey Anneheim a.k.a geogeo, many others)</li>
  * </ul>
  */
@@ -90,7 +91,7 @@ extern const short __egvrev__;                ///< This short represents the Ext
 // Enums used by some extgraph functions
 // The values in enum GrayColors were changed in 2.00 to allow for more optimized grayscale utility functions.
 // -----------------------------------------------------------------------------
-//! Enum describing the values allowed for "color" parameters to the grayscale utility functions (e.g. \ref DrawGrayRect2B)
+//! Enum describing the values allowed for "color" parameters to the grayscale utility functions (e.g. \ref GrayDrawRect2B)
 enum GrayColors {
     COLOR_WHITE = 0,
     COLOR_LIGHTGRAY = 1,
@@ -99,7 +100,7 @@ enum GrayColors {
     COLOR_DGRAY = 2, ///< \since 2.00 Beta 5
     COLOR_BLACK = 3
 };
-//! Enum describing the values allowed for "fill" parameters to the grayscale utility functions (e.g. \ref DrawGrayRect2B)
+//! Enum describing the values allowed for "fill" parameters to the grayscale utility functions (e.g. \ref GrayDrawRect2B)
 enum FillAttrs {
     RECT_EMPTY = 0, ///< Draw the rectangle outline only
     RECT_FILLED = 1 ///< Fill the rectangle
@@ -122,23 +123,23 @@ enum ExtAttrs {
 // do by the new macros.
 // -----------------------------------------------------------------------------
 //@{
-//! Offset in bytes of the (<i>x</i>, <i>y</i>) pixel from the (0, 0) pixel of a 240-pixel-wide plane.
+//! Offset in bytes of the (\a x, \a y) pixel from the (0, 0) pixel of a 240-pixel-wide plane.
 #define EXT_PIXOFFSET(x, y) ((((y)<<4)-(y))*2+((x)>>3))
-//! Address in memory of the (<i>x</i>, <i>y</i>) pixel of a 240-pixel-wide plane starting at <i>p</i>.
+//! Address in memory of the (\a x, \a y) pixel of a 240-pixel-wide plane starting at \a p.
 #define EXT_PIXADDR(p, x, y) (((char *)(p))+EXT_PIXOFFSET(x,y))
-//! Pixel mask of coordinate <i>x</i>.
+//! Pixel mask of coordinate \a x.
 #define EXT_PIXMASK(x) (0x80>>((x)&7))
-//! Bit number of coordinate <i>x</i>.
+//! Bit number of coordinate \a x.
 #define EXT_PIXNBIT(x) (~(x))
 
 
-//! Internal macro: set pixel(s) at address <i>a</i> according to mask <i>m</i>
+//! Internal macro: set pixel(s) at address \a a according to mask \a m
 #define EXT_SETPIX_AM(a, m)   (*(a) |= (m))
-//! Internal macro: clear pixel(s) at address <i>a</i> according to mask <i>m</i>
+//! Internal macro: clear pixel(s) at address \a a according to mask \a m
 #define EXT_CLRPIX_AM(a, m)   (*(a) &= ~(m))
-//! Internal macro: invert pixel(s) at address <i>a</i> according to mask <i>m</i>
+//! Internal macro: invert pixel(s) at address \a a according to mask \a m
 #define EXT_XORPIX_AM(a, m)   (*(a) ^= (m))
-//! Internal macro: get state of pixel(s) at address <i>a</i>, selected by mask <i>m</i>
+//! Internal macro: get state of pixel(s) at address \a a, selected by mask \a m
 #define EXT_GETPIX_AM(a, m)   (*(a) & (m))
 
 
@@ -163,7 +164,7 @@ enum ExtAttrs {
 // These macros are more optimized than EXT_..._AM ones, but less readable...
 // Thanks a lot to Sebastian for giving me the solution to the trigraph
 // problem, I couldn't think of escaping one of the offending question marks !
-//! Internal macro: set pixel whose bit number is <i>n</i>, at offset <i>offset</i> from a 240-pixel-wide plane starting at <i>a</i>
+//! Internal macro: set pixel whose bit number is \a n, at offset \a offset from a 240-pixel-wide plane starting at \a a
 #define EXT_SETPIX_AN(a, offset, n) ({if(__builtin_constant_p(offset)) \
 	{	\
 		if(__builtin_constant_p(a))	\
@@ -178,7 +179,7 @@ enum ExtAttrs {
 		asm("bset.b %0,0(%2,%1.w)" : : "di" (n), "da" (offset), "a" (a));	\
 	})
 
-//! Internal macro: clear pixel whose bit number is <i>n</i>, at offset <i>offset</i> from a 240-pixel-wide plane starting at <i>a</i>
+//! Internal macro: clear pixel whose bit number is \a n, at offset \a offset from a 240-pixel-wide plane starting at \a a
 #define EXT_CLRPIX_AN(a, offset, n) ({if(__builtin_constant_p(offset)) \
 	{	\
 		if(__builtin_constant_p(a))	\
@@ -193,7 +194,7 @@ enum ExtAttrs {
 		asm("bclr.b %0,0(%2,%1.w)" : : "di" (n), "da" (offset), "a" (a));	\
 	})
 
-//! Internal macro: invert pixel whose bit number is <i>n</i>, at offset <i>offset</i> from a 240-pixel-wide plane starting at <i>a</i>
+//! Internal macro: invert pixel whose bit number is \a n, at offset \a offset from a 240-pixel-wide plane starting at \a a
 #define EXT_XORPIX_AN(a, offset, n) ({if(__builtin_constant_p(offset)) \
 	{ \
 		if(__builtin_constant_p(a)) \
@@ -209,7 +210,7 @@ enum ExtAttrs {
 	})
 
 
-//! Internal macro: get state of pixel whose bit number is <i>n</i>, at offset <i>offset</i> from a 240-pixel-wide plane starting at <i>a</i>
+//! Internal macro: get state of pixel whose bit number is \a n, at offset \a offset from a 240-pixel-wide plane starting at \a a
 #define EXT_GETPIX_AN(a, offset, n) ({char __result; if(__builtin_constant_p(offset)) \
 	{ \
 		if(__builtin_constant_p(a)) \
@@ -225,13 +226,13 @@ enum ExtAttrs {
 	__result;})
 
 
-//! Set pixel at coordinates (<i>x</i>, <i>y</i>) in 240-pixel-wide plane starting at <i>p</i>.
+//! Set pixel at coordinates (\a x, \a y) in 240-pixel-wide plane starting at \a p.
 #define EXT_SETPIX(p, x, y) EXT_SETPIX_AN(p, EXT_PIXOFFSET(x,y), EXT_PIXNBIT(x))
-//! Clear pixel at coordinates (<i>x</i>, <i>y</i>) in 240-pixel-wide plane starting at <i>p</i>.
+//! Clear pixel at coordinates (\a x, \a y) in 240-pixel-wide plane starting at \a p.
 #define EXT_CLRPIX(p, x, y) EXT_CLRPIX_AN(p, EXT_PIXOFFSET(x,y), EXT_PIXNBIT(x))
-//! Invert pixel at coordinates (<i>x</i>, <i>y</i>) in 240-pixel-wide plane starting at <i>p</i>.
+//! Invert pixel at coordinates (\a x, \a y) in 240-pixel-wide plane starting at \a p.
 #define EXT_XORPIX(p, x, y) EXT_XORPIX_AN(p, EXT_PIXOFFSET(x,y), EXT_PIXNBIT(x))
-//! Get state of pixel at coordinates (<i>x</i>, <i>y</i>) in 240-pixel-wide plane starting at <i>p</i>.
+//! Get state of pixel at coordinates (\a x, \a y) in 240-pixel-wide plane starting at \a p.
 #define EXT_GETPIX(p, x, y) EXT_GETPIX_AN(p, EXT_PIXOFFSET(x,y), EXT_PIXNBIT(x))
 //@}
 
@@ -243,7 +244,7 @@ enum ExtAttrs {
 //@{
 #ifndef __HAVE_DEREFSMALL
 #define __HAVE_DEREFSMALL
-//! Dereferences a pointer: DEREFSMALL(<i>p</i>,<i>i</i>) does the same as <code>p[i]</code>, but in a faster and smaller way.
+//! Dereferences a pointer: DEREFSMALL(\a p,\a i) does the same as <code>p[i]</code>, but in a faster and smaller way.
 // Doing the same thing using inline assembly saved ~100 bytes on an internal, buggy version of tthdex.
 // Credits go to Kevin Kofler for its generic definition and the &* trick.
 // 2.00 Beta 5: added ifndef/define pair so as to minimize incompatibility chances with the (same)
@@ -268,8 +269,8 @@ enum ExtAttrs {
 
 // -----------------------------------------------------------------------------
 //! @defgroup boundcollidemacros Bounds collision macros
-//! Check two bounding rectangles whose vertices are (<i>x0</i>, <i>y0</i>), (<i>x1</i>, <i>y0</i>), (<i>x0</i>, <i>y1</i>), and (<i>x1</i>, <i>y1</i>) for collision.
-//! '<i>w</i>' parameters are widths in pixels, '<i>h</i>' parameters are heights in pixels.
+//! Check two bounding rectangles whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1), and (\a x1, \a y1) for collision.
+//! '\a w' parameters are widths in pixels, '\a h' parameters are heights in pixels.
 //@{
 #define BOUNDS_COLLIDE(x0, y0, x1, y1, w, h) \
    (((EXT_SHORTABS((x1)-(x0)))<(w))&&((EXT_SHORTABS((y1)-(y0)))<(h)))
@@ -304,10 +305,16 @@ enum ExtAttrs {
 
 // -----------------------------------------------------------------------------
 /** @defgroup testcollide Sprite/sprite collision test functions
- * \brief Check for collision between 2 sprites of various widths (depending on the function's name), the top-left corner of first one being at (<i>x0</i>, <i>y0</i>) and that of the other one at (<i>x1</i>, <i>y1</i>).
+ * \brief Check for collision between 2 sprites of various widths (depending on the function's name), the top-left corner of first one being at (\a x0, \a y0) and that of the other one at (\a x1, \a y1).
  *
  * These functions can test irregulary shaped sprites (not only rectangular ones) for collision, by shifting the content if necessary and "AND"-ing the data together: if a set pixel overlaps (i.e. is set in both sprites) a collision is detected.
  * "2h" variants can handle two sprites of different heights.
+ *
+ * \note For grayscale sprites it is a good idea to use a special type of mask data for \a data0 and \a data1, where every pixel
+ * which should be involved in testing is set. A simple way to generate such a mask is to OR the data of the dark plane and the light plane
+ * together into one plane (see \ref SpriteX8Data_withsprite_OR_R ). If you use such a mask you'll need to call TestCollide8 only once.
+ *
+ * \return 0 if the sprites don't collide, nonzero otherwise.
  */
 // -----------------------------------------------------------------------------
 //@{
@@ -328,7 +335,7 @@ short TestCollideX82w2h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm
 
 // -----------------------------------------------------------------------------
 /** @defgroup pixcollide Pixel/sprite collision test functions
- * \brief Check for collision between pixel at (<i>x0</i>, <i>y0</i>) and sprites of various widths (depending on the function's name) whose top-left corner is at (<i>x1</i>, <i>y1</i>).
+ * \brief Check for collision between pixel at (\a x0, \a y0) and sprites of various widths (depending on the function's name) whose top-left corner is at (\a x1, \a y1).
  *
  * \since 2.00 Beta 5
  * \author Joey Adams, Samuel Stearley, Jesse Frey, Lionel Debroux.
@@ -353,19 +360,22 @@ char PixCollideX16_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2
 // -----------------------------------------------------------------------------
 //@{
 //! Clear the given 240x128 planes
+//! \note \a lightplane and \a darkplane must start at an even address.
 void GrayClearScreen2B(void* lightplane, void* darkplane) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 
 //! Clear the given 240x128 planes, register-parameter-passing version.
+//! \note \a lightplane and \a darkplane must start at an even address.
 void GrayClearScreen2B_R(void* lightplane asm("%a0"), void* darkplane asm("%a1")) __attribute__((__regparm__(2)));
 
 //! Fill the given 240x128 planes with given 32-bit patterns.
+//! \note \a lightplane and \a darkplane must start at an even address.
 void GrayFillScreen2B_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned long lcolor asm("%d0"), unsigned long dcolor asm("%d1")) __attribute__((__regparm__(4)));
 
-//! Draw to the given 240x128 planes the rectangle whose vertices are (<i>x0</i>, <i>y0</i>), (<i>x1</i>, <i>y0</i>), (<i>x0</i>, <i>y1</i>) and (<i>x1</i>, <i>y1</i>).<br>
+//! Draw to the given 240x128 planes the rectangle whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1) and (\a x1, \a y1).<br>
 //! color is an element of \ref GrayColors, fill is an element of \ref FillAttrs.
 void GrayDrawRect2B(short x0, short y0, short x1, short y1, short color, short fill, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Invert the rectangle whose whose vertices are (<i>x0</i>, <i>y0</i>), (<i>x1</i>, <i>y0</i>), (<i>x0</i>, <i>y1</i>) and (<i>x1</i>, <i>y1</i>) in both given 240x128 planes.
+//! Invert the rectangle whose whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1) and (\a x1, \a y1) in both given 240x128 planes.
 void GrayInvertRect2B(short x0, short y0, short x1, short y1, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawLine routine.<br>
@@ -456,7 +466,7 @@ void GrayDrawStrExt2B(short x, short y, const char* s, short attr, short font, v
 
 // -----------------------------------------------------------------------------
 //! @defgroup scrolling Screen scrolling functions 
-//! These functions 160x<i>lines</i> or 240x<i>lines</i> pixels of a 240-pixel-wide plane pointed to by <i>buffer</i>, 1 pixel at a time
+//! These functions 160x\a lines or 240x\a lines pixels of a 240-pixel-wide plane pointed to by \a buffer, 1 pixel at a time
 //! \todo add n-pixel-at-a-time scrolling routine (like that made by Scott Noveck) ?
 // -----------------------------------------------------------------------------
 //@{
@@ -488,7 +498,7 @@ void ScrollDown240_R(unsigned short* buffer asm("%a0"), unsigned short lines asm
 // -----------------------------------------------------------------------------
 /** @defgroup genericline Generic line drawing routines, multiple drawing modes
  * @ingroup line
- * \brief These routines draw a line from (<i>x1</i>, <i>y1</i>) to (<i>x2</i>, <i>y2</i>) in one or two 240-pixel-wide video plane(s) using attribute <i>mode</i> or color <i>color</i>.
+ * \brief These routines draw a line from (\a x1, \a y1) to (\a x2, \a y2) in one or two 240-pixel-wide video plane(s) using attribute \a mode or color \a color.
  *
  * Valid modes are:
  * <ul><li>A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR for \ref FastDrawLine and \ref FastDrawLine_R (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR)</li>
@@ -502,7 +512,7 @@ void GrayFastDrawLine2B_R(void* plane0 asm("%a0"), void *plane1 asm("%a1"), shor
 
 /** @defgroup genericlinesingle Generic line drawing routines, hard-coded drawing mode
  * @ingroup line
- * \brief These routines draw a line from (<i>x1</i>, <i>y1</i>) to (<i>x2</i>, <i>y2</i>) in a 240-pixel-wide video plane pointed to by <i>plane</i>, with hard-coded drawing mode.
+ * \brief These routines draw a line from (\a x1, \a y1) to (\a x2, \a y2) in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.
  */
 //@{
 void FastLine_Draw_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
@@ -512,7 +522,7 @@ void FastLine_Invert_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
 
 /** @defgroup horzline Horizontal line drawing routines, multiple drawing modes
  * @ingroup line
- * \brief These routines draw a line from (<i>x1</i>, <i>y</i>) to (<i>x2</i>, <i>y</i>) in one or two 240-pixel-wide video plane(s) using attribute <i>mode</i> or color <i>color</i>.
+ * \brief These routines draw a line from (\a x1, \a y) to (\a x2, \a y) in one or two 240-pixel-wide video plane(s) using attribute \a mode or color \a color.
  *
  * Valid modes are:
  * <ul><li>A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR for \ref FastDrawHLine and \ref FastDrawHLine_R (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR)</li>
@@ -526,7 +536,7 @@ void GrayFastDrawHLine2B_R(void *plane0 asm("%a0"), void *plane1 asm("%a1"), sho
 
 /** @defgroup vertline Vertical line drawing routines, multiple drawing modes
  * @ingroup line
- * \brief These routines draw a line from (<i>x</i>, <i>y1</i>) to (<i>x</i>, <i>y2</i>) in a 240-pixel-wide video plane pointed to by <i>plane</i> using attribute <i>mode</i>. 
+ * \brief These routines draw a line from (\a x, \a y1) to (\a x, \a y2) in a 240-pixel-wide video plane pointed to by \a plane using attribute \a mode. 
  *
  * Valid modes are A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR).
  * \todo GrayFastDrawVLine2B_R
@@ -539,7 +549,7 @@ void FastDrawVLine_R(void* plane asm("%a0"), short x asm("%d0"), short y1 asm("%
 
 /** @defgroup testline Plane/line collision test
  * @ingroup line
- * \brief These routines check whether there's any pixel set on the line that goes from (<i>x1</i>, <i>y1</i>) to (<i>x2</i>, <i>y2</i>) in a 240-pixel-wide video plane pointed to by <i>plane</i>. 
+ * \brief These routines check whether there's any pixel set on the line that goes from (\a x1, \a y1) to (\a x2, \a y2) in a 240-pixel-wide video plane pointed to by \a plane. 
  *
  * \ref FastTestLine_BE_R tests both ends at the same time, \ref FastTestLine_LE_R starts with the left end, and \ref FastTestLine_RE_R starts with the right end.
  * \since 2.00 Beta 5
@@ -552,7 +562,7 @@ char FastTestLine_RE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
 
 /** @defgroup clipline Line clipping
  * @ingroup line
- * \brief These routines clip the line that goes from (<i>x1</i>, <i>y1</i>) to (<i>x2</i>, <i>y2</i>) to the boundaries of a 240x128 plane, and optionally draw it using a callback to a routine compatible with \ref FastDrawLine_R or \ref GrayFastDrawLine2B_R.
+ * \brief These routines clip the line that goes from (\a x1, \a y1) to (\a x2, \a y2) to the boundaries of a 240x128 plane, and optionally draw it using a callback to a routine compatible with \ref FastDrawLine_R or \ref GrayFastDrawLine2B_R.
  *
  * Valid drawing modes are:
  * <ul><li>A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR for \ref ClipDrawLine_R (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR)</li>
@@ -580,7 +590,7 @@ void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("
 // -----------------------------------------------------------------------------
 /** @defgroup fillrect Rectangle filling functions, multiple drawing modes
  * @ingroup rectangle
- * \brief These routines fill a rectangle whose vertices are (<i>x1</i>, <i>y1</i>), (<i>x2</i>, <i>y1</i>), (<i>x1</i>, <i>y2</i>) and (<i>x2</i>, <i>y2</i>) in one or two 240-pixel-wide video plane(s) using attribute <i>mode</i> or color <i>color</i>. 
+ * \brief These routines fill a rectangle whose vertices are (\a x1, \a y1), (\a x2, \a y1), (\a x1, \a y2) and (\a x2, \a y2) in one or two 240-pixel-wide video plane(s) using attribute \a mode or color \a color. 
  *
  * Valid modes are:
  * <ul><li>A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR for \ref FastDrawLine and \ref FastDrawLine_R (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR)</li>
@@ -594,7 +604,7 @@ void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1
 
 /** @defgroup fillrectsingle Rectangle filling functions, hard-coded drawing mode
  * @ingroup rectangle
- * \brief These routines fill a rectangle whose vertices are (<i>x1</i>, <i>y1</i>), (<i>x2</i>, <i>y1</i>), (<i>x1</i>, <i>y2</i>) and (<i>x2</i>, <i>y2</i>) in a 240-pixel-wide video plane pointed to by <i>plane</i>, with hard-coded drawing mode.
+ * \brief These routines fill a rectangle whose vertices are (\a x1, \a y1), (\a x2, \a y1), (\a x1, \a y2) and (\a x2, \a y2) in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.
  */
 //@{
 void FastFilledRect_Draw_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__(5)));
@@ -604,7 +614,7 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"), short x1 asm("%d0"), short 
 
 /** @defgroup outlinerect Rectangle outlining functions, multiple drawing modes
  * @ingroup rectangle
- * \brief These routines draw the outline of a rectangle, i.e. its vertices (<i>x1</i>, <i>y1</i>), (<i>x2</i>, <i>y1</i>), (<i>x1</i>, <i>y2</i>) and (<i>x2</i>, <i>y2</i>), in one or two 240-pixel-wide video plane(s) using attribute <i>mode</i> or color <i>color</i>. 
+ * \brief These routines draw the outline of a rectangle, i.e. its vertices (\a x1, \a y1), (\a x2, \a y1), (\a x1, \a y2) and (\a x2, \a y2), in one or two 240-pixel-wide video plane(s) using attribute \a mode or color \a color. 
  *
  * Valid modes are:
  * <ul><li>A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR for \ref FastDrawLine and \ref FastDrawLine_R (actually, A_NORMAL = A_REPLACE = A_OR is assumed if mode is neither A_REVERSE nor A_XOR)</li>
@@ -619,7 +629,7 @@ void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short
 
 /** @defgroup fastrect Fast rectangle filling functions for screen-wide widths
  * @ingroup rectangle
- * \brief These routines fill <i>lines</i> lines of the (160|240)-pixel-wide rectangle whose topmost line is at <i>starty</i>, in one or two 240x128 video plane(s), with hard-coded drawing mode.<br>
+ * \brief These routines fill \a lines lines of the (160|240)-pixel-wide rectangle whose topmost line is at \a starty, in one or two 240x128 video plane(s), with hard-coded drawing mode.<br>
  *
  */
 //@{
@@ -640,7 +650,7 @@ void GrayFastInvertRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm(
 
 /** @defgroup fastrectx8 Fast rectangle filling functions for widths multiple of 8
  * @ingroup rectangle
- * \brief These routines fill <i>lines</i> lines of the (<i>bytewidth</i>*8)-pixel-wide rectangle whose top-left corner is at (<i>startcol</i>*8, <i>starty</i>), in a 240-pixel-wide video plane pointed to by <i>plane</i>, with hard-coded drawing mode.<br>
+ * \brief These routines fill \a lines lines of the (\a bytewidth *8)-pixel-wide rectangle whose top-left corner is at (\a startcol *8, \a starty), in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.<br>
  */
 //@{
 void FastEraseRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
@@ -658,14 +668,16 @@ void FastInvertRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short
  * These functions are much faster than the OS DrawClipEllipse function, but
  * that's partly due to the fact DrawClipEllipse supports multiple drawing modes
  * and can draw ellipses, not just circles. Therefore, any bench between
- * DrawClipEllipse and these functions is unfair.
+ * DrawClipEllipse and these functions is slightly unfair.
  *
  * \since 2.00 Beta 5
  */
 
 /** @defgroup outlinedcircle Drawing of circle outline
  * @ingroup circle
- * \brief These functions draw the outline of the circle of radius <i>radius</i> centered at (<i>xcenter</i>, <i>ycenter</i>) in one or two 240x128 video plane(s), with hard-coded drawing mode.
+ * \brief These functions draw the outline of the circle of radius \a radius centered at (\a xcenter, \a ycenter) in one or two 240x128 video plane(s), with hard-coded drawing mode.
+ *
+ * The non-clipped versions are significantly faster than the clipped versions.
  *
  * \warning GrayClipFastOutlinedCircle*_R require consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the
  * root of the ExtGraph documentation</a> for more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
@@ -690,9 +702,9 @@ void GrayClipFastOutlinedCircle_INVERT_R(void *planes asm("%a0"), short xcenter 
 
 /** @defgroup filledcircle Drawing of circle and interior (disk)
  * @ingroup circle
- * \brief These functions fill the circle of radius <i>radius</i> centered at (<i>xcenter</i>, <i>ycenter</i>) in one or two 240x128 video plane(s), with hard-coded drawing mode.
+ * \brief These functions fill the circle of radius \a radius centered at (\a xcenter, \a ycenter) in one or two 240x128 video plane(s), with hard-coded drawing mode.
  *
- * \warning \ref GrayClipFastFilledCircle_R, of which the <i>drawfunc</i> parameter must be a routine compatible with GrayDrawSpan* ones,
+ * \warning \ref GrayClipFastFilledCircle_R, of which the \a drawfunc parameter must be a routine compatible with GrayDrawSpan* ones,
  * requires consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph documentation</a> for 
  * more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
  * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2008, but still...).
@@ -706,9 +718,9 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
 
 // -----------------------------------------------------------------------------
 /** @defgroup triangle Triangle drawing functions
- * \brief These functions fill the triangle whose endpoints are (<i>x1</i>, <i>y1</i>), (<i>x2</i>, <i>y2</i>) and (<i>x3</i>, <i>y3</i>) in one or two 240x128 video plane(s), with hard-coded drawing mode.
+ * \brief These functions fill the triangle whose endpoints are (\a x1, \a y1), (\a x2, \a y2) and (\a x3, \a y3) in one or two 240x128 video plane(s), with hard-coded drawing mode.
  *
- * The <i>drawfunc</i> parameter must be a routine compatible with DrawSpan* / GrayDrawSpan* ones.
+ * The \a drawfunc parameter must be a routine compatible with DrawSpan* / GrayDrawSpan* ones.
  * \warning \ref GrayFilledTriangle_R and \ref GrayClipFilledTriangle_R require consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph
  * documentation</a> for more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
  * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2008, but still...).
@@ -736,8 +748,8 @@ void GrayClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2
  * @ingroup circle triangle
  * \brief Special horizontal line drawing functions fit for filled triangle and circle functions.
  *
- * Unlike (Gray)FastDrawHLine(2B)_R, these routines are clipped. The <i>addr</i>/<i>addrs</i> pointer is 
- * interpreted as the address of the beginning of the screen row to which <i>x1</i> and <i>x2</i>
+ * Unlike (Gray)FastDrawHLine(2B)_R, these routines are clipped. The \a addr/\a addrs pointer is 
+ * interpreted as the address of the beginning of the screen row to which \a x1 and \a x2
  * relate. See the code of \ref ClipFilledTriangle_R for an example of use.
  */
 //@{
@@ -759,7 +771,7 @@ void GrayDrawSpan_INVERT_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr
 
 /** @defgroup scaledraw Scaling+drawing of sprites
  * @ingroup scaling
- * \brief Scale a <b>square</b> sprite of various widths (depending on the name of the function) to <i>sizex</i>x<i>sizey</i> pixels, while drawing the scaled sprite at (<i>x0</i>, <i>y0</i>) in 240-pixel-wide video planes pointed to by <i>dest</i>, with hard-coded drawing mode.
+ * \brief Scale a <b>square</b> sprite of various widths (depending on the name of the function) to \a sizex x \a sizey pixels, while drawing the scaled sprite at (\a x0, \a y0) in 240-pixel-wide video planes pointed to by \a dest, with hard-coded drawing mode.
  *
  * \warning No clipping is done !
  * \author Julien Richard-Foy
@@ -788,9 +800,9 @@ void ScaleSprite64_XOR(const unsigned long long *sprite, void *dest, short x0, s
  *
  */
 //@{
-//! Scale by a factor of two in each direction a (<i>bytewidth</i>*8)x<i>h</i> sprite pointed to by <i>src</i>, storing the result as sprite data in are pointed to by <i>dest</i>.
-void DoubleSpriteDimensionsX8_R(unsigned short h asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
-//! Scale by a factor of two in each direction the 16x16 sprite pointed to by <i>src</i>, writing the result to the area pointed to by <i>dest</i>.<br>
+//! Scale by a factor of two in each direction a (\a bytewidth *8)x\a height sprite pointed to by \a src, storing the result as sprite data in are pointed to by \a dest.
+void DoubleSpriteDimensionsX8_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
+//! Scale by a factor of two in each direction the 16x16 sprite pointed to by \a src, writing the result to the area pointed to by \a dest.<br>
 //! DoubleSpriteDimensions16x16_R is designed for use in file explorers to read the AMS native comments available in TIGCC 0.95+
 void DoubleSpriteDimensions16x16_R(const unsigned short* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__(2)));
 //@}
@@ -819,32 +831,44 @@ void Scale1Plane160to240_R(void *src asm("%a0"), void *dest asm("%a1"));
 //! Fast functions for complete screen (240x128 pixels == 3840 bytes) operations.
 // -----------------------------------------------------------------------------
 //@{
-//! Copy 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>
+//! Copy 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest
+//! \note \a src and \a dest must start at an even address.
+//! \warning FastCopyScreen will crash your calculator if \a src points into the archive memory, for example if you try to copy a screen
+//! which is stored in an archived variable. DON'T use FastCopyScreen in this case.
 //! \deprecated __stkparm__ function with equivalent __regparm__ function
 void FastCopyScreen(void* src, void* dest) __attribute__((__stkparm__));
-//! Copy 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>, register-parameter-passing version
+//! Copy 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest, register-parameter-passing version
+//! \note \a src and \a dest must start at an even address.
+//! \warning FastCopyScreen_R will crash your calculator if \a src points into the archive memory, for example if you try to copy a screen
+//! which is stored in an archived variable. DON'T use FastCopyScreen in this case.
 void FastCopyScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//! Copy 160x<i>height</i> screen (bytewidth = 20) pointed to by <i>src</i> <b>to</b> the upper-left corner of 240x128 plane pointed to by <i>dest</i>.
+//! Copy 160x\a height screen (bytewidth = 20) pointed to by \a src <b>to</b> the upper-left corner of 240x128 plane pointed to by \a dest.
+//! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
 void FastCopyScreen160to240_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
-//! Copy 160x<i>height</i> screen (bytewidth = 20) pointed to by <i>src</i> <b>near</b> the center of 240x128 plane pointed to by <i>dest</i>.
-//! The upper left corner of 160x<i>height</i> data is at (32, 14+(100-<i>height</i>)/2), which makes the copy process significantly more efficient than that of \ref FastCopyScreen160to240_R.
+//! Copy 160x\a height screen (bytewidth = 20) pointed to by \a src <b>near</b> the center of 240x128 plane pointed to by \a dest.
+//! \note \a src and \a dest must start at an even address.
+//! The upper left corner of 160x\a height data is at (32, 14+(100-\a height)/2), which makes the copy process significantly more efficient than that of \ref FastCopyScreen160to240_R.
 //! \since 2.00 Beta 5
 void FastCopyScreen160to240NC_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
-//! AND 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>.
+//! AND 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
+//! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
 void FastANDScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//! OR 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>.
+//! OR 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
+//! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
 void FastORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //void FastTRANBScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //void FastTRANDScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //void FastTRANLScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //void FastTRANWScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//! XOR 240x128 plane pointed to by <i>src</i> to 240x128 plane pointed to by <i>dest</i>.
+//! XOR 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
+//! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
 void FastXORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//! Invert bits of 240x128 plane pointed to by <i>src</i>.
+//! Invert bits of 240x128 plane pointed to by \a src.
+//! \note \a src must start at an even address.
 //! \since 2.00 Beta 6
 void FastInvertScreen_R(void* src asm("%a0")) __attribute__((__regparm__(1)));
 //@}
@@ -853,7 +877,7 @@ void FastInvertScreen_R(void* src asm("%a0")) __attribute__((__regparm__(1)));
 //! @defgroup drawlargebuffer Large buffer -> 240x128 plane drawing functions
 //! @ingroup fastscreen
 //@{
-//! Replace the contents of 240x128 <i>dest</i> buffer with data from the rectangular area (<i>offsetx</i>, <i>offsety</i>, <i>offsetx</i>+239, <i>offsety</i>+127) of the (<i>wordwidth</i>*16) x <i>height</i> source buffer pointed to by <i>big_screen</i>.
+//! Replace the contents of 240x128 \a dest buffer with data from the rectangular area (\a offsetx, \a offsety, \a offsetx+239, \a offsety+127) of the (\a wordwidth *16) x \a height source buffer pointed to by \a big_screen.
 //! \todo draw something if the result of the clipping is less than 240x128 pixels.
 void FastDrawLargeBufferToScreen_R(const void * big_screen asm("%a0"), void * dest asm("%a1"), unsigned short offsetx asm("%d0"), unsigned short offsety asm("%d1"), unsigned short wordwidth asm("%d2"), unsigned short height asm("%d3")) __attribute__((__regparm__(6)));
 //@}
@@ -863,11 +887,11 @@ void FastDrawLargeBufferToScreen_R(const void * big_screen asm("%a0"), void * de
 /** @defgroup floodfill FloodFill functions
  * \brief 4-way floodfill routines
  *
- * These routines fill the interior of an area which enclosed by an arbitrary shaped figure (a cycle, a polygon, etc) using a 4-way floodfill algorithm.<br>
- * Parameters <i>x</i> and <i>y</i> specify the point in the 240x128 destination plane (<i>dest</i>) from where the filling process should be started. If the pixel at (x,y) is already set the routine returns immediately.
+ * These routines fill the interior of an area which enclosed by an arbitrary shaped figure (a circle, a polygon, etc) using a 4-way floodfill algorithm.<br>
+ * Parameters \a x and \a y specify the point in the 240x128 destination plane (\a dest) from where the filling process should be started. If the pixel at (\a x, \a y) is already set the routine returns immediately.
  *
- * Parameter <i>shade</i> is a 16-bit unsigned integer which defines a 4x4 matrix of pixels used to fill the interior (for example: if shade is set to 0xFFFF the interior is filled completely black). Routines of the "noshade" kind hard-code shade to 0xFFFF to squeeze a bit more of speed.<br>
- * Parameter <i>tmpplane</i> has to be a 240x128 pixels large "scratch" buffer which is used internally. Routines of the "MF" kind don't need this additional parameter, they use malloc and free internally to allocate and release the buffer.<br>
+ * Parameter \a shade is a 16-bit unsigned integer which defines a 4x4 matrix of pixels used to fill the interior (for example: if shade is set to 0xFFFF the interior is filled completely black). Routines of the "noshade" kind hard-code shade to 0xFFFF to squeeze a bit more of speed.<br>
+ * Parameter \a tmpplane has to be a 240x128 pixels large "scratch" buffer which is used internally. Routines of the "MF" kind don't need this additional parameter, they use malloc and free internally to allocate and release the buffer.<br>
  * \note Due to the fact that FloodFill heavily uses the common program stack for its operation, the given tmpplane buffer shouldn't be a local LCD_BUFFER variable, but it should be allocated dynamically by using malloc() like FloodFillMF does internally. 
  * \note If speed is crucial you should use FloodFill* instead of FloodFillMF*.
  * \author Zeljko Juric
@@ -893,7 +917,7 @@ void FloodFillMF_noshade_R (short x, short y, void* dest) __attribute__((__regpa
  *   <li><b>MASK</b> mode ANDs the background with the full-sized mask, before ORing the background with the sprite</li>
  *   <li><b>BLIT</b> mode ANDs the background with the same 1-line mask applied to all lines, before ORing the background with the sprite</li>
  *   <li><b>RPLC</b> mode replaces the background with the sprite (it is a BLIT with a hard-coded mask of 0s)</li>
- *   <li><b>Get</b> makes a sprite from the background. Much faster than the OS BitmapGet functions, but not compatible</li>
+ *   <li><b>Get</b> makes from the background a sprite usable by other sprite & tile functions. Much faster than the OS BitmapGet functions, but not compatible</li>
  *   <li><b>SMASK</b> (grayscale only) ANDs both planes with the same full-sized mask, before ORing each plane with a different sprite</li>
  *   <li><b>TRANB</b> (grayscale only) draws the sprite as if the black color were transparent</li>
  *   <li><b>TRAND</b> (grayscale only) draws the sprite as if the dark gray color were transparent</li>
@@ -1224,7 +1248,7 @@ void GrayClipISpriteX16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned s
 // -----------------------------------------------------------------------------
 //@{
 void GraySingleSprite8_BLACK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-//! Parameter <i>color</i> is an element of enum \ref GrayColors.
+//! Parameter \a color is an element of enum \ref GrayColors.
 void GraySingleSprite8_COLOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt, unsigned short color, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySingleSprite8_DGRAY_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySingleSprite8_LGRAY_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1242,14 +1266,21 @@ void GraySingleSprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("
  *
  * \note None of the tile functions is clipped.
  * \note These 'Tile' functions have nothing to do with the tilemap engine.
+ * \note Supporting variable height tiles is easy:
+ * <ul><li>copy the functions in your project;</li>
+ * <li>add the \a height parameter in d2;</li>
+ * <li>modify the functions (everything outside the loops related to d2).</li></ul>
+ * <i>Warning</i>, most loops are unrolled: if you don't want to modify the routine more thoroughly, the height will often have to be
+ * multiple of 2 or even 4.
  */
 // -----------------------------------------------------------------------------
 /** @defgroup sptile Single-plane tile functions
  * @ingroup tile
  * \brief Non-clipped single plane tile (aligned sprite) functions, non-interlaced sprite format
  *
- * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprite</i> at (8*<i>col</i>,y) in <i>plane</i>.<br>
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by \a sprite at (8*\a col,y) in \a plane.<br>
  * These functions have nothing to do with the tilemap engine.
+ * \warning Passing an odd value for \a col to 16x16 and 32x32 routines triggers a CRASH !
  */
 // -----------------------------------------------------------------------------
 //@{
@@ -1282,7 +1313,8 @@ void Tile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"),
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, non-interlaced sprite format
  *
- * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprt0</i> and <i>sprt1</i> at (8*<i>col</i>,y) in planes <i>dest0</i> and <i>dest1</i>.<br>
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by \a sprt0 and \a sprt1 at (8*\a col,y) in planes \a dest0 and \a dest1.<br>
+ * \warning Passing an odd value for \a col to 16x16 and 32x32 routines triggers a CRASH !
  */
 // -----------------------------------------------------------------------------
 //@{
@@ -1324,8 +1356,9 @@ void GrayTile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, interlaced sprite format
  *
- * These functions draw square tiles of various widths (depending on the function's name) pointed to by <i>sprite</i> at (8*<i>col</i>,y) in planes <i>dest0</i> and <i>dest1</i>.<br>
+ * These functions draw square tiles of various widths (depending on the function's name) pointed to by \a sprite at (8*\a col, \a y) in planes \a dest0 and \a dest1.<br>
  * The interlaced sprite format is the same as that of the \ref ctpisprite
+ * \warning Passing an odd value for \a col to 16x16 and 32x32 routines triggers a CRASH !
  */
 // -----------------------------------------------------------------------------
 //@{
@@ -1364,7 +1397,7 @@ void GrayITile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%
  * \brief Various transition effects
  * 
  * I find it hard to describe what some of these routines do, since the effect is very visual.
- * I suggest reading and executing demo18 (which also provides a hint about the <i>wait</i> parameter) :-)
+ * I suggest reading and executing demo18 (which also provides a hint about the \a wait parameter) :-)
  * 
  * \todo many missing effects detailed in <a href="../../../todo%20extgraph.txt">the general ExtGraph todo list</a>
  */
@@ -1398,28 +1431,28 @@ void FadeOutToWhite_TB_R(void *lightplane asm("%a0"), void *darkplane asm("%a1")
 void FadeOutToBlack_BT_R(void *lightplane asm("%a0"), void *darkplane asm("%a1"), unsigned short height asm("%d0"), unsigned short bytewidth asm("%d1"), short wait asm("%d2"));
 void FadeOutToWhite_BT_R(void *lightplane asm("%a0"), void *darkplane asm("%a1"), unsigned short height asm("%d0"), unsigned short bytewidth asm("%d1"), short wait asm("%d2"));
 
-//! Make (<i>wordwidth</i>*16)x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> lighter.
+//! Make (\a wordwidth *16)x\a height planes starting at \a dest0 and \a dest1 lighter.
 void GrayIShadowPlanesX16_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0"), unsigned short wordwidth asm("%d1")) __attribute__((__regparm__(4)));
-//! Make (<i>wordwidth</i>*16)x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> darker.
+//! Make (\a wordwidth *16)x\a height planes starting at \a dest0 and \a dest1 darker.
 void GrayShadowPlanesX16_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0"), unsigned short wordwidth asm("%d1")) __attribute__((__regparm__(4)));
-//! Make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> lighter.
+//! Make 240x\a height planes starting at \a dest0 and \a dest1 lighter.
 void GrayIShadowPlanes240_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
-//! Make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> darker.
+//! Make 240x\a height planes starting at \a dest0 and \a dest1 darker.
 void GrayShadowPlanes240_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
-//! Make 160x<i>height</i> planes (bytewidth=20) starting at <i>dest0</i> and <i>dest1</i> lighter.
+//! Make 160x\a height planes (bytewidth=20) starting at \a dest0 and \a dest1 lighter.
 void GrayIShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
-//! Make 160x<i>height</i> planes (bytewidth=20) starting at <i>dest0</i> and <i>dest1</i> darker.
+//! Make 160x\a height planes (bytewidth=20) starting at \a dest0 and \a dest1 darker.
 void GrayShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
-//! Combination of \ref GrayIShadowPlanes240_R and \ref FastCopyScreen_R : make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> lighter and store the result in <i>dest0</i> and <i>dest1</i>.
+//! Combination of \ref GrayIShadowPlanes240_R and \ref FastCopyScreen_R : make 240x\a height planes starting at \a dest0 and \a dest1 lighter and store the result in \a dest0 and \a dest1.
 void GrayIShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
-//! Combination of \ref GrayShadowPlanes240_R and \ref FastCopyScreen_R : make 240x<i>height</i> planes starting at <i>dest0</i> and <i>dest1</i> darker and store the result in <i>dest0</i> and <i>dest1</i>.
+//! Combination of \ref GrayShadowPlanes240_R and \ref FastCopyScreen_R : make 240x\a height planes starting at \a dest0 and \a dest1 darker and store the result in \a dest0 and \a dest1.
 void GrayShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 
-//! Fill 240x128 plane pointed to by <i>plane</i> with 1s.
+//! Fill 240x128 plane pointed to by \a plane with 1s.
 void FastFillScreen_R(void *plane asm("%a0"));
-//! Fill 240x128 plane pointed to by <i>plane</i> with 0s.
+//! Fill 240x128 plane pointed to by \a plane with 0s.
 void FastClearScreen_R(void *plane asm("%a0"));
-/** \brief Fills (<i>len</i>-<i>len</i>%4) bytes of plane with LFSR-generated garbage, initialized with <i>seed</i>, starting at address <i>plane</i>.
+/** \brief Fills (\a len - \a len%4) bytes of plane with LFSR-generated garbage, initialized with \a seed, starting at address \a plane.
  *
  * This is less random but two orders of magnitude faster than other pseudo-random generators like twice the number of writes of <code>random(RAND_MAX)+random(RAND_MAX)</code>.
  */
@@ -1432,12 +1465,18 @@ void FillScreenWithGarbage_R(unsigned long seed asm("%d0"), unsigned short len a
 /** @defgroup spriteshadow Sprite shadow (darker) / inverse shadow (lighter) creation functions
  * \brief Helper functions to create shadows (darker) and inverse shadows (lighter) from sprites
  * 
- * Generate darker or lighter sprites from sprites of (8|16|32|<i>bytewidth</i>*8)x<i>height</i> pixels, while taking a <i>mask</i> into account.
- * 
- * The generated sprite shadows can be drawn with OR or MASK/SMASK functions. This takes a slightly greater amount of memory,
- * but is significantly faster at run-time than using the (I)SHADOW functions introduced in 2.00 Beta 3 and removed in 2.00 Beta 4.
+ * 'Shadow' functions generate darker (white -> lightgray, lightgray -> darkgray, darkgray -> black, black -> black) sprites from sprites
+ * of (8|16|32|\a bytewidth *8)x\a height pixels pointed to by \a src0 and \a src1, both ANDing them with \a mask,
+ * and storing the result to \a dest0 and \a dest1.<br>
+ * Likewise for 'IShadow' functions, except that they generate lighter (white -> white, lightgray -> white, darkgray -> lightgray, black -> darkgray)
+ * sprites.
  *
- * The interlaced sprite format of CreateISprite* routines is the same as that of the masked format as described in \ref ctpisprite
+ * The generated sprite shadows can be drawn with OR or MASK/SMASK functions. This takes a slightly greater amount of memory,
+ * but is significantly faster at run-time (past the shadow generation phase) than using the (I)SHADOW functions introduced
+ * in 2.00 Beta 3 and removed in 2.00 Beta 4 (because they were rather slow and increased maintenance).
+ *
+ * The interlaced sprite format of CreateISprite* routines is the same as that of the masked format as described in \ref ctpisprite . Both the
+ * source and destination sprites have to be drawn with GrayClipISprite(8|16|32)_MASK routine.
  *
  * \since 2.00 Beta 4
  */
@@ -1468,15 +1507,15 @@ void CreateISpriteShadow32_R(unsigned short height asm("%d0"), const unsigned lo
 /** @defgroup fastsrb Fast background save&restore functions
  * \brief Special fast SpriteGet/RPLC functions and macros
  *
- * These routines save or restore a (8|16|32|<i>bytewidth</i>*8)x<i>height</i> pixel sprite from/to one or two 240-pixel-wide video plane(s).<br>
+ * These routines save or restore a (8|16|32|\a bytewidth *8)x\a height pixel sprite from/to one or two 240-pixel-wide video plane(s).<br>
  * These routines are designed for programs where redrawing everything every frame is detrimental to speed.
  * See demo22 and <a href="../../ExtGraph/comparison.html">this page of the documentation</a> for hints about such situations.
  *
  * \warning
- * <ul><li>(Clip)FastGetBkgrnd8/16_R require dest being at least 4*<i>height</i>+6 bytes long (see \ref FBKGRND8_BUFSIZE and \ref FBKGRND16_BUFSIZE macros)</li>
- * <li>(Clip)FastGetBkgrnd32_R require dest being at least 6*<i>height</i>+6 bytes long (see \ref FBKGRND32_BUFSIZE macro)</li>
- * <li>Gray(Clip)FastGetBkgrnd8/16_R require dest being at least 8*<i>height</i>+6 bytes long (see \ref FGBKGRND8_BUFSIZE and \ref FGBKGRND16_BUFSIZE macros)</li>
- * <li>Gray(Glip)FastGetBkgrnd32_R require dest being at least 12*<i>height</i>+6 bytes long (see \ref FGBKGRND32_BUFSIZE macro)</li></ul>
+ * <ul><li>(Clip)FastGetBkgrnd8/16_R require dest being at least 4*\a height+6 bytes long (see \ref FBKGRND8_BUFSIZE and \ref FBKGRND16_BUFSIZE macros)</li>
+ * <li>(Clip)FastGetBkgrnd32_R require dest being at least 6*\a height+6 bytes long (see \ref FBKGRND32_BUFSIZE macro)</li>
+ * <li>Gray(Clip)FastGetBkgrnd8/16_R require dest being at least 8*\a height+6 bytes long (see \ref FGBKGRND8_BUFSIZE and \ref FGBKGRND16_BUFSIZE macros)</li>
+ * <li>Gray(Glip)FastGetBkgrnd32_R require dest being at least 12*\a height+6 bytes long (see \ref FGBKGRND32_BUFSIZE macro)</li></ul>
  *
  * Special thanks go to Julien Richard-Foy: he needed such functions for one
  * of his own projects. Mine were not exactly what he was looking for, but
@@ -1503,22 +1542,22 @@ void GrayFastPutBkgrnd8_R(const unsigned short *sprt asm("%a2"), void *dest1 asm
 void GrayFastPutBkgrnd16_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd8_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref FastGetBkgrnd8_R
 //! \since 2.00 Beta 6
 #define FBKGRND8_BUFSIZE(h)   (4*(h)+6)
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd16_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref FastGetBkgrnd16_R
 //! \since 2.00 Beta 6
 #define FBKGRND16_BUFSIZE(h)  (4*(h)+6)
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd32_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref FastGetBkgrnd32_R
 //! \since 2.00 Beta 6
 #define FBKGRND32_BUFSIZE(h)  (6*(h)+6)
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd8_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref GrayFastGetBkgrnd8_R
 //! \since 2.00 Beta 6
 #define FGBKGRND8_BUFSIZE(h)  (8*(h)+6)
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd16_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref GrayFastGetBkgrnd16_R
 //! \since 2.00 Beta 6
 #define FGBKGRND16_BUFSIZE(h) (8*(h)+6)
-//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd32_R
+//! Size of buffer for a \a h -pixel-high sprite retrieved by \ref GrayFastGetBkgrnd32_R
 //! \since 2.00 Beta 6
 #define FGBKGRND32_BUFSIZE(h) (12*(h)+6)
 //@}
@@ -1558,13 +1597,13 @@ void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"), void *dest1 as
 //! @ingroup miscspritex8
 //! \note All sprite widths must be multiple of 8; the "X8X8" routines also expect the height to be multiple of 8.
 //@{
-//! Make a horizontal mirror (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src</i> and store the result as sprite data in the area pointed to by <i>dest</i>.
+//! Make a horizontal mirror (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
 //! \deprecated __stkparm__ function with equivalent __regparm__ function
 void SpriteX8_MIRROR_H(unsigned short height, const unsigned char* src, unsigned short bytewidth, unsigned char* dest) __attribute__((__stkparm__));
 //! Register-parameter-passing version of \ref SpriteX8_MIRROR_H
 void SpriteX8_MIRROR_H_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
-//! Make a vertical mirror (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src</i> and store the result as sprite data in the area pointed to by <i>dest</i>.
+//! Make a vertical mirror (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
 //! \deprecated __stkparm__ function with equivalent __regparm__ function
 void SpriteX8_MIRROR_V(unsigned short height, const unsigned char* src, unsigned short bytewidth, unsigned char* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 //! Register-parameter-passing version of \ref SpriteX8_MIRROR_V
@@ -1573,11 +1612,11 @@ void SpriteX8_MIRROR_V_R(unsigned short height asm("%d0"), const unsigned char* 
 //! Combination of \ref SpriteX8_MIRROR_H_R and \ref SpriteX8_MIRROR_V_R
 void SpriteX8_MIRROR_HV_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
-//! Rotate 90° right (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src</i> and store the result as sprite data in the area pointed to by <i>dest</i>.
-//! \note The source sprite is not required to be in a writable area, but it's required to have both dimensions multiple of 8.
+//! Rotate pi/2 right (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
+//! \note The source sprite is not required to be in a writable area, but it's required to have <b>both dimensions multiple of 8</b>.
 void SpriteX8X8_ROTATE_RIGHT_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
-//! Rotate 90° left (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src</i> and store the result as sprite data in the area pointed to by <i>dest</i>.
-//! \note The source sprite is not required to be in a writable area, but it's required to have both dimensions multiple of 8.
+//! Rotate pi/2 left (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
+//! \note The source sprite is not required to be in a writable area, but it's required to have <b>both dimensions multiple of 8</b>.
 void SpriteX8X8_ROTATE_LEFT_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 //! Combination of \ref SpriteX8X8_ROTATE_RIGHT_R and \ref SpriteX8_MIRROR_H_R
 void SpriteX8X8_RR_MH_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
@@ -1607,8 +1646,8 @@ void FastSpriteX8_MIRROR_H_R(unsigned short height asm("%d2"), unsigned short by
 // -----------------------------------------------------------------------------
 /** @defgroup spritex8datawithmask Apply same mask to all lines
  * @ingroup spritex8data
- * The "withmask" functions perform a AND/OR/XOR operation of each line of the (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src</i>,
- * with the line pointed to by <i>maskval</i>, storing the result to the area pointed to by <i>dest</i>.
+ * The "withmask" functions perform a AND/OR/XOR operation of each line of the (\a bytewidth *8)x\a height sprite pointed to by \a src,
+ * with the line pointed to by <i>maskval</i>, storing the result to the area pointed to by \a dest.
  */
 //@{
 void SpriteX8Data_withmask_AND_R(unsigned short height asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src asm("%a0"), const unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
@@ -1618,8 +1657,8 @@ void SpriteX8Data_withmask_XOR_R(unsigned short height asm("%d2"), unsigned shor
 
 /** @defgroup spritex8datawithsprite Modify sprite with another sprite of same size
  * @ingroup spritex8data
- * The "withsprite" functions perform a AND/OR/XOR operation of the whole (<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>src1</i>,
- * with the sprite of same size pointed to by <i>src2</i>, storing the result to the area pointed to by <i>dest</i>.
+ * The "withsprite" functions perform a AND/OR/XOR operation of the whole (\a bytewidth *8)x\a height sprite pointed to by \a src1,
+ * with the sprite of same size pointed to by \a src2, storing the result to the area pointed to by \a dest.
  */
 //@{
 void SpriteX8Data_withsprite_AND_R(unsigned short height asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src1 asm("%a0"), const unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
@@ -1633,7 +1672,7 @@ void SpriteX8Data_withsprite_XOR_R(unsigned short height asm("%d2"), unsigned sh
 /** @defgroup rotatesprite Sprite rotation functions
  * \brief Arbitrary angle sprite rotating functions.
  *
- * Rotate clockwise (8|16|32|<i>bytewidth</i>*8)x<i>height</i> sprite pointed to by <i>srcSprite</i> of <i>degreesClockwise</i> degrees, and store the result as sprite data in area pointed to by <i>destSprite</i>.<br>
+ * Rotate clockwise (8|16|32|\a bytewidth *8)x\a height sprite pointed to by <i>srcSprite</i> of <i>degreesClockwise</i> degrees, and store the result as sprite data in area pointed to by <i>destSprite</i>.<br>
  * The center of rotation is (<i>originX</i>, <i>originY</i>).
  * \author Joey Adams
  */
@@ -1651,10 +1690,9 @@ void RotateSpriteX8_R(unsigned char *srcSprite asm("%a0"), unsigned char *destSp
 
 
 // -----------------------------------------------------------------------------
-//! Sine table (0..90) used in arbitrary angle sprite rotating functions, values
-//! multiplied by 8192 == 1<<13.
-// Courtesy of Joey Adams. Exported at his request to avoid duplication of sine
-// tables in case a program would use another sine table.
+//! Sine table (0..90) used in arbitrary angle sprite rotating functions, values multiplied by 8192 == 1<<13.
+//! \author Joey Adams.
+// Exported at his request to avoid duplication of sine tables in case a program would use another sine table, good idea.
 // -----------------------------------------------------------------------------
 extern const unsigned short RS_sin8192tab[91];
 
@@ -1712,6 +1750,7 @@ typedef struct {
 //@}
 
 //! @defgroup ttunpack TTUnpack handling macros and functions
+//! For more information, see the <a href="../../ExtGraph/exepack.html">ExePack/TTArchive documentation</a>.
 //@{
 //! TTunpack decompression function.
 short UnpackBuffer(unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
@@ -1778,6 +1817,7 @@ typedef struct {
 // -----------------------------------------------------------------------------
 
 //! @defgroup ttarchive TTArchive handling macros
+//! For more information, see the <a href="../../ExtGraph/exepack.html">ExePack/TTArchive documentation</a>.
 //@{
 //! Compares the magic number of the ttarchive header pointed to by <i>_p_</i> against \ref TTARCHIVE_MAGIC
 #define ttarchive_valid(_p_)     (((TTARCHIVE_HEADER*)(_p_))->magic == TTARCHIVE_MAGIC)

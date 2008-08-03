@@ -8,49 +8,47 @@
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
 
 <hr>
-<a name="exepack"></a><h1>Exepack-Decompression and TTArchive Support</h1>
+<a name="exepack"></a><h1>ExePack-Decompression and TTArchive Support</h1>
 <hr>
 <p>
-Exepack-Compression is a compression algorithm which was initially developed to compress
+ExePack compression is a compression algorithm which was initially developed to compress
 executables (-pack option of TIGCC compiler) and to generate eBooks for TICT's eBookReader.
 Everything (tools, sources, headerfiles etc.) which is necessary to use this compression
 in your own projects can be found in the TIGCC Tools Suite which can be download from the
 <a href="http://tict.ticalc.org">TICT-HQ at http://tict.ticalc.org</a>.<br>
 <br>
-To make things easier for you I have decided to integrate support for exepack decompression
-and ttarchives into library ExtGraph. It's no longer necessary nor recommended to include
-files ttunpack.h and ttarchive.h into your sources. Just include extgraph.h and link
-against extgraph.a. That's all. To generate the compressed data files and ttarchive files
+To make things easier for you I have decided to integrate support for ExePack decompression
+and TTArchives into library ExtGraph. It's neither necessary nor recommended any longer to
+include files ttunpack.h and ttarchive.h into your sources. Just include extgraph.h and link
+against extgraph.a. That's all. To generate the compressed data files and TTArchive files
 you still need the TIGCC Tools Suite, of course (especially the tools ttpack and ttarchive).
 </p>
 <br>
 <br>
-<h2>What is the difference of an exepacked file and an ttarchive?</h2>
+<h2>What is the difference of an ExePacked file and an TTArchive ?</h2>
 <p>
-An exepacked file is just a single data file which is compressed using tool ttpack.
-TTArchive files are, as the name already implies, archives which can hold many entries not just
-one. Each entry can be compressed using ttpack or any other program before you stuff it into the
+An ExePacked file is just a single data file which is compressed using tool ttpack.
+TTArchive files are, as the name implies, archives which can hold multiple entries.
+Each entry can be compressed using ttpack or any other program before you stuff it into the
 TTArchive file. Tool ttarchive won't care about the content of the entries at all.
 </p>
 <br><br>
 
-<h2>How to get the Pointer to the Beginning of a File?</h2>
-To use the exepack decompression routine and/or the ttarchive access macros you'll need
+<h2>How to get the pointer to the beginning of a file ?</h2>
+To use the ExePack decompression routine and/or the TTArchive access macros you'll need
 a pointer to the memory where the external variable is stored first. This can be simply
-done function like the following:
+done function similar to the following:
 <pre>
-
-//------------------------------------------------------------------
-// returns pointer to start of external variable which name is given
-// by fname.
+//----------------------------------------------------------------------------
+// returns pointer to start of external variable which name is given by fname.
 // if variable cannot be found NULL is returned
 //
 // NOTE: this routine internally locks the variable. Due to the fact
 //       that the variable has to be unlocked again if you don't
 //       need it anymore, it uses the given pointer to a HANDLE
 //       to store the handle of the locked variable in it.
-//------------------------------------------------------------------
-unsigned char* GetPointerToFile(char* fname,HANDLE* h) {
+//----------------------------------------------------------------------------
+unsigned char* GetPointerToFile(char* fname, HANDLE* h) {
     SYM_ENTRY*     symptr;
     unsigned char* src;
 
@@ -67,9 +65,9 @@ unsigned char* GetPointerToFile(char* fname,HANDLE* h) {
 </pre>
 
 
-<h2>How to use the ExePack Decompression Routine?</h2>
-The Exepack decompression routine needs takes two pointers. A source and a destination pointer.
-The source pointer points to the memory which holds the exepacked destination and the destination
+<h2>How to use the ExePack Decompression Routine ?</h2>
+The ExePack decompression routine needs takes two pointers. A source and a destination pointer.
+The source pointer points to the memory which holds the ExePacked destination and the destination
 pointer should point to a buffer which is large enough to hold the decompressed data. Suppose
 you have an external variable which hold the compressed data (generated with tool ttpack)
 and you have already implemented the above function GetPointerToFile(). Then decompressing this
@@ -90,7 +88,7 @@ unsigned char* GetDecompressedData(char* fname) {
 
     if (!src) return NULL; // file not found
 
-    // check if data is really exepacked
+    // check if data is really ExePacked
     if (!ttunpack_valid(src)) {
         HeapUnlock(h);  // data NOT valid - unlock locked variable again!!
         return NULL;
@@ -114,10 +112,10 @@ unsigned char* GetDecompressedData(char* fname) {
 </pre>
 
 
-<h2>How to get an Entry of an TTArchive file?</h2>
+<h2>How to get an Entry of an TTArchive file ?</h2>
 The first step to retrieve an entry of an archive is to get again a pointer to the start of
-the external variable which holds the ttarchive. The following code shows how to loop through
-all entries of an ttarchive which is stored in a variabled called "mydata". Of course, the
+the external variable which holds the TTArchive. The following code shows how to loop through
+all entries of an TTArchive which is stored in a variabled called "mydata". Of course, the
 following loop is not really useful, but it demonstrates almost everything which is necessary
 to now about TTArchives.
 <pre>
@@ -175,8 +173,8 @@ lines in your sourcecode. Including one of these files is not longer necessary N
 contains newer, faster and smaller versions. Just include extgraph.h, that's enough.<br>
 <br>
 <font color="red">
-<strong>BTW: Is anyone out there who may extend the docs about Exepack and TTArchive to become more useful?
-A short demo, which shows the usage of the decompression and the ttarchive stuff would be nice, too.<br>
+<strong>BTW: Is anyone out there who may extend the docs about ExePack and TTArchive to become more useful ?
+A short demo, which shows the usage of the decompression and the TTArchive stuff would be nice, too.<br>
 <br>If "yes", please send me a mail at <a href="mailto:thomas.nussbaumer@gmx.net">thomas.nussbaumer@gmx.net</a>.</strong></font>
 
 </BODY>

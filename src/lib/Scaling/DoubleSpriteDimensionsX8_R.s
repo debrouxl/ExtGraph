@@ -1,4 +1,4 @@
-| C prototype: void DoubleSpriteDimensionsX8_R(unsigned short h asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
+| C prototype: void DoubleSpriteDimensionsX8_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned short* dest asm("%a1")) __attribute__((__regparm__(4)));
 
 .text
 .globl DoubleSpriteDimensionsX8_R

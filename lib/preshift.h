@@ -1,16 +1,39 @@
 //*****************************************************************************
 /** \file preshift.h
- * EXTGRAPH v2.00 Beta 6<br>
- * Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
- *<br>
- * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
+ * \brief This file contains definitions for the preshifted sprites part of the ExtGraph library.
+ *
+ * ExtGraph is a compile-time library which contains <b>speed-optimized graphics
  * functions</b> for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
  * (collectively known as TI-68k calculators).
  *
+ * <b>Preshifted sprite support</b>:
+ * <ul><li>helper functions to create <b>semi-preshifted</b> sprites from B/W and gray non-masked interlaced 8x8 and 16x16 sprites;</li>
+ * <li>non-clipped OR and XOR macros (to save branches) with completely unrolled looops drawing those semi-preshifted sprites.</li></ul>
+ * 
+ * <i>Semi-preshifted</i> means that only each other shifting is precomputed. This of course decreases average brute force performance if
+ * preshifted sprites are displayed at odd coordinates (not if they're displayed at even coordinates), but:
+ * <ul><li>semi-preshifted sprites remain significantly faster than equivalent GraySpriteX functions on average;</li>
+ * <li>completely preshifted sprites take an insane amount of memory (2K per 16x16 preshifted grayscale sprite), which makes them merely
+ * unusable (only 31 16x16 preshifted grayscale sprites per 65518 bytes block !).</li></ul>
+ * Semi-preshifted sprites allow for 63 preshifted 16x16 grayscale sprites per 65518 bytes block.
+ *
+ * Anyway, as you can see in <a href="../../ExtGraph/comparison.html>the comparison of different approaches</a>, games that just couldn't be
+ * done with normal sprites or a tilemap engine are scarce. Think that using simpler modes + background save / restore can be smarter than
+ * always redrawing everything.
+
+ * \note Credits go to PpHd for the movem.l (sprt)+,d0-d7; or.l d0...d7,(dest)+ trick, taken in GenLib. It is roughly as fast as
+ * repeated 2-instruction move / or sequences, with a simple test code (it might be slightly slower with real-life programs, since it
+ * clobbers more registers, I don't know), but it is significantly smaller.
+ * 
+ * \todo Make and export 8x8 preshifted sprite functions. Keep in mind that "semi-preshifted 8x8 sprites are written so as to take advantage
+ * of 1 word being enough for 4 shiftings out of 8. This allows for 170 preshifted 8x8 grayscale sprites per 65518 bytes block."
+ *
+ * \version 2.00 Beta 6
+ * \copyright Copyright (c) 2001-2008 TICT (TI-Chess Team) and contributors<br>
  * This library is maintained, improved and extended by:
  * <ul><li>Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)</li>
  *     <li>Lionel Debroux     (lionel_debroux@yahoo.fr)</li>
- *     <li>Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume</li>
+ *     <li>Julien Richard-Foy a.k.a jachiechan / Sasume</li>
  *     <li>many contributors  (e.g. Geoffrey Anneheim a.k.a geogeo, many others)</li>
  * </ul>
  */
@@ -63,50 +86,27 @@
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Preshifted sprite functions: helper functions to create semi-preshifted
-// sprites from B/W and gray non-masked interlaced 8x8 and 16x16 sprites;
-// non-clipped OR and XOR macros (to save branches) with completely unrolled
-// loops drawing those semi-preshifted sprites. This extreme brute force
-// squeezes out nearly 900 sprites/sec (about half for function -> macro,
-// half for extreme loop unrolling), but costs more than 200 bytes for each
-// call to GrayPSprite16x16_OR_R !
-//
-// Only 1 shifting out of 2 is precomputed: this of course decreases average
-// brute force performance if preshifted sprites are displayed at odd
-// coordinates (not if they're displayed at even coordinates). However,
-// semi-preshifted sprites remain significantly faster than equivalent
-// GraySpriteX functions on average, and completely preshifted sprites take
-// an insane amount of memory (2K per 16x16 preshifted grayscale sprite)
-// which makes them merely unusable (only 31 16x16 preshifted grayscale
-// sprites per 65518 bytes block !). Semi-preshifted sprites allow for 63
-// preshifted 16x16 grayscale sprites per 65518 bytes block.
-// Anyway, as you can see in the documentation, there is hardly ever ANY
-// game that couldn't be done with normal sprites or a tilemap engine.
-// Think that using simpler modes + background save / restore can be smarter
-// than always redrawing everything.
-//
-// Semi-preshifted 8x8 sprites are written so as to take advantage of 1 word
-// being enough for 4 shiftings out of 8. This allows for 170 preshifted 8x8
-// grayscale sprites per 65518 bytes block.
-//
-// Credits go to PpHd for the movem.l (sprt)+,d0-d7; or.l d0...d7,(dest)+
-// trick, taken in GenLib. It is roughly as fast as repeated 2-instruction
-// move / or sequences, with a simple test code (it might be slightly slower
-// with real-life programs, since it clobbers more registers, I don't know),
-// but it is significantly smaller.
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+///! \defgroup preshift Semi-preshifted sprites support
+//@{
+//! Size of the buffer for a 8x8 semi-preshifted B/W sprite.
 #define SIZE_OF_PSPRITE8x8    (1*(8*(4*2+4*4)))
-#define SIZE_OF_PGSPRITE8x8   (2*(8*(4*2+4*4)))
+//! Size of the buffer for a 8x8 semi-preshifted grayscale sprite.
+#define SIZE_OF_PGSPRITE8x8   (2*SIZE_OF_PGSPRITE8x8)
+//! Size of the buffer for a 16x16 semi-preshifted B/W sprite.
 #define SIZE_OF_PSPRITE16x16  (1*(16*(8*4)))
-#define SIZE_OF_PGSPRITE16x16 (2*(16*(8*4)))
+//! Size of the buffer for a 16x16 semi-preshifted grayscale sprite.
+#define SIZE_OF_PGSPRITE16x16 (2*SIZE_OF_PSPRITE16x16)
 //--BEGIN_FUNCTION_PROTOTYPES--//
 //extern void PreshiftSprite8x8(register const unsigned char *src asm("%a0"),register unsigned long *dest asm("%a1"));
+//! Preshift 16x16 B/W sprite pointed to by \a src to buffer of size \ref SIZE_OF_PSPRITE16x16 pointed to by \a dest.
 void PreshiftSprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
 //extern void PreshiftGrayISprite8x8(register unsigned char *src asm("%a0"),register unsigned long *dest asm("%a1"));
+//! Preshift 16x16 grayscale sprite pointed to by \a src to buffer of size \ref SIZE_OF_PGSPRITE16x16 pointed to by \a dest.
 void PreshiftGrayISprite16x16(register const unsigned short *src asm("%a0"),register unsigned long *dest asm("%a1"));
 //--END_FUNCTION_PROTOTYPES--//
 
+//! OR the 16x16 semi-preshifted B/W sprite pointed to by \a sprt at (\a x, \a y) in 240-pixel-wide plane \a dest.
 #define PSprite16x16_OR_R(x,y,sprt,dest)\
 asm("movem.l %%d5-%%d7,-(%%sp);\
     move.w   %0,%%d0;\
@@ -186,6 +186,7 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest) : "d0","d1","d2","d3","d4","a0","a1","cc");
 
+//! XOR the 16x16 semi-preshifted B/W sprite pointed to by \a sprt at (\a x, \a y) in 240-pixel-wide plane \a dest.
 #define PSprite16x16_XOR_R(x,y,sprt,dest)\
 asm("movem.l %%d5-%%d7,-(%%sp);\
     move.w   %0,%%d0;\
@@ -265,6 +266,8 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest) : "d0","d1","d2","d3","d4","a0","a1","cc");
 
+
+//! OR the 16x16 semi-preshifted Bgrayscale sprite pointed to by \a sprt at (\a x, \a y) in 240-pixel-wide planes \a dest and \a dest1.
 #define GrayPSprite16x16_OR_R(x,y,sprt,dest0,dest1)\
 asm("movem.l %%d5-%%d7,-(%%sp);\
     move.w   %0,%%d0;\
@@ -398,6 +401,7 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest0),"a"(dest1) : "d0","d1","d2","d3","d4","a0","a1","a2","cc");
 
+//! XOR the 16x16 semi-preshifted Bgrayscale sprite pointed to by \a sprt at (\a x, \a y) in 240-pixel-wide planes \a dest and \a dest1.
 #define GrayPSprite16x16_XOR_R(x,y,sprt,dest0,dest1)\
 asm("movem.l %%d5-%%d7,-(%%sp);\
     move.w   %0,%%d0;\
@@ -530,5 +534,7 @@ asm("movem.l %%d5-%%d7,-(%%sp);\
 0:\
     movem.l  (%%sp)+,%%d5-%%d7;\
 " : : "d"(x),"d"(y),"a"(sprt),"a"(dest0),"a"(dest1) : "d0","d1","d2","d3","d4","a0","a1","a2","cc");
+
+//@}
 
 #endif

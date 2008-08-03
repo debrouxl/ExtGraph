@@ -1,16 +1,20 @@
 //*****************************************************************************
 /** \file tilemap.h
- * EXTGRAPH v2.00 Beta 6 - Tilemap Engine v0.4 <br>
- * Copyright (c) 2002-2004 Julien Richard-Foy<br>
- *<br>
- * \brief ExtGraph is a compile-time library which contains <b>speed-optimized graphics
+ * \brief This file contains definitions for the tilemap engine part of the ExtGraph library.
+ *
+ * ExtGraph is a compile-time library which contains <b>speed-optimized graphics
  * functions</b> for the TIGCC cross-compiler for TI-89, TI-89T, TI-92+ and TI-V200
  * (collectively known as TI-68k calculators).
  *
+ * The <b>tilemap engine</b> has its own non-Doxygen documentation, see <a href="../../Tilemap/English/index.html">the English-speaking version</a>
+ * or <a href="../../Tilemap/Francais/index.html">the French-speaking version</a>.
+ *
+ * \version 2.00 Beta 6 (Tilemap Engine v0.4)
+ * \copyright Copyright (c) 2002-2004 Julien Richard-Foy<br>
  * This library is maintained, improved and extended by:
  * <ul><li>Thomas Nussbaumer  (thomas.nussbaumer@gmx.net)</li>
  *     <li>Lionel Debroux     (lionel_debroux@yahoo.fr)</li>
- *     <li>Julien Richard-Foy (julien.rf@wanadoo.fr) a.k.a jachiechan / Sasume</li>
+ *     <li>Julien Richard-Foy a.k.a jachiechan / Sasume</li>
  *     <li>many contributors  (e.g. Geoffrey Anneheim a.k.a geogeo, many others)</li>
  * </ul>
  */
