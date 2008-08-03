@@ -35,7 +35,7 @@
 #define MAP_WIDTH 16
 
 // Contains map of tiles.
-unsigned char map_base[10][MAP_WIDTH]={
+static const unsigned char map_base[10][MAP_WIDTH]={
 {02,03, 8, 8, 8,02,02,04,05,02,11,00,00,00,00,00},
 {02,02,02,02, 8,02,02,06,07,02,13,12,12,19,00,00},
 {02,02,02,01, 8,02,02,02,02,02,02,02,01,13,19,00},
@@ -49,7 +49,7 @@ unsigned char map_base[10][MAP_WIDTH]={
 };
 
 // Contains sprites for tile map. Taken from xtile by Scott Noveck.
-short sprts[][32] = {
+static const short sprts[][32] = {
 // 0 : Water
 {0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000,0xFFFF,0x0000,0xCFCF,0x0000,0x8383,0x0000,0x3838,0x0000,0xFFFF,0x0000,0x1F1F,0x0000,0x4C4C,0x0000,0xE1E1,0x0000},	//Water1
 // 4 : Flower
@@ -82,7 +82,9 @@ short sprts[][32] = {
 {0xA5C3,0xC33F,0x45C3,0x833F,0x8D83,0x037F,0x1983,0x077F,0x7383,0x0F7F,0xC6C7,0x3F3F,0x0DC7,0xFE3F,0xF6C7,0xF83F,0x1F83,0xE07F,0xF803,0x07FF,0xE003,0x1FFF,0x0003,0xFFFF,0x2003,0xFFFF,0x0007,0xFFFE,0x071E,0xFFFC,0xFFFD,0xFFF8},	//Edge20
 };
 
-short sprite[32] =
+static const unsigned char sprite_8[2*8] = {0x81,0x55,0x43,0xAA,0x27,0x55,0x1F,0xAA,0x1F,0x55,0x3E,0xAA,0x7C,0x54,0xF8,0xA8};
+
+static const unsigned short sprite_16[2*16] =
 {
 0b0000011111100000,0b0000011111100000,
 0b0001100000011000,0b0001111111111000,
@@ -102,6 +104,11 @@ short sprite[32] =
 0b0000011111100000,0b0000011111100000
 };
 
+static const unsigned long sprite_32[2*32]  = {0x80000001,0x55555555,0x40000003,0xAAAAAAAA,0x20000007,0x55555555,0x1000000F,0xAAAAAAAA,0x0000001F,0x55555555,0x0000003F,0xAAAAAAAA,0x0000007F,0x55555555,0x000000FF,0xAAAAAAAA,0x000001FF,0x55555555,0x000003FF,0xAAAAAAAA,0x000007FF,0x55555555,0x00000FFF,0xAAAAAAAA,0x00001FFF,0x55555555,0x00003FFF,0xAAAAAAAA,0x00007FFF,0x55555555,0x0000FFFF,0xAAAAAAAA,0x0001FFFF,0x55555555,0x0003FFFF,0xAAAAAAAA,0x0007FFFF,0x55555555,0x000FFFFF,0xAAAAAAAA,0x001FFFFF,0x55555555,0x003FFFFF,0xAAAAAAAA,0x007FFFFF,0x55555555,0x00FFFFFF,0xAAAAAAAA,0x01FFFFFF,0x55555555,0x03FFFFFF,0xAAAAAAAA,0x07FFFFFF,0x55555555,0x0FFFFFFF,0xAAAAAAAA,0x1FFFFFFF,0x55555555,0x3FFFFFFE,0xAAAAAAAA,0x7FFFFFFC,0x55555554,0xFFFFFFF8,0xAAAAAAA8};
+
+
+static unsigned short mode = 0;
+
 
 #define HEIGHT 128
 #define WIDTH  240
@@ -111,41 +118,98 @@ short sprite[32] =
 
 static void DrawSprites(register const unsigned short sx asm("%d3"), register const unsigned short sy asm("%d4")) {
   short i;
-  for (i = 0; i < 4; i++) {
-    GrayClipISprite16_TRANW_R(sx,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-    GrayClipISprite16_TRANW_R(sx+60,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-    GrayClipISprite16_TRANW_R(sx+120,sy+24*i,16,sprite,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+  if (!mode) {
+    for (i = 0; i < 3; i++) {
+      GrayClipISprite8_TRANW_R(sx,sy+32*i,8,sprite_8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite8_TRANB_R(sx+40,sy+32*i,8,sprite_8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite8_OR_R(sx+80,sy+32*i,8,sprite_8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite8_XOR_R(sx+120,sy+32*i,8,sprite_8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
+  }
+  else if (mode == 1) {
+    for (i = 0; i < 3; i++) {
+      GrayClipISprite16_TRANW_R(sx,sy+32*i,16,sprite_16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite16_TRANB_R(sx+40,sy+32*i,16,sprite_16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite16_OR_R(sx+80,sy+32*i,16,sprite_16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite16_XOR_R(sx+120,sy+32*i,16,sprite_16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
+  }
+  else {
+    for (i = 0; i < 3; i++) {
+      GrayClipISprite32_TRANW_R(sx,sy+32*i,32,sprite_32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite32_TRANB_R(sx+40,sy+32*i,32,sprite_32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite32_OR_R(sx+80,sy+32*i,32,sprite_32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayClipISprite32_OR_R(sx+120,sy+32*i,32,sprite_32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
   }
 }
 
-static void RestoreBackground(register unsigned short * const savebackground asm("%a2")) {
+static void RestoreBackground(register unsigned short * const savebackground asm("%a3")) {
   short i;
-  for (i = 0; i < 4; i++) {
-    GrayFastPutBkgrnd16_R(&savebackground[i*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-    GrayFastPutBkgrnd16_R(&savebackground[(i+4)*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
-    GrayFastPutBkgrnd16_R(&savebackground[(i+8)*((8*16+6)/2)],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+  if (!mode) {
+    for (i = 0; i < 3; i++) {
+      GrayFastPutBkgrnd8_R(&savebackground[i*FGBKGRND8_BUFSIZE(8)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd8_R(&savebackground[(i+3)*FGBKGRND8_BUFSIZE(8)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd8_R(&savebackground[(i+6)*FGBKGRND8_BUFSIZE(8)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd8_R(&savebackground[(i+9)*FGBKGRND8_BUFSIZE(8)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
+  }
+  else if (mode == 1) {
+    for (i = 0; i < 3; i++) {
+      GrayFastPutBkgrnd16_R(&savebackground[i*FGBKGRND16_BUFSIZE(16)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd16_R(&savebackground[(i+3)*FGBKGRND16_BUFSIZE(16)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd16_R(&savebackground[(i+6)*FGBKGRND16_BUFSIZE(16)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd16_R(&savebackground[(i+9)*FGBKGRND16_BUFSIZE(16)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
+  }
+  else {
+    for (i = 0; i < 3; i++) {
+      GrayFastPutBkgrnd32_R(&savebackground[i*FGBKGRND32_BUFSIZE(32)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd32_R(&savebackground[(i+3)*FGBKGRND32_BUFSIZE(32)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd32_R(&savebackground[(i+6)*FGBKGRND32_BUFSIZE(32)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+      GrayFastPutBkgrnd32_R(&savebackground[(i+9)*FGBKGRND32_BUFSIZE(32)/2],GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE));
+    }
   }
 }
 
-static void SaveBackground(register const unsigned short sx asm("%d3"), register const unsigned short sy asm("%d4"), register unsigned short * const savebackground asm("%a2")) {
+static void SaveBackground(register const unsigned short sx asm("%d3"), register const unsigned short sy asm("%d4"), register unsigned short * const savebackground asm("%a3")) {
   short i = 0;
   // Save background.
-  for (i = 0; i < 4; i++) {
-    GrayFastGetBkgrnd16_R(sx,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*((8*16+6)/2)]);
-    GrayFastGetBkgrnd16_R(sx+60,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+4)*((8*16+6)/2)]);
-    GrayFastGetBkgrnd16_R(sx+120,sy+24*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+8)*((8*16+6)/2)]);
+  if (!mode) {
+    for (i = 0; i < 3; i++) {
+      GrayFastGetBkgrnd8_R(sx,sy+32*i,8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*FGBKGRND8_BUFSIZE(8)/2]);
+      GrayFastGetBkgrnd8_R(sx+40,sy+32*i,8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+3)*FGBKGRND8_BUFSIZE(8)/2]);
+      GrayFastGetBkgrnd8_R(sx+80,sy+32*i,8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+6)*FGBKGRND8_BUFSIZE(8)/2]);
+      GrayFastGetBkgrnd8_R(sx+120,sy+32*i,8,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+9)*FGBKGRND8_BUFSIZE(8)/2]);
+    }
+  }
+  else if (mode == 1) {
+    for (i = 0; i < 3; i++) {
+      GrayFastGetBkgrnd16_R(sx,sy+32*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*FGBKGRND16_BUFSIZE(16)/2]);
+      GrayFastGetBkgrnd16_R(sx+40,sy+32*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+3)*FGBKGRND16_BUFSIZE(16)/2]);
+      GrayFastGetBkgrnd16_R(sx+80,sy+32*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+6)*FGBKGRND16_BUFSIZE(16)/2]);
+      GrayFastGetBkgrnd16_R(sx+120,sy+32*i,16,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+9)*FGBKGRND16_BUFSIZE(16)/2]);
+    }
+  }
+  else {
+    for (i = 0; i < 3; i++) {
+      GrayFastGetBkgrnd32_R(sx,sy+32*i,32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[i*FGBKGRND32_BUFSIZE(32)/2]);
+      GrayFastGetBkgrnd32_R(sx+40,sy+32*i,32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+3)*FGBKGRND32_BUFSIZE(32)/2]);
+      GrayFastGetBkgrnd32_R(sx+80,sy+32*i,32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+6)*FGBKGRND32_BUFSIZE(32)/2]);
+      GrayFastGetBkgrnd32_R(sx+120,sy+32*i,32,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),&savebackground[(i+9)*FGBKGRND32_BUFSIZE(32)/2]);
+    }
   }
 }
 
 // If behaviour == 0, always redraw everything.
 // If behaviour != 0, redraw everything only if necessary.
 static short RenderMap(Plane *plane, void *dest, short behaviour) {
-  unsigned short x=0,y=0,seq=0;
-  register unsigned short sx asm("%d3") = 16;
+  unsigned short x=0,y=0,seq=0,count=0;
+  register unsigned short sx asm("%d3") = 8;
   register unsigned short sy asm("%d4") = 8;
-  unsigned short mov=0,flag=0;
-  unsigned short savebackground[NR_SPRITES*((8*16+6)/2)];
-  register unsigned short *pSavebackground asm("%a2") = savebackground;
+  unsigned short mov=0;
+  unsigned short savebackground[NR_SPRITES*FGBKGRND32_BUFSIZE(32)/2];
+  register unsigned short *pSavebackground asm("%a3") = savebackground;
 
   DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
   SaveBackground(sx,sy,pSavebackground);
@@ -159,11 +223,11 @@ static short RenderMap(Plane *plane, void *dest, short behaviour) {
     if (OSTimerExpired(USER_TIMER)) {
       // Timer has expired, so we have to move the background.
       if (mov == 0) {
-        if (x < 16*16-WIDTH) x++;
+        if (x < 16*16-WIDTH-1) x++;
         else mov++;
       }
       else if (mov == 1) {
-        if (y < 16*10-HEIGHT) y++;
+        if (y < 16*10-HEIGHT-1) y++;
         else mov++;
       }
       else if (mov == 2) {
@@ -177,26 +241,22 @@ static short RenderMap(Plane *plane, void *dest, short behaviour) {
 
       OSTimerRestart(USER_TIMER);
       // Don't forget to reinitialize the buffers !
-      flag = 1;
-      DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
-      SaveBackground(sx,sy,pSavebackground);
+      if (behaviour) {
+        DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
+        SaveBackground(sx,sy,pSavebackground);
+      }
+      continue;
     }
     
-    if (!behaviour && !flag) { // Don't redraw plane twice...
+    if (!behaviour) {
       DrawPlane(x,y,plane,dest,TM_GRPLC,TM_G16B);
     }
-    if (behaviour && !flag) { // Don't restore if just moved.
+    else {
       RestoreBackground(pSavebackground);
     }
 
     // Move sprites.
-    /*switch (seq&3) {
-      case 0: sx++;       break;
-      case 1: sy++;       break;
-      case 2: sx--;       break;
-      case 3: sy--; break;
-    }*/
-    switch (seq%9) {
+    switch (seq) {
       case 0: sx++;       break;
       case 1: sy++;       break;
       case 2: sx--;       break;
@@ -208,19 +268,19 @@ static short RenderMap(Plane *plane, void *dest, short behaviour) {
       case 8: sy++, sx--; break;
     }
 
-    if (behaviour && !flag) { // Don't save if just moved
+    if (behaviour) { // Don't save if just moved
       SaveBackground(sx,sy,pSavebackground);
     }
 
     DrawSprites(sx,sy);
 
-    seq++;
+    (++seq==9)?seq=0:seq;
+    count++;
 
-    flag = 0;
   } while (!(OSTimerExpired(1)));
   OSFreeTimer(USER_TIMER);
   OSFreeTimer(1);
-  return seq;
+  return count;
 }
 
 
@@ -248,29 +308,27 @@ void _main(void) {
 
   SetIntVec(AUTO_INT_1,DUMMY_HANDLER);
 
-  if(GrayOn())
-  {
-    frame1 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),0);
-    /*asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
-    while (!(_rowread(0xF000)&0xFF));*/
-    GrayOff();
+  // Test "8", "16" and "32" drawing functions.
+  for (mode = 0; mode < 3; mode++) {
+    if (GrayOn())
+    {
+      frame1 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),0);
+
+      frame2 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),1);
+      GrayOff();
+
+      SetIntVec(AUTO_INT_1,ai1);
+
+      sprintf(s,"redraw:%d save&restore:%d (higher=faster)",frame1,frame2);
+      ClrScr();
+    }
+    else {
+      strcpy(s,"Grayscale init failed");
+    }
+    ST_helpMsg(s);
+    while (!(_rowread(0xF000)&0xFF));
+    asm("move.l #0x17FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
   }
-
-  if(GrayOn())
-  {
-    frame2 = RenderMap(&plane,GrayGetPlane(DARK_PLANE),1);
-    /*asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
-    while (!(_rowread(0xF000)&0xFF));*/
-    GrayOff();
-  }
-
-  SetIntVec(AUTO_INT_1,ai1);
-
-  sprintf(s,"redraw:%d save&restore:%d (higher=faster)",frame1,frame2);
-  ClrScr();
-  ST_helpMsg(s);
-  while (!(_rowread(0xF000)&0xFF));
-  asm("move.l #0x17FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
 
   free(block);
   GKeyFlush();

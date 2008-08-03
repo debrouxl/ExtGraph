@@ -1473,10 +1473,10 @@ void CreateISpriteShadow32_R(unsigned short height asm("%d0"), const unsigned lo
  * See demo22 and <a href="../../ExtGraph/comparison.html">this page of the documentation</a> for hints about such situations.
  *
  * \warning
- * <ul><li>(Clip)FastGetBkgrnd8/16_R require dest being at least 4*h+6 bytes long</li>
- * <li>(Clip)FastGetBkgrnd32_R require dest being at least 6*h+6 bytes long</li>
- * <li>Gray(Clip)FastGetBkgrnd8/16_R require dest being at least 8*h+6 bytes long</li>
- * <li>Gray(Glip)FastGetBkgrnd32_R require dest being at least 12*h+6 bytes long</li></ul>
+ * <ul><li>(Clip)FastGetBkgrnd8/16_R require dest being at least 4*<i>height</i>+6 bytes long (see \ref FBKGRND8_BUFSIZE and \ref FBKGRND16_BUFSIZE macros)</li>
+ * <li>(Clip)FastGetBkgrnd32_R require dest being at least 6*<i>height</i>+6 bytes long (see \ref FBKGRND32_BUFSIZE macro)</li>
+ * <li>Gray(Clip)FastGetBkgrnd8/16_R require dest being at least 8*<i>height</i>+6 bytes long (see \ref FGBKGRND8_BUFSIZE and \ref FGBKGRND16_BUFSIZE macros)</li>
+ * <li>Gray(Glip)FastGetBkgrnd32_R require dest being at least 12*<i>height</i>+6 bytes long (see \ref FGBKGRND32_BUFSIZE macro)</li></ul>
  *
  * Special thanks go to Julien Richard-Foy: he needed such functions for one
  * of his own projects. Mine were not exactly what he was looking for, but
@@ -1502,6 +1502,25 @@ void GrayFastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d
 void GrayFastPutBkgrnd8_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 void GrayFastPutBkgrnd16_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
+
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd8_R
+//! \since 2.00 Beta 6
+#define FBKGRND8_BUFSIZE(h)   (4*(h)+6)
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd16_R
+//! \since 2.00 Beta 6
+#define FBKGRND16_BUFSIZE(h)  (4*(h)+6)
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref FastGetBkgrnd32_R
+//! \since 2.00 Beta 6
+#define FBKGRND32_BUFSIZE(h)  (6*(h)+6)
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd8_R
+//! \since 2.00 Beta 6
+#define FGBKGRND8_BUFSIZE(h)  (8*(h)+6)
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd16_R
+//! \since 2.00 Beta 6
+#define FGBKGRND16_BUFSIZE(h) (8*(h)+6)
+//! Size of buffer for a <i>h</i>-pixel-high sprite retrieved by \ref GrayFastGetBkgrnd32_R
+//! \since 2.00 Beta 6
+#define FGBKGRND32_BUFSIZE(h) (12*(h)+6)
 //@}
 
 
