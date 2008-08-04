@@ -1,4 +1,4 @@
-| C prototype: void Sprite16_XOR(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, void *dest) __attribute__((__stkparm__));
+| C prototype: void Sprite16_XOR(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, void *dest) __attribute__((__stkparm__));
 |
 | This routine is faster (about 10%) than the previous C routine, because the
 | algorithm was changed.

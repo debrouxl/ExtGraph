@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, const unsigned char *mask, unsigned short bytewidth, void *dest) __attribute__((__stkparm__));
+| C prototype: void SpriteX8_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char *mask, unsigned short bytewidth, void *dest) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
 .text

@@ -1,4 +1,4 @@
-| C prototype: void GraySprite16_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned short* sprite1, const unsigned short* sprite2, const unsigned short* mask1, const unsigned short* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
+| C prototype: void GraySprite16_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned short* sprite1, const unsigned short* sprite2, const unsigned short* mask1, const unsigned short* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite16_MASK

@@ -1,4 +1,4 @@
-| C prototype: void GraySprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char* sprite1, const unsigned char* sprite2, const unsigned char maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
+| C prototype: void GraySprite8_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned char* sprite1, const unsigned char* sprite2, const unsigned char maskval, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite8_BLIT

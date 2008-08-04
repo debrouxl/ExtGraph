@@ -1,4 +1,4 @@
-| C prototype: void SpriteX8Get(unsigned short x, unsigned short y, unsigned short h, void* src, unsigned char* dest, unsigned short bytewidth) __attribute__((__stkparm__));
+| C prototype: void SpriteX8Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned char* dest, unsigned short bytewidth) __attribute__((__stkparm__));
 
 .text
 .globl SpriteX8Get

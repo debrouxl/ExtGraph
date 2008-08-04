@@ -1,4 +1,4 @@
-| C prototype: void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned short *sprt, const unsigned short maskval, void *dest) __attribute__((__stkparm__));
+| C prototype: void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, const unsigned short maskval, void *dest) __attribute__((__stkparm__));
 
 .text
 .globl Sprite16_BLIT

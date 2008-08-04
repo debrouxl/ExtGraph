@@ -17,7 +17,7 @@
  * unusable (only 31 16x16 preshifted grayscale sprites per 65518 bytes block !).</li></ul>
  * Semi-preshifted sprites allow for 63 preshifted 16x16 grayscale sprites per 65518 bytes block.
  *
- * Anyway, as you can see in <a href="../../ExtGraph/comparison.html>the comparison of different approaches</a>, games that just couldn't be
+ * Anyway, as you can see in <a href="../../ExtGraph/comparison.html">the comparison of different approaches</a>, games that just couldn't be
  * done with normal sprites or a tilemap engine are scarce. Think that using simpler modes + background save / restore can be smarter than
  * always redrawing everything.
 

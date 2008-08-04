@@ -1,4 +1,4 @@
-| C prototype: void ClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
+| C prototype: void ClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0"));
 
 .text
 .globl ClipSprite8_RPLC_R

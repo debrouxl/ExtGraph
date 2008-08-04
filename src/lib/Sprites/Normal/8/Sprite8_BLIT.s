@@ -1,4 +1,4 @@
-| C prototype: void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short h, const unsigned char *sprt, const unsigned char maskval, void *dest) __attribute__((__stkparm__));
+| C prototype: void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char maskval, void *dest) __attribute__((__stkparm__));
 
 .text
 .globl Sprite8_BLIT

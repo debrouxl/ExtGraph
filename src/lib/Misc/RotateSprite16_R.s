@@ -1,4 +1,4 @@
-| C prototype: void RotateSprite16_R(unsigned short *srcSprite asm("%a0"), unsigned short *destSprite asm("%a1"), unsigned short height, short originX asm("%d1"), short originY asm("%d2"), long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
+| C prototype: void RotateSprite16_R(const unsigned short *src asm("%a0"), unsigned short *dest asm("%a1"), unsigned short height, short originX asm("%d1"), short originY asm("%d2"), long degreesClockwise asm("%d0")) __attribute__((__stkparm__));
 |
 | Courtesy of Joey Adams.
 | Modified by Lionel Debroux:

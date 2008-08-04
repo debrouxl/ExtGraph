@@ -1,4 +1,4 @@
-| C prototype: void Sprite32_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned long *sprt, const unsigned long *mask, void *dest) __attribute__((__stkparm__));
+| C prototype: void Sprite32_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, const unsigned long *mask, void *dest) __attribute__((__stkparm__));
 
 .text
 .globl Sprite32_MASK

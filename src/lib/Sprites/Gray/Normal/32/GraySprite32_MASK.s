@@ -1,4 +1,4 @@
-| C prototype: void GraySprite32_MASK(unsigned short x, unsigned short y, unsigned short h, const unsigned long* sprite1, const unsigned long* sprite2, const unsigned long* mask1, const unsigned long* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
+| C prototype: void GraySprite32_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned long* sprite1, const unsigned long* sprite2, const unsigned long* mask1, const unsigned long* mask2, void* dest1, void* dest2) __attribute__((__stkparm__));
 
 .text
 .globl GraySprite32_MASK

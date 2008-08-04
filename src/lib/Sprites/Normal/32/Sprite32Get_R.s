@@ -1,4 +1,4 @@
-| C prototype: void Sprite32Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short h asm("%d2"), void* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__));
+| C prototype: void Sprite32Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__));
 |
 | This routine is faster (about 30%) than the previous C routine, because the
 | algorithm was changed.

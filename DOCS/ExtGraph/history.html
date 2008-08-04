@@ -2,7 +2,7 @@
 <HTML lang="en">
 <HEAD>
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<TITLE>Library ExtGraph Documentation</TITLE>
+<TITLE>Library ExtGraph Documentation - History</TITLE>
 <link rel="stylesheet" type="text/css" media="screen, projection" href="../style.css">
 </HEAD>
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" ALINK="#FF0000" VLINK="#0000FF">
@@ -19,7 +19,7 @@
                                         the hundreds of .c and .s files (and make a bit of checking to make it much harder
                                         to make the Scale1Plane160to240_R missing/wrong label mistake again). To make my
                                         life easier, I renamed several dozens of files.</td></tr>
-<tr><td>           </td><td>          </td><td>Replaced the woefully outdated hand-edited documentation of library
+<tr><td>           </td><td>          </td><td>Replaced the woefully outdated and incomplete hand-edited documentation of library
                                         functions by Doxygen-generated documentation. I stumbled across the nice tool
                                         Doxygen after the last significant updates to the ExtGraph documentation...</td></tr>
 <tr><td>           </td><td>          </td><td>Fixed bugs that prevented preshifted sprite macros from being used twice in
@@ -33,8 +33,9 @@
 <tr><td>           </td><td>          </td><td>... CreateISpriteShadow32_R was broken anyway, and that was never reported
                                         to me, so I'm not so sure that the Create(I)Sprite(I)Shadow routines are
                                         widely used.</td></tr>
-<tr><td>           </td><td>          </td><td>Start increasing test coverage of the demos, find and fix several bugs in the
-                                        process. The coverage needs to be increased further.</td></tr>
+<tr><td>           </td><td>          </td><td>Start increasing test coverage of the demos (using a Perl script to flag unused
+                                        functions), find and fix several bugs in the process.
+                                        The coverage needs to be increased further.</td></tr>
 <tr><td>2.00 Beta 5</td><td>27/07/2008</td><td>Fixed silly bugs on <strong>pixel macros</strong> (yes, once more !).
                                         Credits go to Sebastian and Kevin for the fixes (escape one of
                                         the question marks that form trigraph ??!, etc.).</td></tr>

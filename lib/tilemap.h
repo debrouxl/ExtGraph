@@ -49,38 +49,40 @@
 #define BIG_VSCREEN_WIDTH 272
 #define BIG_VSCREEN_HEIGHT 160
 
-// Structures
+//! Structure for describing a tilemap plane, used by high-level DrawPlane functions.
 typedef struct
 {
-    void *matrix;  // Matrix of tiles
-    unsigned short width;  // Map's width
-    void *sprites; // Sprite array
-    char *big_vscreen;  // Big virtual screen
-    long mask;  // Obsolete (keeped for compability)
-    long reserved;  // Internal utilisation
-    short force_update; // To refresh the big_vscreen
+    void *matrix;  ///< Matrix of tiles
+    unsigned short width;  ///< Map's width
+    void *sprites; ///< Sprite array
+    char *big_vscreen;  ///< Big virtual screen
+    long mask;  ///< Obsolete (kept for compability)
+    long reserved;  ///< Internal utilisation
+    short force_update; ///< To refresh the big_vscreen
 } Plane;
 
+//! Structure for describing a tilemap animated plane, used by high-level DrawAnimatedPlane functions.
 typedef struct
 {
     Plane p;
-    void *tabanim; // Matrix of Animations
-    short nb_anim; // Number of animations
-    short nb_step; // Number of animation's steps
-    short step; // Current step number
-    short step_length; // Length of a step (in frames)
-    short frame; // Current frame number of the current step
+    void *tabanim; ///< Matrix of Animations
+    short nb_anim; ///< Number of animations
+    short nb_step; ///< Number of animation's steps
+    short step; ///< Current step number
+    short step_length; ///< Length of a step (in frames)
+    short frame; ///< Current frame number of the current step
 } AnimatedPlane;
 
 //typedef void (*TM_Type)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"));
 //typedef void (*TM_AnimType)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"),void* asm("%a3"));
 //typedef void (*TM_TilesType)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"));
+//! Function pointer used as callback in high-level DrawPlane and DrawAnimatedPlane functions.
 typedef void (*TM_Mode)(void* asm("%a0"),short asm("%d0"),short asm("%d1"),void* asm("%a1"));
 
 
 // Prototypes des fonctions de la librairie
-// RefreshBuffer
 //--BEGIN_FUNCTION_PROTOTYPES--//
+// RefreshBuffer
 void RefreshBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 void RefreshBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 void RefreshBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));

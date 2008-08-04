@@ -1,4 +1,4 @@
-| C prototype: void ClipSprite32Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short h asm("%d2"), void *dest asm("%a0"), unsigned long *sprt asm("%a1"));
+| C prototype: void ClipSprite32Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), void *dest asm("%a0"), unsigned long *sprt asm("%a1"));
 
 .text
 .globl ClipSprite32Get_R
