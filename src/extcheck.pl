@@ -217,21 +217,35 @@ sub parseheader ($; $) {
         File::Find::find({wanted => \&library, no_chdir => 1}, './lib');
 
         for my $key (sort keys %funcs) {
-            print "Found no implementation for function $key\n";
+            unless (index($key, 'TM_') == 0) {
+                print "Found no implementation for function $key\n";
+            }
         }
     }
     elsif ($ARGV[0] eq '--coverage') {
         # Read header files.
         parseheader "../lib/extgraph.h", 1;
-        parseheader "../lib/tilemap.h", 1; # TODO: improve script so that less false negatives are triggered by this one...
+        parseheader "../lib/tilemap.h", 1;
         parseheader "../lib/preshift.h", 1;
 
         # Traverse desired filesystem
         File::Find::find({wanted => \&demos, no_chdir => 1}, './demos');
 
         for my $key (sort keys %funcs) {
-            if (index($key, 'TM_') != 0) {
+            unless (index($key, 'TM_') == 0) {
                 print "Found no test for function $key\n";
             }
         }
+    }
+    elsif ($ARGV[0] eq '--completeness') {
+        # Read header files.
+        parseheader "../lib/extgraph.h", 1;
+        parseheader "../lib/tilemap.h", 1;
+        parseheader "../lib/preshift.h", 1;
+
+        #parsetpr "lib/extgraph.tpr";
+        #parsetpr "lib/TileMap/TileMap.tpr";
+
+        # Print list of functions found in headers but not in TPRs (except several well-known grayutils).
+        # Print list of functions found in TPRs but not in headers.
     }

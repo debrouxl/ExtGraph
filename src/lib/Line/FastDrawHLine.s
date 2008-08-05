@@ -1,4 +1,4 @@
-| C prototype: void FastDrawHLine(void* plane, short x1, short x2, short y, short mode) __attribute__((__stkparm__));
+| C prototype: void FastDrawHLine(void* plane, unsigned short x1, unsigned short x2, unsigned short y, short mode) __attribute__((__stkparm__));
 | Valid values for mode are: A_REVERSE, A_NORMAL, A_XOR, A_REPLACE, A_OR.
 |
 | This routine draws a horizontal line from (x1;y) to (x2;y).

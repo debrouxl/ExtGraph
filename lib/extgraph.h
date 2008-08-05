@@ -373,37 +373,37 @@ void GrayFillScreen2B_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"),
 
 //! Draw to the given 240x128 planes the rectangle whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1) and (\a x1, \a y1).<br>
 //! color is an element of \ref GrayColors, fill is an element of \ref FillAttrs.
-void GrayDrawRect2B(short x0, short y0, short x1, short y1, short color, short fill, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawRect2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, short fill, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Invert the rectangle whose whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1) and (\a x1, \a y1) in both given 240x128 planes.
-void GrayInvertRect2B(short x0, short y0, short x1, short y1, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayInvertRect2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawLine routine.<br>
 //! color is an element of enum \ref GrayColors.
-void GrayDrawLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawLine2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawClipLine routine.<br>
 //! color is an element of enum \ref GrayColors.
 //! \since 2.00 Beta 6
-void GrayDrawClipLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawClipLine2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the ExtGraph FastDrawLine routine.<br>
 //! color is an element of enum \ref GrayColors.
-void GrayFastDrawLine2B(short x0, short y0, short x1, short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayFastDrawLine2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the line between (x0, y) and (x1, y) in both 240x128 planes given, using the ExtGraph FastDrawHLine routine.<br>
 //! color is an element of enum \ref GrayColors.
-void GrayFastDrawHLine2B(short x0, short x1, short y, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayFastDrawHLine2B(unsigned short x0, unsigned short x1, unsigned short y, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the character c using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawChar routine.
-void GrayDrawChar2B(short x, short y, char c, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawChar2B(unsigned short x, unsigned short y, char c, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawStr routine.
-void GrayDrawStr2B(short x, short y, const char* s, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawStr2B(unsigned short x, unsigned short y, const char* s, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
 //! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawStr routine.<br>
 //! attr can be ORed with the values of enum \ref ExtAttrs for centered drawing and/or drawing with a lighter shadow on the bottom right of the string
-void GrayDrawStrExt2B(short x, short y, const char* s, short attr, short font, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+void GrayDrawStrExt2B(unsigned short x, unsigned short y, const char* s, short attr, short font, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 //@}
 
 //! @defgroup grayutildeprecated Grayscale utility functions, deprecated names
@@ -505,9 +505,9 @@ void ScrollDown240_R(unsigned short* buffer asm("%a0"), unsigned short lines asm
  * <li>the elements of enum \ref GrayColors for \ref GrayFastDrawLine2B_R</li></ul>
  */
 //@{
-void FastDrawLine(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastDrawLine_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux 
-void GrayFastDrawLine2B_R(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux \since 2.00 Beta 5
+void FastDrawLine(void* plane, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, short mode) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux \deprecated __stkparm__ function with equivalent __regparm__ function
+void FastDrawLine_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux 
+void GrayFastDrawLine2B_R(void* plane0 asm("%a0"), void *plane1 asm("%a1"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short color) __attribute__((__stkparm__)); ///< \author Olivier Armand, Lionel Debroux \since 2.00 Beta 5
 //@}
 
 /** @defgroup genericlinesingle Generic line drawing routines, hard-coded drawing mode
@@ -515,9 +515,9 @@ void GrayFastDrawLine2B_R(void* plane0 asm("%a0"), void *plane1 asm("%a1"), shor
  * \brief These routines draw a line from (\a x1, \a y1) to (\a x2, \a y2) in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.
  */
 //@{
-void FastLine_Draw_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
-void FastLine_Erase_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
-void FastLine_Invert_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
+void FastLine_Draw_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
+void FastLine_Erase_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
+void FastLine_Invert_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__)); ///< \author Julien Richard-Foy
 //@}
 
 /** @defgroup horzline Horizontal line drawing routines, multiple drawing modes
@@ -529,9 +529,9 @@ void FastLine_Invert_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
  * <li>the elements of enum \ref GrayColors for \ref GrayFastDrawHLine2B_R</li></ul>
  */
 //@{
-void FastDrawHLine(void* plane, short x1, short x2, short y, short mode) __attribute__((__stkparm__)); ///< Draw horizontal line \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastDrawHLine_R(void* plane asm("a0"), short x1 asm("d0"), short x2 asm("d1"), short y asm("d2"), short mode) __attribute__((__stkparm__));
-void GrayFastDrawHLine2B_R(void *plane0 asm("%a0"), void *plane1 asm("%a1"), short x0 asm("%d0"), short x1 asm("%d1"), short y asm("%d2"), short color asm("%d3")); ///< \since 2.00 Beta 5
+void FastDrawHLine(void* plane, unsigned short x1, unsigned short x2, unsigned short y, short mode) __attribute__((__stkparm__)); ///< Draw horizontal line \deprecated __stkparm__ function with equivalent __regparm__ function
+void FastDrawHLine_R(void* plane asm("a0"), unsigned short x1 asm("d0"), unsigned short x2 asm("d1"), unsigned short y asm("d2"), short mode) __attribute__((__stkparm__));
+void GrayFastDrawHLine2B_R(void *plane0 asm("%a0"), void *plane1 asm("%a1"), unsigned short x1 asm("%d0"), unsigned short x2 asm("%d1"), unsigned short y asm("%d2"), short color asm("%d3")); ///< \since 2.00 Beta 5
 //@}
 
 /** @defgroup vertline Vertical line drawing routines, multiple drawing modes
@@ -542,8 +542,8 @@ void GrayFastDrawHLine2B_R(void *plane0 asm("%a0"), void *plane1 asm("%a1"), sho
  * \todo GrayFastDrawVLine2B_R
  */
 //@{
-void FastDrawVLine(void* plane, short x, short y1, short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastDrawVLine_R(void* plane asm("%a0"), short x asm("%d0"), short y1 asm("%d1"), short y2 asm("%d2"), short mode) __attribute__((__stkparm__));
+void FastDrawVLine(void* plane, unsigned short x, unsigned short y1, unsigned short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void FastDrawVLine_R(void* plane asm("%a0"), unsigned short x asm("%d0"), unsigned short y1 asm("%d1"), unsigned short y2 asm("%d2"), short mode) __attribute__((__stkparm__));
 //@}
 
 
@@ -555,9 +555,9 @@ void FastDrawVLine_R(void* plane asm("%a0"), short x asm("%d0"), short y1 asm("%
  * \since 2.00 Beta 5
  */
 //@{
-char FastTestLine_BE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
-char FastTestLine_LE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
-char FastTestLine_RE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_BE_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_LE_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__));
+char FastTestLine_RE_R(void *plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__));
 //@}
 
 /** @defgroup clipline Line clipping
@@ -578,8 +578,8 @@ char FastTestLine_RE_R(void *plane asm("%a0"), short x1 asm("%d0"), short y1 asm
 //@{
 void * ClipLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1")) __attribute__((__regparm__)); ///< \return a0 = NULL if there's nothing to draw.
 // 
-void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
-void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
+void ClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short mode, void *plane asm("%a0"), void (__attribute__((__stkparm__)) *)(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
+void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), unsigned short *clippedcoord asm("%a1"), short color, void *plane0, void *plane, void (__attribute__((__stkparm__)) *)(void* plane0 asm("%a0"), void *plane1 asm("%a1"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short color)) __attribute__((__stkparm__)); // --TESTS-ClipLine_R--
 //@}
 
 
@@ -597,9 +597,9 @@ void GrayClipDrawLine_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("
  * <li>the elements of enum \ref GrayColors for GrayFastDrawLine2B_R</li></ul>
  */
 //@{
-void FastFillRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastFillRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
-void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastFillRect_R--
+void FastFillRect(void* plane, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, short mode) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void FastFillRect_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
+void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastFillRect_R--
 //@}
 
 /** @defgroup fillrectsingle Rectangle filling functions, hard-coded drawing mode
@@ -607,9 +607,9 @@ void GrayFastFillRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1
  * \brief These routines fill a rectangle whose vertices are (\a x1, \a y1), (\a x2, \a y1), (\a x1, \a y2) and (\a x2, \a y2) in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.
  */
 //@{
-void FastFilledRect_Draw_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__(5)));
-void FastFilledRect_Erase_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__(5)));
-void FastFilledRect_Invert_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__(5)));
+void FastFilledRect_Draw_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__(5)));
+void FastFilledRect_Erase_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__(5)));
+void FastFilledRect_Invert_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__(5)));
 //@}
 
 /** @defgroup outlinerect Rectangle outlining functions, multiple drawing modes
@@ -622,9 +622,9 @@ void FastFilledRect_Invert_R(void* plane asm("%a0"), short x1 asm("%d0"), short 
  */
 //@{
 //! \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastOutlineRect(void* plane, short x1, short y1, short x2, short y2, short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine,FastDrawVLine--
-void FastOutlineRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
-void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
+void FastOutlineRect(void* plane, unsigned short x1, unsigned short y1, unsigned short x2, unsigned short y2, short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine,FastDrawVLine--
+void FastOutlineRect_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
+void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short color) __attribute__((__stkparm__)); // --TESTS-FastDrawHLine_R,FastDrawVLine_R--
 //@}
 
 /** @defgroup fastrect Fast rectangle filling functions for screen-wide widths
@@ -633,19 +633,19 @@ void GrayFastOutlineRect_R(void* dest0 asm("%a0"), void* dest1 asm("%a1"), short
  *
  */
 //@{
-void FastEraseRect160_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
-void FastEraseRect240_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
-void FastFillRect160_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
-void FastFillRect240_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
-void FastInvertRect160_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
-void FastInvertRect240_R(void* plane asm("%a0"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastEraseRect160_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastEraseRect240_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastFillRect160_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastFillRect240_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastInvertRect160_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
+void FastInvertRect240_R(void* plane asm("%a0"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(3)));
 
-void GrayFastEraseRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
-void GrayFastEraseRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
-void GrayFastFillRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
-void GrayFastFillRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
-void GrayFastInvertRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
-void GrayFastInvertRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastEraseRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastEraseRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastFillRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastFillRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastInvertRect2B160_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
+void GrayFastInvertRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm("%a1"), unsigned short starty asm("%d0"), unsigned short lines asm("%d1")) __attribute__((__regparm__(4)));
 //@}
 
 /** @defgroup fastrectx8 Fast rectangle filling functions for widths multiple of 8
@@ -653,9 +653,9 @@ void GrayFastInvertRect2B240_R(void* lightplane asm("%a0"), void* darkplane asm(
  * \brief These routines fill \a lines lines of the (\a bytewidth *8)-pixel-wide rectangle whose top-left corner is at (\a startcol *8, \a starty), in a 240-pixel-wide video plane pointed to by \a plane, with hard-coded drawing mode.<br>
  */
 //@{
-void FastEraseRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
-void FastFillRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
-void FastInvertRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
+void FastEraseRectX8_R(void* plane asm("%a0"), unsigned short startcol asm("%d0"), unsigned short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
+void FastFillRectX8_R(void* plane asm("%a0"), unsigned short startcol asm("%d0"), unsigned short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
+void FastInvertRectX8_R(void* plane asm("%a0"), unsigned short startcol asm("%d0"), unsigned short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
 //@}
 
 
@@ -735,7 +735,7 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
  * to see what I mean.
  */
 //@{
-void FilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
+void FilledTriangle_R(unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), unsigned short x3 asm("%d4"), unsigned short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 void ClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 void GrayFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
 void GrayClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
@@ -818,10 +818,10 @@ void DoubleSpriteDimensions16x16_R(const unsigned short* src asm("%a0"), unsigne
 //@{
 //! Scale 240-pixel-wide plane pointed to by src so that only 160 pixels out of the 240 pixels of each line of dest are used
 //! \author Geoffrey Anneheim
-void Scale1Plane240to160_R(void *src asm("%a0"), void *dest asm("%a1"));
+void Scale1Plane240to160_R(const void *src asm("%a0"), void *dest asm("%a1"));
 //! Scale 160 pixels of a 240-pixel-wide plane so that 240 pixels of each line of dest are used
 //! \author GoldenCrystal
-void Scale1Plane160to240_R(void *src asm("%a0"), void *dest asm("%a1"));
+void Scale1Plane160to240_R(const void *src asm("%a0"), void *dest asm("%a1"));
 //@}
 
 
@@ -836,41 +836,41 @@ void Scale1Plane160to240_R(void *src asm("%a0"), void *dest asm("%a1"));
 //! \warning FastCopyScreen will crash your calculator if \a src points into the archive memory, for example if you try to copy a screen
 //! which is stored in an archived variable. DON'T use FastCopyScreen in this case.
 //! \deprecated __stkparm__ function with equivalent __regparm__ function
-void FastCopyScreen(void* src, void* dest) __attribute__((__stkparm__));
+void FastCopyScreen(const void* src, void* dest) __attribute__((__stkparm__));
 //! Copy 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest, register-parameter-passing version
 //! \note \a src and \a dest must start at an even address.
 //! \warning FastCopyScreen_R will crash your calculator if \a src points into the archive memory, for example if you try to copy a screen
 //! which is stored in an archived variable. DON'T use FastCopyScreen in this case.
-void FastCopyScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastCopyScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //! Copy 160x\a height screen (bytewidth = 20) pointed to by \a src <b>to</b> the upper-left corner of 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
-void FastCopyScreen160to240_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
+void FastCopyScreen160to240_R(unsigned short height asm("%d0"), const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
 //! Copy 160x\a height screen (bytewidth = 20) pointed to by \a src <b>near</b> the center of 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! The upper left corner of 160x\a height data is at (32, 14+(100-\a height)/2), which makes the copy process significantly more efficient than that of \ref FastCopyScreen160to240_R.
 //! \since 2.00 Beta 5
-void FastCopyScreen160to240NC_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
+void FastCopyScreen160to240NC_R(unsigned short height asm("%d0"), const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
 //! AND 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
-void FastANDScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastANDScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //! OR 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
-void FastORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANBScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANDScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANLScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANWScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastORScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+//void FastTRANBScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+//void FastTRANDScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+//void FastTRANLScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+//void FastTRANWScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //! XOR 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
-void FastXORScreen_R(void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
+void FastXORScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //! Invert bits of 240x128 plane pointed to by \a src.
 //! \note \a src must start at an even address.
 //! \since 2.00 Beta 6
-void FastInvertScreen_R(void* src asm("%a0")) __attribute__((__regparm__(1)));
+void FastInvertScreen_R(const void* src asm("%a0")) __attribute__((__regparm__(1)));
 //@}
 
 
@@ -898,13 +898,13 @@ void FastDrawLargeBufferToScreen_R(const void * big_screen asm("%a0"), void * de
  */
 // -----------------------------------------------------------------------------
 //@{
-void FloodFill(short x, short y, unsigned short shade, void* tmpplane, void* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void FloodFill_R(short x, short y, unsigned short shade, void* tmpplane, void* dest) __attribute__((__regparm__(5)));
-void FloodFill_noshade_R (short x, short y, void* tmpplane, void* dest) __attribute__((__regparm__(4)));
+void FloodFill(unsigned short x, unsigned short y, unsigned short shade, void* tmpplane, void* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void FloodFill_R(unsigned short x, unsigned short y, unsigned short shade, void* tmpplane, void* dest) __attribute__((__regparm__(5)));
+void FloodFill_noshade_R (unsigned short x, unsigned short y, void* tmpplane, void* dest) __attribute__((__regparm__(4)));
 
-void FloodFillMF(short x, short y, unsigned short shade, void* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void FloodFillMF_R(short x, short y, unsigned short shade, void* dest) __attribute__((__regparm__(4)));
-void FloodFillMF_noshade_R (short x, short y, void* dest) __attribute__((__regparm__(3)));
+void FloodFillMF(unsigned short x, unsigned short y, unsigned short shade, void* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void FloodFillMF_R(unsigned short x, unsigned short y, unsigned short shade, void* dest) __attribute__((__regparm__(4)));
+void FloodFillMF_noshade_R (unsigned short x, unsigned short y, void* dest) __attribute__((__regparm__(3)));
 //@}
 
 
@@ -939,8 +939,8 @@ void Sprite8_AND(unsigned short x, unsigned short y, unsigned short height, cons
 void Sprite8_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char maskval, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char maskval asm("%d3"), void *dest asm("%a0"));
-void Sprite8Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned char* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void Sprite8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned char* dest asm("%a1")) __attribute__((__regparm__));
+void Sprite8Get(unsigned short x, unsigned short y, unsigned short height, const void* src, unsigned char* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void Sprite8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned char* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite8_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char *mask, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite8_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void Sprite8_OR(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
@@ -954,8 +954,8 @@ void Sprite16_AND(unsigned short x, unsigned short y, unsigned short height, con
 void Sprite16_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, const unsigned short maskval, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite16_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt asm("%a1"), const unsigned short maskval asm("%d3"), void *dest asm("%a0"));
-void Sprite16Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned short* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void Sprite16Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1")) __attribute__((__regparm__));
+void Sprite16Get(unsigned short x, unsigned short y, unsigned short height, const void* src, unsigned short* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void Sprite16Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned short* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite16_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, const unsigned short *mask, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite16_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt asm("%a1"), const unsigned short *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void Sprite16_OR(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
@@ -969,8 +969,8 @@ void Sprite32_AND(unsigned short x, unsigned short y, unsigned short height, con
 void Sprite32_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 void Sprite32_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, const unsigned long maskval, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long maskval asm("%d3"), void *dest asm("%a0"));
-void Sprite32Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned long* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void Sprite32Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__));
+void Sprite32Get(unsigned short x, unsigned short y, unsigned short height, const void* src, unsigned long* dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void Sprite32Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned long* dest asm("%a1")) __attribute__((__regparm__));
 void Sprite32_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, const unsigned long *mask, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void Sprite32_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 void Sprite32_OR(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
@@ -984,8 +984,8 @@ void SpriteX8_AND(unsigned short x, unsigned short y, unsigned short height, con
 void SpriteX8_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
 void SpriteX8_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char *maskval, unsigned short bytewidth, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void SpriteX8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *maskval, unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__stkparm__));
-void SpriteX8Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned char* dest, unsigned short bytewidth) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
-void SpriteX8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void *src asm("%a1"), unsigned char *dest asm("%a0"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__));
+void SpriteX8Get(unsigned short x, unsigned short y, unsigned short height, const void* src, unsigned char* dest, unsigned short bytewidth) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
+void SpriteX8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void *src asm("%a1"), unsigned char *dest asm("%a0"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__));
 void SpriteX8_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char *mask, unsigned short bytewidth, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
 void SpriteX8_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *mask, unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__stkparm__));
 void SpriteX8_OR(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, unsigned short bytewidth, void *dest) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
@@ -999,7 +999,7 @@ void SpriteX8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), un
 //@{
 void SlowerSpriteX8_AND_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
 void SlowerSpriteX8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *maskval, unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__stkparm__));
-void SlowerSpriteX8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void *src asm("%a1"), unsigned char *dest asm("%a0"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__));
+void SlowerSpriteX8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void *src asm("%a1"), unsigned char *dest asm("%a0"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__));
 void SlowerSpriteX8_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *mask, unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__stkparm__));
 void SlowerSpriteX8_OR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
 void SlowerSpriteX8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
@@ -1249,7 +1249,7 @@ void GrayClipISpriteX16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned s
 //@{
 void GraySingleSprite8_BLACK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 //! Parameter \a color is an element of enum \ref GrayColors.
-void GraySingleSprite8_COLOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, unsigned short color, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GraySingleSprite8_COLOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, short color, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySingleSprite8_DGRAY_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySingleSprite8_LGRAY_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GraySingleSprite8_WHITE_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1333,7 +1333,7 @@ void GrayTile16x16_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%
 void GrayTile16x16_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short* mask1, const unsigned short* mask2, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayTile16x16_SMASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), unsigned short *sprt0, unsigned short *sprt1, unsigned short* mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayTile16x16_SMASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, unsigned short* mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_TRANB_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile16x16_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1343,7 +1343,7 @@ void GrayTile32x32_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%
 void GrayTile32x32_MASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long* mask1, const unsigned long* mask2, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_OR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
-void GrayTile32x32_SMASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), unsigned long *sprt0, unsigned long *sprt1, unsigned long* mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayTile32x32_SMASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, unsigned long* mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_TRANB_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_TRANW_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayTile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1444,9 +1444,9 @@ void GrayIShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsi
 //! Make 160x\a height planes (bytewidth=20) starting at \a dest0 and \a dest1 darker.
 void GrayShadowPlanes160_R(void *dest0 asm("%a0"), void *dest1 asm("%a1"), unsigned short height asm("%d0")) __attribute__((__regparm__(3)));
 //! Combination of \ref GrayIShadowPlanes240_R and \ref FastCopyScreen_R : make 240x\a height planes starting at \a dest0 and \a dest1 lighter and store the result in \a dest0 and \a dest1.
-void GrayIShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
+void GrayIShadowPlanesTo_R(const void *src0 asm("%a0"), const void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 //! Combination of \ref GrayShadowPlanes240_R and \ref FastCopyScreen_R : make 240x\a height planes starting at \a dest0 and \a dest1 darker and store the result in \a dest0 and \a dest1.
-void GrayShadowPlanesTo_R(void *src0 asm("%a0"), void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
+void GrayShadowPlanesTo_R(const void *src0 asm("%a0"), const void *src1 asm("%a1"), void *dest0, void *dest1) __attribute__((__stkparm__));
 
 //! Fill 240x128 plane pointed to by \a plane with 1s.
 void FastFillScreen_R(void *plane asm("%a0"));
@@ -1528,16 +1528,16 @@ void CreateISpriteShadow32_R(unsigned short height asm("%d0"), const unsigned lo
  */
 // -----------------------------------------------------------------------------
 //@{
-void FastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
-void FastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
-void FastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src asm("%a0"), unsigned short* dest asm("%a1"));
+void FastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned short* dest asm("%a1"));
+void FastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned short* dest asm("%a1"));
+void FastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src asm("%a0"), unsigned short* dest asm("%a1"));
 void FastPutBkgrnd8_R(const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 void FastPutBkgrnd16_R(const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 void FastPutBkgrnd32_R(const unsigned short *sprt asm("%a1"), void *dest asm("%a0"));
 
-void GrayFastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
-void GrayFastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
-void GrayFastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
+void GrayFastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src1 asm("%a0"), const void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
+void GrayFastGetBkgrnd16_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src1 asm("%a0"), const void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
+void GrayFastGetBkgrnd32_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src1 asm("%a0"), const void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
 void GrayFastPutBkgrnd8_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 void GrayFastPutBkgrnd16_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
 void GrayFastPutBkgrnd32_R(const unsigned short *sprt asm("%a2"), void *dest1 asm("%a0"), void *dest2 asm("%a1"));
@@ -1754,11 +1754,11 @@ typedef struct {
 //! For more information, see the <a href="../../ExtGraph/exepack.html">ExePack/TTArchive documentation</a>.
 //@{
 //! TTunpack decompression function.
-short UnpackBuffer(unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
+short UnpackBuffer(const unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
 #define ttunpack_decompress UnpackBuffer
 
 //! \ref UnpackBufferGray is currently an alias of \ref UnpackBuffer, you have to disable interrupts yourself if you want to squeeze a bit more performance.
-short UnpackBufferGray(unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
+short UnpackBufferGray(const unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
 #define ttunpack_decompress_gray UnpackBufferGray
 
 //! Gets the size of the ttunpack data pointed to by \a _p_

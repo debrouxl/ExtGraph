@@ -1,4 +1,4 @@
-| C prototype: void FastDrawLine_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
+| C prototype: void FastDrawLine_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
 |
 | FastDrawLine_R by Olivier Armand (ExtendeD) <ola.e-ml@wanadoo.fr>
 | Small modifications by Lionel Debroux (mainly size optimizations).

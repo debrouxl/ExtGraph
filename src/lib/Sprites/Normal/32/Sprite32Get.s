@@ -1,4 +1,4 @@
-| C prototype: void Sprite32Get(unsigned short x, unsigned short y, unsigned short height, void* src, unsigned long* dest) __attribute__((__stkparm__));
+| C prototype: void Sprite32Get(unsigned short x, unsigned short y, unsigned short height, const void* src, unsigned long* dest) __attribute__((__stkparm__));
 |
 | This routine is faster (about 30%) than the previous C routine, because the
 | algorithm was changed.

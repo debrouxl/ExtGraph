@@ -1,4 +1,4 @@
-| C prototype: void GrayFastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), void* src1 asm("%a0"), void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
+| C prototype: void GrayFastGetBkgrnd8_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void* src1 asm("%a0"), const void* src2 asm("%a1"), unsigned short* dest asm("%a2"));
 |
 | This routine is a fast grayscale version of Sprite8Get_R, it must be used in
 | conjunction with GrayFastPutBkgrnd8_R.

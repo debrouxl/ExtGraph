@@ -1,4 +1,4 @@
-| C prototype: void Scale1Plane240to160_R(void *src asm("%a0"), void *dest asm("%a1"));
+| C prototype: void Scale1Plane240to160_R(const void *src asm("%a0"), void *dest asm("%a1"));
 | Courtesy of Geoffrey Anneheim IIRC, modified to fit the needs.
 
 .text

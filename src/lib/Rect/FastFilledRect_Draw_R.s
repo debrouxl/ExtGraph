@@ -1,4 +1,4 @@
-| C prototype: void FastFilledRect_Draw_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3")) __attribute__((__regparm__(5)));
+| C prototype: void FastFilledRect_Draw_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3")) __attribute__((__regparm__(5)));
 |
 | This function ORs a rectangle to the destination. The algorithm used here
 | is faster than that of FastFillRect_R. FastFillRect_R is already quite

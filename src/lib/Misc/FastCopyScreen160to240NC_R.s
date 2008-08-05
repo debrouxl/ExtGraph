@@ -1,4 +1,4 @@
-| C prototype: void FastCopyScreen160to240NC_R(unsigned short height asm("%d0"), void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
+| C prototype: void FastCopyScreen160to240NC_R(unsigned short height asm("%d0"), const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(3)));
 
 .text
 .globl FastCopyScreen160to240NC_R

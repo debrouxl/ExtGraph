@@ -1,4 +1,4 @@
-| C prototype: void FastInvertScreen_R(void* src asm("%a0")) __attribute__((__regparm__(1)));
+| C prototype: void FastInvertScreen_R(const void* src asm("%a0")) __attribute__((__regparm__(1)));
 
 .text
 .globl FastInvertScreen_R

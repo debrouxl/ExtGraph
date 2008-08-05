@@ -77,127 +77,127 @@ typedef struct
 //typedef void (*TM_AnimType)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"),void* asm("%a3"));
 //typedef void (*TM_TilesType)(short asm("%d2"),void* asm("%a0"),void* asm("%a1"),void* asm("%a2"));
 //! Function pointer used as callback in high-level DrawPlane and DrawAnimatedPlane functions.
-typedef void (*TM_Mode)(void* asm("%a0"),short asm("%d0"),short asm("%d1"),void* asm("%a1"));
+typedef void (*TM_Mode)(const void* asm("%a0"),unsigned short asm("%d0"),unsigned short asm("%d1"),void* asm("%a1"));
 
 
 // Prototypes des fonctions de la librairie
 //--BEGIN_FUNCTION_PROTOTYPES--//
 // RefreshBuffer
-void RefreshBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshBuffer16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void RefreshGrayBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshGrayBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshGrayBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void RefreshGrayBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void RefreshGrayBuffer16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
 
 // RefreshAnimatedBuffer
-void RefreshAnimatedBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshAnimatedBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshAnimatedBuffer8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
 
-void RefreshGrayAnimatedBuffer16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
-void RefreshGrayAnimatedBuffer8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
+void RefreshGrayAnimatedBuffer8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"),const void *tabanim asm("%a3"));
 
 
 // DrawBuffer
-void DrawBuffer_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawBuffer_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawBuffer_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
 
-void DrawBuffer89_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawBuffer89_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawBuffer89_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer89_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer89_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawBuffer89_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
 
-void DrawGrayBuffer_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer_TRANW(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer_TRANB(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer_TRANW(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer_TRANB(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
 
-void DrawGrayBuffer89_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer89_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer89_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer89_TRANW(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
-void DrawGrayBuffer89_TRANB(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer89_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer89_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer89_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer89_TRANW(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
+void DrawGrayBuffer89_TRANB(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"));
 
 
 // DrawBufferWithShifts
-void DrawBufferWithShifts_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawBufferWithShifts_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawBufferWithShifts_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
+void DrawBufferWithShifts_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawBufferWithShifts_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawBufferWithShifts_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
 
-void DrawBufferWithShifts89_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawBufferWithShifts89_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawBufferWithShifts89_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
+void DrawBufferWithShifts89_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawBufferWithShifts89_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawBufferWithShifts89_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
 
-void DrawGrayBufferWithShifts_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts_TRANW(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts_TRANB(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
+void DrawGrayBufferWithShifts_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts_TRANW(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts_TRANB(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
 
-void DrawGrayBufferWithShifts89_RPLC(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts89_OR(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts89_MASK(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts89_TRANW(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
-void DrawGrayBufferWithShifts89_TRANB(void *src asm("%a0"),short x asm("%d0"),short y asm("%d1"),void *dest asm("%a1"),char *dh asm("%a2"),short *dv asm("%a3"));
+void DrawGrayBufferWithShifts89_RPLC(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts89_OR(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts89_MASK(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts89_TRANW(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
+void DrawGrayBufferWithShifts89_TRANB(const void *src asm("%a0"),unsigned short x asm("%d0"),unsigned short y asm("%d1"),void *dest asm("%a1"),const char *dh asm("%a2"),const short *dv asm("%a3"));
 
 
 // DrawTiles
-void DrawTiles16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawTiles16B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles16W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles8B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawTiles8W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16B89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles16W89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8B89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawTiles8W89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawGrayTiles16B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles16W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles8B(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles8W(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8B(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8W(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
-void DrawGrayTiles16B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles16W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles8B89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
-void DrawGrayTiles8W89(short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16B89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles16W89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8B89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
+void DrawGrayTiles8W89(unsigned short larg asm("%d2"),const void *tab asm("%a0"),void *dest asm("%a1"),const void *tabsprt asm("%a2"));
 
 #define DrawTiles(col,line,larg,tab,dest,tabsprt,type) type((larg),&((tab)[line][col]),(dest),(tabsprt))
 
 
 // DrawPlane
-void DrawPlane16W(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawPlane16B(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawPlane8W(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawPlane8B(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawPlane16W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawPlane16B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawPlane8W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawPlane8B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
 
-void DrawGrayPlane16W(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayPlane16B(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayPlane8W(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayPlane8B(short x asm("%d0"),short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayPlane16W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayPlane16B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayPlane8W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayPlane8B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),Plane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
 
 #define DrawPlane(x,y,plane,dest,mode,type) type((x),(y),(plane),(dest),(mode))
 
 
 // DrawAnimatedPlane
-void DrawAnimatedPlane16W(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawAnimatedPlane16B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawAnimatedPlane8W(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawAnimatedPlane16W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawAnimatedPlane16B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawAnimatedPlane8W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawAnimatedPlane8B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
 
-void DrawGrayAnimatedPlane16W(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayAnimatedPlane16B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayAnimatedPlane8W(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
-void DrawGrayAnimatedPlane8B(short x asm("%d0"),short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayAnimatedPlane16W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayAnimatedPlane16B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayAnimatedPlane8W(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
+void DrawGrayAnimatedPlane8B(unsigned short x asm("%d0"),unsigned short y asm("%d1"),AnimatedPlane *plane asm("%a0"),void *dest asm("%a1"),TM_Mode mode asm("%a2"));
 
 #define DrawAnimatedPlane(x,y,plane,dest,mode,type) type((x),(y),(plane),(dest),(mode))
 

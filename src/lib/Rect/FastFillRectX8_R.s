@@ -1,4 +1,4 @@
-| C prototype: void FastFillRectX8_R(void* plane asm("%a0"), short startcol asm("%d0"), short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
+| C prototype: void FastFillRectX8_R(void* plane asm("%a0"), unsigned short startcol asm("%d0"), unsigned short starty asm("%d1"), unsigned short lines asm("%d2"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__(5)));
 .text
 .globl FastFillRectX8_R
 .even

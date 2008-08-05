@@ -1,4 +1,4 @@
-| C prototype: void FastFillRect_R(void* plane asm("%a0"), short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
+| C prototype: void FastFillRect_R(void* plane asm("%a0"), unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), short mode) __attribute__((__stkparm__));
 | Valid values for mode are: A_REVERSE, A_XOR, A_NORMAL, A_REPLACE. In fact, 
 | A_NORMAL (same effect as A_REPLACE) is assumed if the mode is neither
 | A_REVERSE nor A_XOR.

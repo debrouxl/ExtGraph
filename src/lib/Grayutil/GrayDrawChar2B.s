@@ -1,4 +1,4 @@
-| C prototype: void GrayDrawChar2B(short x, short y, char c, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
+| C prototype: void GrayDrawChar2B(unsigned short x, unsigned short y, char c, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 |
 | This code is not the best programming practice ever, although it could be
 | coded in a much worse way...
