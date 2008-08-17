@@ -910,7 +910,7 @@ void FloodFillMF_noshade_R (unsigned short x, unsigned short y, void* dest) __at
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup sprite Sprite functions
+/** @defgroup sprite Sprite drawing functions
  * Description of the drawing modes:
  * <ul>
  *   <li><b>AND</b>, <b>OR</b>, <b>XOR</b> modes are the usual "clear pixels", "set pixels", "invert pixels" routines</li>
@@ -926,7 +926,7 @@ void FloodFillMF_noshade_R (unsigned short x, unsigned short y, void* dest) __at
  * </ul>
  */
 // -----------------------------------------------------------------------------
-/** @defgroup ncspsprite Non-clipped single-plane sprite functions
+/** @defgroup ncspsprite Non-clipped, single-plane sprite drawing functions
  * @ingroup sprite
  * \brief Non-clipped single-plane sprite functions.
  *
@@ -1008,7 +1008,7 @@ void SlowerSpriteX8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup cspsprite Clipped single-plane sprite functions
+/** @defgroup cspsprite Clipped, single-plane sprite drawing functions
  * @ingroup sprite
  * \brief Clipped single-plane sprite functions.
  *
@@ -1056,7 +1056,7 @@ void ClipSpriteX8Get_R(short x asm("%d0"), short y asm("%d1"), unsigned short he
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup nctpsprite Non-clipped two-plane sprite functions
+/** @defgroup nctpsprite Non-clipped, two-plane sprite drawing functions
  * @ingroup sprite
  * \brief Non-clipped two-plane sprite functions.
  *
@@ -1123,7 +1123,7 @@ void GraySpriteX8_XOR(unsigned short x, unsigned short y, unsigned short height,
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup ctpsprite Clipped two-plane sprite functions
+/** @defgroup ctpsprite Clipped, two-plane sprite drawing functions
  * @ingroup sprite
  * \brief Clipped two-plane sprite functions.
  *
@@ -1174,7 +1174,7 @@ void GrayClipSprite32_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned sho
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup ctpisprite Clipped two-plane sprite functions, interlaced sprite format
+/** @defgroup ctpisprite Clipped, two-plane sprite drawing functions, interlaced sprite format
  * @ingroup sprite
  * \brief Clipped two-plane interlaced sprite functions.
  *
@@ -1238,7 +1238,7 @@ void GrayClipISpriteX16_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned s
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup nctpssprite Non-clipped two-plane single sprite functions
+/** @defgroup nctpssprite Non-clipped, two-plane, single sprite drawing functions
  * @ingroup sprite
  * \brief These functions draw a single sprite to two planes
  *
@@ -1259,7 +1259,7 @@ void GraySingleSprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup tile Tile (aligned sprite) functions
+/** @defgroup tile Tile (aligned sprite) drawing functions
  * \brief Aligned, square sprite functions.
  *
  * The drawing modes are the same as those of the \ref sprite.
@@ -1274,7 +1274,7 @@ void GraySingleSprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("
  * multiple of 2 or even 4.
  */
 // -----------------------------------------------------------------------------
-/** @defgroup sptile Single-plane tile functions
+/** @defgroup sptile Single-plane tile drawing functions
  * @ingroup tile
  * \brief Non-clipped single plane tile (aligned sprite) functions, non-interlaced sprite format
  *
@@ -1309,7 +1309,7 @@ void Tile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"),
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup tptile Two-plane tile functions
+/** @defgroup tptile Two-plane tile drawing functions
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, non-interlaced sprite format
  *
@@ -1352,7 +1352,7 @@ void GrayTile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d
 
 
 // -----------------------------------------------------------------------------
-/** @defgroup tpitile Two-plane tile functions, interlaced sprite format
+/** @defgroup tpitile Two-plane tile drawing functions, interlaced sprite format
  * @ingroup tile
  * \brief Non-clipped two-plane tile (aligned sprite) functions, interlaced sprite format
  *
@@ -1612,10 +1612,10 @@ void SpriteX8_MIRROR_V_R(unsigned short height asm("%d0"), const unsigned char* 
 //! Combination of \ref SpriteX8_MIRROR_H_R and \ref SpriteX8_MIRROR_V_R
 void SpriteX8_MIRROR_HV_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 
-//! Rotate pi/2 right (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
+//! Rotate 90 \htmlonly &deg; \endhtmlonly right (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
 //! \note The source sprite is not required to be in a writable area, but it's required to have <b>both dimensions multiple of 8</b>.
 void SpriteX8X8_ROTATE_RIGHT_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
-//! Rotate pi/2 left (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
+//! Rotate 90 \htmlonly &deg; \endhtmlonly left (\a bytewidth *8)x\a height sprite pointed to by \a src and store the result as sprite data in the area pointed to by \a dest.
 //! \note The source sprite is not required to be in a writable area, but it's required to have <b>both dimensions multiple of 8</b>.
 void SpriteX8X8_ROTATE_LEFT_R(unsigned short height asm("%d0"), const unsigned char* src asm("%a0"), unsigned short bytewidth asm("%d1"), unsigned char* dest asm("%a1")) __attribute__((__regparm__(4)));
 //! Combination of \ref SpriteX8X8_ROTATE_RIGHT_R and \ref SpriteX8_MIRROR_H_R
@@ -1691,10 +1691,10 @@ void RotateSpriteX8_R(const unsigned char *src asm("%a0"), unsigned char *dest a
 
 
 // -----------------------------------------------------------------------------
-//! Sine table (0..90) used in arbitrary angle sprite rotating functions, values multiplied by 8192 == 1<<13.
+//! Sine table (0..90 \htmlonly &deg; \endhtmlonly ) used in arbitrary angle sprite rotating functions, values multiplied by 8192 == 1<<13.
 //! \author Joey Adams.
 //! \since 2.00 Beta 5
-const unsigned short RS_sin8192tab[91];
+extern const unsigned short RS_sin8192tab[91];
 // Exported to avoid duplication of sine tables in case a program would use another sine table, good idea of Joey.
 
 

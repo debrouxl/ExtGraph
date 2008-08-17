@@ -15,17 +15,17 @@ X* Fix Scale1Plane160to240_R, and make a demo for it.
 
 X* Move the functions' documentation into Doxygen comments.
 
+?* Split extgraph.h, timemap.h into multiple smaller header files ?
+
+-- Beta 6 --
+
 0* Rewrite filled triangle functions in ASM, while changing the algorithm: due to rounding errors, the current algorithm doesn't work well. Long division with a higher shift count should be used.
 With that change, there won't probably be any difference between clipped and non-clipped versions.
 
-?* Split extgraph.h, timemap.h into multiple smaller header files ?
-
--- Beta 6
+/* 32x32 tilemap engine. Use and extend what was started by Michael Hergenrader (or Lachipseudo Assasen, I don't remember).
 
 /* Keep augmenting test coverage of the demos, because it IS necessary...
 -> extcheck.pl --coverage helps finding untested functions.
-
-/* 32x32 tilemap engine. Use and extend what was started by Michael Hergenrader (or Lachipseudo Assasen, I don't remember).
 
 0* ScaleSprite functions that draw to a sprite instead of a screen. Suggestion of "epsilon".
 
