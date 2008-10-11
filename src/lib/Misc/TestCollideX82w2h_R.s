@@ -9,7 +9,7 @@ TestCollideX82w2h_R:
 	movem.w 9*4+4(%a7),%d3-%d7
 	sub.w %d3,%d1
 	sub.w %d2,%d0
-	bge 1f
+	bge.s 1f
 	exg.l %a0,%a1
 	exg.l %d4,%d5
 	exg.l %d6,%d7
@@ -17,18 +17,18 @@ TestCollideX82w2h_R:
 	neg.w %d1
 1:
 	tst.w %d1
-	bge 2f
+	bge.s 2f
 	add.w %d1,%d6
 	muls.w %d4,%d1
 	suba.l %d1,%a0
-	bra 3f
+	bra.s 3f
 2:
 	sub.w %d1,%d7
 	muls.w %d5,%d1
 	adda.l %d1,%a1
 3:
 	cmp.w %d7,%d6
-	bge 4f
+	bge.s 4f
 	move.w %d6,%d7
 4:
 	move.w %d0,%d2
@@ -42,14 +42,14 @@ TestCollideX82w2h_R:
 	sub.w %d2,%d3 |bytewidth
 	moveq #0,%d6 |appendix
 	cmp.w %d3,%d4
-	blt 5f
+	blt.s 5f
 	moveq #1,%d6
-	bra 6f
+	bra.s 6f
 5:
 	move.w %d4,%d3
 6:
 	tst.w %d3
-	ble 11f
+	ble.s 11f
 	sub.w %d6,%d3
 	sub.w %d3,%d4
 	sub.w %d3,%d5
@@ -62,36 +62,35 @@ TestCollideX82w2h_R:
 	moveq #1,%d0 |positive return value
 7:
 	subq.w #1,%d7
-	blt 11f
+	blt.s 11f
 	move.w %a4,%d3 |tempshort
 8:
 	subq.w #1,%d3
-	blt 9f
+	blt.s 9f
 	move.b (%a0)+,%d2 |tempchar
 	ror.b %d5,%d2
 	movea.w %d2,%a5 |tempcharorig
 	and.b %d1,%d2
 	and.b (%a1)+,%d2
-	bne 0f
+	bne.s 0f
 	move.w %a5,%d2
 	and.b %d4,%d2
 	and.b (%a1),%d2
-	bne 0f
-	bra 8b
+	bne.s 0f
+	bra.s 8b
 9:
 	tst.w %d6
-	beq 10f
+	beq.s 10f
 	move.b (%a0),%d2
 	lsr.b %d5,%d2
 	and.b (%a1),%d2
-	bne 0f
+	bne.s 0f
 10:
 	adda.l %a2,%a0
 	adda.l %a3,%a1
-	bra 7b
+	bra.s 7b
 11:
 	moveq #0,%d0
 0:
 	movem.l (%a7)+,%d3-%d7/%a2-%a5
 	rts
-	

@@ -116,11 +116,11 @@ enum ExtAttrs {
 //! @defgroup pixmacros Fast pixel access macros
 //! These macros are intended to be fast alternatives at the OS DrawPix function
 //! \author Julien Richard-Foy, Kevin Kofler, Lionel Debroux, Sebastian Reichelt.
-// Added early in the 2.00 betas series, in order to have GCC 3.x generate
-// better code. GCC 4.x seems to do better with the old macros, but we will
-// keep the new ones, which work properly starting from 2.00 Beta 5, until we
-// know GCC can do as well on its own with the old macros as it is forced to
-// do by the new macros.
+// The (address, bit number) variants were added early in the 2.00 beta series,
+// in order to have GCC 3.x generate better code. GCC 4.x seems to do better
+// with the old macros, but we will keep the new ones, which (at last !) work
+// properly starting from 2.00 Beta 5, until we know GCC can do as well on its
+// own with the old macros as it is forced to do by the new macros.
 // -----------------------------------------------------------------------------
 //@{
 //! Offset in bytes of the (\a x, \a y) pixel from the (0, 0) pixel of a 240-pixel-wide plane.
@@ -248,7 +248,7 @@ enum ExtAttrs {
 // Doing the same thing using inline assembly saved ~100 bytes on an internal, buggy version of tthdex.
 // Credits go to Kevin Kofler for its generic definition and the &* trick.
 // 2.00 Beta 5: added ifndef/define pair so as to minimize incompatibility chances with the (same)
-// definition that should be added to TIGCC some day.
+// definition that could be added to TIGCC some day.
 #define DEREFSMALL(__p, __i) (*((typeof(&*(__p)))((unsigned char*)(__p)+(long)(short)((short)(__i)*sizeof(*(__p))))))
 #endif
 
@@ -812,7 +812,7 @@ void DoubleSpriteDimensions16x16_R(const unsigned short* src asm("%a0"), unsigne
 // -----------------------------------------------------------------------------
 //! @defgroup planescaling Plane scaling functions
 //! These functions can be used to scale down 92+/V200 graphics to 89/89T screen, or scale up 89/89T to 92+/V200 screen.
-//! \note Rather slow functions, yield ugly results. You have been warned.
+//! \note By their nature, these functions are rather slow, and they yield ugly results. You have been warned.
 //! \since 2.00 beta 5
 // -----------------------------------------------------------------------------
 //@{
@@ -859,10 +859,6 @@ void FastANDScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attrib
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
 void FastORScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANBScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANDScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANLScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
-//void FastTRANWScreen_R(const void* src asm("%a0"), void* dest asm("%a1")) __attribute__((__regparm__(2)));
 //! XOR 240x128 plane pointed to by \a src to 240x128 plane pointed to by \a dest.
 //! \note \a src and \a dest must start at an even address.
 //! \since 2.00 Beta 5
@@ -1648,6 +1644,7 @@ void FastSpriteX8_MIRROR_H_R(unsigned short height asm("%d2"), unsigned short by
  * @ingroup spritex8data
  * The "withmask" functions perform a AND/OR/XOR operation of each line of the (\a bytewidth *8)x\a height sprite pointed to by \a src,
  * with the line pointed to by \a maskval, storing the result to the area pointed to by \a dest.
+ * \since 2.00 Beta 5
  */
 //@{
 void SpriteX8Data_withmask_AND_R(unsigned short height asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src asm("%a0"), const unsigned char *maskval asm("%a2"), unsigned char *dest asm("%a1"));
@@ -1659,6 +1656,7 @@ void SpriteX8Data_withmask_XOR_R(unsigned short height asm("%d2"), unsigned shor
  * @ingroup spritex8data
  * The "withsprite" functions perform a AND/OR/XOR operation of the whole (\a bytewidth *8)x\a height sprite pointed to by \a src1,
  * with the sprite of same size pointed to by \a src2, storing the result to the area pointed to by \a dest.
+ * \since 2.00 Beta 5
  */
 //@{
 void SpriteX8Data_withsprite_AND_R(unsigned short height asm("%d2"), unsigned short bytewidth asm("%d1"), const unsigned char *src1 asm("%a0"), const unsigned char *src2 asm("%a2"), unsigned char *dest asm("%a1"));
