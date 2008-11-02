@@ -1748,16 +1748,28 @@ typedef struct {
 #define TTUNPACK_LZPOSUNDERRUN  254
 //@}
 
-//! @defgroup ttunpack TTUnpack handling macros and functions
-//! For more information, see the <a href="../../ExtGraph/exepack.html">ExePack/TTArchive documentation</a>.
+/** @defgroup ttunpack TTUnpack handling macros and functions
+ * \brief Decompression stuff. For more information, see the <a href="../../ExtGraph/exepack.html">ExePack/TTArchive documentation</a>.<br>
+ * The current version of the ttunpack functions don't disable interrupts, it's up to the caller to do that if deemed
+ * necessary (decompression is about 10% faster).
+ */
 //@{
 //! TTunpack decompression function.
 short UnpackBuffer(const unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
+//! Name of the UnpackBuffer function in the old ttunpack.h.
 #define ttunpack_decompress UnpackBuffer
 
-//! \ref UnpackBufferGray is currently an alias of \ref UnpackBuffer, you have to disable interrupts yourself if you want to squeeze a bit more performance.
-short UnpackBufferGray(const unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
-#define ttunpack_decompress_gray UnpackBufferGray
+//! \ref UnpackBufferGray is currently an alias of \ref UnpackBuffer.
+#define UnpackBufferGray UnpackBuffer
+//! Name of the UnpackBufferGray function in the old ttunpack.h.
+#define ttunpack_decompress_gray UnpackBuffer
+
+/** \brief TTunpack decompression function, smaller and slower flavour (same author, same functionality, different decompression routine size vs. decompression speed tradeoff).
+ * \since 2.00 Beta 6
+ * \note This routine has been in the ExtGraph repository for a long time... but for some reason, it was never exported in this header file, and it just didn't work the way it was declared (incorrect calling convention declaration).
+ * \note This is the "small" version, not the "super duper small" version used in pstarter and ttstart: for compatibility with \a ttunpack_decompress, the "small" version has __stkparm__ calling convention, proper return value, and like \ref UnpackBuffer, \ref UnpackBufferSmall supports the rarely-used delta LZ mode of the compressor.
+ */
+short UnpackBufferSmall(const unsigned char *src, unsigned char *dest) __attribute__((__stkparm__));
 
 //! Gets the size of the ttunpack data pointed to by \a _p_
 #define ttunpack_size(_p_)  ((unsigned short)(((TTUNPACK_HEADER*)(_p_))->osize_lo | (((TTUNPACK_HEADER*)(_p_))->osize_hi << 8)))
