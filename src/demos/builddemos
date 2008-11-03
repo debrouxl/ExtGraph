@@ -40,3 +40,4 @@ mv demo26.v2z ../../BIN92PV200
 ./buildsep demo31
 ./buildcmp demo32
 ./buildcmp demo33
+./buildcmp demo34

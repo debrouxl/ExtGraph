@@ -1,6 +1,6 @@
 @REM @echo off
 @echo ======= building extgraph library =======
-@REM 2.00 Beta 5: fixing (temporarily ?) a regression of GCC 4.0 using directory changes.
+
 cd Misc
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c versiondef.c
 tigcc -O3 -fno-omit-frame-pointer -Wall -W -Wwrite-strings -ftracer -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c FloodFill.c
@@ -29,10 +29,13 @@ tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFastFillRect_R.c
 cd ..
 
-..\..\bin\m68k-coff-ar -rv extgraph.a Misc\versiondef.o Misc\FloodFill.o Misc\FloodFillMF.o Misc\FloodFill_R.o Misc\FloodFillMF_R.o Misc\FloodFill_noshade_R.o Misc\FloodFillMF_noshade_R.o Misc\FilledTriangle_R.o Misc\ClipFilledTriangle_R.o Misc\GrayFilledTriangle_R.o Misc\GrayClipFilledTriangle_R.o
-..\..\bin\m68k-coff-ar -rv extgraph.a Grayutil\GrayDrawRect2B.o Grayutil\GrayInvertRect2B.o Grayutil\GrayDrawLine2B.o Grayutil\GrayDrawClipLine2B.o Grayutil\GrayFastDrawLine2B.o Grayutil\GrayFastDrawHLine2B.o Grayutil\GrayDrawStr2B.o Grayutil\GrayDrawStrExt2B.o
-..\..\bin\m68k-coff-ar -rv extgraph.a Rect\FastOutlineRect.o Rect\FastOutlineRect_R.o Rect\GrayFastOutlineRect_R.o Rect\GrayFastFillRect_R.o
+
+tprbuilder extgraph.tpr
 
 copy extgraph.a ..\..\lib
 REM del extgraph.a
 @echo on
+
+@REM ..\..\bin\m68k-coff-ar -rv extgraph.a Misc\versiondef.o Misc\FloodFill.o Misc\FloodFillMF.o Misc\FloodFill_R.o Misc\FloodFillMF_R.o Misc\FloodFill_noshade_R.o Misc\FloodFillMF_noshade_R.o Misc\FilledTriangle_R.o Misc\ClipFilledTriangle_R.o Misc\GrayFilledTriangle_R.o Misc\GrayClipFilledTriangle_R.o
+@REM ..\..\bin\m68k-coff-ar -rv extgraph.a Grayutil\GrayDrawRect2B.o Grayutil\GrayInvertRect2B.o Grayutil\GrayDrawLine2B.o Grayutil\GrayDrawClipLine2B.o Grayutil\GrayFastDrawLine2B.o Grayutil\GrayFastDrawHLine2B.o Grayutil\GrayDrawStr2B.o Grayutil\GrayDrawStrExt2B.o
+@REM ..\..\bin\m68k-coff-ar -rv extgraph.a Rect\FastOutlineRect.o Rect\FastOutlineRect_R.o Rect\GrayFastOutlineRect_R.o Rect\GrayFastFillRect_R.o

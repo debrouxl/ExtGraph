@@ -11,6 +11,7 @@
 ;   Version: 2.30 Super Small
 ;			Fixed a bug in header error checks
 ;
+;  Copyright (C) 2004 Samuel Stearley
 ;
 ;THE LICENSE:
 ;
@@ -93,7 +94,6 @@ DELTA_LZ				;If defined it will include code to do DELTA lz decompression
 
  ifd CALL_DIRECTLY
 	public UnpackBufferSmall
-	public ttunpack_decompress
  endc
 
  ifnd CALL_DIRECTLY
@@ -168,7 +168,6 @@ __ERRPCK_LZPOSUNDERRUN	equ	2		;254
 ;	d3 number of times to repeat it
 ;-----------------------------------------------------------------------
 UnpackBufferSmall:
-ttunpack_decompress:
 
  ifnd CALL_DIRECTLY
 	dc.b		"UNPACK_0"

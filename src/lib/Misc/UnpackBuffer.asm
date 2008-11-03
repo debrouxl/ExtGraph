@@ -10,6 +10,7 @@
 ;
 ;   Version 2.28 Fast
 ;
+;  Copyright (C) 2004 Samuel Stearley 
 ;
 ;THE LICENSE:
 ;
