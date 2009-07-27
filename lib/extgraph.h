@@ -329,6 +329,7 @@ short TestCollide162h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("
 short TestCollide322h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1 asm("%d3"), unsigned short height0, unsigned short height1, const unsigned long *data0 asm("%a0"), const unsigned long *data1 asm("%a1")) __attribute__((__stkparm__)); ///< This function can handle two sprites of different heights \since 2.00 Beta 5 \author Joey Adams
 
 short TestCollideX82w2h_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1, unsigned short bytewidth0, unsigned short bytewidth1, unsigned short height0, unsigned short height1, const void *data0 asm("%a0"), const void *data1 asm("%a1")) __attribute__((__stkparm__)); ///< This function can handle two sprites of different heights \since 2.00 Beta 5 \author Joey Adams
+short TestCollideX82w2h_invsprts_R(short x0 asm("%d0"), short y0 asm("%d1"), short x1 asm("%d2"), short y1, unsigned short bytewidth0, unsigned short bytewidth1, unsigned short height0, unsigned short height1, const void *data0 asm("%a0"), const void *data1 asm("%a1")) __attribute__((__stkparm__)); ///< This function can handle two sprites of different heights \since 2.00 Beta 6 \author Joey Adams
 //@}
 
 
@@ -680,8 +681,8 @@ void FastInvertRectX8_R(void* plane asm("%a0"), unsigned short startcol asm("%d0
  * The non-clipped versions are significantly faster than the clipped versions.
  *
  * \warning GrayClipFastOutlinedCircle*_R require consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the
- * root of the ExtGraph documentation</a> for more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
- * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2008, but still...).
+ * root of the ExtGraph documentation</a> for more information), in order not to use too many registers, which would make the used algorithm less efficient.<br>
+ * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2009, but still...).
  *
  * \todo Generic FastOutlinedCircle functions with self-modifying code, that can draw more than one mode ?
  */
@@ -706,8 +707,8 @@ void GrayClipFastOutlinedCircle_INVERT_R(void *planes asm("%a0"), short xcenter 
  *
  * \warning \ref GrayClipFastFilledCircle_R, of which the \a drawfunc parameter must be a routine compatible with GrayDrawSpan* ones,
  * requires consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph documentation</a> for 
- * more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
- * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2008, but still...).
+ * more information), in order not to use too many registers, which would make the used algorithm less efficient.<br>
+ * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2009, but still...).
  */
 //@{
 void ClipFastFilledCircle_R(void *plane asm("%a0"), short xcenter asm("%d0"), short ycenter asm("%d1"), unsigned short radius asm("%d2"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
@@ -722,23 +723,16 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
  *
  * The \a drawfunc parameter must be a routine compatible with DrawSpan* / GrayDrawSpan* ones.
  * \warning \ref GrayFilledTriangle_R and \ref GrayClipFilledTriangle_R require consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph
- * documentation</a> for more information), in order not to use too many registers, which makes the used algorithm less efficient.<br>
- * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2008, but still...).
+ * documentation</a> for more information), in order not to use too many registers, which would make the used algorithm less efficient.<br>
+ * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2009, but still...).
  *
  * Can you figure the code of the outlined triangle drawing functions ? ;-)
  * \since 2.00 Beta 5.
- * \todo rewrite the routines with long division (_ds32s32 or _du32u32) to make numerical errors disappear:
- * as of 2.00 Beta 5, just watch the output of<br>
- * <code>FilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);</code><br>
- * and<br>
- * <code>ClipFilledTriangle_R(-50,0,300,49,159,99,LCD_MEM,DrawSpan_OR_R);</code><br>
- * to see what I mean.
+ * \note FilledTriangle_R and GrayFilledTriangle_R are currently the exact same routine.
  */
 //@{
 void FilledTriangle_R(unsigned short x1 asm("%d0"), unsigned short y1 asm("%d1"), unsigned short x2 asm("%d2"), unsigned short y2 asm("%d3"), unsigned short x3 asm("%d4"), unsigned short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
-void ClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *plane asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0")) asm("%a2"));
 void GrayFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
-void GrayClipFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm("%d2"), short y2 asm("%d3"), short x3 asm("%d4"), short y3 asm("%a1"), void *planes asm("%a0"), void(*drawfunc)(short x1 asm("%d0"), short x2 asm("%d1"), void * addrs asm("%a0")) asm("%a2"));
 //@}
 
 

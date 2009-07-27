@@ -10,9 +10,6 @@ tigcc -O3 -fno-omit-frame-pointer -Wall -W -Wwrite-strings -ftracer -ffunction-s
 tigcc -O3 -fno-omit-frame-pointer -Wall -W -Wwrite-strings -ftracer -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c FloodFill_noshade_R.c
 tigcc -O3 -fno-omit-frame-pointer -Wall -W -Wwrite-strings -ftracer -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c FloodFillMF_noshade_R.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c FilledTriangle_R.c
-tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c ClipFilledTriangle_R.c
-tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayFilledTriangle_R.c
-tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayClipFilledTriangle_R.c
 cd ../Grayutil
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayDrawRect2B.c
 tigcc -Os -Wall -W -Wwrite-strings -ffunction-sections -fdata-sections -Wa,--all-relocs -D_GENERIC_ARCHIVE -c GrayInvertRect2B.c
