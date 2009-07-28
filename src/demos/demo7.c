@@ -23,7 +23,7 @@
                                  //
                                  //       #include <extgraph.h>
 
-
+#define INITIAL_TIMER_VALUE (100000*20UL)
 
 /*===========================================================================*/
 /* main routine: where all the fun starts ...                                */
@@ -39,7 +39,7 @@ void _main(void) {
     if (!GrayOn()) return;
 
     OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
 
     GrayClearScreen_R();
 
@@ -47,7 +47,7 @@ void _main(void) {
 
     do {
         //---------------------------------------------------------------------
-        // build-in AMS line drawing routine ...
+        // built-in OS line drawing routine ...
         //---------------------------------------------------------------------
         OSTimerRestart(USER_TIMER);
         for (j=0;j<4 && !kbhit();j++) {
@@ -58,7 +58,7 @@ void _main(void) {
             for (i=99; i>=8; i--) GrayDrawLine(80,50,0,i,   used_color);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"OS routine took %lu ticks",1000-measure_val);
+        sprintf(tmpstr,"OS routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
 
         GrayDrawRect(0,0,239,7,COLOR_WHITE,RECT_FILLED);
         GrayDrawStrExt(0,0,tmpstr,A_REPLACE | A_CENTERED | A_SHADOWED,F_4x6);
@@ -77,7 +77,7 @@ void _main(void) {
             for (i=99; i>=8; i--) GrayFastDrawLine2B_R(GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),80,50,0,i,   used_color);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"Own routine took %lu ticks",1000-measure_val);
+        sprintf(tmpstr,"Own routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
         GrayDrawRect(0,0,239,8,COLOR_WHITE,RECT_FILLED);
         GrayDrawStrExt(0,0,tmpstr,A_REPLACE | A_CENTERED | A_SHADOWED,F_4x6);
     }

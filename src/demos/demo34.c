@@ -120,7 +120,6 @@ void _main(void) {
 
     for (i=0;i<15;i++) {
         if (GetPic(buffer,i,src)) {
-            asm("0: bra.s 0b");
             if (ShowPic(buffer, plane1, plane2) == KEY_ESC) break;
         }
         else {

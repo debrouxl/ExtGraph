@@ -454,7 +454,7 @@ void _main(void)
 				mode++;
 				if (mode == 3) mode = 0;
 				// Waiting loop so as to cut rebounds on key. It replaces a
-				// bigger block of code that uses AMS timer functions.
+				// bigger block of code that uses OS timer functions.
 				asm("move.l #0x27FFF,%%d0; 0: subq.l #1,%%d0; bpl.s 0b" : : : "d0","cc");
 			}
 

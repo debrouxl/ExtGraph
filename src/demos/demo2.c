@@ -23,6 +23,7 @@
                                  //
                                  //       #include <extgraph.h>
 
+#define INITIAL_TIMER_VALUE (100000*20UL)
 
 /*===========================================================================*/
 /* main routine: where all the fun starts ...                                */
@@ -39,14 +40,14 @@ void _main(void) {
     FontSetSys(F_4x6);
 
     OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
 
     ClearScreen();
     DrawStr(0,0,tmpstr,A_REPLACE);
 
     do {
         //---------------------------------------------------------------------
-        // build-in AMS line drawing routine ...
+        // built-in OS line drawing routine ...
         //---------------------------------------------------------------------
         OSTimerRestart(USER_TIMER);
         for (j=0;j<6 && !kbhit();j++) {
@@ -57,7 +58,7 @@ void _main(void) {
             for (i=99; i>=8; i--) DrawLine(80,50,0,i,   used_mode);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"OS Routine took %lu ticks",1000-measure_val);
+        sprintf(tmpstr,"OS Routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
         memset(LCD_MEM,0,30*8);
         DrawStr(0,0,tmpstr,A_REPLACE);
 
@@ -75,7 +76,7 @@ void _main(void) {
             for (i=99; i>=8; i--) FastDrawLine_R(LCD_MEM,80,50,0,i,   used_mode);
         }
         measure_val = OSTimerCurVal(USER_TIMER);
-        sprintf(tmpstr,"Own Routine took %lu ticks",1000-measure_val);
+        sprintf(tmpstr,"Own Routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
         memset(LCD_MEM,0,30*8);
         DrawStr(0,0,tmpstr,A_REPLACE);
     }

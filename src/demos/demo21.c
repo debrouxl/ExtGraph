@@ -13,6 +13,8 @@
                                  //       #include <extgraph.h>
 #include "../../lib/preshift.h"
 
+#define INITIAL_TIMER_VALUE (100000*20UL)
+
 #define isprite_16 \
 ((unsigned short[2*16]){0x1,0xFFFF,0x3,0xFFFE,0x7,0xFFFC,0xF,0xFFF8,0x1F,0xFFF0,0x3F,0xFFE0,0x7F,0xFFC0,0xFF,0xFF80,0x1FF,0xFF00,0x3FF,0xFE00,0x7FF,0xFC00,0xFFF,0xF800,0x1FFF,0xF000,0x3FFF,0xE000,0x7FFF,0xC000,0xFFFF,0x8000})
 
@@ -53,11 +55,11 @@ void _main(void) {
     // Grayscale.
     PreshiftGrayISprite16x16(isprite_16,preshiftbuf);
 
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
     if(!GrayOn()) goto end;
     count = 0;
 
-    OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
 
     for (i=2;(i--);) {
         GrayClearScreen_R();
@@ -71,8 +73,7 @@ void _main(void) {
 
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -80,8 +81,7 @@ void _main(void) {
     if(!GrayOn()) goto end;
     count = 0;
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=2;(i--);) {
         GrayClearScreen_R();
         for (y=0;y<=100-16;y++) {
@@ -94,8 +94,7 @@ void _main(void) {
 
     GrayOff();
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ClipSprite: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"ClipSprite: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
@@ -105,8 +104,7 @@ void _main(void) {
 
     count = 0;
 
-    OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
+    OSTimerRestart(USER_TIMER);
 
     for (i=2;(i--);) {
         ClrScr();
@@ -119,15 +117,14 @@ void _main(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"Preshift: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) goto end;
 
 
     count = 0;
 
-    OSRegisterTimer(USER_TIMER,1000);
+    OSTimerRestart(USER_TIMER);
 
     for (i=2;(i--);) {
         ClrScr();
@@ -140,13 +137,13 @@ void _main(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"Sprite: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"Sprite: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     ngetchx();
 
 
     end:
+    OSFreeTimer(USER_TIMER);
     LCD_restore(screen);
     GKeyFlush();
     ST_helpMsg(EXTGRAPH_VERSION_PWDSTR);

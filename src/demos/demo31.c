@@ -34,7 +34,7 @@
                                  //
                                  //       #include <extgraph.h>
 
-
+#define INITIAL_TIMER_VALUE (100000*20UL)
 
 void _main(void) {
 #define bsize (100*20+4) // Size of a bitmap for a 160x100 screen.
@@ -55,61 +55,59 @@ void _main(void) {
     
     // Scale from calculator actual screen size.
     ST_helpMsg("Benchmarking...");
-    OSRegisterTimer(USER_TIMER,100000*20UL);
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
     for (i = 0; i < 3000; i++) {
         C89_92V200(Scale1Plane160to240_R(lcd, lcd2),
                    Scale1Plane240to160_R(lcd, lcd2));
     }
     LCD_restore(lcd2);
-    C89_92V200(sprintf(tmpstr,"%lu ticks for 3000 160->240 scaling",(100000*20UL-OSTimerCurVal(USER_TIMER))),
-               sprintf(tmpstr,"%lu ticks for 3000 240->160 scaling",(100000*20UL-OSTimerCurVal(USER_TIMER))));
+    C89_92V200(sprintf(tmpstr,"%lu ticks for 3000 160->240 scaling",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER))),
+               sprintf(tmpstr,"%lu ticks for 3000 240->160 scaling",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER))));
     ST_helpMsg(tmpstr);
-    OSFreeTimer(USER_TIMER);
     if (ngetchx() == KEY_ESC) goto end;
 
 
     // Scale to calculator actual screen size.
     ClrScr();
     ST_helpMsg("Benchmarking...");
-    OSRegisterTimer(USER_TIMER,100000*20UL);
+    OSTimerRestart(USER_TIMER);
     for (i = 0; i < 3000; i++) {
         C89_92V200(Scale1Plane240to160_R(lcd2, LCD_MEM),
                    Scale1Plane160to240_R(lcd2, LCD_MEM));
     }
-    C89_92V200(sprintf(tmpstr,"%lu ticks for 3000 160->240 scaling",(100000*20UL-OSTimerCurVal(USER_TIMER))),
-               sprintf(tmpstr,"%lu ticks for 3000 240->160 scaling",(100000*20UL-OSTimerCurVal(USER_TIMER))));
+    C89_92V200(sprintf(tmpstr,"%lu ticks for 3000 160->240 scaling",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER))),
+               sprintf(tmpstr,"%lu ticks for 3000 240->160 scaling",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER))));
     ST_helpMsg(tmpstr);
-    OSFreeTimer(USER_TIMER);
-    ngetchx();
+    if (ngetchx() == KEY_ESC) goto end;
 
     
     // Copy 160x100 screen to the upper-left corner of the 240x128 screen.
     ClrScr();
     ST_helpMsg("Benchmarking...");
-    OSRegisterTimer(USER_TIMER,100000*20UL);
+    OSTimerRestart(USER_TIMER);
     for (i = 0; i < 3000; i++) {
         FastCopyScreen160to240_R(100, &sscreen[4], LCD_MEM);
     }
-    sprintf(tmpstr,"%lu ticks for 3000 160->240 copying",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"%lu ticks for 3000 160->240 copying",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    OSFreeTimer(USER_TIMER);
-    ngetchx();
+    if (ngetchx() == KEY_ESC) goto end;
 
     
     // Copy 160x100 screen near the center of the 240x128 screen.
     ClrScr();
     ST_helpMsg("Benchmarking...");
-    OSRegisterTimer(USER_TIMER,100000*20UL);
+    OSTimerRestart(USER_TIMER);
     for (i = 0; i < 3000; i++) {
         FastCopyScreen160to240NC_R(100, &sscreen[4], LCD_MEM);
     }
-    sprintf(tmpstr,"%lu ticks for 3000 160->240 copying",(100000*20UL-OSTimerCurVal(USER_TIMER)));
+    sprintf(tmpstr,"%lu ticks for 3000 160->240 copying",(INITIAL_TIMER_VALUE-OSTimerCurVal(USER_TIMER)));
     ST_helpMsg(tmpstr);
-    OSFreeTimer(USER_TIMER);
     ngetchx();
 
 
     end:
+    OSFreeTimer(USER_TIMER);
     OSSetSR(0);
     LCD_restore(lcd);
     GKeyFlush();

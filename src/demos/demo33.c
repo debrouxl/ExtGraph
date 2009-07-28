@@ -23,7 +23,7 @@
                                  //
                                  //       #include <extgraph.h>
 
-
+#define INITIAL_TIMER_VALUE (100000*20UL)
 
 /*===========================================================================*/
 /* main routine: where all the fun starts ...                                */
@@ -39,12 +39,12 @@ void _main(void) {
     LCD_save(screen);
 
     OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
 
     if (!GrayOn()) goto end;
 
     //---------------------------------------------------------------------
-    // built-in AMS line drawing routine ...
+    // built-in OS line drawing routine ...
     //---------------------------------------------------------------------
     GrayClearScreen_R();
     OSTimerRestart(USER_TIMER);
@@ -56,7 +56,7 @@ void _main(void) {
         for (i=168;i>=-40; i--) GrayDrawClipLine(120,64,-40,i,used_color);
     }
     measure_val = OSTimerCurVal(USER_TIMER);
-    sprintf(tmpstr,"OS routine took %lu ticks",1000-measure_val);
+    sprintf(tmpstr,"OS routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
     GrayDrawRect(0,0,239,7,COLOR_WHITE,RECT_FILLED);
     GrayDrawStrExt(0,0,tmpstr,A_NORMAL | A_CENTERED | A_SHADOWED,F_4x6);
 
@@ -76,7 +76,7 @@ void _main(void) {
         for (i=168;i>=-40; i--) GrayClipDrawLine_R(120,64,-40,i,clippedcoord,used_color,GrayGetPlane(LIGHT_PLANE),GrayGetPlane(DARK_PLANE),GrayFastDrawLine2B_R);
     }
     measure_val = OSTimerCurVal(USER_TIMER);
-    sprintf(tmpstr,"Own routine took %lu ticks",1000-measure_val);
+    sprintf(tmpstr,"Own routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
     GrayDrawRect(0,0,239,7,COLOR_WHITE,RECT_FILLED);
     GrayDrawStrExt(0,0,tmpstr,A_NORMAL | A_CENTERED | A_SHADOWED,F_4x6);
 
@@ -86,7 +86,7 @@ void _main(void) {
     GrayOff();
     ClrScr();
     //---------------------------------------------------------------------
-    // built-in AMS line drawing routine ...
+    // built-in OS line drawing routine ...
     //---------------------------------------------------------------------
     OSTimerRestart(USER_TIMER);
     for (j=0;j<4;j++) {
@@ -97,7 +97,7 @@ void _main(void) {
         for (i=168;i>=-40; i--) {rect.y1 = i; DrawClipLine(&rect,&(SCR_RECT){{0, 0, 239, 127}},A_XOR); }
     }
     measure_val = OSTimerCurVal(USER_TIMER);
-    sprintf(tmpstr,"OS routine took %lu ticks",1000-measure_val);
+    sprintf(tmpstr,"OS routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
     GrayDrawRect2B(0,0,239,7,COLOR_WHITE,RECT_FILLED,LCD_MEM,LCD_MEM);
     GrayDrawStrExt2B(0,0,tmpstr,A_NORMAL | A_CENTERED,F_4x6,LCD_MEM,LCD_MEM);
 
@@ -115,7 +115,7 @@ void _main(void) {
         for (i=168;i>=-40; i--) ClipDrawLine_R(120,64,-40,i,clippedcoord,A_XOR,LCD_MEM,FastDrawLine_R);
     }
     measure_val = OSTimerCurVal(USER_TIMER);
-    sprintf(tmpstr,"Own routine took %lu ticks",1000-measure_val);
+    sprintf(tmpstr,"Own routine took %lu ticks",INITIAL_TIMER_VALUE-measure_val);
     GrayDrawRect2B(0,0,239,7,COLOR_WHITE,RECT_FILLED,LCD_MEM,LCD_MEM);
     GrayDrawStrExt2B(0,0,tmpstr,A_NORMAL | A_CENTERED,F_4x6,LCD_MEM,LCD_MEM);
 

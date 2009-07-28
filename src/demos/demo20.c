@@ -11,6 +11,8 @@
                                  //
                                  //       #include <extgraph.h>
 
+#define INITIAL_TIMER_VALUE (100000*20UL)
+
 static const unsigned char spritedata8[8]  = {0xaa,0x55,0xaa,0x55,0xaa,0x55,0xaa,0x55};
 static const unsigned short spritedata16[16] = {
 0xaaaa,0x5555,0xaaaa,0x5555,
@@ -43,9 +45,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<=160-8;x+=8) {
@@ -57,11 +57,32 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
+#if __TIGCCLIB_VERSION__ >= 272
+    //-------------------------------------------------------------------------
+    // original sprite functions with RPLC (GCC4TI 0.96 Beta 10+)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-16;y++) {
+            for (x=0;x<=160-8;x+=8) {
+                count++;
+                Sprite8(x,y,8,spritedata8,LCD_MEM,SPRT_RPLC);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB RPLC: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+#endif
 
     //-------------------------------------------------------------------------
     // modified sprite functions using separate and/or
@@ -69,8 +90,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<20;x++) {
@@ -82,8 +102,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -93,8 +112,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<20;x++) {
@@ -105,8 +123,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -116,8 +133,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<20;x++) {
@@ -128,8 +144,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -139,8 +154,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<20;x++) {
@@ -151,8 +165,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -163,9 +176,8 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSFreeTimer(USER_TIMER);
-    OSRegisterTimer(USER_TIMER,1000);
 
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<=160-8;x+=8) {
@@ -176,8 +188,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -187,8 +198,7 @@ static inline short Test8(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-16;y++) {
             for (x=0;x<20;x++) {
@@ -199,8 +209,7 @@ static inline short Test8(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -221,8 +230,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<=160-16;x+=16) {
@@ -234,11 +242,32 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
+#if __TIGCCLIB_VERSION__ >= 272
+    //-------------------------------------------------------------------------
+    // original sprite functions with RPLC (GCC4TI 0.96 Beta 10+)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-24;y++) {
+            for (x=0;x<=160-16;x+=16) {
+                count++;
+                Sprite16(x,y,16,spritedata16,LCD_MEM,SPRT_RPLC);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB RPLC: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+#endif
 
     //-------------------------------------------------------------------------
     // modified sprite functions using separate and/or
@@ -246,8 +275,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<10;x++) {
@@ -259,8 +287,7 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -270,8 +297,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<10;x++) {
@@ -282,8 +308,7 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -293,8 +318,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<10;x++) {
@@ -305,8 +329,7 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -316,8 +339,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<10;x++) {
@@ -327,8 +349,7 @@ static inline short Test16(void) {
         }
     }
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 
@@ -338,8 +359,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<=160-16;x+=16) {
@@ -350,8 +370,7 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -361,8 +380,7 @@ static inline short Test16(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-24;y++) {
             for (x=0;x<10;x++) {
@@ -373,8 +391,7 @@ static inline short Test16(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -396,8 +413,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<=160-32;x+=16) {
@@ -409,11 +425,32 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB AND+OR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
+#if __TIGCCLIB_VERSION__ >= 272
+    //-------------------------------------------------------------------------
+    // original sprite functions with RPLC (GCC4TI 0.96 Beta 10+)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-40;y++) {
+            for (x=0;x<=160-32;x+=16) {
+                count++;
+                Sprite32(x,y,32,spritedata32,LCD_MEM,SPRT_RPLC);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"TIGCCLIB RPLC: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+#endif
 
     //-------------------------------------------------------------------------
     // modified sprite functions using separate and/or
@@ -421,8 +458,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<9;x++) {
@@ -434,8 +470,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph AND+OR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -445,8 +480,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<9;x++) {
@@ -457,8 +491,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph MASK: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -468,8 +501,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<9;x++) {
@@ -480,8 +512,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph BLIT: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -491,8 +522,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<9;x++) {
@@ -503,8 +533,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph RPLC: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -515,8 +544,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<=160-32;x+=16) {
@@ -527,8 +555,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",1000-measure_val,count);
+    sprintf(tmpstr,"TIGCCLIB XOR: %lu ticks for %ld sprites",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
@@ -538,8 +565,7 @@ static inline short Test32(void) {
     count = 0;
     ClrScr();
 
-    OSRegisterTimer(USER_TIMER,1000);
-
+    OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
         for (y=0;y<=100-40;y++) {
             for (x=0;x<9;x++) {
@@ -550,8 +576,7 @@ static inline short Test32(void) {
     }
 
     measure_val = OSTimerCurVal(USER_TIMER);
-    OSFreeTimer(USER_TIMER);
-    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",1000-measure_val,count);
+    sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -565,11 +590,14 @@ void _main(void) {
     short      retval;
 
     LCD_save(screen);
+    OSFreeTimer(USER_TIMER);
+    OSRegisterTimer(USER_TIMER,INITIAL_TIMER_VALUE);
 
     retval = Test8();
     if (retval != KEY_ESC) retval=Test16();
     if (retval != KEY_ESC) retval=Test32();
 
+    OSFreeTimer(USER_TIMER);
     LCD_restore(screen);
     GKeyFlush();
     ST_helpMsg(EXTGRAPH_VERSION_PWDSTR);

@@ -5,6 +5,8 @@ X* Fix Scale1Plane160to240_R, and make a demo for it.
 
 /* Start augmenting test coverage of the demos, because it IS necessary...
 -> demo32 for Create(I)Sprite(I)Shadow functions.
+-> demo33 for clipped lines
+-> demo34 for UnpackBuffer*
 -> extcheck.pl --coverage helps finding untested functions.
 
 /* The C function prototypes embedded in the .s and .c files are outdated, and they're a pain to maintain. Make some script that replaces them by those in extgraph.h (the correct ones, by definition).
@@ -15,12 +17,12 @@ X* Fix Scale1Plane160to240_R, and make a demo for it.
 
 X* Move the functions' documentation into Doxygen comments.
 
-?* Split extgraph.h, timemap.h into multiple smaller header files ?
+X* Rewrite filled triangle functions in ASM, while changing the algorithm: due to rounding errors, the current algorithm doesn't work well. Long division with a higher shift count should be used.
+With that change, there won't probably be any difference between clipped and non-clipped versions.
 
 -- Beta 6 --
 
-0* Rewrite filled triangle functions in ASM, while changing the algorithm: due to rounding errors, the current algorithm doesn't work well. Long division with a higher shift count should be used.
-With that change, there won't probably be any difference between clipped and non-clipped versions.
+?* Split extgraph.h, timemap.h into multiple smaller header files ?
 
 /* 32x32 tilemap engine. Use and extend what was started by Michael Hergenrader (or Lachipseudo Assasen, I don't remember).
 
