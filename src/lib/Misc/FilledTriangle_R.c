@@ -165,8 +165,8 @@ GrayFilledTriangle_R:
 	jsr (%a3)
 | Result is in d1
 	movea.l %d1,%a3
-	move.l (%sp)+,%d1
 	move.l (%sp)+,%d2
+	move.l (%sp)+,%d1
 	move.l %d4,%d6
 	bra.s .L23
 .L21:
