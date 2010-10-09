@@ -1,5 +1,5 @@
 ===============================================================================
-Library ExtGraph (TIGCC-AddOn)               (c) 2001-2008 TICT (TI-Chess Team)
+Library ExtGraph (TIGCC-AddOn)               (c) 2001-2010 TICT (TI-Chess Team)
 ===============================================================================
 
 Read file docs/extgraph.html to get details about the API of the ExtGraph-Lib.
@@ -91,16 +91,19 @@ modifications.
 
 
 If you think you've found a bug, send me information about the faulty functions,
-with a complete testcase if possible (like Kevin Kofler, the maintainer of the
-official TIGCC, I won't disclose your project if you send me an entire project):
-I have a small test suite, which suits well for sprite routines. I'll try to
-reply within several days, the delay depends on how busy I am. If I forget to
-reply after a while, remind me about you !
+with a complete testcase if possible (I won't disclose your project if you send
+me an entire project): I have a small test suite, which suits well to sprite
+routines. I'll _try_ to reply within several days, the delay depends on how busy
+I am. If I forget to reply after a while, remind me about you !
 But first, please:
-* check out the ExtGraph library (at least the /lib directory) from the SVN
-repository, created 2005/08/12, located at http://opensvn.csie.org/ExtGraph,
-and see if the bug is still there in the repository version. Many bugs were
-fixed in SVN prior to the 2.00 Beta 5 release.
+* download the ExtGraph library (at least the files in the /lib directory) from
+the Git repository at http://github.com/debrouxl/ExtGraph , and see if the bug
+is still there in the repository version.
+Historical note: there used to be a SVN repository at
+http://opensvn.csie.org/ExtGraph . This free SVN repository hosting provider
+went away mid-May 2010, the Git repository was created in October 2010. Many
+bugs were fixed in SVN prior to the 2.00 Beta 5 release, and likewise after the
+2.00 Beta 5 release.
 * if the problem is Address Error, check whether forcing the pointer alignment
 to be even fixes the problem. As a general rule, all planes *must* start at an
 even address, but some functions assume, for efficiency, that one of their
