@@ -722,7 +722,7 @@ void GrayClipFastFilledCircle_R(void *planes asm("%a0"), short xcenter asm("%d0"
  * \brief These functions fill the triangle whose endpoints are (\a x1, \a y1), (\a x2, \a y2) and (\a x3, \a y3) in one or two 240x128 video plane(s), with hard-coded drawing mode.
  *
  * The \a drawfunc parameter must be a routine compatible with DrawSpan* / GrayDrawSpan* ones.
- * \warning \ref GrayFilledTriangle_R and \ref GrayClipFilledTriangle_R require consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph
+ * \warning \ref GrayFilledTriangle_R requires consecutive grayscale planes (see <a href="../../extgraph.html#grayscaletilemap">the root of the ExtGraph
  * documentation</a> for more information), in order not to use too many registers, which would make the used algorithm less efficient.<br>
  * <b>NOT PROVIDING SUCH PLANES IS LIKELY TO CRASH HW1 CALCULATORS</b> (which have become VERY infrequent in 2009, but still...).
  *
@@ -744,7 +744,7 @@ void GrayFilledTriangle_R(short x1 asm("%d0"), short y1 asm("%d1"), short x2 asm
  *
  * Unlike (Gray)FastDrawHLine(2B)_R, these routines are clipped. The \a addr/\a addrs pointer is 
  * interpreted as the address of the beginning of the screen row to which \a x1 and \a x2
- * relate. See the code of \ref ClipFilledTriangle_R for an example of use.
+ * relate. See the code of \ref FilledTriangle_R for an example of use.
  */
 //@{
 void DrawSpan_OR_R(short x1 asm("%d0"), short x2 asm("%d1"), void * addr asm("%a0"));
