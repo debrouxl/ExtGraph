@@ -294,9 +294,9 @@ enum ExtAttrs {
 #define BOUNDS_COLLIDE8(x0, y0, x1, y1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, 8)
 #define BOUNDS_COLLIDE16(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, 16)
 #define BOUNDS_COLLIDE32(x0, y0, x1, y1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, 32)
-#define BOUNDS_COLLIDE82H(x0, y0, x1, y1, h0, h1)  BOUNDS_COLLIDE(x0, y0, x1, y1, 8, h0, h1)
-#define BOUNDS_COLLIDE162H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 16, h0, h1)
-#define BOUNDS_COLLIDE322H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE(x0, y0, x1, y1, 32, h0, h1)
+#define BOUNDS_COLLIDE82H(x0, y0, x1, y1, h0, h1)  BOUNDS_COLLIDE2H(x0, y0, x1, y1, 8, h0, h1)
+#define BOUNDS_COLLIDE162H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE2H(x0, y0, x1, y1, 16, h0, h1)
+#define BOUNDS_COLLIDE322H(x0, y0, x1, y1, h0, h1) BOUNDS_COLLIDE2H(x0, y0, x1, y1, 32, h0, h1)
 //@}
 
 

@@ -14,6 +14,7 @@ ClipSprite8Get_R:
     add.w    %d1,%d2		| %d2 = h + y
     bmi.s    0f		| y + h < 0 ?
 
+    suba.w   %d1,%a1		| sprt -= y
     moveq.l  #0,%d1		| offsety = 0
     bra.s    10f
 
@@ -78,7 +79,6 @@ ClipSprite8Get_R:
     neg.w    %d0		| shift = -x
     add.w    %d1,%d1		| %d1 = y*30
     adda.w   %d1,%a0		| dest += offset
-
 4:
     move.b   (%a0),%d1
     lsr.b    %d0,%d1		| shifting

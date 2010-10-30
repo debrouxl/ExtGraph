@@ -42,6 +42,7 @@ ClipSprite32Get_R:
     add.w    %d3,%d1		| %d3 = x/16 + y*15
     add.w    %d1,%d1		| %d3 = x/8 + y*30
     adda.w   %d1,%a0		| dest += offset
+
     moveq.l  #16,%d1
     andi.w   #15,%d0		| %d0 = righshift
     sub.w    %d0,%d1		| %d1 = 16 - (x & 15)
@@ -62,6 +63,7 @@ ClipSprite32Get_R:
 8:
     cmpi.w   #-32,%d0
     ble.s    0f		| x <= -32 ?
+
     neg.w    %d0		| shift = -x
     add.w    %d1,%d1		| %d1 = y*30
     adda.w   %d1,%a0		| dest += offset
@@ -69,6 +71,7 @@ ClipSprite32Get_R:
     move.l   (%a0),%d1
     lsr.l    %d0,%d1		| shifting
     move.l   %d1,(%a1)+
+
     lea.l    30(%a0),%a0
     dbf      %d2,4b
 0:
@@ -78,14 +81,17 @@ ClipSprite32Get_R:
 7:
     cmpi.w   #239,%d0
     bhi.s    0b		| x > 239
+
+    subi.w   #208,%d0		| shiftx
     add.w    %d1,%d1		| %d1 = y*30
     lea.l    26(%a0,%d1.w),%a0
-    subi.w   #208,%d0		| shiftx
 5:
     move.l   (%a0),%d1
     lsl.l    %d0,%d1
     move.l   %d1,(%a1)+
+
     lea.l    30(%a0),%a0
     dbf      %d2,5b
+
     move.l   (%sp)+,%d3
     rts

@@ -14,6 +14,8 @@ ClipSprite16Get_R:
     add.w    %d1,%d2		| %d2 = h + y
     bmi.s    0f		| y + h < 0 ?
 
+    add.w    %d1,%d1		| %d1 = 2y
+    suba.w   %d1,%a1		| sprt -= 2y
     moveq.l  #0,%d1		| offsety = 0
     bra.s    10f
 
@@ -59,11 +61,10 @@ ClipSprite16Get_R:
 8:
     cmpi.w   #-16,%d0
     ble.s    0b		| x <= -16 ?
-    neg.w    %d0		| shift = -x
 
+    neg.w    %d0		| shift = -x
     add.w    %d1,%d1		| %d1 = y*30
     adda.w   %d1,%a0
-
 4:
     move.w   (%a0),%d1
     lsr.w    %d0,%d1		| shifting
@@ -82,7 +83,6 @@ ClipSprite16Get_R:
     andi.w   #15,%d0		| shiftx = x & 15
     add.w    %d1,%d1		| %d1 = y*30
     lea.l    28(%a0,%d1.w),%a0	| dest += offset
-
 5:
     move.w   (%a0),%d1
     lsl.w    %d0,%d1
