@@ -1,4 +1,4 @@
-| C prototype: void Tile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0")) __attribute__((__stkparm__));
+| C prototype: void Tile16x16_RPLC_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprite asm("%a1"), void *plane asm("%a0"));
 
 .text
 .globl Tile16x16_RPLC_R

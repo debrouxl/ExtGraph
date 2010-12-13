@@ -169,13 +169,11 @@ static inline short Test8(void) {
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
-
     //-------------------------------------------------------------------------
     // original sprite functions
     //-------------------------------------------------------------------------
     count = 0;
     ClrScr();
-
 
     OSTimerRestart(USER_TIMER);
     for (i=5;(i--);) {
@@ -210,6 +208,27 @@ static inline short Test8(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // modified sprite functions (Get the tile)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-16;y++) {
+            for (x=0;x<20;x++) {
+                count++;
+                Tile8x8Get_R(x,y,LCD_MEM,tmpstr);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph Get: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
@@ -395,6 +414,26 @@ static inline short Test16(void) {
     ST_helpMsg(tmpstr);
     if (ngetchx() == KEY_ESC) return KEY_ESC;
 
+    //-------------------------------------------------------------------------
+    // modified sprite functions (Get the tile)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-24;y++) {
+            for (x=0;x<10;x++) {
+                count++;
+                Tile16x16Get_R(x,y,LCD_MEM,(unsigned short *)tmpstr);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph Get: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    return ngetchx();
 }
 
 
@@ -403,7 +442,7 @@ static inline short Test16(void) {
 /*===========================================================================*/
 static inline short Test32(void) {
     unsigned long  measure_val;
-    char           tmpstr[100];
+    char           tmpstr[130];
     short          x,y,i;
     long           count;
 
@@ -577,6 +616,27 @@ static inline short Test32(void) {
 
     measure_val = OSTimerCurVal(USER_TIMER);
     sprintf(tmpstr,"ExtGraph XOR: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
+    ST_helpMsg(tmpstr);
+    if (ngetchx() == KEY_ESC) return KEY_ESC;
+
+    //-------------------------------------------------------------------------
+    // modified sprite functions (Get the tile)
+    //-------------------------------------------------------------------------
+    count = 0;
+    ClrScr();
+
+    OSTimerRestart(USER_TIMER);
+    for (i=5;(i--);) {
+        for (y=0;y<=100-40;y++) {
+            for (x=0;x<9;x++) {
+                count++;
+                Tile32x32Get_R(x,y,LCD_MEM,(unsigned long *)tmpstr);
+            }
+        }
+    }
+
+    measure_val = OSTimerCurVal(USER_TIMER);
+    sprintf(tmpstr,"ExtGraph Get: %lu ticks for %ld tiles",INITIAL_TIMER_VALUE-measure_val,count);
     ST_helpMsg(tmpstr);
     return ngetchx();
 }
