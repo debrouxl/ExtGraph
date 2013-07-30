@@ -127,15 +127,14 @@ __gray_int1_handler_hw1:
 	moveq    #0x8,%d0                | reset phase counter to 8
 __gray_store:
 	move.w   %d0,(%a0)               | store new phase counter value
-#	cmp.b    #8,%d0
-	subq.w   #8,%d0                  | cmpi -> subq (-2 bytes).
+	cmp.b    #8,%d0
 	beq.s    __gray_proceed_old      | for value 8 we do nothing (dark plane
 	                                 | stays active)
 	lea      (__D_plane,%pc),%a0
     |--------------------------------------------------------------------------
     | doublebuffer extension ... add content of __gray_dbl_offset to %d0
     |--------------------------------------------------------------------------
-	add.w    (__gray_dbl_offset-__D_plane+8,%a0),%d0 | +8 required by cmpi -> subq above.
+	add.w    (__gray_dbl_offset-__D_plane,%a0),%d0
 	suba.w   %d0,%a0
 	move.l   (%a0),%d0               | load the address of this plane
 	lsr.l    #3,%d0                  | reduce to address / 8
@@ -298,7 +297,7 @@ __gray_perform_copying:
     |--------------------------------------------------------------------------
 
     |--------------------------------------------------------------------------
-    | doublebuffer extension ... add content of __gray_dbl_offset to %d0
+    | doublebuffer extension ... add content of __gray_dbl_offset to %d1
     |--------------------------------------------------------------------------
 	add.w    (__gray_dbl_offset,%pc),%d1
 	neg.w    %d1

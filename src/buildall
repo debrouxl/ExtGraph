@@ -1,6 +1,6 @@
 #!/bin/sh
 cd lib
-./buildentirelib
+./buildlib
 cd ..
 cd demos
 ./builddemos
