@@ -1,5 +1,7 @@
 | C prototype: void Sprite32_MASK_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long *mask, void *dest asm("%a0")) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite32_MASK_R
 .even
@@ -14,15 +16,13 @@ Sprite32_MASK_R:
 
     move.l   4+10(%sp),%a2
 
-    move.w   %d1,%d3
-    lsl.w    #4,%d1
-    sub.w    %d3,%d1		| %d1=y*15
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d3
 
     move.w   %d0,%d3
     lsr.w    #4,%d3		| %d2=x/16
 
-    add.w    %d1,%d3		| %d2=x/16+y*15
-    add.w    %d3,%d3		| %d2=x/8+y*30 (nb pair)
+    add.w    %d1,%d3		| %d2=x/16+y*PLANE_BYTE_WIDTH/2
+    add.w    %d3,%d3		| %d2=x/8+y*PLANE_BYTE_WIDTH
     adda.w   %d3,%a0
 
     andi.w   #15,%d0		| %d0=rightshift
@@ -47,7 +47,7 @@ Sprite32_MASK_R:
     or.w     %d4,(%a0)
     or.l     %d3,-(%a0)
 
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
     movea.l  (%sp)+,%a2

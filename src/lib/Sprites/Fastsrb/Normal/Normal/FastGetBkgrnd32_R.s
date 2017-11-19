@@ -31,16 +31,16 @@ FastGetBkgrnd32_R:
     swap     %d2
     lsr.w    #1,%d2
     bcs.s    0f
-    lea      -30+4(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH+4(%a0),%a0
     bra.s    1f
 
 0:
     move.l   (%a0)+,(%a1)+
     move.w   (%a0),(%a1)+
 1:
-    move.l   30-4(%a0),(%a1)+
-    move.w   30(%a0),(%a1)+
-    lea      60-4(%a0),%a0
+    move.l   PLANE_BYTE_WIDTH-4(%a0),(%a1)+
+    move.w   PLANE_BYTE_WIDTH(%a0),(%a1)+
+    lea      2*PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d2,0b
 
 2:

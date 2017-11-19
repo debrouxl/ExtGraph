@@ -1,5 +1,7 @@
 | C prototype: void GrayClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl GrayClipSprite8_RPLC_R
 .even
@@ -20,8 +22,8 @@
     and.w    %d3,(%a1)
     or.w     %d0,(%a1)
 
-    lea      30(%a0),%a0
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,2b
 
     movem.l  (%sp)+,%d3/%a2-%a3
@@ -47,25 +49,23 @@ GrayClipSprite8_RPLC_R:
 
 9:
     add.w    %d2,%d3		| %d3 = h + y
-    subi.w   #127,%d3		| %d3 = h + y - 127
-    ble.s    6f			| h + y - 127 <= 0 ?
-    sub.w    %d3,%d2		| h -= h + y - 127 (h = 127-y)
+    subi.w   #PLANE_PIXEL_HEIGHT-1,%d3		| %d3 = h + y - (PLANE_PIXEL_HEIGHT-1)
+    ble.s    6f			| h + y - (PLANE_PIXEL_HEIGHT-1) <= 0 ?
+    sub.w    %d3,%d2		| h -= h + y - (PLANE_PIXEL_HEIGHT-1) <=> (h = (PLANE_PIXEL_HEIGHT-1)-y)
     bmi.s    0f
 
 6:
-    move.w   %d1,%d3
-    lsl.w    #4,%d1
-    sub.w    %d3,%d1		| %d1 = y*15
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d3
 
 10:
     move.w   %d0,%d3		| %d3 = x
     ble.s    8f	| x < 0 ?
-    cmpi.w   #239-8,%d0
-    bhi.s    7f	| x > 239-8
+    cmpi.w   #PLANE_PIXEL_WIDTH-1-8,%d0
+    bhi.s    7f	| x > PLANE_PIXEL_WIDTH-1-8
 
     lsr.w    #4,%d3		| %d3 = x/16
-    add.w    %d3,%d1		| %d1 = x/16 + y*15
-    add.w    %d1,%d1		| %d1 = x/8 + y*30
+    add.w    %d3,%d1		| %d1 = x/16 + y*PLANE_BYTE_WIDTH/2
+    add.w    %d1,%d1		| %d1 = x/8 + y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
     adda.w   %d1,%a1
 
@@ -95,8 +95,8 @@ GrayClipSprite8_RPLC_R:
     and.l    %d3,(%a1)
     or.l     %d0,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,1b
 
 0:
@@ -108,7 +108,7 @@ GrayClipSprite8_RPLC_R:
     ble.s    0b		| x <= -8 ?
 
     neg.w    %d0		| shift = -x
-    add.w    %d1,%d1		| %d1 = y*30
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
     adda.w   %d1,%a1
 
@@ -127,20 +127,20 @@ GrayClipSprite8_RPLC_R:
     and.b    %d3,(%a1)
     or.b     %d1,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,4b
 
     movem.l  (%sp)+,%d3/%a2-%a3
     rts
 
 7:
-    cmpi.w   #239,%d0
-    bhi.s    0b		| x > 239
+    cmpi.w   #PLANE_PIXEL_WIDTH-1,%d0
+    bhi.s    0b		| x > PLANE_PIXEL_WIDTH-1
 
     andi.w   #7,%d0		| shiftx = x & 7
-    add.w    %d1,%d1		| %d1 = y*30
-    addi.w   #29,%d1
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
+    addi.w   #PLANE_BYTE_WIDTH-1,%d1
     adda.w   %d1,%a0
     adda.w   %d1,%a1
 
@@ -159,8 +159,8 @@ GrayClipSprite8_RPLC_R:
     and.b    %d3,(%a1)
     or.b     %d1,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,5b
 
     movem.l  (%sp)+,%d3/%a2-%a3

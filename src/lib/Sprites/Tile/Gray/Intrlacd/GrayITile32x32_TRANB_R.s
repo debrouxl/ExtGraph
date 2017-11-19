@@ -1,5 +1,7 @@
 | C prototype: void GrayITile32x32_TRANB_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl GrayITile32x32_TRANB_R
 .even
@@ -10,9 +12,7 @@ GrayITile32x32_TRANB_R:
  
     move.l   4+8(%sp),%a2
  
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
  
     add.w    %d0,%d1
  
@@ -42,17 +42,17 @@ GrayITile32x32_TRANB_R:
 
     move.l   %d1,%d3
     not.l    %d3
-    or.l     30(%a0),%d3
+    or.l     PLANE_BYTE_WIDTH(%a0),%d3
     and.l    %d0,%d3
-    move.l   %d3,30(%a0)
+    move.l   %d3,PLANE_BYTE_WIDTH(%a0)
 
     not.l    %d0
-    or.l     30(%a1),%d0
+    or.l     PLANE_BYTE_WIDTH(%a1),%d0
     and.l    %d1,%d0
-    move.l   %d0,30(%a1)
+    move.l   %d0,PLANE_BYTE_WIDTH(%a1)
 
-    lea.l    60(%a0),%a0
-    lea.l    60(%a1),%a1
+    lea.l    2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    2*PLANE_BYTE_WIDTH(%a1),%a1
  
     dbf      %d2,0b
  

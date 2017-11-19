@@ -36,13 +36,13 @@ GraySprite16_AND_R:
     move.w   (%a2)+,%d0
     rol.l    %d1,%d0
     and.l    %d0,(%a0)
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
 
     moveq    #-1,%d0
     move.w   (%a3)+,%d0
     rol.l    %d1,%d0
     and.l    %d0,(%a1)
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 

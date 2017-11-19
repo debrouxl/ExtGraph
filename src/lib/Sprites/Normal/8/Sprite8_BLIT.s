@@ -1,5 +1,7 @@
 | C prototype: void Sprite8_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char maskval, void *dest) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite8_BLIT
 .even
@@ -15,9 +17,7 @@ Sprite8_BLIT:
     movea.l  (%a0)+,%a1
     movea.l  2(%a0),%a0
 
-    move.w   %d1,%d3
-    lsl.w    #4,%d1
-    sub.w    %d3,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d3
 
     move.w   %d0,%d3
     lsr.w    #4,%d3
@@ -46,7 +46,7 @@ Sprite8_BLIT:
     lsr.l    %d1,%d0
     and.l    %d3,(%a0)
     or.l     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
     move.l   (%sp)+,%d3
@@ -60,7 +60,7 @@ Sprite8_BLIT:
     lsl.w    %d1,%d0
     and.w    %d3,(%a0)
     or.w     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,2b
 
 4:

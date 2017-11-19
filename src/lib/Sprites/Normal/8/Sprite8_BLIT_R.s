@@ -1,5 +1,7 @@
 | C prototype: void Sprite8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char maskval asm("%d3"), void *dest asm("%a0"));
 
+.include "common.s"
+
 .text
 .globl Sprite8_BLIT_R
 .even
@@ -10,9 +12,7 @@ Sprite8_BLIT_R:
 
     move.l   %d4,-(%sp)
 
-    move.w   %d1,%d4
-    lsl.w    #4,%d1
-    sub.w    %d4,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
     move.w   %d0,%d4
     lsr.w    #4,%d4
@@ -39,7 +39,7 @@ Sprite8_BLIT_R:
     lsr.l    %d1,%d0
     and.l    %d4,(%a0)
     or.l     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
     move.l   (%sp)+,%d4
@@ -53,7 +53,7 @@ Sprite8_BLIT_R:
     lsl.w    %d1,%d0
     and.w    %d4,(%a0)
     or.w     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,2b
 
     move.l   (%sp)+,%d4

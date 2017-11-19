@@ -24,7 +24,7 @@ GraySprite8_SMASK_R:
     lsr.w    #4,%d0	| d3 = x/16
 
     add.w    %d0,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
     adda.w   %d1,%a1
 
@@ -53,8 +53,8 @@ GraySprite8_SMASK_R:
     and.l    %d3,(%a1)
     or.l     %d0,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
     movem.l  (%sp)+,%d3/%a2-%a4
@@ -62,8 +62,8 @@ GraySprite8_SMASK_R:
     rts
 
 2:
-    lea      30(%a0),%a0
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
 3:
     moveq.l  #-1,%d3
     move.b   (%a4)+,%d3

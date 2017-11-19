@@ -1,5 +1,7 @@
 | C prototype: void Sprite16_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, const unsigned short *mask, void *dest) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite16_MASK
 .even
@@ -15,9 +17,7 @@ Sprite16_MASK:
     movea.l  (%a0)+,%a2
     movea.l  (%a0),%a0
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d2
@@ -46,7 +46,7 @@ Sprite16_MASK:
     lsl.l    %d1,%d0
     or.l     %d0,(%a0)
 
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
 0:

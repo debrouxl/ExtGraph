@@ -3,6 +3,8 @@
 | This routine is faster (about 30%) than the previous C routine, because the
 | algorithm was changed.
 
+.include "common.s"
+
 .text
 .globl Sprite32_XOR
 .even
@@ -19,9 +21,7 @@ Sprite32_XOR:
     movea.l  (%a0)+,%a1
     movea.l  (%a0),%a0
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d0
@@ -44,7 +44,7 @@ Sprite32_XOR:
     eor.l    %d0,(%a0)+
     lsl.w    %d1,%d4
     eor.w    %d4,(%a0)
-    lea      30-4(%a0),%a0
+    lea      PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d3,1b
 
 0:

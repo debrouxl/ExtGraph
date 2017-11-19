@@ -1,5 +1,7 @@
 | C prototype: void Sprite8_XOR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite8_XOR_R
 .even
@@ -10,9 +12,7 @@ Sprite8_XOR_R:
 
     swap     %d2
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d2
@@ -35,12 +35,12 @@ Sprite8_XOR_R:
     swap     %d0
     lsr.l    %d1,%d0
     eor.l    %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
     rts
 
 2:
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
 3:
     moveq    #0,%d0
     move.b   (%a1)+,%d0

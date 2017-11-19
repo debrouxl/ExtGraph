@@ -1,15 +1,17 @@
 | C prototype: void GrayClipISprite32_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl GrayClipISprite32_AND_R
 .even
 
 7:
-    cmpi.w   #239,%d0
-    bhi.s    0f	| x > 239
+    cmpi.w   #PLANE_PIXEL_WIDTH-1,%d0
+    bhi.s    0f	| x > PLANE_PIXEL_WIDTH-1
 
-    add.w    %d1,%d1		| %d1 = y*30
-    addi.w   #26,%d1
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
+    addi.w   #PLANE_BYTE_WIDTH-4,%d1
     adda.w   %d1,%a0
     adda.w   %d1,%a1
 
@@ -29,8 +31,8 @@
     or.l     %d3,%d1
     and.l    %d1,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,5b
 0:
     move.l   (%sp)+,%a2
@@ -57,9 +59,9 @@ GrayClipISprite32_AND_R:
 
 9:
     add.w    %d2,%d3		| %d3 = h + y
-    subi.w   #127,%d3		| %d3 = h + y - 127
-    ble.s    6f			| h + y - 127 <= 0 ?
-    sub.w    %d3,%d2		| h -= h + y - 127 (h = 127-y)
+    subi.w   #PLANE_PIXEL_HEIGHT-1,%d3		| %d3 = h + y - (PLANE_PIXEL_HEIGHT-1)
+    ble.s    6f			| h + y - (PLANE_PIXEL_HEIGHT-1) <= 0 ?
+    sub.w    %d3,%d2		| h -= h + y - (PLANE_PIXEL_HEIGHT-1) <=> (h = (PLANE_PIXEL_HEIGHT-1)-y)
     bmi.s    0f
 
 6:
@@ -70,12 +72,12 @@ GrayClipISprite32_AND_R:
 10:
     move.w   %d0,%d3		| %d3 = x
     ble.s    8f	| x < 0 ?
-    cmpi.w   #239-32,%d0
-    bhi.s    7b	| x > 239-32
+    cmpi.w   #PLANE_PIXEL_WIDTH-1-32,%d0
+    bhi.s    7b	| x > PLANE_PIXEL_WIDTH-1-32
 
     lsr.w    #4,%d3		| %d3 = x/16
     add.w    %d3,%d1		| %d3 = x/16 + y*15
-    add.w    %d1,%d1		| %d3 = x/8 + y*30
+    add.w    %d1,%d1		| %d3 = x/8 + y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
     adda.w   %d1,%a1
     moveq.l  #16,%d1
@@ -105,8 +107,8 @@ GrayClipISprite32_AND_R:
     or.l     %d4,%d0
     and.l    %d0,(%a1)
 
-    lea.l    28(%a0),%a0
-    lea.l    28(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH-2(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH-2(%a1),%a1
     dbf      %d2,1b
     move.w   (%sp)+,%d5
     move.w   (%sp)+,%d4
@@ -119,7 +121,7 @@ GrayClipISprite32_AND_R:
     cmpi.w   #-32,%d0
     ble.s    0b		| x <= -32 ?
     neg.w    %d0		| shift = -x
-    add.w    %d1,%d1		| %d1 = y*30
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
     adda.w   %d1,%a1
     moveq.l  #-1,%d3
@@ -136,8 +138,8 @@ GrayClipISprite32_AND_R:
     or.l     %d3,%d1
     and.l    %d1,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,4b
 
     move.l   (%sp)+,%a2

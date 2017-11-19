@@ -1,33 +1,33 @@
-	.text
-	xdef DrawGrayBuffer89_RPLC
+.include "common.s"
 
-| Affiche le buffer de 5440 octets sur un buffer de 3840 octets
+.text
+.globl DrawGrayBuffer89_RPLC
+.even
+
+| Display a (PLANE_BYTE_WIDTH * PLANE_PIXEL_HEIGHT) buffer onto the 100 first lines of a 240x128 1 bpp buffer, performing RPLC operation - grayscale version.
 
 | Input :
-| a0.l : adresse du buffer source
-| a1.l : adresse du buffer destination
-| d0.w : décalage sur x (0 <= d0 < 32)
-| d1.w : décalage sur y (0 <= d1 < 32)
+| a0.l : source buffer address
+| a1.l : destination plane address
+| d0.w : x offset in pixels (0 <= d0 < PLANE_PIXEL_WIDTH - 240)
+| d1.w : y offset in pixels (0 <= d1 < PLANE_PIXEL_HEIGHT - 128)
 
-| Détruit : d0-d2/a0-a1
+| Destroys : d0-d2/a0-a1
 
 DrawGrayBuffer89_RPLC:
     movem.l  %d3-%d7/%a2-%a3,-(%a7)
 
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
     add.w    %d1,%d1
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    add.w    %d2,%d1	| d1 = y*34
-    adda.w   %d1,%a0	| scrolling vertical
+    adda.w   %d1,%a0	| vertical offset
 
-    moveq.l  #16,%d1
-    cmp.w    %d1,%d0	| d0 < 16 ?
-    blt.s    OK_DrawGrayBuffer89_RPLC
-    addq.l   #2,%a0
-    sub.w    %d1,%d0
-OK_DrawGrayBuffer89_RPLC:
+    move.w   %d0,%d1
+    andi.w   #15,%d0	| reduced shift count
+    lsr.w    #4,%d1
+    add.w    %d1,%d1
+    adda.w   %d1,%a0	| horizontal offset
 
-    lea.l    5440(%a0),%a2
+    lea.l    PLANE_BYTE_WIDTH * PLANE_PIXEL_HEIGHT(%a0),%a2
     lea.l    3840(%a1),%a3
 
     moveq.l  #99,%d7
@@ -37,7 +37,7 @@ OK_DrawGrayBuffer89_RPLC:
     move.w   %d1,%d2
     not.w    %d2	| d2 = mask2
 
-LineStart_DrawGrayBuffer89_RPLC:
+0:
     move.l   (%a0)+,%d3
     lsl.l    %d0,%d3
 
@@ -120,12 +120,12 @@ LineStart_DrawGrayBuffer89_RPLC:
     or.w     %d6,%d5
     move.l   %d5,(%a3)+
 
-    lea.l    10+2(%a0),%a0
-    lea.l    10+2(%a2),%a2
+    lea.l    PLANE_BYTE_WIDTH-22(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH-22(%a2),%a2
     lea.l    10(%a1),%a1
     lea.l    10(%a3),%a3
 
-    dbf      %d7,LineStart_DrawGrayBuffer89_RPLC
+    dbf      %d7,0b
 
     movem.l  (%a7)+,%d3-%d7/%a2-%a3
     rts

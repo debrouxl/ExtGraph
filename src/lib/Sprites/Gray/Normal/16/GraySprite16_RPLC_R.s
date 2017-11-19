@@ -39,14 +39,14 @@ GraySprite16_RPLC_R:
     lsl.l    %d1,%d0
     and.l    %d3,(%a0)
     or.l     %d0,(%a0)
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
 
     moveq.l  #0,%d0
     move.w   (%a3)+,%d0
     lsl.l    %d1,%d0
     and.l    %d3,(%a1)
     or.l     %d0,(%a1)
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 

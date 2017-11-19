@@ -25,7 +25,7 @@ GraySprite32_MASK:
     move.w   %d0,%d3
     lsr.w    #4,%d3           | d3=x/16
     add.w    %d1,%d3          | d3=x/16+y*15
-    add.w    %d3,%d3          | d3=x/8+y*30 (nb pair)
+    add.w    %d3,%d3          | d3=x/8+y*PLANE_BYTE_WIDTH (nb pair)
 
     adda.w   %d3,%a0
     adda.w   %d3,%a1
@@ -73,8 +73,8 @@ GraySprite32_MASK:
     and.w    %d4,%d5
     or.w     %d5,-(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,1b
 
 0:

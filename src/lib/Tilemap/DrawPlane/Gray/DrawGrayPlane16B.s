@@ -1,5 +1,8 @@
-	.text
-	xdef DrawGrayPlane16B
+.include "common.s"
+
+.text
+.globl DrawGrayPlane16B
+.even
 
 | Affiche la map
 | In : 
@@ -71,7 +74,7 @@ RefreshBuffer_DrawGrayPlane16B:
 
     movem.l  %d0-%d1,-(%a7)
 
-    bsr      RefreshGrayBuffer16B
+    jbsr     RefreshGrayBuffer16B
 
     movem.l  (%a7)+,%d0-%d1
 

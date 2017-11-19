@@ -1,6 +1,8 @@
 | C prototype: void SpriteX8_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), const unsigned char *maskval, unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
+.include "common.s"
+
 .text
 .globl SpriteX8_BLIT_R
 .even
@@ -10,9 +12,7 @@ SpriteX8_BLIT_R:
 
 	move.l  28+4(%sp),%a2
 
-	move.w	%d1,%d4
-	lsl.w	#4,%d1
-	sub.w	%d4,%d1
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 	move.w	%d0,%d4
 	andi.w	#15,%d4
@@ -74,7 +74,7 @@ E1:
 	subq.l	#1,%a1
 	subq.l	#1,%a4
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a4
@@ -88,7 +88,7 @@ E2:
  	addq.l	#2,%a3
 	dbf	%d4,E1
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,E0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a4
@@ -114,7 +114,7 @@ O1:
 	and.l	%d6,(%a3)
 	or.l	%d0,(%a3)
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 r:
 	dbf	%d2,E0
 
@@ -141,7 +141,7 @@ O2:
  	addq.l	#2,%a3
 	dbf	%d4,O1
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a4

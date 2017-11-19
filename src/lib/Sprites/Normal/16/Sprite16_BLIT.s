@@ -1,5 +1,7 @@
 | C prototype: void Sprite16_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned short *sprt, const unsigned short maskval, void *dest) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite16_BLIT
 .even
@@ -16,9 +18,7 @@ Sprite16_BLIT:
     move.w   (%a0)+,%d3
     movea.l  (%a0),%a0
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d2
@@ -44,7 +44,7 @@ Sprite16_BLIT:
     lsl.l    %d1,%d0
     and.l    %d3,(%a0)
     or.l     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
 0:

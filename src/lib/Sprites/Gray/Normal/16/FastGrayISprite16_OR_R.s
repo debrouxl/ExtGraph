@@ -34,7 +34,7 @@ __suite__:
     lsr.w    #1,%d2
     bcs.s    _loop_Sprite16_OR
 
-    lea.l    -30(%a0),%a0
+    lea.l    -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    Milieu_Boucle16
 
 _loop_Sprite16_OR:
@@ -52,15 +52,15 @@ Milieu_Boucle16:
     moveq    #0,%d0
     move.w   (%a1)+,%d0
     lsl.l    %d1,%d0
-    or.l     %d0,30(%a0)
+    or.l     %d0,PLANE_BYTE_WIDTH(%a0)
 
     moveq    #0,%d0
     move.w   (%a1)+,%d0
     lsl.l    %d1,%d0
-    or.l     %d0,6000+30(%a0)
+    or.l     %d0,6000+PLANE_BYTE_WIDTH(%a0)
 
 
-    lea.l    60(%a0),%a0
+    lea.l    2*PLANE_BYTE_WIDTH(%a0),%a0
 
     dbf      %d2,_loop_Sprite16_OR
 
@@ -70,7 +70,7 @@ Pre_Boucle16_LSR:
     lsr.w    #1,%d2
     bcs.s    Boucle16_LSR
 
-    lea.l    -30(%a0),%a0
+    lea.l    -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    Milieu_Boucle16_LSR
 
 Boucle16_LSR:
@@ -91,15 +91,15 @@ Milieu_Boucle16_LSR:
     move.w   (%a1)+,%d1
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,30(%a0)
+    or.l     %d1,PLANE_BYTE_WIDTH(%a0)
 
     moveq    #0,%d1
     move.w   (%a1)+,%d1
     swap.w   %d1
     lsr.l    %d0,%d1
-    or.l     %d1,6000+30(%a0)
+    or.l     %d1,6000+PLANE_BYTE_WIDTH(%a0)
 
-    lea.l    60(%a0),%a0
+    lea.l    2*PLANE_BYTE_WIDTH(%a0),%a0
 
 
     dbf      %d2,Boucle16_LSR

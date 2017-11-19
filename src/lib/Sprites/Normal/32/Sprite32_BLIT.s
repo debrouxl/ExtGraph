@@ -1,5 +1,7 @@
 | C prototype: void Sprite32_BLIT(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, const unsigned long maskval, void *dest) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite32_BLIT
 .even
@@ -21,9 +23,7 @@ Sprite32_BLIT:
 
     subq.w   #1,%d3
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d2

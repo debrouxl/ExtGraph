@@ -1,5 +1,7 @@
 | C prototype: void Sprite32_RPLC_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite32_RPLC_R
 .even
@@ -13,9 +15,7 @@ Sprite32_RPLC_R:
     move.l   %d5,-(%sp)
     move.w   %d6,-(%sp)
 
-    move.w   %d1,%d5
-    lsl.w    #4,%d1
-    sub.w    %d5,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d5
 
     move.w   %d0,%d5
     lsr.w    #4,%d5

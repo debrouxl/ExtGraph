@@ -3,6 +3,8 @@
 | This routine is faster (about 20%) than the previous C routine, because the
 | algorithm was changed.
 
+.include "common.s"
+
 .text
 .globl Sprite8_AND
 .even
@@ -12,9 +14,7 @@ Sprite8_AND:
     move.w   0+4+2(%sp),%d1
     movea.l  0+4+6(%sp),%a1
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d0
@@ -42,12 +42,12 @@ Sprite8_AND:
     swap     %d0
     ror.l    %d1,%d0
     and.l    %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
     rts
 
 3:
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
 2:
     moveq    #-1,%d0
     and.b    (%a1)+,%d0

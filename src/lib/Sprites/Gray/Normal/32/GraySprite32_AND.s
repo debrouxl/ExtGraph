@@ -23,7 +23,7 @@ GraySprite32_AND:
     move.w   %d0,%d3
     lsr.w    #4,%d3           | d3=x/16
     add.w    %d1,%d3          | d3=x/16+y*15
-    add.w    %d3,%d3          | d3=x/8+y*30 (nb pair)
+    add.w    %d3,%d3          | d3=x/8+y*PLANE_BYTE_WIDTH (nb pair)
 
     adda.w   %d3,%a0
     adda.w   %d3,%a1

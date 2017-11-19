@@ -1,6 +1,8 @@
 | C prototype: void SpriteX8_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned char *sprt, const unsigned char *mask, unsigned short bytewidth, void *dest) __attribute__((__stkparm__));
 | see SpriteX8_OR_R for comments
 
+.include "common.s"
+
 .text
 .globl SpriteX8_MASK
 .even
@@ -17,9 +19,7 @@ SpriteX8_MASK:
 	move.w  (%a0)+,%d3
 	move.l  (%a0)+,%a0
 
-	move.w	%d1,%d4
-	lsl.w	#4,%d1
-	sub.w	%d4,%d1
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 	move.w	%d0,%d4
 	andi.w	#15,%d4
@@ -80,7 +80,7 @@ E1:
 	subq.l	#1,%a1
 	subq.l	#1,%a2
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a3
@@ -94,7 +94,7 @@ E2:
  	addq.l	#2,%a3
 	dbf	%d4,E1
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,E0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a3
@@ -119,7 +119,7 @@ O1:
 	and.l	%d6,(%a3)
 	or.l	%d0,(%a3)
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 r:
 	dbf	%d2,E0
 
@@ -146,7 +146,7 @@ O2:
 	addq.l	#2,%a3
 	dbf	%d4,O1
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a3

@@ -1,33 +1,33 @@
-	.text
-	xdef DrawGrayBuffer_TRANW
+.include "common.s"
 
-| Affiche le buffer de 5440 octets sur un buffer de 3840 octets, le blanc est transparent
+.text
+.globl DrawGrayBuffer_TRANW
+.even
+
+| Display a (PLANE_BYTE_WIDTH * PLANE_PIXEL_HEIGHT) buffer onto a 240x128 1 bpp buffer, assuming transparent white - grayscale version.
 
 | Input :
-| a0.l : adresse du buffer source
-| a1.l : adresse du buffer destination
-| d0.w : décalage sur x (0 <= d0 < 32)
-| d1.w : décalage sur y (0 <= d1 < 32)
+| a0.l : source buffer address
+| a1.l : destination plane address
+| d0.w : x offset in pixels (0 <= d0 < PLANE_PIXEL_WIDTH - 240)
+| d1.w : y offset in pixels (0 <= d1 < PLANE_PIXEL_HEIGHT - 128)
 
-| Détruit : d0-d2/a0-a1
+| Destroys : d0-d2/a0-a1
 
 DrawGrayBuffer_TRANW:
     movem.l  %d3-%d7/%a2-%a3,-(%a7)
 
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
     add.w    %d1,%d1
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    add.w    %d2,%d1	| d1 = y*34
-    adda.w   %d1,%a0	| scrolling vertical
+    adda.w   %d1,%a0	| vertical offset
 
-    moveq.l  #16,%d1
-    cmp.w    %d1,%d0	| d0 < 16 ?
-    blt.s    OK_DrawGrayBuffer_TRANW
-    addq.l   #2,%a0
-    sub.w    %d1,%d0
-OK_DrawGrayBuffer_TRANW:
+    move.w   %d0,%d1
+    andi.w   #15,%d0	| reduced shift count
+    lsr.w    #4,%d1
+    add.w    %d1,%d1
+    adda.w   %d1,%a0	| horizontal offset
 
-    lea.l    5440(%a0),%a2
+    lea.l    PLANE_BYTE_WIDTH * PLANE_PIXEL_HEIGHT(%a0),%a2
     lea.l    3840(%a1),%a3
 
     moveq.l  #127,%d2
@@ -39,7 +39,7 @@ OK_DrawGrayBuffer_TRANW:
     not.w    %d2	| d2 = mask2
     swap.w   %d2
 
-LineStart_DrawGrayBuffer_TRANW:
+0:
     swap.w   %d2
 
     move.l   (%a0)+,%d3
@@ -233,11 +233,11 @@ LineStart_DrawGrayBuffer_TRANW:
     or.w     %d6,%d4
     move.w   %d4,(%a3)+
 
-    addq.l   #2,%a0
-    addq.l   #2,%a2
+    addq.l   #PLANE_BYTE_WIDTH-32,%a0
+    addq.l   #PLANE_BYTE_WIDTH-32,%a2
 
     swap.w   %d2
-    dbf      %d2,LineStart_DrawGrayBuffer_TRANW
+    dbf      %d2,0b
 
     movem.l  (%a7)+,%d3-%d7/%a2-%a3
     rts

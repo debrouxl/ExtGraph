@@ -1,13 +1,10 @@
 | C prototype: void GrayClipISpriteX16_AND_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d3"), const unsigned short *sprt, unsigned short wordwidth asm("%d2"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 |
 | Based on GrayClipISpriteX16_OR_R.
-
-| #defines ported from Genlib. Agreed, this is how ExtGraph should have been written: symbolic
-| constant definitions, macros... Julien started doing it for the new X8 routines.
-.set _EXT_SCREEN_X, 30 | Size in bytes of a line of the video screen
-.set _EXT_SCREEN_Y, 128 | Number of rows of the video screen.
-
+|
 | The sprite format is a sequence of WORDS (not lines): light plane, dark plane (different from that of MASK).
+
+.include "common.s"
 
 .text
 .globl GrayClipISpriteX16_AND_R
@@ -36,24 +33,22 @@ GrayClipISpriteX16_AND_R:
 9:
 | Test clipping sur la bordure basse
     add.w    %d3,%d4     | %d4 = y + hauteur
-    subi.w   #_EXT_SCREEN_Y,%d4     | %d4 = y + hauteur - _EXT_SCREEN_Y
-    bls.s    6f     | si y + hauteur <= _EXT_SCREEN_Y, le sprite n'a pas besoin d'être clippé
+    subi.w   #PLANE_PIXEL_HEIGHT,%d4     | %d4 = y + hauteur - PLANE_PIXEL_HEIGHT
+    bls.s    6f     | si y + hauteur <= PLANE_PIXEL_HEIGHT, le sprite n'a pas besoin d'être clippé
   | Le sprite doit être clippé sur la bordure basse de l'écran
-    neg.w    %d4     | %d4 = _EXT_SCREEN_Y - hauteur - y
-    add.w    %d4,%d3     | %d3 = _EXT_SCREEN_Y - y = nouvelle hauteur du sprite
-    ble.w    0f     | si y >= _EXT_SCREEN_Y, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
+    neg.w    %d4     | %d4 = PLANE_PIXEL_HEIGHT - hauteur - y
+    add.w    %d4,%d3     | %d3 = PLANE_PIXEL_HEIGHT - y = nouvelle hauteur du sprite
+    ble.w    0f     | si y >= PLANE_PIXEL_HEIGHT, le sprite n'est pas visible (FIXME : bls plutôt que ble ?)
 
 6:
-    move.w   %d1,%d4
-    lsl.w    #4,%d1
-    sub.w    %d4,%d1     |d1 = 15 * y = offset du à y (multiplié par 2 plus tard pour donner 30*y)
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 10:
     subq.w   #1,%d3     | hauteur - 1 (compteur de height_loop)
 
 | Test clipping gauche
-    moveq.l  #_EXT_SCREEN_X,%d7
-    sub.w    %d5,%d7     | %d7 = 30 - largeur (en octets) = incrément de la destination après avoir affiché une ligne
+    moveq.l  #PLANE_BYTE_WIDTH,%d7
+    sub.w    %d5,%d7     | %d7 = PLANE_BYTE_WIDTH - largeur (en octets) = incrément de la destination après avoir affiché une ligne
     |move.w   %d4,%a3 ???
     lsl.w    #3,%d5     | %d5 = largeur * 2 * 8 (en pixels)
     move.w   %d0,%d4     | %d4 = x
@@ -63,15 +58,15 @@ GrayClipISpriteX16_AND_R:
     move.w   %d0,%d4
     lsr.w    #4,%d4
     add.w    %d4,%d1
-    add.w    %d1,%d1     | %d1 = 30 * y + (x / 16) * 2
+    add.w    %d1,%d1     | %d1 = PLANE_BYTE_WIDTH * y + (x / 16) * 2
 
     adda.w   %d1,%a0     | a0 = Screen1 + Offset
     adda.w   %d1,%a1
 
 | Test clipping droit
     add.w    %d0,%d5     | x + largeur en pixels
-    sub.w    #_EXT_SCREEN_X*8,%d5
-    bhi.w    8f     | si x + largeur > 240, il faut clipper à droite
+    sub.w    #PLANE_PIXEL_WIDTH,%d5
+    bhi.w    8f     | si x + largeur > PLANE_PIXEL_WIDTH, il faut clipper à droite
 
     subq.w   #1,%d2     | largeur - 1 (compteur de width_loop)
 
@@ -175,10 +170,10 @@ GrayClipISpriteX16_AND_R:
     subq.w   #2,%d2     | -1 (pour le premier mot, clippé) + -1 (pour le dbf) = -2
 
     add.w    %d4,%d4     | *2 pour avoir des octets
-    add.w    %d4,%d7     | incrément de la destination (30 - largeur + %d4)
+    add.w    %d4,%d7     | incrément de la destination (PLANE_BYTE_WIDTH - largeur + %d4)
     addq.w   #2,%d7
 
-    add.w    %d1,%d1     | %d1 = 30 * y
+    add.w    %d1,%d1     | %d1 = PLANE_BYTE_WIDTH * y
     adda.w   %d1,%a0     | a0 = dark_screen
     adda.w   %d1,%a1
 
@@ -231,10 +226,10 @@ GrayClipISpriteX16_AND_R:
 
 | Clipping sur la bordure droite de l'écran
 8:
-    cmp.w    #_EXT_SCREEN_X*8,%d0
-    bcc.s    0b     | si x >= 240, le sprite est en-dehors de l'écran
+    cmp.w    #PLANE_PIXEL_WIDTH,%d0
+    bcc.s    0b     | si x >= PLANE_PIXEL_WIDTH, le sprite est en-dehors de l'écran
 
-    lsr.w    #4,%d5     | ((x + largeur) - 240) / 16 => nombre de words du sprite en trop
+    lsr.w    #4,%d5     | ((x + largeur) - PLANE_PIXEL_WIDTH) / 16 => nombre de words du sprite en trop
     sub.w    %d5,%d2
     subq.w   #2,%d2     | compteur width_loop
 

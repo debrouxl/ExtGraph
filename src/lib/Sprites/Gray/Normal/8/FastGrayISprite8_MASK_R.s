@@ -19,7 +19,7 @@ suite:
     lsr.w    #4,%d3	| d3 = x/16
 
     add.w    %d3,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
 
     move.w   (%a7)+,%d3
@@ -34,7 +34,7 @@ suite:
     lsr.w    #1,%d2
     bcs.s    _loop_Sprite8_OR_1
 
-    lea.l    -30(%a0),%a0
+    lea.l    -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    Milieu1
 
 _loop_Sprite8_OR_1:
@@ -59,21 +59,21 @@ Milieu1:
     moveq.l  #-1,%d0
     move.b   (%a1)+,%d0
     rol.l    %d1,%d0
-    and.l    %d0,30(%a0)
+    and.l    %d0,PLANE_BYTE_WIDTH(%a0)
 
-    and.l    %d0,6000+30(%a0)
-
-    moveq    #0,%d0
-    move.b   (%a1)+,%d0
-    lsl.l    %d1,%d0
-    or.l     %d0,30(%a0)
+    and.l    %d0,6000+PLANE_BYTE_WIDTH(%a0)
 
     moveq    #0,%d0
     move.b   (%a1)+,%d0
     lsl.l    %d1,%d0
-    or.l     %d0,6000+30(%a0)
+    or.l     %d0,PLANE_BYTE_WIDTH(%a0)
 
-    lea      60(%a0),%a0
+    moveq    #0,%d0
+    move.b   (%a1)+,%d0
+    lsl.l    %d1,%d0
+    or.l     %d0,6000+PLANE_BYTE_WIDTH(%a0)
+
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
 
     dbf      %d2,_loop_Sprite8_OR_1
 
@@ -83,7 +83,7 @@ pre_loop_Sprite8_OR_2:
     lsr.w    #1,%d2
     bcs.s    _loop_Sprite8_OR_2
 
-    lea.l    -30(%a0),%a0
+    lea.l    -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    Milieu2
 
 _loop_Sprite8_OR_2:
@@ -112,23 +112,23 @@ Milieu2:
     move.b   (%a1)+,%d0
     swap.w   %d0
     rol.l    %d1,%d0
-    and.l    %d0,30(%a0)
+    and.l    %d0,PLANE_BYTE_WIDTH(%a0)
 
-    and.l    %d0,6000+30(%a0)
-
-    moveq.l  #0,%d0
-    move.b   (%a1)+,%d0
-    swap.w   %d0
-    lsl.l    %d1,%d0
-    or.l     %d0,30(%a0)
+    and.l    %d0,6000+PLANE_BYTE_WIDTH(%a0)
 
     moveq.l  #0,%d0
     move.b   (%a1)+,%d0
     swap.w   %d0
     lsl.l    %d1,%d0
-    or.l     %d0,6000+30(%a0)
+    or.l     %d0,PLANE_BYTE_WIDTH(%a0)
 
-    lea      60(%a0),%a0
+    moveq.l  #0,%d0
+    move.b   (%a1)+,%d0
+    swap.w   %d0
+    lsl.l    %d1,%d0
+    or.l     %d0,6000+PLANE_BYTE_WIDTH(%a0)
+
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
 
     dbf      %d2,_loop_Sprite8_OR_2
 

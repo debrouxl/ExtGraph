@@ -34,8 +34,8 @@ GrayFastGetBkgrnd32_R:
     swap     %d2
     lsr.w    #1,%d2
     bcs.s    0f
-    lea      -30+4(%a0),%a0
-    lea      -30+4(%a1),%a1
+    lea      -PLANE_BYTE_WIDTH+4(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH+4(%a1),%a1
     bra.s    1f
 
 0:
@@ -44,12 +44,12 @@ GrayFastGetBkgrnd32_R:
     move.w   (%a0),(%a2)+
     move.w   (%a1),(%a2)+
 1:
-    move.l   30-4(%a0),(%a2)+
-    move.l   30-4(%a1),(%a2)+
-    move.w   30(%a0),(%a2)+
-    move.w   30(%a1),(%a2)+
-    lea      60-4(%a0),%a0
-    lea      60-4(%a1),%a1
+    move.l   PLANE_BYTE_WIDTH-4(%a0),(%a2)+
+    move.l   PLANE_BYTE_WIDTH-4(%a1),(%a2)+
+    move.w   PLANE_BYTE_WIDTH(%a0),(%a2)+
+    move.w   PLANE_BYTE_WIDTH(%a1),(%a2)+
+    lea      2*PLANE_BYTE_WIDTH-4(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH-4(%a1),%a1
     dbf      %d2,0b
 
 2:

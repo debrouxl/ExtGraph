@@ -21,7 +21,7 @@ GraySprite8_RPLC_R:
     lsr.w    #4,%d3	| d3 = x/16
 
     add.w    %d3,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
     adda.w   %d1,%a1
 
@@ -44,7 +44,7 @@ GraySprite8_RPLC_R:
     lsr.l    %d1,%d0
     and.l    %d3,(%a0)
     or.l     %d0,(%a0)
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
 
     moveq    #0,%d0
     move.b   (%a3)+,%d0
@@ -52,7 +52,7 @@ GraySprite8_RPLC_R:
     lsr.l    %d1,%d0
     and.l    %d3,(%a1)
     or.l     %d0,(%a1)
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 
@@ -68,14 +68,14 @@ GraySprite8_RPLC_R:
     lsl.w    %d1,%d0
     and.w    %d3,(%a0)
     or.w     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
 
     moveq    #0,%d0
     move.b   (%a3)+,%d0
     lsl.w    %d1,%d0
     and.w    %d3,(%a1)
     or.w     %d0,(%a1)
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,2b
 

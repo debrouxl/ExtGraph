@@ -1,13 +1,13 @@
 | C prototype: void Tile32x32Get_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const void *src asm("%a0"), unsigned long *dest asm("%a1"));
 
+.include "common.s"
+
 .text
 .globl Tile32x32Get_R
 .even
 
 Tile32x32Get_R:
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     add.w    %d0,%d1
     add.w    %d1,%d1
@@ -19,21 +19,21 @@ Tile32x32Get_R:
 0:
     move.l   (%a0),(%a1)+
 
-    move.l   30(%a0),(%a1)+
+    move.l   PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   60(%a0),(%a1)+
+    move.l   2*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   90(%a0),(%a1)+
+    move.l   3*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   120(%a0),(%a1)+
+    move.l   4*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   150(%a0),(%a1)+
+    move.l   5*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   180(%a0),(%a1)+
+    move.l   6*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    move.l   210(%a0),(%a1)+
+    move.l   7*PLANE_BYTE_WIDTH(%a0),(%a1)+
 
-    lea      240(%a0),%a0
+    lea      8*PLANE_BYTE_WIDTH(%a0),%a0
 
     dbf      %d2,0b
 

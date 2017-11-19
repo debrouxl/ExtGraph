@@ -4,6 +4,8 @@
 | algorithm was changed.
 | An optimization (4 clocks) was made by Ximoon, jackiechan told me about it.
 
+.include "common.s"
+
 .text
 .globl Sprite8Get_R
 .even
@@ -14,9 +16,7 @@ Sprite8Get_R:
 
     swap     %d2    
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d0
@@ -37,7 +37,7 @@ Sprite8Get_R:
     swap     %d0
     rol.l    %d1,%d0
     move.b   %d0,(%a1)+
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
     
     rts
@@ -48,7 +48,7 @@ Sprite8Get_R:
     move.w   (%a0),%d0
     lsr.w    %d1,%d0
     move.b   %d0,(%a1)+
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,2b
 0:
     rts

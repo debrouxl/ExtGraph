@@ -1,5 +1,7 @@
 | C prototype: void GrayITile32x32_XOR_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned long *sprite, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
  
+.include "common.s"
+
 .text
 .globl GrayITile32x32_XOR_R
 .even
@@ -9,9 +11,7 @@ GrayITile32x32_XOR_R:
  
     move.l   4+4(%sp),%a2
  
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
  
     add.w    %d0,%d1
  
@@ -28,22 +28,22 @@ GrayITile32x32_XOR_R:
     eor.l    %d0,(%a1)
 
     move.l   (%a2)+,%d0
-    eor.l    %d0,30(%a0)
+    eor.l    %d0,PLANE_BYTE_WIDTH(%a0)
     move.l   (%a2)+,%d0
-    eor.l    %d0,30(%a1)
+    eor.l    %d0,PLANE_BYTE_WIDTH(%a1)
 
     move.l   (%a2)+,%d0
-    eor.l    %d0,60(%a0)
+    eor.l    %d0,2*PLANE_BYTE_WIDTH(%a0)
     move.l   (%a2)+,%d0
-    eor.l    %d0,60(%a1)
+    eor.l    %d0,2*PLANE_BYTE_WIDTH(%a1)
  
     move.l   (%a2)+,%d0
-    eor.l    %d0,90(%a0)
+    eor.l    %d0,3*PLANE_BYTE_WIDTH(%a0)
     move.l   (%a2)+,%d0
-    eor.l    %d0,90(%a1)
+    eor.l    %d0,3*PLANE_BYTE_WIDTH(%a1)
  
-    lea.l    120(%a0),%a0
-    lea.l    120(%a1),%a1
+    lea.l    4*PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    4*PLANE_BYTE_WIDTH(%a1),%a1
  
     dbf      %d2,0b
  

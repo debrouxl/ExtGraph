@@ -1,5 +1,7 @@
 | C prototype: void SpriteX8_OR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), unsigned short bytewidth asm("%d3"), void *dest asm("%a0")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl SpriteX8_OR_R
 .even
@@ -7,16 +9,14 @@
 SpriteX8_OR_R:
 	movem.l	%d3-%d5/%a2,-(%sp)
 
-	move.w	%d1,%d4			| d4=d1
-	lsl.w	#4,%d1			| d1*16
-	sub.w	%d4,%d1			| d1=15y
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 	move.w	%d0,%d4	    		| d4=d0
 	andi.w	#15,%d4			| d4=x%16
 
 	lsr.w	#4,%d0			| d0/16
-	add.w	%d1,%d0			| d0=15y+x/16
-	add.w	%d0,%d0			| d0=30y+x/8 (even)
+	add.w	%d1,%d0			| d0=y*PLANE_BYTE_WIDTH/2+x/16
+	add.w	%d0,%d0			| d0=y*PLANE_BYTE_WIDTH+x/8
 
 	adda.w	%d0,%a0			| align to the screen
 
@@ -61,7 +61,7 @@ E1:
 	lsl.l	%d5,%d0
 	or.l	%d0,(%a2)		| no need to increment (last byte)
 	subq.l	#1,%a1			| re-align src
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0			| next byte will at an odd adress
 
 	movem.l	(%sp)+,%d3-%d5/%a2
@@ -73,7 +73,7 @@ E2:	| if it's not the last byte we can draw two in a row
  	addq.l	#2,%a2
 	dbf	%d4,E1			| next line if some remain
 
-	lea.l	30(%a0),%a0
+	lea.l	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,E0
 
 	movem.l	(%sp)+,%d3-%d5/%a2
@@ -90,7 +90,7 @@ O1:
 
 	lsl.l	%d1,%d0
 	or.l	%d0,(%a2)
-	lea.l	30(%a0),%a0
+	lea.l	PLANE_BYTE_WIDTH(%a0),%a0
 r:
 	dbf	%d2,E0
 
@@ -107,7 +107,7 @@ O2:
 	addq.l	#2,%a2
 	dbf	%d4,O1
 
-	lea.l	30(%a0),%a0
+	lea.l	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,O0
 
 	movem.l	(%sp)+,%d3-%d5/%a2

@@ -1,5 +1,7 @@
 | C prototype: void GrayITile8x8_BLIT_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned char *sprite, const unsigned char maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl GrayITile8x8_BLIT_R
 .even
@@ -9,9 +11,7 @@ GrayITile8x8_BLIT_R:
  
     move.l   4+4(%sp),%a2
  
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
  
     add.w    %d1,%d1
     add.w    %d0,%d1
@@ -30,14 +30,14 @@ GrayITile8x8_BLIT_R:
     or.b     %d0,(%a1)
  
     move.b   (%a2)+,%d0
-    and.b    %d3,30(%a0)
-    or.b     %d0,30(%a0)
+    and.b    %d3,PLANE_BYTE_WIDTH(%a0)
+    or.b     %d0,PLANE_BYTE_WIDTH(%a0)
     move.b   (%a2)+,%d0
-    and.b    %d3,30(%a1)
-    or.b     %d0,30(%a1)
+    and.b    %d3,PLANE_BYTE_WIDTH(%a1)
+    or.b     %d0,PLANE_BYTE_WIDTH(%a1)
  
-    lea.l    60(%a0),%a0
-    lea.l    60(%a1),%a1
+    lea.l    2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    2*PLANE_BYTE_WIDTH(%a1),%a1
  
     dbf      %d2,0b
  

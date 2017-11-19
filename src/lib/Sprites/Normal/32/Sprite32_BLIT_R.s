@@ -1,5 +1,7 @@
 | C prototype: void Sprite32_BLIT_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt asm("%a1"), const unsigned long maskval asm("%d3"), void *dest asm("%a0"));
 
+.include "common.s"
+
 .text
 .globl Sprite32_BLIT_R
 .even
@@ -10,9 +12,7 @@ Sprite32_BLIT_R:
 
     movem.l  %d3-%d6,-(%sp)
 
-    move.w   %d1,%d5
-    lsl.w    #4,%d1
-    sub.w    %d5,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d5
 
     move.w   %d0,%d5
     lsr.w    #4,%d5
@@ -44,7 +44,7 @@ Sprite32_BLIT_R:
     and.w    %d4,(%a0)
     or.w     %d6,(%a0)
 
-    lea      30-4(%a0),%a0
+    lea      PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d2,1b
 
     movem.l  (%sp)+,%d3-%d6

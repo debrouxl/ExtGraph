@@ -1,0 +1,5 @@
+#! /bin/sh
+echo ======= building tilemap library =======
+
+tprbuilder TileMap.tpr
+cp TileMap.a ../../../lib/tilemap.a

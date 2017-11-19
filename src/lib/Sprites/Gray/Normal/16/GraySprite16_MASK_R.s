@@ -58,8 +58,8 @@ GraySprite16_MASK_R:
     or.l     %d0,%d3
     move.l   %d3,(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 

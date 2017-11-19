@@ -1,5 +1,7 @@
 | C prototype: void Sprite32_MASK(unsigned short x, unsigned short y, unsigned short height, const unsigned long *sprt, const unsigned long *mask, void *dest) __attribute__((__stkparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite32_MASK
 .even
@@ -20,8 +22,7 @@ Sprite32_MASK:
 
     subq.w   #1,%d3
 
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d2
@@ -55,7 +56,7 @@ Sprite32_MASK:
     or.w     %d4,(%a0)
     or.l     %d0,-(%a0)
 
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d3,1b
 
 0:

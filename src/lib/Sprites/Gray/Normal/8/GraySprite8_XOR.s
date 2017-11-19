@@ -25,7 +25,7 @@ GraySprite8_XOR:
     lsr.w    #4,%d2	| d3 = x/16
 
     add.w    %d2,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
 
     adda.w   %d1,%a0
     adda.w   %d1,%a1
@@ -46,14 +46,14 @@ GraySprite8_XOR:
     swap.w   %d0
     lsr.l    %d1,%d0
     eor.l    %d0,(%a0)
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
 
     moveq    #0,%d0
     move.b   (%a3)+,%d0
     swap.w   %d0
     lsr.l    %d1,%d0
     eor.l    %d0,(%a1)
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 0:
@@ -62,8 +62,8 @@ GraySprite8_XOR:
     rts
 
 2:
-    lea      30(%a0),%a0
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
 3:
     moveq    #0,%d0
     move.b   (%a2)+,%d0

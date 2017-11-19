@@ -1,5 +1,7 @@
 | C prototype: void Sprite8_OR_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt asm("%a1"), void *dest asm("%a0")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl Sprite8_OR_R
 .even
@@ -10,15 +12,13 @@ Sprite8_OR_R:
 
     swap     %d2
 
-    move.w   %d1,%d2	| d2 = y
-    lsl.w    #4,%d1	| d1 = 16*y
-    sub.w    %d2,%d1	| d1 = 15*y
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2	| d2 = x
     lsr.w    #4,%d2	| d2 = x/16
 
-    add.w    %d2,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d2,%d1	| d1 = y*PLANE_BYTE_WIDTH/2 + x/16
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
 
     swap     %d2
@@ -35,12 +35,12 @@ Sprite8_OR_R:
     swap     %d0
     lsr.l    %d1,%d0
     or.l     %d0,(%a0)
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
     rts
 
 2:
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
 3:
     moveq    #0,%d0
     move.b   (%a1)+,%d0

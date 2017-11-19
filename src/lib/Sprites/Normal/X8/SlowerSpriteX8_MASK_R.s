@@ -1,6 +1,8 @@
 | C prototype: void SlowerSpriteX8_MASK_R(short x asm("%d0"),short y asm("%d1"),short h asm("%d2"),unsigned char *sprt asm("%a1"),unsigned char *mask,short w asm("%d3"),void *dest asm("%a0"));
 | see SpriteX8_OR_R for comments
 
+.include "common.s"
+
 .text
 .globl SlowerSpriteX8_MASK_R
 .even
@@ -10,9 +12,7 @@ SlowerSpriteX8_MASK_R:
 
 	move.l  24+4(%sp),%a2
 
-	move.w	%d1,%d4
-	lsl.w	#4,%d1
-	sub.w	%d4,%d1
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 	move.w	%d0,%d4
 	andi.w	#15,%d4
@@ -51,7 +51,7 @@ SlowerSpriteX8_MASK_R:
 	and.l	%d6,(%a3)
 	or.l	%d0,(%a3)
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,0b
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a3
@@ -73,7 +73,7 @@ SlowerSpriteX8_MASK_R:
 	addq.l	#2,%a3
 	dbf	%d4,1b
 
-	lea	30(%a0),%a0
+	lea	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,0b
 
 	movem.l	(%sp)+,%d3-%d6/%a2-%a3

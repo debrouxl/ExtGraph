@@ -28,7 +28,7 @@ FastPutBkgrnd8_R:
 
     lsr.w    #1,%d2
     bcs.s    1f
-    lea      -30(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    2f
 
 1:
@@ -39,10 +39,10 @@ FastPutBkgrnd8_R:
 2:
     move.w   (%a1)+,%d3
     and.w    %d0,%d3
-    and.w    %d1,30(%a0)
-    or.w     %d3,30(%a0)
+    and.w    %d1,PLANE_BYTE_WIDTH(%a0)
+    or.w     %d3,PLANE_BYTE_WIDTH(%a0)
 
-    lea      60(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,1b
 
     move.l   (%sp)+,%d3
@@ -68,7 +68,7 @@ FastPutBkgrnd8_R:
 
     lsr.w    #1,%d2
     bcs.s    4f
-    lea      -30(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    5f
 
 4:
@@ -79,10 +79,10 @@ FastPutBkgrnd8_R:
 5:
     move.l   (%a1)+,%d3
     and.l    %d0,%d3
-    and.l    %d1,30(%a0)
-    or.l     %d3,30(%a0)
+    and.l    %d1,PLANE_BYTE_WIDTH(%a0)
+    or.l     %d3,PLANE_BYTE_WIDTH(%a0)
 
-    lea      60(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,4b
 
     move.l   (%sp)+,%d3

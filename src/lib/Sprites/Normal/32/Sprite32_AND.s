@@ -5,6 +5,8 @@
 | Unfortunately, the trick used in Sprite8_AND in Sprite16_AND doesn't work
 | on this routine...
 
+.include "common.s"
+
 .text
 .globl Sprite32_AND
 .even
@@ -21,9 +23,7 @@ Sprite32_AND:
     movea.l  (%a0)+,%a1
     movea.l  (%a0),%a0
 
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
 
     move.w   %d0,%d2
     lsr.w    #4,%d0
@@ -49,7 +49,7 @@ Sprite32_AND:
     lsl.w    %d1,%d4
     not.w    %d4
     and.w    %d4,(%a0)
-    lea      30-4(%a0),%a0
+    lea      PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d3,1b
 
 0:

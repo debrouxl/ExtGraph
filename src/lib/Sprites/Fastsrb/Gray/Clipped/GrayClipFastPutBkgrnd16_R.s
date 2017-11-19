@@ -40,8 +40,8 @@ GrayClipFastPutBkgrnd16_R:
 
     lsr.w    #1,%d2
     bcs.s    1f
-    lea      -30(%a0),%a0
-    lea      -30(%a1),%a1
+    lea      -PLANE_BYTE_WIDTH(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH(%a1),%a1
     bra.s    2f
 
 1:
@@ -56,14 +56,14 @@ GrayClipFastPutBkgrnd16_R:
 2:
     move.l   (%a2)+,%d3
     and.l    %d0,%d3
-    and.l    %d1,30(%a0)
-    or.l     %d3,30(%a0)
+    and.l    %d1,PLANE_BYTE_WIDTH(%a0)
+    or.l     %d3,PLANE_BYTE_WIDTH(%a0)
     move.l   (%a2)+,%d3
     and.l    %d0,%d3
-    and.l    %d1,30(%a1)
-    or.l     %d3,30(%a1)
-    lea      60(%a0),%a0
-    lea      60(%a1),%a1
+    and.l    %d1,PLANE_BYTE_WIDTH(%a1)
+    or.l     %d3,PLANE_BYTE_WIDTH(%a1)
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,1b
 
     move.l   (%sp)+,%d3

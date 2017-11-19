@@ -26,7 +26,7 @@ GraySingleSprite8_DGRAY_R:
     lsr.w    #4,%d2	| d2 = x/16
 
     add.w    %d2,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
     adda.w   %d1,%a1	| a1 += offset
 
@@ -49,16 +49,16 @@ GraySingleSprite8_DGRAY_R:
     not.l    %d0
     and.l    %d0,(%a0)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
     move.l   (%sp)+,%a2
     rts
 
 3:
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 2:
     moveq    #0,%d0
     move.b   (%a2)+,%d0

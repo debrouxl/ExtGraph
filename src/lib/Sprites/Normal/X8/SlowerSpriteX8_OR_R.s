@@ -1,5 +1,7 @@
 | C prototype: void SlowerSpriteX8_OR_R(short x asm("%d0"), short y asm("%d1"),short h asm("%d2"),short w asm("%d3"),unsigned char *sprt asm("%a1"),void *dest asm("%a0")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl SlowerSpriteX8_OR_R
 .even
@@ -7,16 +9,14 @@
 SlowerSpriteX8_OR_R:
 	movem.l	%d3-%d5/%a2,-(%sp)
 
-	move.w	%d1,%d4			| d4=d1
-	lsl.w	#4,%d1			| d1*16
-	sub.w	%d4,%d1			| d1=15y
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 
 	move.w	%d0,%d4	    		| d4=d0
 	andi.w	#15,%d4			| d4=x%16
 
 	lsr.w	#4,%d0			| d0/16
-	add.w	%d1,%d0			| d0=15y+x/16
-	add.w	%d0,%d0			| d0=30y+x/8 (even)
+	add.w	%d1,%d0			| d0=y*PLANE_BYTE_WIDTH/2+x/16
+	add.w	%d0,%d0			| d0=y*PLANE_BYTE_WIDTH+x/8
 
 	adda.w	%d0,%a0			| align to the screen
 
@@ -40,7 +40,7 @@ SlowerSpriteX8_OR_R:
 
 	lsl.l	%d1,%d0
 	or.l	%d0,(%a2)
-	lea.l	30(%a0),%a0
+	lea.l	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,0b
 
 	movem.l	(%sp)+,%d3-%d5/%a2
@@ -54,7 +54,7 @@ SlowerSpriteX8_OR_R:
 	addq.l	#2,%a2
 	dbf	%d4,1b
 
-	lea.l	30(%a0),%a0
+	lea.l	PLANE_BYTE_WIDTH(%a0),%a0
 	dbf	%d2,0b
 
 	movem.l	(%sp)+,%d3-%d5/%a2

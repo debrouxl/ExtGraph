@@ -1,5 +1,7 @@
 | C prototype: void GrayTile16x16_SMASK_R(unsigned short col asm("%d0"), unsigned short y asm("%d1"), const unsigned short *sprt0, const unsigned short *sprt1, unsigned short* mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
  
+.include "common.s"
+
 .text
 .globl GrayTile16x16_SMASK_R
 .even
@@ -12,9 +14,7 @@ GrayTile16x16_SMASK_R:
     move.l   (%a4)+,%a3
     move.l   (%a4),%a4
     
-    move.w   %d1,%d2
-    lsl.w    #4,%d1
-    sub.w    %d2,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d2
  
     add.w    %d0,%d1
  
@@ -28,8 +28,8 @@ GrayTile16x16_SMASK_R:
     move.l   (%a2)+,%d0
     move.l   (%a4)+,%d1
    
-    and.w    %d1,30(%a0)
-    or.w     %d0,30(%a0)
+    and.w    %d1,PLANE_BYTE_WIDTH(%a0)
+    or.w     %d0,PLANE_BYTE_WIDTH(%a0)
     swap     %d0
     swap     %d1
     and.w    %d1,(%a0)
@@ -38,15 +38,15 @@ GrayTile16x16_SMASK_R:
     move.l   (%a3)+,%d0
     swap     %d1
    
-    and.w    %d1,30(%a1)
-    or.w     %d0,30(%a1)
+    and.w    %d1,PLANE_BYTE_WIDTH(%a1)
+    or.w     %d0,PLANE_BYTE_WIDTH(%a1)
     swap     %d0
     swap     %d1
     and.w    %d1,(%a1)
     or.w     %d0,(%a1)
  
-    lea.l    60(%a0),%a0
-    lea.l    60(%a1),%a1
+    lea.l    2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    2*PLANE_BYTE_WIDTH(%a1),%a1
  
     dbf      %d2,0b
  

@@ -48,7 +48,7 @@ __suite__:
     lsr.w    #1,%d2
     bcs.s    Bouboucle32
 
-    lea.l    -30(%a0),%a0
+    lea.l    -PLANE_BYTE_WIDTH(%a0),%a0
     bra.s    Milieu
 
 Bouboucle32:
@@ -86,26 +86,26 @@ Milieu:
     or.l     %d5,%d3
     or.w     %d6,%d4
     and.l     %d3,26(%a0)
-    and.w     %d4,30(%a0)
+    and.w     %d4,PLANE_BYTE_WIDTH(%a0)
 
     and.l     %d3,6000+26(%a0)
-    and.w     %d4,6000+30(%a0)
+    and.w     %d4,6000+PLANE_BYTE_WIDTH(%a0)
 
     move.l   (%a1)+,%d3
     move.w   %d3,%d4
     lsr.l    %d0,%d3
     lsl.w    %d1,%d4
     or.l     %d3,26(%a0)
-    or.w     %d4,30(%a0)
+    or.w     %d4,PLANE_BYTE_WIDTH(%a0)
 
     move.l   (%a1)+,%d3
     move.w   %d3,%d4
     lsr.l    %d0,%d3
     lsl.w    %d1,%d4
     or.l     %d3,6000+26(%a0)
-    or.w     %d4,6000+30(%a0)
+    or.w     %d4,6000+PLANE_BYTE_WIDTH(%a0)
 
-    lea.l    26+30(%a0),%a0
+    lea.l    26+PLANE_BYTE_WIDTH(%a0),%a0
 
     dbf    %d2,Bouboucle32
 

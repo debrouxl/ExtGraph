@@ -379,11 +379,11 @@ void GrayDrawRect2B(unsigned short x0, unsigned short y0, unsigned short x1, uns
 //! Invert the rectangle whose whose vertices are (\a x0, \a y0), (\a x1, \a y0), (\a x0, \a y1) and (\a x1, \a y1) in both given 240x128 planes.
 void GrayInvertRect2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawLine routine.<br>
+//! Draw the line between (x0, y0) and (x1, y1) in both given planes, using the OS DrawLine routine.<br>
 //! color is an element of enum \ref GrayColors.
 void GrayDrawLine2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Draw the line between (x0, y0) and (x1, y1) in both 240x128 planes given, using the OS DrawClipLine routine.<br>
+//! Draw the line between (x0, y0) and (x1, y1) in both given planes, using the OS DrawClipLine routine.<br>
 //! color is an element of enum \ref GrayColors.
 //! \since 2.00 Beta 6
 void GrayDrawClipLine2B(unsigned short x0, unsigned short y0, unsigned short x1, unsigned short y1, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
@@ -396,13 +396,13 @@ void GrayFastDrawLine2B(unsigned short x0, unsigned short y0, unsigned short x1,
 //! color is an element of enum \ref GrayColors.
 void GrayFastDrawHLine2B(unsigned short x0, unsigned short x1, unsigned short y, short color, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Draw the character c using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawChar routine.
+//! Draw the character c using drawing mode attr between (x0, y) and (x1, y) in both given planes, using the OS DrawChar routine.
 void GrayDrawChar2B(unsigned short x, unsigned short y, char c, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawStr routine.
+//! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both given planes, using the OS DrawStr routine.
 void GrayDrawStr2B(unsigned short x, unsigned short y, const char* s, short attr, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 
-//! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both 240x128 planes given, using the OS DrawStr routine.<br>
+//! Draw the string s using drawing mode attr between (x0, y) and (x1, y) in both given planes, using the OS DrawStr routine.<br>
 //! attr can be ORed with the values of enum \ref ExtAttrs for centered drawing and/or drawing with a lighter shadow on the bottom right of the string
 void GrayDrawStrExt2B(unsigned short x, unsigned short y, const char* s, short attr, short font, void* lightplane, void* darkplane) __attribute__((__stkparm__));
 //@}
@@ -468,7 +468,7 @@ void GrayDrawStrExt2B(unsigned short x, unsigned short y, const char* s, short a
 // -----------------------------------------------------------------------------
 //! @defgroup scrolling Screen scrolling functions 
 //! These functions 160x\a lines or 240x\a lines pixels of a 240-pixel-wide plane pointed to by \a buffer, 1 pixel at a time
-//! \todo add n-pixel-at-a-time scrolling routine (like that made by Scott Noveck) ?
+//! \todo add n-pixel-at-a-time scrolling routine (like the one made by Scott Noveck) ?
 // -----------------------------------------------------------------------------
 //@{
 void ScrollLeft160(unsigned short* buffer, unsigned short lines) __attribute__((__stkparm__)); ///< \deprecated __stkparm__ function with equivalent __regparm__ function
@@ -908,7 +908,9 @@ void FloodFillMF_noshade_R (unsigned short x, unsigned short y, void* dest) __at
  *   <li><b>BLIT</b> mode ANDs the background with the same 1-line mask applied to all lines, before ORing the background with the sprite</li>
  *   <li><b>RPLC</b> mode replaces the background with the sprite (it is a BLIT with a hard-coded mask of 0s)</li>
  *   <li><b>Get</b> makes from the background a sprite usable by other sprite & tile functions. Much faster than the OS BitmapGet functions, but not compatible</li>
+ *   <li><b>SAND</b> (grayscale only) ANDs both planes with the same sprite</li>
  *   <li><b>SMASK</b> (grayscale only) ANDs both planes with the same full-sized mask, before ORing each plane with a different sprite</li>
+ *   <li><b>SOR</b> (grayscale only) ORs both planes with the same sprite</li>
  *   <li><b>TRANB</b> (grayscale only) draws the sprite as if the black color were transparent</li>
  *   <li><b>TRAND</b> (grayscale only) draws the sprite as if the dark gray color were transparent</li>
  *   <li><b>TRANL</b> (grayscale only) draws the sprite as if the light gray color were transparent</li>
@@ -1126,7 +1128,9 @@ void GrayClipSprite8_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned sho
 void GrayClipSprite8_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char *mask0, const unsigned char *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite8_SAND_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_SMASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, const unsigned char *mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite8_SOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_TRANB_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_TRANW_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite8_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned char *sprt0, const unsigned char *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1137,9 +1141,11 @@ void GrayClipSprite16_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned sh
 void GrayClipSprite16_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short *mask0, const unsigned short *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite16_SAND_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_SMASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, const unsigned short *mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 //! Combined SMASK and BLIT operation.
 void GrayClipSprite16_SMASKBLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), unsigned short *sprt0, unsigned short *sprt1, unsigned short *mask, const unsigned short maskval asm("%d3"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite16_SOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt asm("%a2"), void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANB_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite16_TRANW_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned short *sprt0, const unsigned short *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 //! Draw sprite upside down.
@@ -1152,7 +1158,9 @@ void GrayClipSprite32_BLIT_R(short x asm("%d0"), short y asm("%d1"), unsigned sh
 void GrayClipSprite32_MASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long *mask0, const unsigned long *mask1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_OR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_RPLC_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite32_SAND_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_SMASK_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, const unsigned long *mask, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
+void GrayClipSprite32_SOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_TRANB_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_TRANW_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
 void GrayClipSprite32_XOR_R(short x asm("%d0"), short y asm("%d1"), unsigned short height asm("%d2"), const unsigned long *sprt0, const unsigned long *sprt1, void *dest0 asm("%a0"), void *dest1 asm("%a1")) __attribute__((__stkparm__));
@@ -1500,7 +1508,7 @@ void CreateISpriteShadow32_R(unsigned short height asm("%d0"), const unsigned lo
 /** @defgroup fastsrb Fast background save&restore functions
  * \brief Special fast SpriteGet/RPLC functions and macros
  *
- * These routines save or restore a (8|16|32|\a bytewidth *8)x\a height pixel sprite from/to one or two 240-pixel-wide video plane(s).<br>
+ * These routines save or restore a (8|16|32|\a bytewidth *8)x\a height pixel sprite from/to one or two video plane(s).<br>
  * These routines are designed for programs where redrawing everything every frame is detrimental to speed.
  * See demo22 and <a href="../../ExtGraph/comparison.html">this page of the documentation</a> for hints about such situations.
  *

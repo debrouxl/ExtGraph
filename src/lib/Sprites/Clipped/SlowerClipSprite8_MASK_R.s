@@ -23,26 +23,26 @@ SlowerClipSprite8_MASK_R:
     bra.s    __ClipX_ClipSprite8_MASK_R
 
 __YPositive_ClipSprite8_MASK_R:
-    subi.w   #127,%d3		| %d3 = y - 128
-    bhi.s    __End_ClipSprite8_MASK_R		| y - 128 > 0 ?
-    add.w    %d2,%d3		| %d3 = h + y - 128
-    bmi.s    __CalcOffset_ClipSprite8_MASK_R	| h + y - 128 < 0 ?
-    sub.w    %d3,%d2		| h -= h + y -128 (h = y - 128)
+    subi.w   #PLANE_PIXEL_HEIGHT-1,%d3		| %d3 = y - (PLANE_PIXEL_HEIGHT-1)
+    bhi.s    __End_ClipSprite8_MASK_R		| y - (PLANE_PIXEL_HEIGHT-1) > 0 ?
+    add.w    %d2,%d3		| %d3 = h + y - (PLANE_PIXEL_HEIGHT-1)
+    bmi.s    __CalcOffset_ClipSprite8_MASK_R	| h + y - (PLANE_PIXEL_HEIGHT-1) < 0 ?
+    sub.w    %d3,%d2		| h -= h + y - (PLANE_PIXEL_HEIGHT-1) <=> (h = y - (PLANE_PIXEL_HEIGHT-1))
 
 __CalcOffset_ClipSprite8_MASK_R:
     move.w   %d1,%d3
     lsl.w    #4,%d1
-    sub.w    %d3,%d1		| %d1 = y*15
+    sub.w    %d3,%d1		| %d1 = y*PLANE_BYTE_WIDTH/2
 
 __ClipX_ClipSprite8_MASK_R:
     move.w   %d0,%d3		| %d3 = x
     bmi.s    __ClipXLeft_ClipSprite8_MASK_R	| x < 0 ?
-    cmpi.w   #239-8,%d0
-    bhi.s    __ClipXRight_ClipSprite8_MASK_R	| x > 239-8
+    cmpi.w   #PLANE_PIXEL_WIDTH-1-8,%d0
+    bhi.s    __ClipXRight_ClipSprite8_MASK_R	| x > PLANE_PIXEL_WIDTH-1-8
 
     lsr.w    #4,%d3		| %d3 = x/16
-    add.w    %d3,%d1		| %d3 = x/16 + y*15
-    add.w    %d1,%d1		| %d3 = x/8 + y*30
+    add.w    %d3,%d1		| %d3 = x/16 + y*PLANE_BYTE_WIDTH/2
+    add.w    %d1,%d1		| %d3 = x/8 + y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
 
     and.w    #0xF,%d0
@@ -62,7 +62,7 @@ __Loop_ClipSprite8_MASK_R_1:
     lsl.l    %d1,%d0
     or.l     %d0,(%a0)
 
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,__Loop_ClipSprite8_MASK_R_1
 
     move.w   (%sp)+,%d3
@@ -80,7 +80,7 @@ __Loop_ClipSprite8_MASK_R_2:
     lsl.w    %d1,%d0
     or.w     %d0,(%a0)
 
-    lea      30(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,__Loop_ClipSprite8_MASK_R_2
 __End_ClipSprite8_MASK_R:
     move.w   (%sp)+,%d3
@@ -92,7 +92,7 @@ __ClipXLeft_ClipSprite8_MASK_R:
     bls.s    __End_ClipSprite8_MASK_R		| x <= -8 ?
 
     neg.w    %d0		| shift = -x
-    add.w    %d1,%d1		| %d1 = y*30
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
 
 __LoopClipL_ClipSprite8_MASK_R:
@@ -105,7 +105,7 @@ __LoopClipL_ClipSprite8_MASK_R:
     lsl.b    %d0,%d1		| shifting
     or.b     %d1,(%a0)
 
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,__LoopClipL_ClipSprite8_MASK_R
 
     move.w   (%sp)+,%d3
@@ -113,12 +113,12 @@ __LoopClipL_ClipSprite8_MASK_R:
     rts
 
 __ClipXRight_ClipSprite8_MASK_R:
-    cmpi.w   #239,%d0
-    bhi.s    __End_ClipSprite8_MASK_R		| x > 239
+    cmpi.w   #PLANE_PIXEL_WIDTH-1,%d0
+    bhi.s    __End_ClipSprite8_MASK_R		| x > PLANE_PIXEL_WIDTH-1
 
     andi.w   #7,%d0		| shiftx = x & 7
-    add.w    %d1,%d1		| %d1 = y*30
-    lea.l    29(%a0,%d1.w),%a0
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
+    lea.l    PLANE_BYTE_WIDTH-1(%a0,%d1.w),%a0
 __LoopClipR_ClipSprite8_MASK_R:
     moveq.l  #-1,%d1
     move.b   (%a2)+,%d1
@@ -129,7 +129,7 @@ __LoopClipR_ClipSprite8_MASK_R:
     lsr.b    %d0,%d1
     or.b     %d1,(%a0)
 
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,__LoopClipR_ClipSprite8_MASK_R
 
     move.w   (%sp)+,%d3

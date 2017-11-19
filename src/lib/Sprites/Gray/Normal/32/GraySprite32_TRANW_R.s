@@ -19,7 +19,7 @@ GraySprite32_TRANW_R:
     move.w   %d0,%d3
     lsr.w    #4,%d3           | d3=x/16
     add.w    %d1,%d3          | d3=x/16+y*15
-    add.w    %d3,%d3          | d3=x/8+y*30 (even)
+    add.w    %d3,%d3          | d3=x/8+y*PLANE_BYTE_WIDTH (even)
     adda.w   %d3,%a0
     adda.w   %d3,%a1
 
@@ -80,8 +80,8 @@ GraySprite32_TRANW_R:
     and.w    %d4,%d7
     or.w     %d7,-(%a1)
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,1b
 
     movem.l  (%sp)+,%d3-%d7/%a2-%a3

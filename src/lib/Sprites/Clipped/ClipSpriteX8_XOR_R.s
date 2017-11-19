@@ -6,8 +6,8 @@
 
 | Agreed, this is how ExtGraph should have been written: symbolic constant definitions, macros...
 | Julien started doing it for the new X8 routines.
-.set _EXT_MAX_LCD_WIDTH, 239 | Number of columns of the video screen
-.set _EXT_MAX_LCD_HEIGHT, 127 | Number of rows of the video screen.
+.set _EXT_MAX_LCD_WIDTH, PLANE_PIXEL_WIDTH-1 | Number of columns of the video screen
+.set _EXT_MAX_LCD_HEIGHT, (PLANE_PIXEL_HEIGHT-1) | Number of rows of the video screen.
 
 .text
 .globl ClipSpriteX8_XOR_R
@@ -69,7 +69,7 @@ ClipSpriteX8_XOR_R:
     moveq.l  #8,%d4
     sub.w    %d1,%d4				|8-%d1
 
-    moveq    #30,%d5
+    moveq    #PLANE_BYTE_WIDTH,%d5
     sub.w    %d2,%d5
 
 |x<0

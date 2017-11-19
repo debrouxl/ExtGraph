@@ -1,5 +1,8 @@
-	.text
-	xdef DrawPlane8B
+.include "common.s"
+
+.text
+.globl DrawPlane8B
+.even
 
 | Affiche la map
 | In : 
@@ -72,7 +75,7 @@ RefreshBuffer_DrawPlane8B:
 
     movem.l  %d0-%d1,-(%a7)
 
-    bsr      RefreshBuffer8B
+    jbsr     RefreshBuffer8B
 
     movem.l  (%a7)+,%d0-%d1
 

@@ -27,7 +27,7 @@ GraySingleSprite8_COLOR_R:
     lsr.w    #4,%d2	| d2 = x/16
 
     add.w    %d2,%d1	| d1 = 15*y + x/16
-    add.w    %d1,%d1	| d1 = 30*y + x/8
+    add.w    %d1,%d1	| d1 = y*PLANE_BYTE_WIDTH + x/8
     adda.w   %d1,%a0	| a0 += offset
     adda.w   %d1,%a1	| a1 += offset
 
@@ -72,8 +72,8 @@ GraySingleSprite8_COLOR_R:
     nop
     nop
 
-    lea.l    30(%a0),%a0
-    lea.l    30(%a1),%a1
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
     move.l   (%sp)+,%a3

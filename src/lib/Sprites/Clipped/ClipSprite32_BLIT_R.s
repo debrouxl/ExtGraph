@@ -23,25 +23,25 @@ ClipSprite32_BLIT_R:
 
 9:
     add.w    %d2,%d3		| %d3 = h + y
-    subi.w   #127,%d3		| %d3 = h + y - 127
-    ble.s    6f			| h + y - 127 <= 0 ?
-    sub.w    %d3,%d2		| h -= h + y - 127 (h = 127-y)
+    subi.w   #PLANE_PIXEL_HEIGHT-1,%d3		| %d3 = h + y - (PLANE_PIXEL_HEIGHT-1)
+    ble.s    6f			| h + y - (PLANE_PIXEL_HEIGHT-1) <= 0 ?
+    sub.w    %d3,%d2		| h -= h + y - (PLANE_PIXEL_HEIGHT-1) <=> (h = (PLANE_PIXEL_HEIGHT-1)-y)
     bmi.s    0f
 
 6:
     move.w   %d1,%d3
     lsl.w    #4,%d1
-    sub.w    %d3,%d1		| %d1 = y*15
+    sub.w    %d3,%d1		| %d1 = y*PLANE_BYTE_WIDTH/2
 
 10:
     move.w   %d0,%d3		| %d3 = x
     ble.s    8f	| x < 0 ?
-    cmpi.w   #239-32,%d0
-    bhi.s    7f	| x > 239-15
+    cmpi.w   #PLANE_PIXEL_WIDTH-1-32,%d0
+    bhi.s    7f	| x > PLANE_PIXEL_WIDTH-1-15
 
     lsr.w    #4,%d3		| %d3 = x/16
-    add.w    %d3,%d1		| %d3 = x/16 + y*15
-    add.w    %d1,%d1		| %d3 = x/8 + y*30
+    add.w    %d3,%d1		| %d3 = x/16 + y*PLANE_BYTE_WIDTH/2
+    add.w    %d1,%d1		| %d3 = x/8 + y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
 
     moveq.l  #16,%d1
@@ -70,7 +70,7 @@ ClipSprite32_BLIT_R:
     and.w    %d6,(%a0)
     or.w     %d4,(%a0)
 
-    lea.l    26(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d2,1b
 
     move.w   (%sp)+,%d6
@@ -85,7 +85,7 @@ ClipSprite32_BLIT_R:
     ble.s    0b		| x <= -32 ?
 
     neg.w    %d0		| shift = -x
-    add.w    %d1,%d1		| %d1 = y*30
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0
 
     move.l   (%sp),%d3
@@ -99,18 +99,18 @@ ClipSprite32_BLIT_R:
     and.l    %d3,(%a0)
     or.l     %d1,(%a0)
 
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,4b
 
     move.l   (%sp)+,%d3
     rts
 
 7:
-    cmpi.w   #239,%d0
-    bhi.s    0b		| x > 239
+    cmpi.w   #PLANE_PIXEL_WIDTH-1,%d0
+    bhi.s    0b		| x > PLANE_PIXEL_WIDTH-1
 
-    add.w    %d1,%d1		| %d1 = y*30
-    lea.l    26(%a0,%d1.w),%a0
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
+    lea.l    PLANE_BYTE_WIDTH-4(%a0,%d1.w),%a0
 
     subi.w   #208,%d0
 
@@ -125,7 +125,7 @@ ClipSprite32_BLIT_R:
     and.l    %d3,(%a0)
     or.l     %d1,(%a0)
 
-    lea.l    30(%a0),%a0
+    lea.l    PLANE_BYTE_WIDTH(%a0),%a0
     dbf      %d2,5b
 
     move.l   (%sp)+,%d3

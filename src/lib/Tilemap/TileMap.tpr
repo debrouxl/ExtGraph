@@ -4,7 +4,7 @@ Pack=0
 Packed Variable=
 Project Name=TileMap
 GCC Switches=-Os -Wall -W -Wwrite-strings
-GNU Assembler Switches=
+GNU Assembler Switches=--all-relocs --defsym PLANE_BYTE_WIDTH=34 --defsym PLANE_PIXEL_WIDTH=272 --defsym PLANE_PIXEL_HEIGHT=160
 Assembler Switches=-g -t
 GNU Linker Switches=
 Linker Switches=

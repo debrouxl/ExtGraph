@@ -1,5 +1,7 @@
 | C prototype: void SpriteX8Get_R(unsigned short x asm("%d0"), unsigned short y asm("%d1"), unsigned short height asm("%d2"), const void *src asm("%a1"), unsigned char *dest asm("%a0"), unsigned short bytewidth asm("%d3")) __attribute__((__regparm__));
 
+.include "common.s"
+
 .text
 .globl SpriteX8Get_R
 .even
@@ -10,18 +12,16 @@ SpriteX8Get_R:
 	subq.w	#1,%d2
 	blt.s   9f
 
+	COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d4
 	add.w	%d1,%d1
-	move.w	%d1,%d4
-	lsl.w	#4,%d4
-	sub.w	%d1,%d4
 
-	move.w	%d0,%d1
-	lsr.w	#3,%d1
-	add.w	%d1,%d4
+	move.w	%d0,%d4
+	lsr.w	#3,%d4
+	add.w	%d4,%d1
 
-	adda.w	%d4,%a1
+	adda.w	%d1,%a1
 
-	moveq	#30,%d6
+	moveq	#PLANE_BYTE_WIDTH,%d6
 	sub.w	%d3,%d6			| constant offset from the end of a line to the beginning of the next one
 
 	and.w	#7,%d0			| shifting coeff

@@ -3,6 +3,8 @@
 | This routine is faster (about 30%) than the previous C routine, because the
 | algorithm was changed.
 
+.include "common.s"
+
 .text
 .globl Sprite32Get_R
 .even
@@ -14,9 +16,7 @@ Sprite32Get_R:
     move.w   %d3,-(%sp)
     move.w   %d4,-(%sp)
 
-    move.w   %d1,%d3
-    lsl.w    #4,%d1
-    sub.w    %d3,%d1
+    COMPUTE_HALF_PLANE_BYTE_WIDTH %d1,%d3
 
     move.w   %d0,%d3
     lsr.w    #4,%d0
@@ -37,7 +37,7 @@ Sprite32Get_R:
     lsr.w    %d1,%d4
     or.w     %d4,%d0
     move.l   %d0,(%a1)+
-    lea      30-4(%a0),%a0
+    lea      PLANE_BYTE_WIDTH-4(%a0),%a0
     dbf      %d2,1b
 
     move.w  (%sp)+,%d4

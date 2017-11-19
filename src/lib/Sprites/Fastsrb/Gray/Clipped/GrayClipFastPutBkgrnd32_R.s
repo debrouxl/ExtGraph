@@ -63,8 +63,8 @@ GrayClipFastPutBkgrnd32_R:
     and.w    %d4,%d5
     and.w    %d3,(%a1)
     or.w     %d5,(%a1)
-    lea      30-4(%a0),%a0
-    lea      30-4(%a1),%a1
+    lea      PLANE_BYTE_WIDTH-4(%a0),%a0
+    lea      PLANE_BYTE_WIDTH-4(%a1),%a1
     dbf      %d2,0b
 
     movem.l  (%sp)+,%d3-%d5/%a2

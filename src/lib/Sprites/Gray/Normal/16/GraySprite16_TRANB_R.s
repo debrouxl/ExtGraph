@@ -49,8 +49,8 @@ GraySprite16_TRANB_R:
     and.l    %d3,%d0
     move.l   %d0,(%a1)
 
-    lea      30(%a0),%a0
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
 
     dbf      %d2,1b
 

@@ -12,18 +12,18 @@
 3:
     lsr.w    #1,%d2
     bcs.s    4f
-    lea      -30(%a0),%a0
-    lea      -30(%a1),%a1
+    lea      -PLANE_BYTE_WIDTH(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH(%a1),%a1
     bra.s    5f
 
 4:
     move.l   (%a0),(%a2)+
     move.l   (%a1),(%a2)+
 5:
-    move.l   30(%a0),(%a2)+
-    move.l   30(%a1),(%a2)+
-    lea      60(%a0),%a0
-    lea      60(%a1),%a1
+    move.l   PLANE_BYTE_WIDTH(%a0),(%a2)+
+    move.l   PLANE_BYTE_WIDTH(%a1),(%a2)+
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,4b
 
     move.l   (%sp)+,%a2
@@ -55,7 +55,7 @@ __YPositive_GCFGB8_R:
 6:
     move.w   %d1,%d3
     lsl.w    #4,%d1
-    sub.w    %d3,%d1		| %d1 = y*15
+    sub.w    %d3,%d1		| %d1 = y*PLANE_BYTE_WIDTH
 
 __ClipX_GCFGB8_R:
     move.w   %d0,%d3		| %d3 = x
@@ -64,8 +64,8 @@ __ClipX_GCFGB8_R:
     bhi.s    __ClipXRight_GCFGB8_R	| x > 239-8
 
     lsr.w    #4,%d3		| %d3 = x/16
-    add.w    %d3,%d1		| %d3 = x/16 + y*15
-    add.w    %d1,%d1		| %d3 = x/8 + y*30
+    add.w    %d3,%d1		| %d3 = x/16 + y*PLANE_BYTE_WIDTH/2
+    add.w    %d1,%d1		| %d3 = x/8 + y*PLANE_BYTE_WIDTH
     adda.w   %d1,%a0		| dest += offset
     adda.w   %d1,%a1
 
@@ -75,18 +75,18 @@ __ClipX_GCFGB8_R:
 
     lsr.w    #1,%d2
     bcs.s    1f
-    lea      -30(%a0),%a0
-    lea      -30(%a1),%a1
+    lea      -PLANE_BYTE_WIDTH(%a0),%a0
+    lea      -PLANE_BYTE_WIDTH(%a1),%a1
     bra.s    2f
 
 1:
     move.w   (%a0),(%a2)+
     move.w   (%a1),(%a2)+
 2:
-    move.w   30(%a0),(%a2)+
-    move.w   30(%a1),(%a2)+
-    lea      60(%a0),%a0
-    lea      60(%a1),%a1
+    move.w   PLANE_BYTE_WIDTH(%a0),(%a2)+
+    move.w   PLANE_BYTE_WIDTH(%a1),(%a2)+
+    lea      2*PLANE_BYTE_WIDTH(%a0),%a0
+    lea      2*PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,1b
 
 0:
@@ -98,7 +98,7 @@ __ClipXLeft_GCFGB8_R:
     cmpi.w   #-8,%d0
     ble.s    0b		| x <= -8 ?
 
-    add.w    %d1,%d1		| %d1 = y*30
+    add.w    %d1,%d1		| %d1 = y*PLANE_BYTE_WIDTH
 
 5:
     adda.w   %d1,%a0
@@ -107,8 +107,8 @@ __ClipXLeft_GCFGB8_R:
 4:
     move.b   (%a0),(%a2)+
     move.b   (%a1),(%a2)+
-    lea      30(%a0),%a0
-    lea      30(%a1),%a1
+    lea      PLANE_BYTE_WIDTH(%a0),%a0
+    lea      PLANE_BYTE_WIDTH(%a1),%a1
     dbf      %d2,4b
 
     move.l   (%sp)+,%a2
